@@ -55,7 +55,7 @@ This project is our first and final assignement for our full-stack web course at
 
 ### Context
 An imaginary company wishes to carry out a project allowing people to create small
-offers (ie: lawn mowing, carpentry, cleaning) in exchange for a financial compensation.
+offers (ie: lawn mowing, carpentry, cleaning) in exchange for financial compensations.
 
 ### Built With
 
