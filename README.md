@@ -55,7 +55,7 @@ This project is our first and final assignement for our full-stack web course at
 
 ### Context
 An imaginary company wishes to carry out a project allowing people to create small
-offers (ie: lawn mowing, carpentry, cleaning) in exchange for financial compensation.
+offers (ie: lawn mowing, carpentry, cleaning) in exchange for a financial compensation.
 
 ### Built With
 
@@ -74,7 +74,7 @@ To get a local copy up and running follow the next few steps.
 
 ### Prerequisites
 
-In order to run communoservice locally, you will need to install the following applications:
+In order to run communoservice locally, you will need to install the following
 *  [Docker](https://docs.docker.com/install/)
 *  [Docker-Compose](https://docs.docker.com/compose/)
 ### Installation
