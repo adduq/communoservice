@@ -55,6 +55,7 @@
                 <router-link to="/mon-compte" class="button is-light">
                   Mon compte
                 </router-link>
+                <button @click="logout()" class="button is-danger"><i class="fas fa-sign-out-alt"></i></button>
               </template>
 
               <template v-else>
@@ -80,18 +81,19 @@
     </section>
 
     <footer class="footer">
-      <p class="has-text-centered">
-        Copyright 
-        <i class="fas fa-copyright" aria-hidden="true"></i>
-        Communoservice 2021
-      </p>
+      <div class="content has-text-centered">
+        <p>Copyright 
+          <i class="fas fa-copyright" aria-hidden="true"></i>
+          Communoservice 2021
+        </p>
+      </div>
     </footer>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
+import { toast } from 'bulma-toast';
 export default {
   data() {
     return {
@@ -113,12 +115,39 @@ export default {
   },
   computed: {
 
+  },
+  methods: {
+    logout() {
+      axios.defaults.headers.common["Authorization"] = "";
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("userid");
+      this.$store.commit("removeToken");
+      this.$router.push("/");
+      toast({
+          message: "Déconnecté avec succès!",
+          type: "is-success",
+          dismissible: false,
+          pauseOnHover: false,
+          duration: 3000,
+          position: "center",
+          animate: {in: 'fadeInRightBig', out: 'fadeOutLeftBig'}
+			});
+    },
   }
 };
 </script>
 
 <style lang="scss">
-@import "../node_modules/bulma";
+// @import "../node_modules/bulma";
+@import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
+
+.test-classe {
+	@extend .title;
+	@extend .is-4;
+	@extend .has-text-centered;
+}
+
 .lds-dual-ring {
   display: inline-block;
   width: 80px;
