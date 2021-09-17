@@ -11,7 +11,6 @@
 				</figure>
 			</div>
 			<div class="column has-text-right">
-
 			</div>
 
 		</div>

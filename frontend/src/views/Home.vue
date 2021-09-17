@@ -17,7 +17,7 @@
 		<div class="columns mt-6">
 			<div class="column">
 				<div class="box">
-					
+
 				</div>
 			</div>
 			<div class="column is-two-thirds">
