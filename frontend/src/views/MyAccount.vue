@@ -1,11 +1,46 @@
 <template>
 	<div class="page-my-account">
 
-		<div class="is-flex">
-			<figure class="image is-128x128 round-shadow has-image-centered">
-				<img class="is-rounded" src="https://axim-auto.fr/wp-content/uploads/2019/09/0_200.png">
-				<figcaption class="has-text-centered">[nom ici]</figcaption>
-			</figure>
+		<div class="columns is-mobile">
+
+			<div class="column"></div>
+			<div class="column">
+				<figure class="image is-128x128 round-shadow has-image-centered">
+					<img class="is-rounded" src="https://axim-auto.fr/wp-content/uploads/2019/09/0_200.png">
+					<figcaption class="has-text-centered">[nom ici]</figcaption>
+				</figure>
+			</div>
+			<div class="column has-text-right">
+				<div class="dropdown is-hoverable is-right">
+					<div class="dropdown-trigger">
+						<button class="button" aria-haspopup="true" aria-controls="dropdown-menu3">
+							<span class="icon is-small mr-3">
+								<i class="fas fa-angle-down" aria-hidden="true"></i>
+							</span>
+							<span> Menu </span>
+						</button>
+					</div>
+					<div class="dropdown-menu" id="dropdown-menu3" role="menu">
+						<div class="dropdown-content has-text-left">
+							<a href="#" class="dropdown-item"
+								v-on:click="modalSettingsisActive = !modalSettingsisActive">
+								<span class="icon is-small mr-3">
+									<i class="fas fa-cog"></i>
+								</span>
+								<span> Paramêtres </span>
+							</a>
+							<hr class="dropdown-divider" />
+							<a href="#" @click="logout()" class="dropdown-item has-text-danger">
+								<span class="icon is-small mr-3">
+									<i class="fas fa-sign-out-alt"></i>
+								</span>
+								<span> Déconnexion </span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 		<!--
 		<div class="tabs is-medium mt-6 is-boxed">
@@ -79,7 +114,7 @@
 					<div class="columns is-centered mt-5">
 						<div class="column control is-half">
 							<button class="button is-success w-200"
-								v-on:click="modalCreateisActive = 'on'">Créer</button>
+								v-on:click="modalCreateisActive = !modalCreateisActive">Créer</button>
 						</div>
 					</div>
 				</div>
@@ -330,19 +365,39 @@
 			</span>
 		</span>
 
-		<div class="modal" v-bind:class="{ 'is-active': modalCreateisActive == 'on'}">
+		<div class="modal" v-bind:class="{ 'is-active': modalCreateisActive}">
 			<div class="modal-background"></div>
 			<div class="modal-card">
 				<header class="modal-card-head">
 					<p class="modal-card-title">Confirmation</p>
-					<button class="delete" v-on:click="modalCreateisActive = 'off'" aria-label="close"></button>
+					<button class="delete" v-on:click="modalCreateisActive = !modalCreateisActive"
+						aria-label="close"></button>
 				</header>
 				<section class="modal-card-body">
 					Êtes-vous certain de vouloir créer ce service?
 				</section>
 				<footer class="modal-card-foot">
-					<button class="button is-danger w-100" v-on:click="modalCreateisActive = 'off'">Non</button>
+					<button class="button is-danger w-100"
+						v-on:click="modalCreateisActive = !modalCreateisActive">Non</button>
 					<button class="button is-success w-100">Oui</button>
+				</footer>
+			</div>
+		</div>
+		<div class="modal" v-bind:class="{ 'is-active': modalSettingsisActive}">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title">Paramêtres</p>
+					<button class="delete" v-on:click="modalSettingsisActive = !modalSettingsisActive"
+						aria-label="close"></button>
+				</header>
+				<section class="modal-card-body">
+					Configuration des paramêtres ici
+				</section>
+				<footer class="modal-card-foot">
+					<button class="button is-success w-100">Sauvegarder</button>
+					<button class="button is-danger w-100"
+						v-on:click="modalSettingsisActive = !modalSettingsisActive">Canceler</button>
 				</footer>
 			</div>
 		</div>
@@ -356,25 +411,34 @@
 		data() {
 			return {
 				orders: [],
-				modalCreateisActive: 'off',
+				modalCreateisActive: false,
+				modalSettingsisActive: false,
 			};
 		},
 		mounted() {
 			document.title = "Mon compte | Communoservice";
 		},
 		methods: {
-
+			logout() {
+				axios.defaults.headers.common["Authorization"] = "";
+				localStorage.removeItem("token");
+				localStorage.removeItem("username");
+				localStorage.removeItem("userid");
+				this.$store.commit("removeToken");
+				this.$router.push("/");
+				toast({
+					message: "Déconnecté avec succès!",
+					type: "is-success",
+					dismissible: false,
+					pauseOnHover: false,
+					duration: 3000,
+					position: "center",
+					animate: {
+						in: "fadeInRightBig",
+						out: "fadeOutLeftBig",
+					},
+				});
+			},
 		},
 	};
 </script>
-
-// <style lang="sass" scoped>
-	// @import "../../node_modules/bulmaswatch/minty/bulmaswatch.scss";
-
-	// .test-classe {
-	// 	@extend .title;
-	// 	@extend .is-4;
-	// 	@extend .has-text-centered;
-	// }
-	// 
-</style>
