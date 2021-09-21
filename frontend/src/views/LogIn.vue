@@ -70,13 +70,25 @@ export default {
 
 					axios.defaults.headers.common["Authorization"] = "Token " + token;
 					localStorage.setItem("token", token);
-					const toPath = this.$route.query.to || "/mon-compte";
+					const toPath = this.$route.query.to || "/";
 					this.$router.push(toPath);
 				})
 				.catch((error) => {
 					if (error.response) {
+						this.errors.splice(0);
 						for (const property in error.response.data) {
-							this.errors.push(`${property}: ${error.response.data[property]}`);
+							var outvar = "";
+							switch(property){
+								case "username":
+									outvar = "Nom d'utilisateur";
+									break;
+								case "password":
+									outvar = "Mot de passe";
+									break;
+								default:
+									outvar = "Erreur";
+							}
+							this.errors.push(`${outvar}: ${error.response.data[property]}`);
 						}
 					} else {
 						this.errors.push("Une erreur est survenue");
