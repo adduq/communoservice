@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .models import Offer
 from .fixtures import OfferFixtures
 from .views import Offers
+from pprint import pprint
 
 
 '''https://www.geeksforgeeks.org/python-assertion-error/'''
@@ -283,7 +284,7 @@ class OfferViewTest(TestCase):
         self.user = User.objects.create_user(
             username='jacob', email='jacob@…', password='top_secret')
 
-    def test_getAllOffers(self):
+    def test_OffersView_whenGetMethod_thenResponseStatusCode200(self):
         # given
         request = self.factory.get('/offer/')
 
@@ -293,7 +294,7 @@ class OfferViewTest(TestCase):
         # then
         self.assertEqual(response.status_code, 200)
 
-    def test_OffersView_IllegalPutMethod(self):
+    def test_OffersView_whenIllegalPutMethod_thenResponseStatusCode405(self):
         # given
         request = self.factory.put('/offer/')
 
@@ -303,7 +304,7 @@ class OfferViewTest(TestCase):
         # then
         self.assertEqual(response.status_code, 405)
 
-    def test_OffersView_CreatingNewOffer(self):
+    def test_OffersView_whenCreateOffer_thenResponseStatusCode201(self):
 
         # given
         payload = {
@@ -321,14 +322,14 @@ class OfferViewTest(TestCase):
         # then
         self.assertEqual(response.status_code, 201)
 
-    def test_postNewOffer_error400(self):
+    def test_OffersView_whenCreateOfferWithNonExistentUser_thenResponseStatusCode400(self):
 
         # given
-        no_existent_user = -1
+        non_existent_user = 999
         payload = {
-            "user": no_existent_user,
+            "user": non_existent_user,
             "type_service": "Dressage d'animaux",
-            "DESCRIPTION": "Utilisation de gâteries véganes!",
+            "description": "Utilisation de gâteries véganes!",
             "hourly_rate": "10.50",
             "max_distance": 2
         }
