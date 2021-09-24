@@ -392,24 +392,6 @@
 				</footer>
 			</div>
 		</div>
-		<div class="modal" v-bind:class="{ 'is-active': modalSettingsisActive}">
-			<div class="modal-background"></div>
-			<div class="modal-card">
-				<header class="modal-card-head">
-					<p class="modal-card-title">Paramêtres</p>
-					<button class="delete" v-on:click="modalSettingsisActive = !modalSettingsisActive"
-						aria-label="close"></button>
-				</header>
-				<section class="modal-card-body">
-					Configuration des paramêtres ici
-				</section>
-				<footer class="modal-card-foot">
-					<button class="button is-success w-100">Sauvegarder</button>
-					<button class="button is-danger w-100"
-						v-on:click="modalSettingsisActive = !modalSettingsisActive">Canceler</button>
-				</footer>
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -421,7 +403,6 @@
 			return {
 				orders: [],
 				modalCreateisActive: false,
-				modalSettingsisActive: false,
 				daysSelected: {
 					monday: false,
 					tuesday: false,
