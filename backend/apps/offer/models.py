@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Offer(models.Model):
-    User = models.ForeignKey(
+    user = models.ForeignKey(
         User, related_name='offers', db_column="id_user", on_delete=models.CASCADE)
     type_service = models.CharField(max_length=30, default="Administration")
     description = models.CharField(
