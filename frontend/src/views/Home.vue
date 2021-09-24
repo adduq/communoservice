@@ -22,8 +22,7 @@
 			</div>
 			<div class="column is-two-thirds">
 				<div class="box">
-					
-					<div class="card mb-3 h-140">
+					<div class="card mb-3 h-140" v-on:click="modalViewisActive = !modalViewisActive">
 						<div class="card-content">
 							<div class="media">
 								<div class="media-left">
@@ -45,6 +44,7 @@
 							</div>
 						</div>
 					</div>
+					
 					<div class="card mb-3 h-140">
 						<div class="card-content">
 							<div class="media">
@@ -145,7 +145,7 @@
 		name: "Home",
 		data() {
 			return {
-
+				
 			};
 		},
 		components: {
@@ -155,7 +155,7 @@
 			document.title = "Accueil | Communoservice";
 		},
 		methods: {
-
+			
 		},
 	};
 </script>

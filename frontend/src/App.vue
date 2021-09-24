@@ -31,34 +31,35 @@
                 <i class="fas fa-user-circle"></i>
               </span>
             </router-link>
-            <div class="navbar-item mr-3">
+            <div class="navbar-item">
               <div class="dropdown is-hoverable" :class="dropdownRight ? 'is-right' : 'is-left'">
-            <div class="dropdown-trigger">
-              <button class="button is-rounded has-text-centered" aria-haspopup="true" aria-controls="dropdown-menu3">
-                <span class="icon is-small">
-                  <i class="fas fa-angle-down" aria-hidden="true"></i>
-                </span>
-              </button>
-            </div>
-            <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
-              <div class="dropdown-content has-text-left">
-                <a href="#" class="dropdown-item" v-on:click="modalSettingsisActive = !modalSettingsisActive">
-                  <span class="icon is-small mr-3">
-                    <i class="fas fa-cog"></i>
-                  </span>
-                  <span> Paramêtres </span>
-                </a>
-                <hr class="dropdown-divider" />
-                <a href="#" @click="logout()" class="dropdown-item has-text-danger">
-                  <span class="icon is-small mr-3">
-                    <i class="fas fa-sign-out-alt"></i>
-                  </span>
-                  <span> Déconnexion </span>
-                </a>
+                <div class="dropdown-trigger">
+                  <button class="button is-rounded has-text-centered" aria-haspopup="true"
+                    aria-controls="dropdown-menu3">
+                    <span class="icon is-small">
+                      <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </div>
+                <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
+                  <div class="dropdown-content has-text-left">
+                    <a href="#" class="dropdown-item" v-on:click="modalSettingsisActive = !modalSettingsisActive">
+                      <span class="icon is-small mr-3">
+                        <i class="fas fa-cog"></i>
+                      </span>
+                      <span> Paramêtres </span>
+                    </a>
+                    <hr class="dropdown-divider" />
+                    <a href="#" @click="logout()" class="dropdown-item has-text-danger">
+                      <span class="icon is-small mr-3">
+                        <i class="fas fa-sign-out-alt"></i>
+                      </span>
+                      <span> Déconnexion </span>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          </div>
           </template>
 
           <template v-else>
@@ -75,6 +76,25 @@
     <section class="section">
       <router-view />
     </section>
+
+    <div class="modal" v-bind:class="{ 'is-active': modalSettingsisActive}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Paramêtres</p>
+          <button class="delete" v-on:click="modalSettingsisActive = !modalSettingsisActive"
+            aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          Configuration des paramêtres ici
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success w-100">Sauvegarder</button>
+          <button class="button is-danger w-100"
+            v-on:click="modalSettingsisActive = !modalSettingsisActive">Canceler</button>
+        </footer>
+      </div>
+    </div>
 
     <footer class="footer">
       <div class="content has-text-centered">
@@ -98,10 +118,11 @@
       return {
         showNav: false,
         window: {
-            width: 0,
-            height: 0
+          width: 0,
+          height: 0
         },
         dropdownRight: true,
+        modalSettingsisActive: false,
       };
     },
     beforeCreate() {
@@ -116,42 +137,41 @@
       }
     },
     mounted() {
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
+      window.addEventListener('resize', this.handleResize);
+      this.handleResize();
     },
-    computed: {
-    },
+    computed: {},
     methods: {
       logout() {
-				axios.defaults.headers.common["Authorization"] = "";
-				localStorage.removeItem("token");
-				localStorage.removeItem("username");
-				localStorage.removeItem("userid");
-				this.$store.commit("removeToken");
-				this.$router.push("/");
-				toast({
-					message: "Déconnecté avec succès!",
-					type: "is-success",
-					dismissible: false,
-					pauseOnHover: false,
-					duration: 3000,
-					position: "center",
-					animate: {
-						in: "fadeInRightBig",
-						out: "fadeOutLeftBig",
-					},
-				});
-			},
+        axios.defaults.headers.common["Authorization"] = "";
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userid");
+        this.$store.commit("removeToken");
+        this.$router.push("/");
+        toast({
+          message: "Déconnecté avec succès!",
+          type: "is-success",
+          dismissible: false,
+          pauseOnHover: false,
+          duration: 3000,
+          position: "center",
+          animate: {
+            in: "fadeInRightBig",
+            out: "fadeOutLeftBig",
+          },
+        });
+      },
       handleResize() {
-            this.window.width = window.innerWidth;
-            this.window.height = window.innerHeight;
-            if(window.innerWidth > 1006){
-              this.showNav = false;
-              this.dropdownRight = true;
-            }else{
-              this.dropdownRight = false;
-            }
-        },
+        this.window.width = window.innerWidth;
+        this.window.height = window.innerHeight;
+        if (window.innerWidth > 1006) {
+          this.showNav = false;
+          this.dropdownRight = true;
+        } else {
+          this.dropdownRight = false;
+        }
+      },
     },
   };
 </script>
@@ -165,8 +185,8 @@
     @extend .has-text-centered;
   }
 
-  .navbar{
-    border-radius:0!important;
+  .navbar {
+    border-radius: 0 !important;
   }
 
   .lds-dual-ring {

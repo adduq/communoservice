@@ -25,7 +25,7 @@
 
 					<div class="field">
 						<div class="control">
-							<button class="button is-dark">Connexion</button>
+							<button class="button is-dark" :class="isLoading ? 'is-loading' : ''">Connexion</button>
 						</div>
 					</div>
 
@@ -47,6 +47,7 @@ export default {
 			username: "",
 			password: "",
 			errors: [],
+			isLoading: false,
 		};
 	},
 	mounted() {
@@ -54,6 +55,7 @@ export default {
 	},
 	methods: {
 		async submitForm() {
+			this.isLoading = true;
 			axios.defaults.headers.common["Authorization"] = "";
 			localStorage.removeItem("token");
 
@@ -96,6 +98,7 @@ export default {
 						console.log(JSON.stringify(error));
 					}
 				});
+			this.isLoading = false;
 		},
 	},
 };
