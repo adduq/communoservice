@@ -340,3 +340,5 @@ class OfferViewTest(TestCase):
 
         # then
         self.assertEqual(response.status_code, 400)
+        pprint(vars(response))
+        print(response.data.user)
