@@ -135,6 +135,7 @@
       } else {
         axios.defaults.headers.common["Authorization"] = "";
       }
+      console.log(token);
     },
     mounted() {
       window.addEventListener('resize', this.handleResize);
