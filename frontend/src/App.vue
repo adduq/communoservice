@@ -178,7 +178,7 @@
 
 <style lang="scss">
   @import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
-
+  @import "../node_modules/bulma-slider";
   .test-classe {
     @extend .title;
     @extend .is-4;
@@ -226,5 +226,8 @@
     &.is-loading {
       height: 80px;
     }
+  }
+  .w-80{
+    width: 80px!important;
   }
 </style>
