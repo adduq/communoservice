@@ -1,0 +1,86 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "garneau",
+      "first_name": "François",
+      "last_name": "Xavier-Garneau",
+      "email": "fgx@educegepgarneau.ca",
+      "password": "17F80754644D33AC685B0842A402229ADBB43FC9312F7BDF36BA24237A1F1FFB",
+      "is_active":"True"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "type_service": "Tonte de pelouse",
+      "description": "Service rapide et professionnel.",
+      "hourly_rate": "12.50",
+      "max_distance": 2,
+      "date_added": "2020-09-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "type_service": "Tonte de pelouse",
+      "description": "Administration",
+      "hourly_rate": "50",
+      "max_distance": 2,
+      "date_added": "2020-05-05"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "type_service": "Gardiennage",
+      "description": "Maximum 3 enfants.",
+      "hourly_rate": "12.50",
+      "max_distance": 4,
+      "date_added": "2020-09-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 4,
+    "fields": {
+      "user": 1,
+      "type_service": "Déneigement",
+      "description": "Les escaliers extérieurs peuvent être inclus.",
+      "hourly_rate": "15.75",
+      "max_distance": 4,
+      "date_added": "2020-12-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 5,
+    "fields": {
+      "user": 1,
+      "type_service": "Déneigement",
+      "description": "Les escaliers extérieurs peuvent être inclus.",
+      "hourly_rate": "15.75",
+      "max_distance": 4,
+      "date_added": "2020-12-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 6,
+    "fields": {
+      "user": 1,
+      "type_service": "Déneigement",
+      "description": "",
+      "hourly_rate": "15.75",
+      "max_distance": 4,
+      "date_added": "2020-12-20"
+    }
+  }
+]
