@@ -24,31 +24,41 @@
           </p>
           <div class="panel-block is-flex-wrap-wrap">
             <p class="control has-icons-left is-full-width">
-              <input class="input" type="text" placeholder="Search">
+              <input class="input" type="text" placeholder="Mots Clé(s)">
               <span class="icon is-left">
                 <i class="fas fa-search" aria-hidden="true"></i>
               </span>
             </p>
-            <a class="is-2">Recherche Avancée</a>
           </div>
           <p class="ml-2 has-text-weight-bold has-text-black">
             Type de service
           </p>
           <label class="panel-block">
-            <input type="checkbox">
-            Option 1
+            <div class="control">
+              <div class="select">
+                <select>
+                  <option>Tonte de pelouse</option>
+                  <option>Gardiennage</option>
+                  <option>Déneigement</option>
+                </select>
+              </div>
+            </div>
           </label>
           <p class="ml-2 has-text-weight-bold has-text-black">
             Distance
           </p>
           <label class="panel-block">
             Max (km)
-            <input id="maxDistanceSlider" class="slider has-output is-fullwidth" min="0" max="100" value="50" step="10"
+            <input id="maxDistanceSlider" class="slider has-output is-fullwidth" min="0" max="100" value="100" step="10"
               type="range">
-            <output for="maxDistanceSlider" class="w-80">50</output>
+            <output for="maxDistanceSlider" class="w-80">100</output>
           </label>
-
-
+          <p class="ml-2 has-text-weight-bold has-text-black">
+            Autre filtres
+          </p>
+          <label class="panel-block">
+            ...
+          </label>
           <div class="panel-block">
             <button class="button is-link is-outlined is-fullwidth">
               Rechercher
