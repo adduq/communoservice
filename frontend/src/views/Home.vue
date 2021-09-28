@@ -36,7 +36,7 @@
           <label class="panel-block">
             <div class="control">
               <div class="select">
-                <select>
+                <select v-model='query'>
                   <option>Tonte de pelouse</option>
                   <option>Gardiennage</option>
                   <option>Déneigement</option>
@@ -60,7 +60,7 @@
             ...
           </label>
           <div class="panel-block">
-            <button class="button is-link is-outlined is-fullwidth">
+            <button v-on:click="sendQuery" class="button is-link is-outlined is-fullwidth">
               Rechercher
             </button>
           </div>
@@ -88,6 +88,7 @@
         isFetchingOffers: false,
         activePanelTab: 'distance',
         attachedSliders: [],
+        query:"",
       };
     },
     components: {
@@ -117,6 +118,19 @@
           });
         this.isFetchingOffers = false;
       },
+      async sendQuery(){
+        this.isFetchingOffers = true;
+
+        await axios
+          .get("/api/v1/offers/search?type-service="+this.query)
+          .then((response) => {
+            this.offers = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        this.isFetchingOffers = false;
+      }
     },
   };
 </script>
