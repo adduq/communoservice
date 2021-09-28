@@ -54,7 +54,7 @@
             <output for="maxDistanceSlider" class="w-80">100</output>
           </label>
           <p class="ml-2 has-text-weight-bold has-text-black">
-            Autre filtres
+            Autres filtres
           </p>
           <label class="panel-block">
             ...
