@@ -1,6 +1,9 @@
 # Stage 1 - build frontend app
 FROM node:10-alpine as build-deps
 
+RUN adduser communoservice
+USER communoservice
+
 WORKDIR /app/
 
 # COPY frontend/package.json frontend/package-lock.json /app/
