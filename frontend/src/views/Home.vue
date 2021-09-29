@@ -88,7 +88,9 @@
         isFetchingOffers: false,
         activePanelTab: 'distance',
         attachedSliders: [],
-        query:"",
+        // La valeur de "query" est hard codé pour le moment. Il va falloir faire categories[0] 
+        // lorsque nous allons avoir la liste des catégories pour peupler le dropdown.
+        query:"Tonte de pelouse",
       };
     },
     components: {
