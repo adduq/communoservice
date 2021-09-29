@@ -70,3 +70,20 @@ class UserOffers(APIView):
         offer = self.get_object(no_user)
         serializer = OfferSerializer(offer, many=True)
         return Response(serializer.data)
+
+
+'''
+Permet de rechercher des offres selon le type de service.
+'''
+
+
+@api_view(['GET'])
+def search(request):
+    query = request.query_params.get('type-service', '')
+    if query:
+        offers = Offer.objects.filter(
+            Q(type_service__icontains=query))
+        serializer = OfferSerializer(offers, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({"offers": []})
