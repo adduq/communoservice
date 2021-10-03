@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.http import Http404
+from django.core import serializers
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,6 +16,7 @@ from rest_framework.schemas import AutoSchema
 
 # Create your views here.
 
+
 class UserInfoDetail(APIView):
 
     """
@@ -23,11 +25,15 @@ class UserInfoDetail(APIView):
 
     def get_object(self, user_id):
         try:
-            return UserInfo.objects.get(id=user_id)
+
+            user = UserInfo.objects.get(user_id=user_id)
+
+            user_is_active = User.objects.get(id=user_id).values('is_active')
+            user.is_active = user_is_active
+            return user
         except UserInfo.DoesNotExist:
             raise Http404
 
     def get(self, request, user_id, format=None):
         userinfo = self.get_object(user_id)
-        serializer = UserInfoSerializer(userinfo)
-        return Response(serializer.data)
+        serializers.serialize('json', userinfo)
