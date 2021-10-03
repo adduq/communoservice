@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from offer import views
+from apps.offer import views
 
 urlpatterns = [
     path('offers/', views.Offers.as_view()),

@@ -1,28 +1,21 @@
-FROM python:3.9
+FROM python:3-alpine
 
-RUN adduser communoservice
-USER communoservice
+WORKDIR /app/
 
-# python envs
-ENV PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONHASHSEED=random \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100
+# Install Python dependencies
+COPY ./requirements.txt /app/
+COPY ./scripts/entrypoint.sh .
 
-# python dependencies
-COPY ./requirements.txt /
-RUN pip install -r ./requirements.txt
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
+RUN pip install psycopg2-binary
+RUN pip install uwsgi
+RUN pip install -r requirements.txt
 
-# upload scripts
-COPY --chown=communoservice:communoservice ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh /tmp/
+# Add the rest of the code
+COPY . /app/
 
-# Fix windows docker bug, convert CRLF to LF
-RUN sed -i 's/\r$//g' /tmp/start.sh && chmod +x /tmp/start.sh &&\
-    sed -i 's/\r$//g' /tmp/entrypoint.sh && chmod +x /tmp/entrypoint.sh &&\
-    sed -i 's/\r$//g' /tmp/gunicorn.sh && chmod +x /tmp/gunicorn.sh
+EXPOSE $PORT
 
-WORKDIR /app
+RUN sed -i 's/\r$//g' ./entrypoint.sh && chmod +x ./entrypoint.sh
 
-ENTRYPOINT ["/tmp/entrypoint.sh"]
+CMD ["./entrypoint.sh"]
