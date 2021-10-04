@@ -7,18 +7,18 @@ services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile.dev
     depends_on:
       - postgres
     volumes:
       - ./backend:/app
     command: /tmp/start.sh
-    entrypoint: /tmp/entrypoint.sh
+    entrypoint: /tmp/entrypoint.dev.sh
     restart: on-failure
     env_file: .env
 
   frontend:
     image: node:10-alpine
-    # command: npm i && npm run serve
     command: npm run serve-and-install
     volumes:
       - ./.env:/app/.env:ro
