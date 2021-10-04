@@ -25,7 +25,7 @@
 
 					<div class="field">
 						<div class="control">
-							<button class="button is-dark">Connexion</button>
+							<button class="button is-dark" :class="isLoading ? 'is-loading' : ''">Connexion</button>
 						</div>
 					</div>
 
@@ -47,6 +47,7 @@ export default {
 			username: "",
 			password: "",
 			errors: [],
+			isLoading: false,
 		};
 	},
 	mounted() {
@@ -54,6 +55,7 @@ export default {
 	},
 	methods: {
 		async submitForm() {
+			this.isLoading = true;
 			axios.defaults.headers.common["Authorization"] = "";
 			localStorage.removeItem("token");
 
@@ -69,14 +71,27 @@ export default {
 					this.$store.commit("setToken", token);
 
 					axios.defaults.headers.common["Authorization"] = "Token " + token;
+					console.log(axios.defaults.headers.common["Authorization"]);
 					localStorage.setItem("token", token);
-					const toPath = this.$route.query.to || "/mon-compte";
+					const toPath = this.$route.query.to || "/";
 					this.$router.push(toPath);
 				})
 				.catch((error) => {
 					if (error.response) {
+						this.errors.splice(0);
 						for (const property in error.response.data) {
-							this.errors.push(`${property}: ${error.response.data[property]}`);
+							var outvar = "";
+							switch(property){
+								case "username":
+									outvar = "Nom d'utilisateur";
+									break;
+								case "password":
+									outvar = "Mot de passe";
+									break;
+								default:
+									outvar = "Erreur";
+							}
+							this.errors.push(`${outvar}: ${error.response.data[property]}`);
 						}
 					} else {
 						this.errors.push("Une erreur est survenue");
@@ -84,6 +99,7 @@ export default {
 						console.log(JSON.stringify(error));
 					}
 				});
+			this.isLoading = false;
 		},
 	},
 };

@@ -1,22 +1,21 @@
-FROM python:3.9
+FROM python:3-alpine
 
-# python envs
-ENV PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONHASHSEED=random \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100
+WORKDIR /app/
 
-# python dependencies
-COPY ./requirements.txt /
-RUN pip install -r ./requirements.txt
+# Install Python dependencies
+COPY ./requirements.txt /app/
+COPY ./scripts/entrypoint.sh .
 
-# upload scripts
-COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh /
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
+RUN pip install psycopg2-binary
+RUN pip install uwsgi
+RUN pip install -r requirements.txt
 
-# Fix windows docker bug, convert CRLF to LF
-RUN sed -i 's/\r$//g' /start.sh && chmod +x /start.sh && sed -i 's/\r$//g' /entrypoint.sh && chmod +x /entrypoint.sh &&\
-    sed -i 's/\r$//g' /gunicorn.sh && chmod +x /gunicorn.sh
+# Add the rest of the code
+COPY . /app/
 
-WORKDIR /app
+EXPOSE $PORT
+
+RUN sed -i 's/\r$//g' ./entrypoint.sh && chmod +x ./entrypoint.sh
+
+CMD ["./entrypoint.sh"]
