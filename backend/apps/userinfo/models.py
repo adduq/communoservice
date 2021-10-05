@@ -3,9 +3,7 @@ from django.contrib.auth.models import User
 
 
 class UserInfo(models.Model):
-    user_id = models.ForeignKey(
-        User, related_name='offers', db_column="id_user",
-        on_delete=models.CASCADE)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, to_field="id")
 
     profile_is_completed = models.BooleanField(default=False)
 
@@ -19,14 +17,14 @@ class UserInfo(models.Model):
 
     nb_services_given = models.PositiveIntegerField(null=False)
 
-    avg_rating_as_employee = models.DecimalField(decimal_places=3,
+    avg_rating_as_employee = models.DecimalField(decimal_places=2,
                                                  max_digits=3,
                                                  null=False,
                                                  default=0)
 
     nb_rating_as_employe = models.PositiveIntegerField(null=False, default=0)
 
-    avg_rating_as_employer = models.DecimalField(decimal_places=3,
+    avg_rating_as_employer = models.DecimalField(decimal_places=2,
                                                  max_digits=3,
                                                  null=False,
                                                  default=0)

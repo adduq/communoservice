@@ -1,6 +1,6 @@
 from django.db.models import Q
-from django.http import Http404
-from django.core import serializers
+from django.http import Http404, JsonResponse
+from django.forms.models import model_to_dict
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,7 +20,7 @@ from rest_framework.schemas import AutoSchema
 class UserInfoDetail(APIView):
 
     """
-    Récupérer l'info d'un user selon l'id de du user.
+    Récupérer l'info d'un utilisateur à l'aide de son identifiant.
     """
 
     def get_object(self, user_id):
@@ -28,12 +28,16 @@ class UserInfoDetail(APIView):
 
             user = UserInfo.objects.get(user_id=user_id)
 
-            user_is_active = User.objects.get(id=user_id).values('is_active')
-            user.is_active = user_is_active
-            return user
+            user_is_active = User.objects.get(id=user_id).is_active
+            serializer = UserInfoSerializer(user)
+
+            out_dict = {'is_active':user_is_active}
+            out_dict.update(serializer.data)
+
+            return out_dict
         except UserInfo.DoesNotExist:
             raise Http404
 
     def get(self, request, user_id, format=None):
         userinfo = self.get_object(user_id)
-        serializers.serialize('json', userinfo)
+        return Response(userinfo)
