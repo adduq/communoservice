@@ -13,6 +13,7 @@
             class="is-rounded"
             src="https://axim-auto.fr/wp-content/uploads/2019/09/0_200.png"
           />
+          <i class="fas fa-circle" :class="userIsActive ? 'active-icon':'not-active-icon'"></i>
           <figcaption class="has-text-centered">[nom ici]</figcaption>
         </figure>
       </div>
@@ -495,6 +496,7 @@ export default {
         sunday: false,
       },
       profileSwitch: false,
+      userIsActive: true,
     };
   },
   //Les components qu'on veut utiliser
