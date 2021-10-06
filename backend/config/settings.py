@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
-    'apps.offer'
+    'apps.offer',
+    'apps.userinfo'
 ]
 
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(",")
