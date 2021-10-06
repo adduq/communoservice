@@ -177,7 +177,6 @@
 
 <style lang="scss">
   @import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
-  @import "../node_modules/bulma-slider";
   .test-classe {
     @extend .title;
     @extend .is-4;
@@ -186,54 +185,7 @@
   .navbar {
     border-radius: 0 !important;
   }
-  .lds-dual-ring {
-    display: inline-block;
-    width: 80px;
-    height: 80px;
-  }
-  .lds-dual-ring:after {
-    content: " ";
-    display: block;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border-radius: 50%;
-    border: 6px solid #ccc;
-    border-color: #ccc transparent #ccc transparent;
-    animation: lds-dual-ring 1.2s linear infinite;
-  }
-  @keyframes lds-dual-ring {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  .is-loading-bar {
-    height: 0;
-    overflow: hidden;
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-    &.is-loading {
-      height: 80px;
-    }
-  }
   .w-80{
     width: 80px!important;
-  }
-  .active-icon{
-    position: absolute;
-    right: 6%;
-    bottom: 6%;
-    font-size: 1.5em;
-    color: forestgreen;
-  }
-  .not-active-icon{
-    position: absolute;
-    right: 6%;
-    bottom: 6%;
-    font-size: 1.5em;
-    color: grey;
   }
 </style>

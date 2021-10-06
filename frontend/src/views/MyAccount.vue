@@ -1,25 +1,51 @@
 <template>
   <div class="page-my-account">
-    <div class="columns is-mobile">
-      <div class="column">
-        <div class="buttons has-addons">
-          <button class="button" v-on:click="profileSwitch = false" :class="profileSwitch == false ? 'is-success is-selected' : ''">Employé</button>
-          <button class="button" v-on:click="profileSwitch = true" :class="profileSwitch == true ? 'is-success is-selected' : ''">Employeur</button>
+    <div class="container profile">
+      <div class="section profile-heading">
+        <div class="columns">
+          <div class="column is-one-fifth">
+            <figure class="image is-128x128 round-shadow has-image-centered">
+              <img class="is-rounded" src="https://owcdn.net/img/5bda50b474984.jpg" />
+              <i class="fas fa-circle" :class="userIsActive ? 'active-icon':'not-active-icon'"></i>
+            </figure>
+
+          </div>
+          <div class="column is-one-third">
+            <p>
+              <span class="title is-bold">Félix Lengyel</span>
+            </p>
+            <p class="tagline">I am a French Canadian Twitch streamer, former Overwatch League player, current Luminosity Gaming member and G FUEL partner.</p>
+          </div>
+          <dic class="column ml-5">
+            <div class="columns is-mobile is-centered">
+              <div class="column has-text-centered">
+                <p class="stat-val">129</p>
+                <p class="stat-key">services rendus</p>
+              </div>
+              <div class="column has-text-centered">
+                <p class="stat-val">23</p>
+                <p class="stat-key">services actifs</p>
+              </div>
+              <div class="column has-text-centered">
+                <p class="stat-val">8.9/10</p>
+                <p class="stat-key">score</p>
+              </div>
+            </div>
+
+          </dic>
+
         </div>
       </div>
-      <div class="column">
-        <figure class="image is-128x128 round-shadow has-image-centered">
-          <img
-            class="is-rounded"
-            src="https://axim-auto.fr/wp-content/uploads/2019/09/0_200.png"
-          />
-          <i class="fas fa-circle" :class="userIsActive ? 'active-icon':'not-active-icon'"></i>
-          <figcaption class="has-text-centered">[nom ici]</figcaption>
-        </figure>
-      </div>
-      <div class="column has-text-right"></div>
     </div>
-    <div class="columns mt-6">
+    <div class="columns is-centered mt-6">
+      <div class="column buttons has-addons is-half has-text-centered">
+        <button class="button profile-toggle" v-on:click="profileSwitch = false"
+          :class="profileSwitch == false ? 'is-success is-selected' : ''">Employé</button>
+        <button class="button profile-toggle" v-on:click="profileSwitch = true"
+          :class="profileSwitch == true ? 'is-success is-selected' : ''">Employeur</button>
+      </div>
+    </div>
+    <div class="columns">
       <template v-if="profileSwitch == false">
         <div class="column">
           <div class="box">
@@ -56,70 +82,47 @@
               <label class="label">Disponibilités</label>
               <div>
                 <div
-                  class="columns is-mobile is-family-monospace buttons is-grouped is-justify-content-space-around mt-2"
-                >
+                  class="columns is-mobile is-family-monospace buttons is-grouped is-justify-content-space-around mt-2">
                   <div class="control ml-0">
-                    <a
-                      class="button is-rounded"
-                      :class="daysSelected.monday ? 'is-success' : ''"
-                      v-on:click="daysSelected.monday = !daysSelected.monday"
-                    >
+                    <a class="button is-rounded" :class="daysSelected.monday ? 'is-success' : ''"
+                      v-on:click="daysSelected.monday = !daysSelected.monday">
                       L
                     </a>
                   </div>
                   <div class="control">
-                    <a
-                      class="button is-rounded"
-                      :class="daysSelected.tuesday ? 'is-success' : ''"
-                      v-on:click="daysSelected.tuesday = !daysSelected.tuesday"
-                    >
+                    <a class="button is-rounded" :class="daysSelected.tuesday ? 'is-success' : ''"
+                      v-on:click="daysSelected.tuesday = !daysSelected.tuesday">
                       M
                     </a>
                   </div>
                   <div class="control">
-                    <a
-                      class="button is-rounded"
-                      :class="daysSelected.wednesday ? 'is-success' : ''"
-                      v-on:click="
+                    <a class="button is-rounded" :class="daysSelected.wednesday ? 'is-success' : ''" v-on:click="
                         daysSelected.wednesday = !daysSelected.wednesday
-                      "
-                    >
+                      ">
                       M
                     </a>
                   </div>
                   <div class="control">
-                    <a
-                      class="button is-rounded"
-                      :class="daysSelected.thursday ? 'is-success' : ''"
-                      v-on:click="daysSelected.thursday = !daysSelected.thursday"
-                    >
+                    <a class="button is-rounded" :class="daysSelected.thursday ? 'is-success' : ''"
+                      v-on:click="daysSelected.thursday = !daysSelected.thursday">
                       J
                     </a>
                   </div>
                   <div class="control">
-                    <a
-                      class="button is-rounded"
-                      :class="daysSelected.friday ? 'is-success' : ''"
-                      v-on:click="daysSelected.friday = !daysSelected.friday"
-                    >
+                    <a class="button is-rounded" :class="daysSelected.friday ? 'is-success' : ''"
+                      v-on:click="daysSelected.friday = !daysSelected.friday">
                       V
                     </a>
                   </div>
                   <div class="control">
-                    <a
-                      class="button is-rounded"
-                      :class="daysSelected.saturday ? 'is-success' : ''"
-                      v-on:click="daysSelected.saturday = !daysSelected.saturday"
-                    >
+                    <a class="button is-rounded" :class="daysSelected.saturday ? 'is-success' : ''"
+                      v-on:click="daysSelected.saturday = !daysSelected.saturday">
                       S
                     </a>
                   </div>
                   <div class="control mr-0">
-                    <a
-                      class="button is-rounded"
-                      :class="daysSelected.sunday ? 'is-success' : ''"
-                      v-on:click="daysSelected.sunday = !daysSelected.sunday"
-                    >
+                    <a class="button is-rounded" :class="daysSelected.sunday ? 'is-success' : ''"
+                      v-on:click="daysSelected.sunday = !daysSelected.sunday">
                       D
                     </a>
                   </div>
@@ -129,10 +132,7 @@
             <div class="field">
               <label class="label">Message</label>
               <div class="control">
-                <textarea
-                  class="textarea"
-                  placeholder="Votre message ici..."
-                ></textarea>
+                <textarea class="textarea" placeholder="Votre message ici..."></textarea>
               </div>
             </div>
 
@@ -145,10 +145,7 @@
               </div>
             </div>
             <div class="has-text-centered">
-              <button
-                class="button is-success w-200"
-                v-on:click="modalCreateisActive = !modalCreateisActive"
-              >
+              <button class="button is-success w-200" v-on:click="modalCreateisActive = !modalCreateisActive">
                 Créer
               </button>
             </div>
@@ -159,11 +156,7 @@
           <div class="box">
             <h3 class="test-classe">Mes services actifs</h3>
 
-            <ActiveOffer
-              v-for="offer in offers"
-              v-bind:key="offer.id"
-              v-bind:offer="offer"
-            />
+            <ActiveOffer v-for="offer in offers" v-bind:key="offer.id" v-bind:offer="offer" />
           </div>
         </div>
 
@@ -175,10 +168,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -207,10 +197,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -238,10 +225,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -269,10 +253,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -301,13 +282,9 @@
       <template v-if="profileSwitch == true">
         <div class="column">
           <div class="box">
-            <h3 class="test-classe">Mes services prévues</h3>
+            <h3 class="test-classe">Mes services prévus</h3>
 
-            <ActiveOffer
-              v-for="offer in offers"
-              v-bind:key="offer.id"
-              v-bind:offer="offer"
-            />
+            <ActiveOffer v-for="offer in offers" v-bind:key="offer.id" v-bind:offer="offer" />
           </div>
         </div>
 
@@ -319,10 +296,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -351,10 +325,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -371,7 +342,7 @@
                       <span class="icon">
                         <i class="fas fa-exclamation-triangle"></i>
                       </span>
-                      <span>Cancelé</span>
+                      <span>Annulé</span>
                     </span>
                   </div>
                 </div>
@@ -382,10 +353,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -413,10 +381,7 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img
-                        src="https://bulma.io/images/placeholders/96x96.png"
-                        alt="Placeholder image"
-                      />
+                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -454,20 +419,13 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Confirmation</p>
-          <button
-            class="delete"
-            v-on:click="modalCreateisActive = !modalCreateisActive"
-            aria-label="close"
-          ></button>
+          <button class="delete" v-on:click="modalCreateisActive = !modalCreateisActive" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
           Êtes-vous certain de vouloir créer ce service?
         </section>
         <footer class="modal-card-foot">
-          <button
-            class="button is-danger w-100"
-            v-on:click="modalCreateisActive = !modalCreateisActive"
-          >
+          <button class="button is-danger w-100" v-on:click="modalCreateisActive = !modalCreateisActive">
             Non
           </button>
           <button class="button is-success w-100">Oui</button>
@@ -478,49 +436,91 @@
 </template>
 
 <script>
-import axios from "axios";
-import ActiveOffer from "@/components/ActiveOffer";
-export default {
-  name: "MyAccount",
-  data() {
-    return {
-      offers: [],
-      modalCreateisActive: false,
-      daysSelected: {
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
-      },
-      profileSwitch: false,
-      userIsActive: true,
-    };
-  },
-  //Les components qu'on veut utiliser
-  components: {
-    ActiveOffer,
-  },
-  mounted() {
-    document.title = "Mon compte | Communoservice";
-    this.getAllOffers();
-  },
-  methods: {
-    async getAllOffers(){
-      this.$store.commit("setIsLoading", true);
-      
-      await axios
-        .get("/api/v1/offers/")
-        .then((response) => {
-          this.offers = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      this.$store.commit("setIsLoading", false);
-    }
-  },
-};
+  import axios from "axios";
+  import ActiveOffer from "@/components/ActiveOffer";
+  export default {
+    name: "MyAccount",
+    data() {
+      return {
+        offers: [],
+        modalCreateisActive: false,
+        daysSelected: {
+          monday: false,
+          tuesday: false,
+          wednesday: false,
+          thursday: false,
+          friday: false,
+          saturday: false,
+          sunday: false,
+        },
+        profileSwitch: false,
+        userIsActive: true,
+      };
+    },
+    //Les components qu'on veut utiliser
+    components: {
+      ActiveOffer,
+    },
+    mounted() {
+      document.title = "Mon compte | Communoservice";
+      this.getAllOffers();
+    },
+    methods: {
+      async getAllOffers() {
+        this.$store.commit("setIsLoading", true);
+        await axios
+          .get("/api/v1/offers/")
+          .then((response) => {
+            this.offers = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        this.$store.commit("setIsLoading", false);
+      }
+    },
+  };
 </script>
+
+<style lang="scss" scoped>
+  .profile-toggle {
+    width: 8em !important;
+  }
+  .active-icon {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    font-size: 1.5em;
+    color: rgb(49, 162, 76);
+  }
+  .not-active-icon {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    font-size: 1.5em;
+    color: grey;
+  }
+  .stat-key {
+    font-size: 20px;
+    font-weight: 200;
+  }
+  .stat-val {
+    font-size: 35px;
+    font-weight: bold;
+  }
+  .tagline {
+    padding: 20px 0;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .avatar {
+    object-fit:cover;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    box-shadow: 0px 2px 8px 3px darkgrey;
+  }
+  p.title.is-bold {
+    font-weight: bold;
+  }
+</style>

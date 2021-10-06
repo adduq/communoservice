@@ -44,15 +44,7 @@
               </div>
             </div>
           </label>
-          <p class="ml-2 has-text-weight-bold has-text-black">
-            Distance
-          </p>
-          <label class="panel-block">
-            Max (km)
-            <input id="maxDistanceSlider" class="slider has-output is-fullwidth" min="0" max="100" value="100" step="10"
-              type="range">
-            <output for="maxDistanceSlider" class="w-80">100</output>
-          </label>
+
           <p class="ml-2 has-text-weight-bold has-text-black">
             Autres filtres
           </p>
@@ -90,7 +82,7 @@
         attachedSliders: [],
         // La valeur de "query" est hard codé pour le moment. Il va falloir faire categories[0] 
         // lorsque nous allons avoir la liste des catégories pour peupler le dropdown.
-        query:"Tonte de pelouse",
+        query: "Tonte de pelouse",
       };
     },
     components: {
@@ -109,7 +101,6 @@
     methods: {
       async getAllOffers() {
         this.isFetchingOffers = true;
-
         await axios
           .get("/api/v1/offers/")
           .then((response) => {
@@ -120,11 +111,10 @@
           });
         this.isFetchingOffers = false;
       },
-      async sendQuery(){
+      async sendQuery() {
         this.isFetchingOffers = true;
-
         await axios
-          .get("/api/v1/offers/search?type-service="+this.query)
+          .get("/api/v1/offers/search?type-service=" + this.query)
           .then((response) => {
             this.offers = response.data;
           })
