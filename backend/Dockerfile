@@ -7,7 +7,7 @@ COPY ./requirements.txt /app/
 COPY ./scripts/entrypoint.sh .
 
 # RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
-RUN apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
+RUN apk add postgresql-dev gcc python3-dev musl-dev libffi-dev build-base linux-headers pcre-dev
 RUN pip install psycopg2-binary
 RUN pip install uwsgi
 RUN pip install -r requirements.txt
