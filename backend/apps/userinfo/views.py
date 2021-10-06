@@ -57,8 +57,9 @@ class MyUserInfo(APIView):
 
             user = UserInfo.objects.get(user_id=user_id)
             serializer = UserInfoSerializer(user)
+            user_is_active = User.objects.get(id=user_id).is_active
 
-            out_dict = {}
+            out_dict = {'is_active':user_is_active}
             out_dict.update(serializer.data)
             
             del out_dict['id']

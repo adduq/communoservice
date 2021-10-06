@@ -12,14 +12,14 @@
           </div>
           <div class="column is-one-third">
             <p>
-              <span class="title is-bold">Félix Lengyel</span>
+              <span class="title is-bold">{{ userinfo.first_name + ' ' + userinfo.last_name }}</span>
             </p>
             <p class="tagline">I am a French Canadian Twitch streamer, former Overwatch League player, current Luminosity Gaming member and G FUEL partner.</p>
           </div>
           <dic class="column ml-5">
             <div class="columns is-mobile is-centered">
               <div class="column has-text-centered">
-                <p class="stat-val">129</p>
+                <p class="stat-val">{{userinfo.nb_services_given}}</p>
                 <p class="stat-key">services rendus</p>
               </div>
               <div class="column has-text-centered">
@@ -27,7 +27,7 @@
                 <p class="stat-key">services actifs</p>
               </div>
               <div class="column has-text-centered">
-                <p class="stat-val">8.9/10</p>
+                <p class="stat-val">{{userinfo.avg_rating_as_employee}}/10</p>
                 <p class="stat-key">score</p>
               </div>
             </div>
@@ -455,6 +455,7 @@
         },
         profileSwitch: false,
         userIsActive: true,
+        userinfo: {},
       };
     },
     //Les components qu'on veut utiliser
@@ -464,10 +465,10 @@
     mounted() {
       document.title = "Mon compte | Communoservice";
       this.getAllOffers();
+      this.getUserInfo();
     },
     methods: {
       async getAllOffers() {
-        this.$store.commit("setIsLoading", true);
         await axios
           .get("/api/v1/offers/")
           .then((response) => {
@@ -476,7 +477,17 @@
           .catch((error) => {
             console.log(error);
           });
-        this.$store.commit("setIsLoading", false);
+      },
+      async getUserInfo() {
+        await axios
+          .get("/api/v1/userinfo/me")
+          .then((response) => {
+            this.userinfo = response.data;
+            this.userIsActive = this.userinfo['is_active'];
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     },
   };
