@@ -7,18 +7,18 @@ services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile.dev
     depends_on:
       - postgres
     volumes:
       - ./backend:/app
-    command: /start.sh
-    entrypoint: /entrypoint.sh
+    command: /tmp/start.sh
+    entrypoint: /tmp/entrypoint.dev.sh
     restart: on-failure
     env_file: .env
 
   frontend:
     image: node:10-alpine
-    # command: npm i && npm run serve
     command: npm run serve-and-install
     volumes:
       - ./.env:/app/.env:ro
@@ -31,6 +31,13 @@ services:
     volumes:
       - test_data:/var/lib/postgresql/data
     env_file: .env
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    env_file: .env
+    ports:
+      - "8050:80"
 
   mailhog:
     image: mailhog/mailhog
