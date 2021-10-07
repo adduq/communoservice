@@ -12,6 +12,13 @@ class Offer(models.Model):
         null=True, max_digits=6, decimal_places=2)
     max_distance = models.PositiveIntegerField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    lundi = models.BooleanField(default=False)
+    mardi = models.BooleanField(default=False)
+    mercredi = models.BooleanField(default=False)
+    jeudi = models.BooleanField(default=False)
+    vendredi = models.BooleanField(default=False)
+    samedi = models.BooleanField(default=False)
+    dimanche = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-date_added',)

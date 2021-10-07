@@ -22,6 +22,14 @@
         </div>
       </div>
     </div>
+    <div>Disponibilités:</div>
+    <span v-if="offer.lundi == true"> Lundi  </span>
+    <span v-if="offer.mardi == true"> Mardi  </span>
+    <span v-if="offer.mercredi == true"> Mercredi  </span>
+    <span v-if="offer.jeudi == true"> Jeudi  </span>
+    <span v-if="offer.vendredi == true"> Vendredi  </span>
+    <span v-if="offer.samedi == true"> Samedi  </span>
+    <span v-if="offer.dimanche == true"> Dimanche </span>
   </div>
 </template>
 

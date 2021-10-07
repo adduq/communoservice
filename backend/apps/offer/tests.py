@@ -224,7 +224,7 @@ class TestOffer(unittest.TestCase):
             print(e.args)
             print('**********************************************************')
 
-    def test_givenValidInfo_whenCreatingInstance_thenReturnNewInstance(self):
+    def test_givenNoDisponibilies_whenCreatingInstance_thenReturnNewInstance(self):
 
         # given
         test_user = self.user
@@ -245,6 +245,13 @@ class TestOffer(unittest.TestCase):
         self.assertEqual(offer.description, test_description)
         self.assertEqual(offer.hourly_rate, test_hourly_rate)
         self.assertEqual(offer.max_distance, test_max_dist)
+        self.assertEqual(offer.lundi, False)
+        self.assertEqual(offer.mardi, False)
+        self.assertEqual(offer.mercredi, False)
+        self.assertEqual(offer.jeudi, False)
+        self.assertEqual(offer.vendredi, False)
+        self.assertEqual(offer.samedi, False)
+        self.assertEqual(offer.dimanche, False)
 
     def test_givenExistingOfferId_whenCreatingInstance_expectError(self):
         # given
@@ -340,5 +347,3 @@ class OfferViewTest(TestCase):
 
         # then
         self.assertEqual(response.status_code, 400)
-        pprint(vars(response))
-        print(response.data.user)
