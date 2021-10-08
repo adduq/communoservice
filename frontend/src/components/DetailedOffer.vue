@@ -18,10 +18,19 @@
 
       <div class="columns">
         <div class="column">
-          <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+          <time class="has-text-danger" datetime="{{offer.expiration_date}}">Valide jusqu'au {{offer.expiration_date}}</time>
         </div>
       </div>
     </div>
+    <div>Disponibilités:</div>
+    <span class="button is-rounded is-success" v-if="offer.lundi == true"> Lun  </span>
+    <span class="button is-rounded is-success" v-if="offer.mardi == true"> Mar  </span>
+    <span class="button is-rounded is-success" v-if="offer.mercredi == true"> Mer  </span>
+    <span class="button is-rounded is-success" v-if="offer.jeudi == true"> Jeu  </span>
+    <span class="button is-rounded is-success" v-if="offer.vendredi == true"> Ven  </span>
+    <span class="button is-rounded is-success" v-if="offer.samedi == true"> Sam  </span>
+    <span class="button is-rounded is-success" v-if="offer.dimanche == true"> Dim </span>
+<div></div>
   </div>
 </template>
 
