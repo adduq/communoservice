@@ -111,6 +111,7 @@
         "pk": 1,
         "fields": {
             "user_id": 1,
+            "is_online": false,
             "profile_is_completed": false,
             "first_name": "François",
             "last_name": "Xavier-Garneau",
@@ -124,7 +125,7 @@
             "user_bio": "Blablablabla1",
             "location_lat": "79.467565",
             "location_lon": "70.463679",
-            "adress": "2460 Chem. Royal, Sainte-Famille"
+            "address": "2460 Chem. Royal, Sainte-Famille"
         }
     },
     {
@@ -132,6 +133,7 @@
         "pk": 2,
         "fields": {
             "user_id": 2,
+            "is_online": false,
             "profile_is_completed": false,
             "first_name": "Guylaine",
             "last_name": "Morin",
@@ -145,7 +147,7 @@
             "user_bio": "Blablablabla1",
             "location_lat": "79.467565",
             "location_lon": "70.463679",
-            "adress": "2325 Rue de l'Université, Québec"
+            "address": "2325 Rue de l'Université, Québec"
         }
     },
     {
@@ -153,6 +155,7 @@
         "pk": 3,
         "fields": {
             "user_id": 3,
+            "is_online": false,
             "profile_is_completed": false,
             "first_name": "Clément",
             "last_name": "Tremblay",
@@ -166,7 +169,7 @@
             "user_bio": "Blablablabla1",
             "location_lat": "79.467565",
             "location_lon": "70.463679",
-            "adress": "1660 Bd de l'Entente, Québec"
+            "address": "1660 Bd de l'Entente, Québec"
         }
     },
     {
