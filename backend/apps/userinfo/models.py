@@ -1,10 +1,35 @@
 from django.db import models
-from .signals import *
 from django.contrib.auth.models import User
+from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.dispatch import receiver
+import logging
+import pprint
 
+logger = logging.getLogger(__name__)
+
+
+@receiver(user_logged_in)
+def login_logger(request, user, **kwargs):
+    print('Logged in')
+    pprint(vars(user))
+    userinfo = UserInfo.objects.get(user_id=request.user.user_id)
+    pprint(vars(userinfo))
+    # userinfo.is_online = True
+    # userinfo.save()
+
+@receiver(user_logged_out)
+def got_offline(request, user, **kwargs):   
+    print('Logged off')
+    pprint(vars(user))
+    userinfo = UserInfo.objects.get(user_id=request.user.user_id)
+    pprint(vars(userinfo))
+    # userinfo.is_online = False
+    # userinfo.save()
 
 class UserInfo(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, to_field="id")
+
+    is_online = models.BooleanField(default=False)
 
     profile_is_completed = models.BooleanField(default=False)
 
