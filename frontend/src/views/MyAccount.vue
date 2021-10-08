@@ -24,7 +24,7 @@
                   <p class="stat-key">services rendus</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">23</p>
+                  <p class="stat-val">{{offers.length}}</p>
                   <p class="stat-key">services actifs</p>
                 </div>
                 <div class="column has-text-centered">
@@ -38,7 +38,7 @@
                   <p class="stat-key">services reçus</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">23</p>
+                  <p class="stat-val">{{offers.length}}</p>
                   <p class="stat-key">services actifs</p>
                 </div>
                 <div class="column has-text-centered">
