@@ -1,161 +1,161 @@
-[{
-        "model": "auth.user",
-        "pk": 1,
-        "fields": {
-            "username": "garneau1",
-            "first_name": "François",
-            "last_name": "Xavier-Garneau",
-            "email": "fgx@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
-        }
-    },
-    {
-        "model": "auth.user",
-        "pk": 2,
-        "fields": {
-            "username": "garneau2",
-            "first_name": "Guylaine",
-            "last_name": "Morin",
-            "email": "gmorin@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
-        }
-    },
-    {
-        "model": "auth.user",
-        "pk": 3,
-        "fields": {
-            "username": "garneau3",
-            "first_name": "Clément",
-            "last_name": "Tremblay",
-            "email": "ctremblay@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 1,
-        "fields": {
-            "user": 1,
-            "type_service": "Tonte de pelouse",
-            "description": "Service rapide et professionnel.",
-            "hourly_rate": "12.50",
-            "max_distance": 2,
-            "date_added": "2020-09-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 2,
-        "fields": {
-            "user": 1,
-            "type_service": "Tonte de pelouse",
-            "description": "Rapide et efficace.",
-            "hourly_rate": "50",
-            "max_distance": 2,
-            "date_added": "2020-05-05"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 3,
-        "fields": {
-            "user": 1,
-            "type_service": "Gardiennage",
-            "description": "Maximum 3 enfants.",
-            "hourly_rate": "12.50",
-            "max_distance": 4,
-            "date_added": "2020-09-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 4,
-        "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "Les escaliers extérieurs peuvent être inclus.",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 5,
-        "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "La pelle doit être fournie par le client.",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 6,
-        "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20"
-        }
-    },
-    {
-        "model": "userinfo.userinfo",
-        "pk": 1,
-        "fields": {
-            "user_id": 1,
-            "profile_is_completed": false,
-            "first_name": "François",
-            "last_name": "Xavier-Garneau",
-            "email": "fgx@educegepgarneau.ca",
-            "nb_services_received": 45,
-            "nb_services_given": 54,
-            "avg_rating_as_employee": 9.5,
-            "nb_rating_as_employe": 34,
-            "avg_rating_as_employer": 8.98,
-            "nb_rating_as_employer": 23
-        }
-    },
-    {
-        "model": "userinfo.userinfo",
-        "pk": 2,
-        "fields": {
-            "user_id": 2,
-            "profile_is_completed": false,
-            "first_name": "Guylaine",
-            "last_name": "Morin",
-            "email": "gmorin@educegepgarneau.ca",
-            "nb_services_received": 123,
-            "nb_services_given": 12,
-            "avg_rating_as_employee": 8.86,
-            "nb_rating_as_employe": 34,
-            "avg_rating_as_employer": 6.98,
-            "nb_rating_as_employer": 23
-        }
-    },
-    {
-        "model": "userinfo.userinfo",
-        "pk": 3,
-        "fields": {
-            "user_id": 3,
-            "profile_is_completed": false,
-            "first_name": "Clément",
-            "last_name": "Tremblay",
-            "email": "ctremblay@educegepgarneau.ca",
-            "nb_services_received": 13,
-            "nb_services_given": 21,
-            "avg_rating_as_employee": 4.56,
-            "nb_rating_as_employe": 35,
-            "avg_rating_as_employer": 4.98,
-            "nb_rating_as_employer": 7
-        }
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "garneau1",
+      "first_name": "François",
+      "last_name": "Xavier-Garneau",
+      "email": "fgx@educegepgarneau.ca",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": "True"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "garneau2",
+      "first_name": "Guylaine",
+      "last_name": "Morin",
+      "email": "gmorin@educegepgarneau.ca",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": "True"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "garneau3",
+      "first_name": "Clément",
+      "last_name": "Tremblay",
+      "email": "ctremblay@educegepgarneau.ca",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": "True"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "type_service": "Tonte de pelouse",
+      "description": "Service rapide et professionnel.",
+      "hourly_rate": "12.50",
+      "max_distance": 2,
+      "date_added": "2020-09-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "type_service": "Tonte de pelouse",
+      "description": "Rapide et efficace.",
+      "hourly_rate": "50",
+      "max_distance": 2,
+      "date_added": "2020-05-05"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "type_service": "Gardiennage",
+      "description": "Maximum 3 enfants.",
+      "hourly_rate": "12.50",
+      "max_distance": 4,
+      "date_added": "2020-09-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "type_service": "Déneigement",
+      "description": "Les escaliers extérieurs peuvent être inclus.",
+      "hourly_rate": "15.75",
+      "max_distance": 4,
+      "date_added": "2020-12-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 5,
+    "fields": {
+      "user": 2,
+      "type_service": "Déneigement",
+      "description": "La pelle doit être fournie par le client.",
+      "hourly_rate": "15.75",
+      "max_distance": 4,
+      "date_added": "2020-12-20"
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 6,
+    "fields": {
+      "user": 2,
+      "type_service": "Déneigement",
+      "description": "",
+      "hourly_rate": "15.75",
+      "max_distance": 4,
+      "date_added": "2020-12-20"
+    }
+  },
+  {
+    "model": "userinfo.userinfo",
+    "pk": 1,
+    "fields": {
+      "user_id": 1,
+      "profile_is_completed": false,
+      "first_name": "François",
+      "last_name": "Xavier-Garneau",
+      "email": "fgx@educegepgarneau.ca",
+      "nb_services_received": 45,
+      "nb_services_given": 54,
+      "avg_rating_as_employee": 9.5,
+      "nb_rating_as_employe": 34,
+      "avg_rating_as_employer": 8.98,
+      "nb_rating_as_employer": 23
+    }
+  },
+  {
+    "model": "userinfo.userinfo",
+    "pk": 2,
+    "fields": {
+      "user_id": 2,
+      "profile_is_completed": false,
+      "first_name": "Guylaine",
+      "last_name": "Morin",
+      "email": "gmorin@educegepgarneau.ca",
+      "nb_services_received": 123,
+      "nb_services_given": 12,
+      "avg_rating_as_employee": 8.86,
+      "nb_rating_as_employe": 34,
+      "avg_rating_as_employer": 6.98,
+      "nb_rating_as_employer": 23
+    }
+  },
+  {
+    "model": "userinfo.userinfo",
+    "pk": 3,
+    "fields": {
+      "user_id": 3,
+      "profile_is_completed": false,
+      "first_name": "Clément",
+      "last_name": "Tremblay",
+      "email": "ctremblay@educegepgarneau.ca",
+      "nb_services_received": 13,
+      "nb_services_given": 21,
+      "avg_rating_as_employee": 4.56,
+      "nb_rating_as_employe": 35,
+      "avg_rating_as_employer": 4.98,
+      "nb_rating_as_employer": 7
     }
   },
   {
@@ -192,14 +192,14 @@
       "hourly_rate": "12.50",
       "max_distance": 2,
       "date_added": "2020-09-20",
-      "lundi":true,
-      "mardi":true,
-      "mercredi":true,
-      "jeudi":true,
-      "vendredi":true,
-      "samedi":true,
-      "dimanche":true,
-      "expiration_date":"2021-12-20"
+      "lundi": true,
+      "mardi": true,
+      "mercredi": true,
+      "jeudi": true,
+      "vendredi": true,
+      "samedi": true,
+      "dimanche": true,
+      "expiration_date": "2021-12-20"
     }
   },
   {
@@ -212,9 +212,9 @@
       "hourly_rate": "50",
       "max_distance": 2,
       "date_added": "2020-05-05",
-      "samedi":true,
-      "dimanche":true,
-      "expiration_date":"2021-12-20"
+      "samedi": true,
+      "dimanche": true,
+      "expiration_date": "2021-12-20"
     }
   },
   {
@@ -227,8 +227,8 @@
       "hourly_rate": "12.50",
       "max_distance": 4,
       "date_added": "2020-09-20",
-      "mercredi":true,
-      "expiration_date":"2021-12-20"
+      "mercredi": true,
+      "expiration_date": "2021-12-20"
     }
   },
   {
@@ -241,9 +241,9 @@
       "hourly_rate": "15.75",
       "max_distance": 4,
       "date_added": "2020-12-20",
-      "mercredi":true,
-      "dimanche":true,
-      "expiration_date":"2021-12-20"
+      "mercredi": true,
+      "dimanche": true,
+      "expiration_date": "2021-12-20"
     }
   },
   {
@@ -256,8 +256,8 @@
       "hourly_rate": "15.75",
       "max_distance": 4,
       "date_added": "2020-12-20",
-      "samedi":true,
-      "expiration_date":"2021-12-20"
+      "samedi": true,
+      "expiration_date": "2021-12-20"
     }
   },
   {
@@ -270,8 +270,8 @@
       "hourly_rate": "15.75",
       "max_distance": 4,
       "date_added": "2020-12-20",
-      "samedi":true,
-      "expiration_date":"2021-12-20"
+      "samedi": true,
+      "expiration_date": "2021-12-20"
     }
   }
 ]

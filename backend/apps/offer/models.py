@@ -21,8 +21,9 @@ class Offer(models.Model):
     vendredi = models.BooleanField(default=False)
     samedi = models.BooleanField(default=False)
     dimanche = models.BooleanField(default=False)
-    expiration_date = models.DateField(
-        null=True, validators=[validate_expiration_date])
+    expiration_date = models.DateField(null=True)
+    # expiration_date = models.DateField(
+    #     null=True, validators=[validate_expiration_date])
 
     class Meta:
         ordering = ('-date_added',)
