@@ -141,25 +141,43 @@
     },
     computed: {},
     methods: {
-      logout() {
-        axios.defaults.headers.common["Authorization"] = "";
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
-        localStorage.removeItem("userid");
-        this.$store.commit("removeToken");
-        this.$router.push("/");
-        toast({
-          message: "Déconnecté avec succès!",
-          type: "is-success",
-          dismissible: false,
-          pauseOnHover: false,
-          duration: 3000,
-          position: "center",
-          animate: {
-            in: "fadeInRightBig",
-            out: "fadeOutLeftBig",
-          },
-        });
+      async logout() {
+        await axios
+				.post("/api/v1/token/logout/")
+				.then((response) => {
+					axios.defaults.headers.common["Authorization"] = "";
+          localStorage.removeItem("token");
+          localStorage.removeItem("username");
+          localStorage.removeItem("userid");
+          this.$store.commit("removeToken");
+          this.$router.push("/");
+          toast({
+            message: "Déconnecté avec succès!",
+            type: "is-success",
+            dismissible: false,
+            pauseOnHover: false,
+            duration: 3000,
+            position: "center",
+            animate: {
+              in: "fadeInRightBig",
+              out: "fadeOutLeftBig",
+            },
+          });
+				})
+				.catch((error) => {
+					toast({
+            message: "Une erreur est survenue...",
+            type: "is-danger",
+            dismissible: false,
+            pauseOnHover: false,
+            duration: 3000,
+            position: "center",
+            animate: {
+              in: "fadeInRightBig",
+              out: "fadeOutLeftBig",
+            },
+          });
+				});
       },
       handleResize() {
         this.window.width = window.innerWidth;
