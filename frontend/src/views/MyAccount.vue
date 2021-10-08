@@ -497,7 +497,7 @@
           .get("/api/v1/userinfo/me")
           .then((response) => {
             this.userinfo = response.data;
-            this.userIsActive = this.userinfo['is_active'];
+            this.userIsActive = this.userinfo['is_online'];
           })
           .catch((error) => {
             console.log(error);

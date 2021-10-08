@@ -23,12 +23,12 @@ class UserInfoDetail(APIView):
     Récupérer l'info d'un utilisateur à l'aide de son identifiant.
     """
 
-    def get_object(self, user_id):
+    def get_object(self, user):
         try:
 
-            user = UserInfo.objects.get(user_id=user_id)
+            user = UserInfo.objects.get(user=user)
 
-            user_is_active = User.objects.get(id=user_id).is_active
+            user_is_active = User.objects.get(id=user).is_active
             serializer = UserInfoSerializer(user)
 
             out_dict = {'is_active':user_is_active}
@@ -42,8 +42,8 @@ class UserInfoDetail(APIView):
         except UserInfo.DoesNotExist:
             raise Http404
 
-    def get(self, request, user_id, format=None):
-        userinfo = self.get_object(user_id)
+    def get(self, request, user, format=None):
+        userinfo = self.get_object(user)
         return Response(userinfo)
 
 class MyUserInfo(APIView):
@@ -52,20 +52,18 @@ class MyUserInfo(APIView):
     Récupérer l'info de l'utilisateur à l'aide de son token.
     """
 
-    def get_object(self, user_id):
+    def get_object(self, user):
         try:
 
-            user = UserInfo.objects.get(user_id=user_id)
-            serializer = UserInfoSerializer(user)
-            user_is_active = User.objects.get(id=user_id).is_active
+            userinfo = UserInfo.objects.get(user=user)
+            serializer = UserInfoSerializer(userinfo)
+            user_is_active = User.objects.get(id=user.id).is_active
 
-            out_dict = {'is_active':user_is_active}
+            out_dict = {}
             out_dict.update(serializer.data)
             
             del out_dict['id']
             del out_dict['email']
-            del out_dict['profile_is_completed'] 
-
             return out_dict
         except UserInfo.DoesNotExist:
             raise Http404
@@ -75,5 +73,5 @@ class MyUserInfo(APIView):
         if request.user.is_anonymous:
             return HttpResponse('Unauthorized', status=401)
 
-        userinfo = self.get_object(request.user.id)
+        userinfo = self.get_object(request.user)
         return Response(userinfo)

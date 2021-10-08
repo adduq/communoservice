@@ -7,7 +7,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     def validate_creation(self, value):
         ModelClass = self.Meta.model
-        if ModelClass.objects.filter(user_id=value).exists():
+        if ModelClass.objects.filter(user=value).exists():
             raise serializers.ValidationError('already exists')
         return value
 
