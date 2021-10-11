@@ -206,13 +206,13 @@
             "hourly_rate": "12.50",
             "max_distance": 2,
             "date_added": "2020-09-20",
-            "lundi": true,
-            "mardi": true,
-            "mercredi": true,
-            "jeudi": true,
-            "vendredi": true,
-            "samedi": true,
-            "dimanche": true,
+            "monday": true,
+            "tuesday": true,
+            "wednesday": true,
+            "thursday": true,
+            "friday": true,
+            "saturday": true,
+            "sunday": true,
             "expiration_date": "2021-12-20"
         }
     },
@@ -226,8 +226,8 @@
             "hourly_rate": "50",
             "max_distance": 2,
             "date_added": "2020-05-05",
-            "samedi": true,
-            "dimanche": true,
+            "friday": true,
+            "saturday": true,
             "expiration_date": "2021-12-20"
         }
     },
@@ -241,7 +241,7 @@
             "hourly_rate": "12.50",
             "max_distance": 4,
             "date_added": "2020-09-20",
-            "mercredi": true,
+            "wednesday": true,
             "expiration_date": "2021-12-20"
         }
     },
@@ -255,8 +255,8 @@
             "hourly_rate": "15.75",
             "max_distance": 4,
             "date_added": "2020-12-20",
-            "mercredi": true,
-            "dimanche": true,
+            "wednesday": true,
+            "sunday": true,
             "expiration_date": "2021-12-20"
         }
     },
@@ -270,7 +270,7 @@
             "hourly_rate": "15.75",
             "max_distance": 4,
             "date_added": "2020-12-20",
-            "samedi": true,
+            "saturday": true,
             "expiration_date": "2021-12-20"
         }
     },
@@ -284,7 +284,7 @@
             "hourly_rate": "15.75",
             "max_distance": 4,
             "date_added": "2020-12-20",
-            "samedi": true,
+            "saturday": true,
             "expiration_date": "2021-12-20"
         }
     }

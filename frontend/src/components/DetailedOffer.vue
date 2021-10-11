@@ -23,13 +23,13 @@
       </div>
     </div>
     <div>Disponibilités:</div>
-    <span class="button is-rounded is-success" v-if="offer.lundi == true"> Lun  </span>
-    <span class="button is-rounded is-success" v-if="offer.mardi == true"> Mar  </span>
-    <span class="button is-rounded is-success" v-if="offer.mercredi == true"> Mer  </span>
-    <span class="button is-rounded is-success" v-if="offer.jeudi == true"> Jeu  </span>
-    <span class="button is-rounded is-success" v-if="offer.vendredi == true"> Ven  </span>
-    <span class="button is-rounded is-success" v-if="offer.samedi == true"> Sam  </span>
-    <span class="button is-rounded is-success" v-if="offer.dimanche == true"> Dim </span>
+    <span class="button is-rounded is-success" v-if="offer.monday == true"> Lun  </span>
+    <span class="button is-rounded is-success" v-if="offer.tuesday == true"> Mar  </span>
+    <span class="button is-rounded is-success" v-if="offer.wednesday == true"> Mer  </span>
+    <span class="button is-rounded is-success" v-if="offer.thursday == true"> Jeu  </span>
+    <span class="button is-rounded is-success" v-if="offer.friday == true"> Ven  </span>
+    <span class="button is-rounded is-success" v-if="offer.saturday == true"> Sam  </span>
+    <span class="button is-rounded is-success" v-if="offer.sunday == true"> Dim </span>
 <div></div>
   </div>
 </template>
