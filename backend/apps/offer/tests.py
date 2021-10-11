@@ -300,13 +300,13 @@ class TestOffer(unittest.TestCase):
         self.assertEqual(offer.description, test_description)
         self.assertEqual(offer.hourly_rate, test_hourly_rate)
         self.assertEqual(offer.max_distance, test_max_dist)
-        self.assertEqual(offer.lundi, False)
-        self.assertEqual(offer.mardi, False)
-        self.assertEqual(offer.mercredi, False)
-        self.assertEqual(offer.jeudi, False)
-        self.assertEqual(offer.vendredi, False)
-        self.assertEqual(offer.samedi, False)
-        self.assertEqual(offer.dimanche, False)
+        self.assertEqual(offer.monday, False)
+        self.assertEqual(offer.tuesday, False)
+        self.assertEqual(offer.wednesday, False)
+        self.assertEqual(offer.thursday, False)
+        self.assertEqual(offer.friday, False)
+        self.assertEqual(offer.saturday, False)
+        self.assertEqual(offer.sunday, False)
 
     def test_givenExistingOfferId_whenCreatingInstance_expectError(self):
         # given
