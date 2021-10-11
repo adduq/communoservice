@@ -30,27 +30,26 @@
               </span>
             </p>
           </div>
-          <p class="ml-2 has-text-weight-bold has-text-black">
+          <div class="panel-section">
+            <p class="ml-2 has-text-weight-bold has-text-black">
             Type de service
-          </p>
-          <label class="panel-block">
-            <div class="control">
-              <div class="select">
-                <select v-model='query'>
-                  <option>Tonte de pelouse</option>
-                  <option>Gardiennage</option>
-                  <option>Déneigement</option>
-                </select>
-              </div>
-            </div>
-          </label>
+            </p>
 
-          <p class="ml-2 has-text-weight-bold has-text-black">
-            Autres filtres
-          </p>
-          <label class="panel-block">
-            ...
-          </label>
+            <div class="select ml-2 mt-1">
+              <select v-model='query'>
+                <option>Tonte de pelouse</option>
+                <option>Gardiennage</option>
+                <option>Déneigement</option>
+              </select>
+            </div>
+          </div>
+          <div class="panel-section">
+            <p class="ml-2 has-text-weight-bold has-text-black">
+              Date
+            </p>
+            <input class="datepicker ml-2 mt-1" type="date" :min="dateToday" v-model="serviceDateQuery">
+          </div>
+          
           <div class="panel-block">
             <button v-on:click="sendQuery" class="button is-link is-outlined is-fullwidth">
               Rechercher
@@ -71,7 +70,6 @@
 <script>
   import axios from "axios";
   import DetailedOffer from "@/components/DetailedOffer";
-  import bulmaSlider from "bulma-slider";
   export default {
     name: "Home",
     data() {
@@ -83,6 +81,17 @@
         // La valeur de "query" est hard codé pour le moment. Il va falloir faire categories[0] 
         // lorsque nous allons avoir la liste des catégories pour peupler le dropdown.
         query: "Tonte de pelouse",
+        dateToday: '',
+        serviceDateQuery: '',
+        weekdays: {
+          0:"monday",
+          1:"tuesday",
+          2:"wednesday",
+          3:"thursday",
+          4:"friday",
+          5:"saturday",
+          6:"sunday",
+        }
       };
     },
     components: {
@@ -91,12 +100,12 @@
     mounted() {
       document.title = "Accueil | Communoservice";
       this.getAllOffers();
+      this.updateCalendarToday();
     },
     renderTriggered() {
-      if (this.attachedSliders.length == 0) {
-        this.attachedSliders = bulmaSlider.attach();
-        console.log("Sliders attached: " + this.attachedSliders.length)
-      }
+      // DEBUG pour le datepicker
+      var chosenDate = new Date(this.serviceDateQuery);
+      console.log(`${this.serviceDateQuery} is a ${this.weekdays[chosenDate.getDay()]}`);
     },
     methods: {
       async getAllOffers() {
@@ -122,6 +131,10 @@
             console.log(error);
           });
         this.isFetchingOffers = false;
+      },
+      updateCalendarToday(){
+        var current = new Date();
+        this.serviceDateQuery = this.dateToday = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
       }
     },
   };
