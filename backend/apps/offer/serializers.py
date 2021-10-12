@@ -13,7 +13,7 @@ class OfferSerializer(serializers.ModelSerializer):
         return value
 
     def validate_expiration_date(self, value):
-        if value < date.today:
+        if value < date.today():
             raise serializers.ValidationError("Expiration date is not valid.")
         return value
 

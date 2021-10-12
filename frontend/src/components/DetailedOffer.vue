@@ -12,7 +12,7 @@
         </div>
         <div class="media-content">
           <p class="title is-4">{{offer.type_service}}</p>
-          <p class="subtitle is-6">Localisation ici</p>
+          <p class="subtitle is-6">{{offer.description}}</p>
         </div>
       </div>
 

@@ -5,44 +5,58 @@
         <div class="columns">
           <div class="column is-one-fifth">
             <figure class="image is-128x128 round-shadow has-image-centered">
-              <img class="is-rounded" src="https://owcdn.net/img/5bda50b474984.jpg" />
-              <i class="fas fa-circle" :class="userIsActive ? 'active-icon':'not-active-icon'"></i>
+              <img
+                class="is-rounded"
+                src="https://owcdn.net/img/5bda50b474984.jpg"
+              />
+              <i
+                class="fas fa-circle"
+                :class="userIsActive ? 'active-icon' : 'not-active-icon'"
+              ></i>
             </figure>
-
           </div>
           <div class="column is-one-third">
             <p>
-              <span class="title is-bold">{{ userinfo.first_name + ' ' + userinfo.last_name }}</span>
+              <span class="title is-bold">{{
+                userInfo.first_name + " " + userInfo.last_name
+              }}</span>
             </p>
-            <p class="tagline">I am a French Canadian Twitch streamer, former Overwatch League player, current Luminosity Gaming member and G FUEL partner.</p>
+            <p class="tagline">
+              I am a French Canadian Twitch streamer, former Overwatch League
+              player, current Luminosity Gaming member and G FUEL partner.
+            </p>
           </div>
           <div class="column ml-5">
             <div class="columns is-mobile is-centered">
               <template v-if="profileSwitch == false">
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{userinfo.nb_services_given}}</p>
+                  <p class="stat-val">{{ userInfo.nb_services_given }}</p>
                   <p class="stat-key">services rendus</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{offers.length}}</p>
+                  <p class="stat-val">{{ offers.length }}</p>
                   <p class="stat-key">services actifs</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{userinfo.avg_rating_as_employee}}/10</p>
+                  <p class="stat-val">
+                    {{ userInfo.avg_rating_as_employee }}/10
+                  </p>
                   <p class="stat-key">score</p>
                 </div>
               </template>
               <template v-if="profileSwitch == true">
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{userinfo.nb_services_received}}</p>
+                  <p class="stat-val">{{ userInfo.nb_services_received }}</p>
                   <p class="stat-key">services reçus</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{offers.length}}</p>
+                  <p class="stat-val">{{ offers.length }}</p>
                   <p class="stat-key">services actifs</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{userinfo.avg_rating_as_employer}}/10</p>
+                  <p class="stat-val">
+                    {{ userInfo.avg_rating_as_employer }}/10
+                  </p>
                   <p class="stat-key">score</p>
                 </div>
               </template>
@@ -53,10 +67,20 @@
     </div>
     <div class="columns is-centered mt-6">
       <div class="column buttons has-addons is-half has-text-centered">
-        <button class="button profile-toggle" v-on:click="profileSwitch = false"
-          :class="profileSwitch == false ? 'is-success is-selected' : ''">Employé</button>
-        <button class="button profile-toggle" v-on:click="profileSwitch = true"
-          :class="profileSwitch == true ? 'is-success is-selected' : ''">Employeur</button>
+        <button
+          class="button profile-toggle"
+          v-on:click="profileSwitch = false"
+          :class="profileSwitch == false ? 'is-success is-selected' : ''"
+        >
+          Employé
+        </button>
+        <button
+          class="button profile-toggle"
+          v-on:click="profileSwitch = true"
+          :class="profileSwitch == true ? 'is-success is-selected' : ''"
+        >
+          Employeur
+        </button>
       </div>
     </div>
     <div class="columns">
@@ -69,7 +93,7 @@
               <label class="label">Type de service</label>
               <div class="control">
                 <div class="select">
-                  <select class="w-200">
+                  <select v-model="serviceType" class="w-200">
                     <option>Tonte de pelouse</option>
                     <option>Déneigement</option>
                   </select>
@@ -88,7 +112,24 @@
                 </span>
               </p>
               <p class="control">
-                <input class="input" type="text" placeholder="Montant" />
+                <input
+                  v-model="hourlyRate"
+                  class="input"
+                  type="number"
+                  placeholder="Montant"
+                />
+              </p>
+            </div>
+
+            <label class="label">Distance maximale</label>
+            <div class="field has-addons">
+              <p class="control">
+                <input
+                  v-model="maxDistance"
+                  class="input"
+                  type="number"
+                  placeholder="Distance"
+                />
               </p>
             </div>
 
@@ -96,57 +137,99 @@
               <label class="label">Disponibilités</label>
               <div>
                 <div
-                  class="columns is-mobile is-family-monospace buttons is-grouped is-justify-content-space-around mt-2">
+                  class="columns is-mobile is-family-monospace buttons is-grouped is-justify-content-space-around mt-2"
+                >
                   <div class="control ml-0">
-                    <a class="button is-rounded" :class="daysSelected.monday ? 'is-success' : ''"
-                      v-on:click="daysSelected.monday = !daysSelected.monday">
+                    <a
+                      class="button is-rounded"
+                      :class="daysSelected.monday ? 'is-success' : ''"
+                      v-on:click="daysSelected.monday = !daysSelected.monday"
+                    >
                       L
                     </a>
                   </div>
                   <div class="control">
-                    <a class="button is-rounded" :class="daysSelected.tuesday ? 'is-success' : ''"
-                      v-on:click="daysSelected.tuesday = !daysSelected.tuesday">
+                    <a
+                      class="button is-rounded"
+                      :class="daysSelected.tuesday ? 'is-success' : ''"
+                      v-on:click="daysSelected.tuesday = !daysSelected.tuesday"
+                    >
                       M
                     </a>
                   </div>
                   <div class="control">
-                    <a class="button is-rounded" :class="daysSelected.wednesday ? 'is-success' : ''" v-on:click="
+                    <a
+                      class="button is-rounded"
+                      :class="daysSelected.wednesday ? 'is-success' : ''"
+                      v-on:click="
                         daysSelected.wednesday = !daysSelected.wednesday
-                      ">
+                      "
+                    >
                       M
                     </a>
                   </div>
                   <div class="control">
-                    <a class="button is-rounded" :class="daysSelected.thursday ? 'is-success' : ''"
-                      v-on:click="daysSelected.thursday = !daysSelected.thursday">
+                    <a
+                      class="button is-rounded"
+                      :class="daysSelected.thursday ? 'is-success' : ''"
+                      v-on:click="
+                        daysSelected.thursday = !daysSelected.thursday
+                      "
+                    >
                       J
                     </a>
                   </div>
                   <div class="control">
-                    <a class="button is-rounded" :class="daysSelected.friday ? 'is-success' : ''"
-                      v-on:click="daysSelected.friday = !daysSelected.friday">
+                    <a
+                      class="button is-rounded"
+                      :class="daysSelected.friday ? 'is-success' : ''"
+                      v-on:click="daysSelected.friday = !daysSelected.friday"
+                    >
                       V
                     </a>
                   </div>
                   <div class="control">
-                    <a class="button is-rounded" :class="daysSelected.saturday ? 'is-success' : ''"
-                      v-on:click="daysSelected.saturday = !daysSelected.saturday">
+                    <a
+                      class="button is-rounded"
+                      :class="daysSelected.saturday ? 'is-success' : ''"
+                      v-on:click="
+                        daysSelected.saturday = !daysSelected.saturday
+                      "
+                    >
                       S
                     </a>
                   </div>
                   <div class="control mr-0">
-                    <a class="button is-rounded" :class="daysSelected.sunday ? 'is-success' : ''"
-                      v-on:click="daysSelected.sunday = !daysSelected.sunday">
+                    <a
+                      class="button is-rounded"
+                      :class="daysSelected.sunday ? 'is-success' : ''"
+                      v-on:click="daysSelected.sunday = !daysSelected.sunday"
+                    >
                       D
                     </a>
                   </div>
                 </div>
               </div>
             </div>
+
+            <div class="field">
+              <label class="label">Expiration</label>
+              <input
+                type="date"
+                min="2021-09-16"
+                max="2021-10-16"
+                v-model="expirationDate"
+              />
+            </div>
+
             <div class="field">
               <label class="label">Message</label>
               <div class="control">
-                <textarea class="textarea" placeholder="Votre message ici..."></textarea>
+                <textarea
+                  v-model="description"
+                  class="textarea"
+                  placeholder="Votre message ici..."
+                ></textarea>
               </div>
             </div>
 
@@ -159,9 +242,12 @@
               </div>
             </div>
             <div class="has-text-centered">
-              <button class="button is-success w-200" v-on:click="modalCreateisActive = !modalCreateisActive">
+              <button class="button is-success w-200" v-on:click="validateForm">
                 Créer
               </button>
+            </div>
+            <div class="notification is-danger mt-4" v-if="errors.length">
+              <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
             </div>
           </div>
         </div>
@@ -170,7 +256,11 @@
           <div class="box">
             <h3 class="test-classe">Mes services actifs</h3>
 
-            <ActiveOffer v-for="offer in offers" v-bind:key="offer.id" v-bind:offer="offer" />
+            <DetailedOffer
+              v-for="offer in offers"
+              v-bind:key="offer.id"
+              v-bind:offer="offer"
+            />
           </div>
         </div>
 
@@ -182,7 +272,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -211,7 +304,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -239,7 +335,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -267,7 +366,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -298,7 +400,11 @@
           <div class="box">
             <h3 class="test-classe">Mes services prévus</h3>
 
-            <ActiveOffer v-for="offer in offers" v-bind:key="offer.id" v-bind:offer="offer" />
+            <ActiveOffer
+              v-for="offer in offers"
+              v-bind:key="offer.id"
+              v-bind:offer="offer"
+            />
           </div>
         </div>
 
@@ -310,7 +416,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -339,7 +448,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -367,7 +479,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -395,7 +510,10 @@
                 <div class="media">
                   <div class="media-left">
                     <figure class="image is-48x48">
-                      <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
                     </figure>
                   </div>
                   <div class="media-content">
@@ -433,16 +551,25 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Confirmation</p>
-          <button class="delete" v-on:click="modalCreateisActive = !modalCreateisActive" aria-label="close"></button>
+          <button
+            class="delete"
+            v-on:click="modalCreateisActive = !modalCreateisActive"
+            aria-label="close"
+          ></button>
         </header>
         <section class="modal-card-body">
           Êtes-vous certain de vouloir créer ce service?
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-danger w-100" v-on:click="modalCreateisActive = !modalCreateisActive">
+          <button
+            class="button is-danger w-100"
+            v-on:click="modalCreateisActive = !modalCreateisActive"
+          >
             Non
           </button>
-          <button class="button is-success w-100">Oui</button>
+          <button v-on:click="addNewOffer" class="button is-success w-100">
+            Oui
+          </button>
         </footer>
       </div>
     </div>
@@ -450,102 +577,175 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import ActiveOffer from "@/components/ActiveOffer";
-  export default {
-    name: "MyAccount",
-    data() {
-      return {
-        offers: [],
-        modalCreateisActive: false,
-        daysSelected: {
-          monday: false,
-          tuesday: false,
-          wednesday: false,
-          thursday: false,
-          friday: false,
-          saturday: false,
-          sunday: false,
-        },
-        profileSwitch: false,
-        userIsActive: true,
-        userinfo: {},
-      };
-    },
-    //Les components qu'on veut utiliser
-    components: {
-      ActiveOffer,
-    },
-    mounted() {
-      document.title = "Mon compte | Communoservice";
-      this.getAllOffers();
-      this.getUserInfo();
-    },
-    methods: {
-      async getAllOffers() {
-        await axios
-          .get("/api/v1/offers/")
-          .then((response) => {
-            this.offers = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+import axios from "axios";
+import DetailedOffer from "@/components/DetailedOffer";
+
+export default {
+  name: "MyAccount",
+  data() {
+    return {
+      offers: [],
+      modalCreateisActive: false,
+      serviceType: "",
+      description: "",
+      hourlyRate: 10.5,
+      maxDistance: 2,
+      expirationDate: "",
+      daysSelected: {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false,
       },
-      async getUserInfo() {
-        await axios
-          .get("/api/v1/userinfo/me")
-          .then((response) => {
-            this.userinfo = response.data;
-            this.userIsActive = this.userinfo['is_active'];
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      profileSwitch: false,
+      userIsActive: true,
+      userInfo: {},
+      errors: [],
+    };
+  },
+  //Les components qu'on veut utiliser
+  components: {
+    DetailedOffer,
+  },
+  mounted() {
+    document.title = "Mon compte | Communoservice";
+    this.getAllOffers();
+    this.getUserInfo();
+    this.today = this.getToday();
+  },
+  methods: {
+    getToday() {
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, "0");
+      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      var yyyy = today.getFullYear();
+
+      today = yyyy + "-" + mm + "-" + dd;
+      return today;
+    },
+    async getAllOffers() {
+      await axios
+        .get("/api/v1/offers/")
+        .then((response) => {
+          this.offers = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    validateForm() {
+      this.errors = [];
+      if (this.serviceType === "") {
+        this.errors.push("Il faut choisir un type.");
+      }
+
+      this.description = this.description.trim();
+
+      if (this.hourlyRate < 0) {
+        this.errors.push("Le taux horaire doit être un nombre positif.");
+      }
+      if (this.maxDistance < 0) {
+        this.errors.push("La distance maximal doit être positive.");
+      }
+      let today = new Date();
+      let selectedDate = new Date(this.expirationDate);
+      if (selectedDate.getTime() < today.getTime()) {
+        this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
+      }
+
+      if (!this.errors.length) {
+        this.modalCreateisActive = true;
       }
     },
-  };
+    async addNewOffer() {
+      this.isLoading = true;
+      const newOffer = {
+        user: this.userInfo.user_id,
+        type_service: this.serviceType,
+        description: this.description,
+        hourly_rate: this.hourlyRate,
+        max_distance: this.maxDistance,
+        expiration_date: this.expirationDate,
+        monday: this.daysSelected.monday,
+        tuesday: this.daysSelected.tuesday,
+        wednesday: this.daysSelected.wednesday,
+        thursday: this.daysSelected.thursday,
+        friday: this.daysSelected.friday,
+        saturday: this.daysSelected.saturday,
+        sunday: this.daysSelected.sunday,
+      };
+      alert(JSON.stringify(newOffer));
+      await axios
+        .post("/api/v1/offers/", newOffer)
+        .then((response) => {
+ alert('Ajout réussi.');
+        })
+        .catch((error) => {
+          this.errors.push("Une erreur est survenue. Essayez à nouveau.");
+          console.log(error);
+        });
+     this.isLoading = true;
+    },
+    toSelectDate(payload) {
+      alert(payload);
+    },
+    async getUserInfo() {
+      await axios
+        .get("/api/v1/userinfo/me")
+        .then((response) => {
+          this.userInfo = response.data;
+          this.userIsActive = this.userInfo["is_active"];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .profile-toggle {
-    width: 8em !important;
-  }
-  .active-icon {
-    position: absolute;
-    right: 6%;
-    bottom: 6%;
-    font-size: 1.5em;
-    color: rgb(49, 162, 76);
-  }
-  .not-active-icon {
-    position: absolute;
-    right: 6%;
-    bottom: 6%;
-    font-size: 1.5em;
-    color: grey;
-  }
-  .stat-key {
-    font-size: 20px;
-    font-weight: 200;
-  }
-  .stat-val {
-    font-size: 35px;
-    font-weight: bold;
-  }
-  .tagline {
-    padding: 20px 0;
-    font-size: 16px;
-    line-height: 1.4;
-  }
-  .avatar {
-    object-fit:cover;
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    box-shadow: 0px 2px 8px 3px darkgrey;
-  }
-  p.title.is-bold {
-    font-weight: bold;
-  }
+.profile-toggle {
+  width: 8em !important;
+}
+.active-icon {
+  position: absolute;
+  right: 6%;
+  bottom: 6%;
+  font-size: 1.5em;
+  color: rgb(49, 162, 76);
+}
+.not-active-icon {
+  position: absolute;
+  right: 6%;
+  bottom: 6%;
+  font-size: 1.5em;
+  color: grey;
+}
+.stat-key {
+  font-size: 20px;
+  font-weight: 200;
+}
+.stat-val {
+  font-size: 35px;
+  font-weight: bold;
+}
+.tagline {
+  padding: 20px 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.avatar {
+  object-fit: cover;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  box-shadow: 0px 2px 8px 3px darkgrey;
+}
+p.title.is-bold {
+  font-weight: bold;
+}
 </style>
