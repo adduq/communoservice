@@ -96,6 +96,8 @@
                   <select v-model="serviceType" class="w-200">
                     <option>Tonte de pelouse</option>
                     <option>Déneigement</option>
+                    <option>Gardiennage</option>
+                    <option>Administration</option>
                   </select>
                 </div>
               </div>
@@ -216,8 +218,7 @@
               <label class="label">Expiration</label>
               <input
                 type="date"
-                min="2021-09-16"
-                max="2021-10-16"
+                v-bind:min="tomorrow"
                 v-model="expirationDate"
               />
             </div>
@@ -604,6 +605,7 @@ export default {
       userIsActive: true,
       userInfo: {},
       errors: [],
+      tomorrow:""
     };
   },
   //Les components qu'on veut utiliser
@@ -612,23 +614,22 @@ export default {
   },
   mounted() {
     document.title = "Mon compte | Communoservice";
-    this.getAllOffers();
     this.getUserInfo();
-    this.today = this.getToday();
+    this.tomorrow = this.getTomorrow();
   },
   methods: {
-    getToday() {
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, "0");
-      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-      var yyyy = today.getFullYear();
+    getTomorrow() {
+      var tomorrow = new Date();
+      var dd = String(tomorrow.getDate()+1).padStart(2, "0");
+      var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
+      var yyyy = tomorrow.getFullYear();
 
-      today = yyyy + "-" + mm + "-" + dd;
-      return today;
+      tomorrow = yyyy + "-" + mm + "-" + dd;
+      return tomorrow;
     },
-    async getAllOffers() {
+    async getAllOffers(userId) {
       await axios
-        .get("/api/v1/offers/")
+        .get(`/api/v1/offers/user/${userId}/`)
         .then((response) => {
           this.offers = response.data;
         })
@@ -650,9 +651,9 @@ export default {
       if (this.maxDistance < 0) {
         this.errors.push("La distance maximal doit être positive.");
       }
-      let today = new Date();
+      let tomorrow = new Date();
       let selectedDate = new Date(this.expirationDate);
-      if (selectedDate.getTime() < today.getTime()) {
+      if (selectedDate.getTime() < tomorrow.getTime()) {
         this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
       }
 
@@ -662,13 +663,14 @@ export default {
     },
     async addNewOffer() {
       this.isLoading = true;
+      let expiration = this.expirationDate=="" ? null : this.expirationDate;
       const newOffer = {
         user: this.userInfo.user_id,
         type_service: this.serviceType,
         description: this.description,
         hourly_rate: this.hourlyRate,
         max_distance: this.maxDistance,
-        expiration_date: this.expirationDate,
+        expiration_date:expiration,
         monday: this.daysSelected.monday,
         tuesday: this.daysSelected.tuesday,
         wednesday: this.daysSelected.wednesday,
@@ -677,17 +679,20 @@ export default {
         saturday: this.daysSelected.saturday,
         sunday: this.daysSelected.sunday,
       };
-      alert(JSON.stringify(newOffer));
+      //alert(JSON.stringify(newOffer));//pour validation.
       await axios
         .post("/api/v1/offers/", newOffer)
-        .then((response) => {
- alert('Ajout réussi.');
+        .then((response,userId) => {
+          this.isLoading = false;
+          this.modalCreateisActive=false;
+          console.log(response);
+         this.getAllOffers(response.data.user);
         })
         .catch((error) => {
+          this.modalCreateisActive=false;
           this.errors.push("Une erreur est survenue. Essayez à nouveau.");
           console.log(error);
         });
-     this.isLoading = true;
     },
     toSelectDate(payload) {
       alert(payload);
@@ -698,6 +703,7 @@ export default {
         .then((response) => {
           this.userInfo = response.data;
           this.userIsActive = this.userInfo["is_active"];
+          this.getAllOffers(this.userInfo.user_id)
         })
         .catch((error) => {
           console.log(error);
