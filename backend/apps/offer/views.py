@@ -13,6 +13,9 @@ from .serializers import OfferSerializer, UserSerializer
 from rest_framework.decorators import api_view, schema
 from rest_framework.schemas import AutoSchema
 
+from functools import reduce
+from operator import and_
+
 
 class Offers(APIView):
 
@@ -79,11 +82,34 @@ Permet de rechercher des offres selon le type de service.
 
 @api_view(['GET'])
 def search(request):
-    query = request.query_params.get('type-service', '')
-    if query:
-        offers = Offer.objects.filter(
-            Q(type_service__icontains=query))
-        serializer = OfferSerializer(offers, many=True)
-        return Response(serializer.data)
-    else:
-        return Response({"offers": []})
+    queryset = Offer.objects.all()
+    if "type-service" in request.GET:
+        queryset = queryset.filter(type_service__icontains=request.GET.get('type-service'))
+
+    if "day-of-week" in request.GET:
+        date = request.GET.get('date')
+        dow = request.GET.get('day-of-week')
+
+        if dow == "monday":
+            queryset = queryset.filter(monday=True)
+        if dow == "tuesday":
+            queryset = queryset.filter(tuesday=True)
+        if dow == "thursday":
+            queryset = queryset.filter(thursday=True)
+        if dow == "wednesday":
+            queryset = queryset.filter(wednesday=True)
+        if dow == "friday":
+            queryset = queryset.filter(friday=True)
+        if dow == "saturday":
+            queryset = queryset.filter(saturday=True)
+        if dow == "sunday":
+            queryset = queryset.filter(sunday=True)
+        
+        queryset.filter(expiration_date__gte=date)
+    
+    if "mots-cles" in request.GET:
+        mots_cles = request.GET.getlist('mots-cles')[0].split(',')
+        queryset = queryset.filter(reduce(and_, (Q(description__icontains=mot) for mot in mots_cles)))
+
+    serializer = OfferSerializer(queryset, many=True)
+    return Response(serializer.data)

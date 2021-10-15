@@ -206,4 +206,21 @@
   .w-80{
     width: 80px!important;
   }
+  .panel-section{
+    border-bottom: 1px solid #ededed;
+    padding: 10px 0 10px 0;
+  }
+  .datepicker{
+    background-color: white;
+    border-color: #dee2e5;
+    border-radius: 0.4em;
+    color: #2b3c4e;
+    border-width: 2px;
+    border-style: solid;
+    font-size: 1em;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: calc(0.75em - 1px);
+    padding-right: calc(0.75em - 1px);
+    padding-top: calc(0.5em - 1px);
+  }
 </style>

@@ -218,6 +218,7 @@
               <label class="label">Expiration</label>
               <input
                 type="date"
+                class="datepicker"
                 v-bind:min="tomorrow"
                 v-model="expirationDate"
               />
