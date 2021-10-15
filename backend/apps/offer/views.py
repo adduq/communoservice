@@ -62,7 +62,7 @@ class UserOffers(APIView):
 
     def get_object(self, no_user):
         try:
-            return Offer.objects.filter(id_user=no_user)
+            return Offer.objects.filter(user=no_user)
         except User.DoesNotExist:
             raise Http404
 

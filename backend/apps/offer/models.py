@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, timedelta
-from .validators import validate_expiration_date
 
 
 class Offer(models.Model):

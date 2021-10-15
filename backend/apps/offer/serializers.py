@@ -13,9 +13,11 @@ class OfferSerializer(serializers.ModelSerializer):
         return value
 
     def validate_expiration_date(self, value):
-        if value < date.today:
-            raise serializers.ValidationError("Expiration date is not valid.")
-        return value
+        if value is not None:
+            if value < date.today():
+                raise serializers.ValidationError(
+                    "Expiration date is not valid.")
+            return value
 
     class Meta:
         model = Offer
