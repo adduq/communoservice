@@ -222,6 +222,5 @@
     padding-left: calc(0.75em - 1px);
     padding-right: calc(0.75em - 1px);
     padding-top: calc(0.5em - 1px);
-    width: 162.95px;
   }
 </style>
