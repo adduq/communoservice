@@ -24,43 +24,36 @@
           </p>
           <div class="panel-block is-flex-wrap-wrap">
             <p class="control has-icons-left is-full-width">
-              <input class="input" type="text" placeholder="Mots Clé(s)">
+              <input class="input" type="text" placeholder="Mots Clé(s)" v-model="query_mots_cles">
               <span class="icon is-left">
                 <i class="fas fa-search" aria-hidden="true"></i>
               </span>
             </p>
           </div>
-          <p class="ml-2 has-text-weight-bold has-text-black">
+          <div class="panel-section">
+            <p class="ml-2 has-text-weight-bold has-text-black">
             Type de service
-          </p>
-          <label class="panel-block">
-            <div class="control">
-              <div class="select">
-                <select v-model='query'>
-                  <option>Tonte de pelouse</option>
-                  <option>Gardiennage</option>
-                  <option>Déneigement</option>
-                </select>
-              </div>
+            </p>
+
+            <div class="select ml-2 mt-1">
+              <select v-model='query_typeservice'>
+                <option>Tout</option>
+                <option>Tonte de pelouse</option>
+                <option>Gardiennage</option>
+                <option>Déneigement</option>
+                <option>Administration</option>
+              </select>
             </div>
-          </label>
-          <p class="ml-2 has-text-weight-bold has-text-black">
-            Distance
-          </p>
-          <label class="panel-block">
-            Max (km)
-            <input id="maxDistanceSlider" class="slider has-output is-fullwidth" min="0" max="100" value="100" step="10"
-              type="range">
-            <output for="maxDistanceSlider" class="w-80">100</output>
-          </label>
-          <p class="ml-2 has-text-weight-bold has-text-black">
-            Autres filtres
-          </p>
-          <label class="panel-block">
-            ...
-          </label>
+          </div>
+          <div class="panel-section">
+            <p class="ml-2 has-text-weight-bold has-text-black">
+              Date
+            </p>
+            <input class="datepicker ml-2 mt-1" type="date" :min="dateToday" v-model="select_serviceday">
+          </div>
+          
           <div class="panel-block">
-            <button v-on:click="sendQuery" class="button is-link is-outlined is-fullwidth">
+            <button v-on:click="sendQuery" class="button is-link is-outlined is-fullwidth" :class="isFetchingOffers ? 'is-loading':''">
               Rechercher
             </button>
           </div>
@@ -68,7 +61,7 @@
       </div>
       <div class="column is-two-thirds">
         <div class="box">
-          <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress>
+          <!-- <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress> -->
           <DetailedOffer v-for="offer in offers" v-bind:key="offer.id" v-bind:offer="offer" />
         </div>
       </div>
@@ -79,7 +72,6 @@
 <script>
   import axios from "axios";
   import DetailedOffer from "@/components/DetailedOffer";
-  import bulmaSlider from "bulma-slider";
   export default {
     name: "Home",
     data() {
@@ -90,7 +82,20 @@
         attachedSliders: [],
         // La valeur de "query" est hard codé pour le moment. Il va falloir faire categories[0] 
         // lorsque nous allons avoir la liste des catégories pour peupler le dropdown.
-        query:"Tonte de pelouse",
+        query_typeservice: "Tout",
+        query_serviceday: new Date(),
+        query_mots_cles: '',
+        select_serviceday: '',
+        dateToday: '',
+        weekdays: {
+          0:"monday",
+          1:"tuesday",
+          2:"wednesday",
+          3:"thursday",
+          4:"friday",
+          5:"saturday",
+          6:"sunday",
+        }
       };
     },
     components: {
@@ -99,17 +104,16 @@
     mounted() {
       document.title = "Accueil | Communoservice";
       this.getAllOffers();
+      this.updateCalendarToday();
     },
     renderTriggered() {
-      if (this.attachedSliders.length == 0) {
-        this.attachedSliders = bulmaSlider.attach();
-        console.log("Sliders attached: " + this.attachedSliders.length)
-      }
+      // DEBUG pour le datepicker
+      this.query_serviceday = new Date(this.select_serviceday);
+      console.log(`${this.select_serviceday} is a ${this.weekdays[this.query_serviceday.getDay()]}`);
     },
     methods: {
       async getAllOffers() {
         this.isFetchingOffers = true;
-
         await axios
           .get("/api/v1/offers/")
           .then((response) => {
@@ -120,11 +124,26 @@
           });
         this.isFetchingOffers = false;
       },
-      async sendQuery(){
+      async sendQuery() {
         this.isFetchingOffers = true;
+        const params = new URLSearchParams();
+
+        if(this.query_typeservice != 'Tout'){
+          params.append('type-service', this.query_typeservice);
+        }
+
+        if(this.query_serviceday instanceof Date && !isNaN(this.query_serviceday)){
+          params.append('date', this.query_serviceday.toISOString().split('T')[0]);
+          params.append('day-of-week', this.weekdays[this.query_serviceday.getDay()]);
+        }
+
+        if(this.query_mots_cles.split(' ').length > 0){
+          this.query_mots_cles.trim();
+          params.append('mots-cles', this.query_mots_cles.split(' '));
+        }
 
         await axios
-          .get("/api/v1/offers/search?type-service="+this.query)
+          .get("/api/v1/offers/search?" + params.toString())
           .then((response) => {
             this.offers = response.data;
           })
@@ -132,6 +151,10 @@
             console.log(error);
           });
         this.isFetchingOffers = false;
+      },
+      updateCalendarToday(){
+        var current = new Date();
+        this.query_serviceday = this.dateToday = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
       }
     },
   };

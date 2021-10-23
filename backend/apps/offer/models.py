@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date, timedelta
 
 
 class Offer(models.Model):
@@ -11,7 +12,15 @@ class Offer(models.Model):
     hourly_rate = models.DecimalField(
         null=True, max_digits=6, decimal_places=2)
     max_distance = models.PositiveIntegerField(null=True)
-    date_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateField(auto_now_add=True)
+    monday = models.BooleanField(default=False)
+    tuesday = models.BooleanField(default=False)
+    wednesday = models.BooleanField(default=False)
+    thursday = models.BooleanField(default=False)
+    friday = models.BooleanField(default=False)
+    saturday = models.BooleanField(default=False)
+    sunday = models.BooleanField(default=False)
+    expiration_date = models.DateField(null=True)
 
     class Meta:
         ordering = ('-date_added',)
