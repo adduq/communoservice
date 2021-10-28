@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 from rest_framework import status
 from .models import Offer
-from .serializers import OfferSerializer, UserSerializer
+from .serializers import OfferSerializer
 
 from rest_framework.decorators import api_view, schema
 from rest_framework.schemas import AutoSchema

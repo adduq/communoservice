@@ -24,3 +24,20 @@ class Offer(models.Model):
 
     class Meta:
         ordering = ('-date_added',)
+
+
+class ServiceType(models.Model):
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return f'/{self.slug}/'  # le f permet de formatter.
+
+    # pour test
+    def get_name(self):
+        return self.name
