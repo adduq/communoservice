@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="card mb-3 h-140"
-    v-on:click="modalViewisActive = !modalViewisActive"
-  >
+<a href="#">
+  <div class="card mb-3 h-140" >
     <div class="card-content">
       <div class="media">
         <div class="media-left">
@@ -24,36 +22,14 @@
           Valide en tout temps
         </div>
         <div class="column" v-else>
-          <time datetime="{{offer.expiration_date}}"
-            >Valide jusqu'au {{ offer.expiration_date }}</time
-          >
+          <time datetime="{{offer.expiration_date}}">
+            Valide jusqu'au {{ offer.expiration_date }}
+          </time>
         </div>
       </div>
     </div>
-    <div>Disponibilités:</div>
-    <span class="button is-rounded is-success" v-if="offer.monday == true">
-      Lun
-    </span>
-    <span class="button is-rounded is-success" v-if="offer.tuesday == true">
-      Mar
-    </span>
-    <span class="button is-rounded is-success" v-if="offer.wednesday == true">
-      Mer
-    </span>
-    <span class="button is-rounded is-success" v-if="offer.thursday == true">
-      Jeu
-    </span>
-    <span class="button is-rounded is-success" v-if="offer.friday == true">
-      Ven
-    </span>
-    <span class="button is-rounded is-success" v-if="offer.saturday == true">
-      Sam
-    </span>
-    <span class="button is-rounded is-success" v-if="offer.sunday == true">
-      Dim
-    </span>
-    <div></div>
   </div>
+  </a>
 </template>
 
 <script>

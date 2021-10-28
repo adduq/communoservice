@@ -5,6 +5,7 @@ import Home from "./views/Home.vue";
 import SignUp from "./views/SignUp.vue";
 import LogIn from "./views/LogIn.vue";
 import MyAccount from "./views/MyAccount.vue";
+import Offer from "./views/Offer.vue";
 
 const routes = [{
         path: "/",
