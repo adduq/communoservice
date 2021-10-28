@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Offer
+from .models import Offer, ServiceType
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -24,7 +24,7 @@ class OfferSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ServiceTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = ServiceType
         fields = '__all__'
