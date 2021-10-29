@@ -10,9 +10,12 @@ logger = logging.getLogger(__name__)
 
 @receiver(user_logged_in)
 def login_logger(sender, request, user, **kwargs):
-    userinfo = UserInfo.objects.get(user_id=user.id)
-    userinfo.is_online = True
-    userinfo.save()
+    try: 
+        userinfo = UserInfo.objects.get(user_id=user.id)
+        userinfo.is_online = True
+        userinfo.save()
+    except:
+        newUser = UserInfo.objects.create(user_id = user, is_online=True)
 
 @receiver(user_logged_out)
 def got_offline(sender, request, user, **kwargs):
@@ -27,15 +30,15 @@ class UserInfo(models.Model):
 
     profile_is_completed = models.BooleanField(default=False)
 
-    first_name = models.CharField(max_length=30)
+    first_name = models.CharField(null=True, max_length=30)
 
-    last_name = models.CharField(max_length=30)
+    last_name = models.CharField(null=True, max_length=30)
 
-    email = models.EmailField()
+    email = models.EmailField(null=True)
 
-    nb_services_received = models.PositiveIntegerField(null=False)
+    nb_services_received = models.PositiveIntegerField(null=False, default=0)
 
-    nb_services_given = models.PositiveIntegerField(null=False)
+    nb_services_given = models.PositiveIntegerField(null=False, default=0)
 
     avg_rating_as_employee = models.DecimalField(decimal_places=2,
                                                  max_digits=3,

@@ -347,7 +347,9 @@
     right: 6%;
     bottom: 6%;
     font-size: 1.5em;
-    color: rgb(49, 162, 76);
+    color: #3ef100;
+    box-shadow: 0px 0px 8px 0px lime;
+    border-radius: 9999px;
   }
   
   .not-active-icon {

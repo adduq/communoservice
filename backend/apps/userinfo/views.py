@@ -31,10 +31,10 @@ class UserInfoDetail(APIView):
 
             user = UserInfo.objects.get(user_id=user_id)
 
-            user_is_active = User.objects.get(id=user_id).is_active
+            auth_user = User.objects.get(id=user_id)
             serializer = UserInfoSerializer(user)
 
-            out_dict = {'is_active':user_is_active}
+            out_dict = {'is_active':auth_user.is_active, 'username':auth_user.username}
             out_dict.update(serializer.data)
 
             del out_dict['id']
@@ -60,9 +60,9 @@ class MyUserInfo(APIView):
 
             user = UserInfo.objects.get(user_id=user_id)
             serializer = UserInfoSerializer(user)
-            user_is_active = User.objects.get(id=user_id).is_active
+            auth_user = User.objects.get(id=user_id)
 
-            out_dict = {'is_active':user_is_active}
+            out_dict = {'is_active':auth_user.is_active, 'username':auth_user.username}
             out_dict.update(serializer.data)
             
             del out_dict['id']
@@ -111,7 +111,13 @@ class UpdateUserInfo(APIView):
                     user.email = body['email']
                 else:
                     return Response('Le courriel est invalide.', status=status.HTTP_400_BAD_REQUEST)
-     
+
+            if 'address' in body:
+                if len(body['address']) < 100:
+                    user.address = body['address']
+                else:
+                    return Response('L\'adresse est invalide.', status=status.HTTP_400_BAD_REQUEST)
+
             if 'user_bio' in body:
                 user.user_bio = body['user_bio']
             
@@ -120,7 +126,7 @@ class UpdateUserInfo(APIView):
                 user.email != '' and user.email != None and \
                 user.address != '' and user.address != None:
 
-               user.profile_is_completed = True
+                user.profile_is_completed = True
             else:
                 user.profile_is_completed = False
 

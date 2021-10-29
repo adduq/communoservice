@@ -44,8 +44,8 @@
             "email": "communostaff@live.ca",
             "password": "pbkdf2_sha256$260000$TD8CwXKbK3ZK827Z4PHna0$FC/2L2g2rCmnXuN5k85JywDaq7/8BEBv11GTqjJ2V68=",
             "is_active": "True",
-            "is_superuser":"True",
-            "is_staff":"True"
+            "is_superuser": "True",
+            "is_staff": "True"
         }
     },
     {
@@ -58,33 +58,33 @@
             "email": "communostaff@live.ca",
             "nb_services_received": 0,
             "nb_services_given": 0,
-            "avg_rating_as_employee":0,
-            "nb_rating_as_employe":0,
-            "avg_rating_as_employer":0,
-            "nb_rating_as_employer":0,
-            "user_id_id":4,
-            "is_online":"False"
+            "avg_rating_as_employee": 0,
+            "nb_rating_as_employe": 0,
+            "avg_rating_as_employer": 0,
+            "nb_rating_as_employer": 0,
+            "user_id_id": 4,
+            "is_online": "False"
         }
     },
     {
         "model": "offer.servicetype",
         "pk": 1,
-        "fields": { "name": "Gardiennage"}
+        "fields": { "name": "Gardiennage" }
     },
     {
         "model": "offer.servicetype",
         "pk": 2,
-        "fields": { "name": "Administration"}
+        "fields": { "name": "Administration" }
     },
     {
         "model": "offer.servicetype",
         "pk": 3,
-        "fields": { "name": "Déneigement"}
+        "fields": { "name": "Déneigement" }
     },
     {
         "model": "offer.servicetype",
         "pk": 4,
-        "fields": { "name": "Tonte de pelouse"}
+        "fields": { "name": "Tonte de pelouse" }
     },
     {
         "model": "offer.offer",

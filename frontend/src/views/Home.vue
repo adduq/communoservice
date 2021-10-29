@@ -371,32 +371,41 @@
         this.isFetchingOffers = false;
       },
       async sendQuery() {
-        this.isFetchingOffers = true;
         const params = new URLSearchParams();
 
         if(this.query_typeservice != 'Tout'){
           params.append('type-service', this.query_typeservice);
         }
 
+        this.query_serviceday = new Date(this.select_serviceday);
         if(this.query_serviceday instanceof Date && !isNaN(this.query_serviceday)){
           params.append('date', this.query_serviceday.toISOString().split('T')[0]);
           params.append('day-of-week', this.weekdays[this.query_serviceday.getDay()]);
         }
 
-        if(this.query_mots_cles.split(' ').length > 0){
-          this.query_mots_cles.trim();
-          params.append('mots-cles', this.query_mots_cles.split(' '));
+        let array_mots_cles = []
+        array_mots_cles = this.query_mots_cles.split(' ')
+        if(array_mots_cles.length == 1 && array_mots_cles[0] == ''){
+          array_mots_cles = []
         }
 
-        await axios
-          .get("/api/v1/offers/search?" + params.toString())
-          .then((response) => {
-            this.offers = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        this.isFetchingOffers = false;
+        if(array_mots_cles.length > 0){
+          this.query_mots_cles.trim();
+          params.append('mots-cles', array_mots_cles);
+        }
+
+        if(Array.from(params).length > 0){
+          this.isFetchingOffers = true;
+          await axios
+            .get("/api/v1/offers/search?" + params.toString())
+            .then((response) => {
+              this.offers = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          this.isFetchingOffers = false;
+        }
       },
       async getOfferUserInfo(user_id){
         await axios
