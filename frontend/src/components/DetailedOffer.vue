@@ -21,25 +21,25 @@
           </time>
         </div>
         <div class="column is-flex is-justify-content-flex-end is-family-monospace">
-          <span class="tag is-rounded is-size-5" :class="offer.monday ? 'is-info' : 'is-dark'">
+          <span class="tag is-rounded" :class="offer.monday ? 'is-info' : 'is-dark'">
             L
           </span>
-          <span class="tag is-rounded is-size-5" :class="offer.tuesday ? 'is-info' : 'is-dark'">
+          <span class="tag is-rounded" :class="offer.tuesday ? 'is-info' : 'is-dark'">
             M
           </span>
-          <span class="tag is-rounded is-size-5" :class="offer.thursday ? 'is-info' : 'is-dark'">
+          <span class="tag is-rounded" :class="offer.thursday ? 'is-info' : 'is-dark'">
             M
           </span>
-          <span class="tag is-rounded is-size-5" :class="offer.wednesday ? 'is-info' : 'is-dark'">
+          <span class="tag is-rounded" :class="offer.wednesday ? 'is-info' : 'is-dark'">
             J
           </span>
-          <span class="tag is-rounded is-size-5" :class="offer.friday ? 'is-info' : 'is-dark'">
+          <span class="tag is-rounded" :class="offer.friday ? 'is-info' : 'is-dark'">
             V 
           </span>
-          <span class="tag is-rounded is-size-5" :class="offer.saturday ? 'is-info' : 'is-dark'">
+          <span class="tag is-rounded" :class="offer.saturday ? 'is-info' : 'is-dark'">
             S
           </span>
-          <span class="tag is-rounded is-size-5" :class="offer.sunday ? 'is-info' : 'is-dark'">
+          <span class="tag is-rounded" :class="offer.sunday ? 'is-info' : 'is-dark'">
             D
           </span>
         </div>
