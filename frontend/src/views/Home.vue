@@ -357,9 +357,6 @@
       this.updateCalendarToday(); 
       StepsWizard.attach(this.$refs.stepsSection.el);
     },
-    renderTriggered(){
-      this.query_serviceday = new Date(this.select_serviceday);
-    },
     methods: {
       async getAllOffers() {
         this.isFetchingOffers = true;
@@ -380,6 +377,7 @@
           params.append('type-service', this.query_typeservice);
         }
 
+        this.query_serviceday = new Date(this.select_serviceday);
         if(this.query_serviceday instanceof Date && !isNaN(this.query_serviceday)){
           params.append('date', this.query_serviceday.toISOString().split('T')[0]);
           params.append('day-of-week', this.weekdays[this.query_serviceday.getDay()]);
