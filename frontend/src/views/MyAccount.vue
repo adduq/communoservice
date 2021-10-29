@@ -690,7 +690,11 @@ export default {
         })
         .catch((error) => {
           this.modalCreateisActive=false;
-          this.errors.push("Une erreur est survenue. Essayez à nouveau.");
+          if(error.response.data['error'] == 'profile_incomplete'){
+            this.errors.push("Profil incomplet. Veuillez completer votre profil dans les paramètres.");
+          }else{
+            this.errors.push("Une erreur est survenue. Essayez à nouveau.");
+          }
           console.log(error);
         });
     },
