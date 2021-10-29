@@ -43,7 +43,7 @@
                 </div>
                 <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
                   <div class="dropdown-content has-text-left">
-                    <a href="#" class="dropdown-item" v-on:click="modalSettingsisActive = !modalSettingsisActive">
+                    <a href="#" class="dropdown-item" v-on:click="openSettingsModal()">
                       <span class="icon is-small mr-3">
                         <i class="fas fa-cog"></i>
                       </span>
@@ -86,12 +86,37 @@
             aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-          Configuration des paramètres ici
+          <div class="field">
+            <label class="label">Prénom</label>
+            <div class="control">
+              <input class="input" type="text" :placeholder="userInfo.first_name" v-model="updatedUserInfo.first_name">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Nom</label>
+            <div class="control">
+              <input class="input" type="text" :placeholder="userInfo.last_name" v-model="updatedUserInfo.last_name">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Courriel</label>
+            <div class="control">
+              <input class="input" type="email" :placeholder="userInfo.email" v-model="updatedUserInfo.email">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Adresse</label>
+            <div class="control">
+              <input class="input" type="email" :placeholder="userInfo.address" v-model="updatedUserInfo.address">
+            </div>
+          </div>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success w-100">Sauvegarder</button>
+          <button class="button is-success w-100" @click="validateUserInfo()">Sauvegarder</button>
           <button class="button is-danger w-100"
-            v-on:click="modalSettingsisActive = !modalSettingsisActive">Canceler</button>
+            v-on:click="modalSettingsisActive = !modalSettingsisActive">Fermer</button>
         </footer>
       </div>
     </div>
@@ -123,6 +148,13 @@
         },
         dropdownRight: true,
         modalSettingsisActive: false,
+        userInfo: {},
+        updatedUserInfo: {
+          first_name: '',
+          last_name: '',
+          email: '',
+          address: ''
+        }
       };
     },
     beforeCreate() {
@@ -178,6 +210,86 @@
             },
           });
 				});
+      },
+      openSettingsModal(){
+        this.getUserInfo();
+        this.modalSettingsisActive = !this.modalSettingsisActive;
+      },
+      async getUserInfo(){
+        await axios
+        .get('api/v1/userinfo/me/')
+        .then((response)=>{
+          this.userInfo = response.data;
+          this.updatedUserInfo.first_name = response.data['first_name'];
+          this.updatedUserInfo.last_name = response.data['last_name'];
+          this.updatedUserInfo.email = response.data['email'];
+          this.updatedUserInfo.address = response.data['address'];
+        })
+        .catch((error)=>{
+          console.log(error);
+        });
+      },
+      async validateUserInfo(){
+        let data = {}
+        if(this.updatedUserInfo.first_name != this.userInfo.first_name){
+          data.first_name = this.updatedUserInfo.first_name;
+        }
+        if(this.updatedUserInfo.last_name != this.userInfo.last_name){
+          data.last_name = this.updatedUserInfo.last_name;
+        }
+        if(this.updatedUserInfo.email != this.userInfo.email){
+          data.email = this.updatedUserInfo.email;
+        }
+        if(this.updatedUserInfo.address != this.userInfo.address){
+          data.address = this.updatedUserInfo.address;
+        }
+        if(Object.keys(data).length != 0){
+          await axios
+          .put('api/v1/userinfo/me/update/', data)
+          .then((response)=>{
+            this.userInfo = response.data;
+            toast({
+              message: "Informations sauvegardés avec succès!",
+              type: "is-success",
+              dismissible: true,
+              pauseOnHover: false,
+              duration: 3000,
+              position: "bottom-right",
+              animate: {
+                in: "fadeInRightBig",
+                out: "fadeOutRightBig",
+              },
+            });
+          })
+          .catch((error)=>{
+            console.log(error);
+            toast({
+              message: "Une erreur est survenue...",
+              type: "is-danger",
+              dismissible: false,
+              pauseOnHover: false,
+              duration: 3000,
+              position: "bottom-right",
+              animate: {
+                in: "fadeInRightBig",
+                out: "fadeOutRightBig",
+              },
+            });
+          });
+        }else{
+          toast({
+            message: "Informations sauvegardés avec succès!",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: false,
+            duration: 3000,
+            position: "bottom-right",
+            animate: {
+              in: "fadeInRightBig",
+              out: "fadeOutRightBig",
+            },
+          });
+        }
       },
       handleResize() {
         this.window.width = window.innerWidth;

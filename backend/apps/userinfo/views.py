@@ -13,6 +13,9 @@ from .serializers import UserInfoSerializer, UserSerializer
 
 from rest_framework.decorators import api_view, schema
 from rest_framework.schemas import AutoSchema
+from django.core.validators import validate_email
+
+import re, json
 
 # Create your views here.
 
@@ -63,8 +66,6 @@ class MyUserInfo(APIView):
             out_dict.update(serializer.data)
             
             del out_dict['id']
-            del out_dict['email']
-            del out_dict['profile_is_completed'] 
 
             return out_dict
         except UserInfo.DoesNotExist:
@@ -77,3 +78,55 @@ class MyUserInfo(APIView):
 
         userinfo = self.get_object(request.user.id)
         return Response(userinfo)
+
+class UpdateUserInfo(APIView):
+
+    """
+    Modifier l'info de l'utilisateur actif à l'aide de son token.
+    """
+
+    def put(self, request, format=None):
+
+        if request.user.is_anonymous:
+            return HttpResponse('Unauthorized', status=401)
+
+        try:
+            user = UserInfo.objects.get(user_id=request.user.id)
+            body = json.loads(request.body)
+
+            if 'first_name' in body:
+                if body['first_name'] == '' or re.match(r"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð-]{2,15}$", body['first_name']):
+                    user.first_name = body['first_name']
+                else:
+                    return Response('Le prénom est invalide.', status=status.HTTP_400_BAD_REQUEST)
+
+            if 'last_name' in body:
+                if body['last_name'] == '' or re.match(r"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð-]{2,15}$", body['last_name']):
+                    user.last_name = body['last_name']
+                else:
+                    return Response('Le nom est invalide.', status=status.HTTP_400_BAD_REQUEST)
+
+            if 'email' in body:
+                if body['email'] == '' or re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", body['email']):
+                    user.email = body['email']
+                else:
+                    return Response('Le courriel est invalide.', status=status.HTTP_400_BAD_REQUEST)
+     
+            if 'user_bio' in body:
+                user.user_bio = body['user_bio']
+            
+            if user.first_name != '' and user.first_name != None and \
+                user.last_name != '' and user.last_name != None and \
+                user.email != '' and user.email != None and \
+                user.address != '' and user.address != None:
+
+               user.profile_is_completed = True
+            else:
+                user.profile_is_completed = False
+
+            user.save()
+            serializer = UserInfoSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except UserInfo.DoesNotExist:
+            raise Http404
