@@ -22,42 +22,41 @@
               }}</span>
             </p>
             <p class="tagline">
-              I am a French Canadian Twitch streamer, former Overwatch League
-              player, current Luminosity Gaming member and G FUEL partner.
+              {{userInfo.user_bio}}
             </p>
           </div>
           <div class="column ml-5">
             <div class="columns is-mobile is-centered">
               <template v-if="profileSwitch == false">
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{ userInfo.nb_services_given }}</p>
-                  <p class="stat-key">services rendus</p>
+                  <p class="has-text-weight-bold is-size-3">{{ userInfo.nb_services_given }}</p>
+                  <p>services rendus</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{ offers.length }}</p>
-                  <p class="stat-key">services actifs</p>
+                  <p class="has-text-weight-bold is-size-3">{{ offers.length }}</p>
+                  <p>services actifs</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">
+                  <p class="has-text-weight-bold is-size-3">
                     {{ userInfo.avg_rating_as_employee }}/10
                   </p>
-                  <p class="stat-key">score</p>
+                  <p>score</p>
                 </div>
               </template>
               <template v-if="profileSwitch == true">
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{ userInfo.nb_services_received }}</p>
-                  <p class="stat-key">services reçus</p>
+                  <p class="has-text-weight-bold is-size-3">{{ userInfo.nb_services_received }}</p>
+                  <p>services reçus</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">{{ offers.length }}</p>
-                  <p class="stat-key">services actifs</p>
+                  <p class="has-text-weight-bold is-size-3">{{ offers.length }}</p>
+                  <p>services actifs</p>
                 </div>
                 <div class="column has-text-centered">
-                  <p class="stat-val">
+                  <p class="has-text-weight-bold is-size-3">
                     {{ userInfo.avg_rating_as_employer }}/10
                   </p>
-                  <p class="stat-key">score</p>
+                  <p>score</p>
                 </div>
               </template>
             </div>
@@ -87,7 +86,7 @@
       <template v-if="profileSwitch == false">
         <div class="column">
           <div class="box">
-            <h3 class="test-classe">Créer un service</h3>
+            <p class="title has-text-centered">Créer un service</p>
 
             <div class="field">
               <label class="label">Type de service</label>
@@ -256,7 +255,7 @@
 
         <div class="column">
           <div class="box">
-            <h3 class="test-classe">Mes services actifs</h3>
+            <p class="title has-text-centered">Mes services actifs</p>
 
             <DetailedOffer
               v-for="offer in offers"
@@ -268,7 +267,7 @@
 
         <div class="column">
           <div class="box">
-            <h3 class="test-classe">Historique</h3>
+            <p class="title has-text-centered">Historique</p>
             <div class="card mb-3 h-140">
               <div class="card-content">
                 <div class="media">
@@ -400,7 +399,7 @@
       <template v-if="profileSwitch == true">
         <div class="column">
           <div class="box">
-            <h3 class="test-classe">Mes services prévus</h3>
+            <p class="title has-text-centered">Mes services prévus</p>
 
             <ActiveOffer
               v-for="offer in offers"
@@ -412,7 +411,7 @@
 
         <div class="column">
           <div class="box">
-            <h3 class="test-classe">Historique</h3>
+            <p class="title has-text-centered">Historique</p>
             <div class="card mb-3 h-140">
               <div class="card-content">
                 <div class="media">
@@ -554,7 +553,7 @@
         <header class="modal-card-head">
           <p class="modal-card-title">Confirmation</p>
           <button
-            class="delete"
+            class="delete has-background-danger"
             v-on:click="modalCreateisActive = !modalCreateisActive"
             aria-label="close"
           ></button>
@@ -700,10 +699,10 @@ export default {
     },
     async getUserInfo() {
       await axios
-        .get("/api/v1/userinfo/me")
+        .get("/api/v1/userinfo/me/")
         .then((response) => {
           this.userInfo = response.data;
-          this.userIsActive = this.userInfo["is_active"];
+          this.userIsActive = this.userInfo["is_online"];
           this.getAllOffers(this.userInfo.user_id)
         })
         .catch((error) => {
@@ -718,41 +717,5 @@ export default {
 .profile-toggle {
   width: 8em !important;
 }
-.active-icon {
-  position: absolute;
-  right: 6%;
-  bottom: 6%;
-  font-size: 1.5em;
-  color: rgb(49, 162, 76);
-}
-.not-active-icon {
-  position: absolute;
-  right: 6%;
-  bottom: 6%;
-  font-size: 1.5em;
-  color: grey;
-}
-.stat-key {
-  font-size: 20px;
-  font-weight: 200;
-}
-.stat-val {
-  font-size: 35px;
-  font-weight: bold;
-}
-.tagline {
-  padding: 20px 0;
-  font-size: 16px;
-  line-height: 1.4;
-}
-.avatar {
-  object-fit: cover;
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  box-shadow: 0px 2px 8px 3px darkgrey;
-}
-p.title.is-bold {
-  font-weight: bold;
-}
+
 </style>

@@ -47,7 +47,7 @@
                       <span class="icon is-small mr-3">
                         <i class="fas fa-cog"></i>
                       </span>
-                      <span> Paramêtres </span>
+                      <span> Paramètres </span>
                     </a>
                     <hr class="dropdown-divider" />
                     <a href="#" @click="logout()" class="dropdown-item has-text-danger">
@@ -81,12 +81,12 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Paramêtres</p>
-          <button class="delete" v-on:click="modalSettingsisActive = !modalSettingsisActive"
+          <p class="modal-card-title">Paramètres</p>
+          <button class="delete has-background-danger" v-on:click="modalSettingsisActive = !modalSettingsisActive"
             aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-          Configuration des paramêtres ici
+          Configuration des paramètres ici
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success w-100">Sauvegarder</button>
@@ -195,21 +195,27 @@
 
 <style lang="scss">
   @import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
-  .test-classe {
-    @extend .title;
-    @extend .is-4;
-    @extend .has-text-centered;
-  }
   .navbar {
     border-radius: 0 !important;
   }
+
   .w-80{
     width: 80px!important;
   }
+
+  .w-200 {
+    width: 200px;
+  }
+
+  .bt-1{
+    border-top: 1px solid #d3d3d3;
+  }
+
   .panel-section{
     border-bottom: 1px solid #ededed;
     padding: 10px 0 10px 0;
   }
+
   .datepicker{
     background-color: white;
     border-color: #dee2e5;
@@ -223,4 +229,57 @@
     padding-right: calc(0.75em - 1px);
     padding-top: calc(0.5em - 1px);
   }
+
+  .active-icon {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    font-size: 1.5em;
+    color: rgb(49, 162, 76);
+  }
+  
+  .not-active-icon {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    font-size: 1.5em;
+    color: grey;
+  }
+  
+  .tagline {
+    padding: 20px 0;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  
+  .avatar {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    box-shadow: 0px 2px 8px 3px darkgrey;
+  }
+  
+  p.title.is-bold {
+    font-weight: bold;
+  }
+  
+  .h-100p{
+    height: 100%;
+  }
+  
+  .has-image-centered {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .round-shadow {
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px #ccc;
+  }
+
+  .w-100 {
+    width: 100px;
+  }
+
 </style>
