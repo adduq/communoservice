@@ -1,64 +1,45 @@
 <template>
   <div class="page-my-account">
-    <div class="container profile">
-      <div class="section profile-heading">
-        <div class="columns">
-          <div class="column is-one-fifth">
-            <figure class="image is-128x128 round-shadow has-image-centered">
-              <img
-                class="is-rounded"
-                src="https://owcdn.net/img/5bda50b474984.jpg"
-              />
-              <i
-                class="fas fa-circle"
-                :class="userIsActive ? 'active-icon' : 'not-active-icon'"
-              ></i>
-            </figure>
+    <div class="box has-background-dark has-text-white">
+      <div class="container profile">
+        <div class="section profile-heading">
+          <div class="columns">
+            <div class="column has-text-centered">
+              <figure class="image is-128x128 round-shadow has-image-centered">
+                <img class="is-rounded" src="https://owcdn.net/img/5bda50b474984.jpg" />
+                <i class="fas fa-circle" 
+                  :class="userInfo.is_active ? 'active-icon' : 'not-active-icon'"
+                  :title="userInfo.is_active ? 'Actif' : 'Inactif'"></i>
+              </figure>
+              <p class="mt-2">
+                <span class="title is-bold has-text-white" 
+                v-if="userInfo.first_name  && userInfo.last_name">
+                  {{ userInfo.first_name + " " + userInfo.last_name }}
+                </span>
+                <span class="title is-bold has-text-white" v-else>
+                  {{userInfo.username}}
+                </span>
+              </p>
+              <p class="has-text-grey" v-if="userInfo.first_name  && userInfo.last_name">
+                <i class="has-text-success">@</i> 
+                {{userInfo.username}}
+              </p>
+            </div>
           </div>
-          <div class="column is-one-third">
-            <p>
-              <span class="title is-bold">{{
-                userInfo.first_name + " " + userInfo.last_name
-              }}</span>
-            </p>
-            <p class="tagline">
-              {{userInfo.user_bio}}
-            </p>
-          </div>
-          <div class="column ml-5">
-            <div class="columns is-mobile is-centered">
-              <template v-if="profileSwitch == false">
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-bold is-size-3">{{ userInfo.nb_services_given }}</p>
-                  <p>services rendus</p>
-                </div>
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-bold is-size-3">{{ offers.length }}</p>
-                  <p>services actifs</p>
-                </div>
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-bold is-size-3">
-                    {{ userInfo.avg_rating_as_employee }}/10
-                  </p>
-                  <p>score</p>
-                </div>
-              </template>
-              <template v-if="profileSwitch == true">
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-bold is-size-3">{{ userInfo.nb_services_received }}</p>
-                  <p>services reçus</p>
-                </div>
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-bold is-size-3">{{ offers.length }}</p>
-                  <p>services actifs</p>
-                </div>
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-bold is-size-3">
-                    {{ userInfo.avg_rating_as_employer }}/10
-                  </p>
-                  <p>score</p>
-                </div>
-              </template>
+          <div class="is-flex is-flex-wrap-wrap is-justify-content-space-evenly">
+            <div class="has-text-centered">
+              <p class="has-text-weight-bold is-size-3">{{ userInfo.nb_services_given }}</p>
+              <p>services rendus</p>
+            </div>
+            <div class="has-text-centered">
+              <p class="has-text-weight-bold is-size-3">{{ offers.length }}</p>
+              <p>services actifs</p>
+            </div>
+            <div class="has-text-centered">
+              <p class="has-text-weight-bold is-size-3">
+                {{ userInfo.avg_rating_as_employee }}/10
+              </p>
+              <p>score</p>
             </div>
           </div>
         </div>

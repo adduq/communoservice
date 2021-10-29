@@ -378,9 +378,9 @@
           params.append('type-service', this.query_typeservice);
         }
 
-        if(this.query_serviceday instanceof Date && !isNaN(this.query_serviceday)){
-          params.append('date', this.query_serviceday.toISOString().split('T')[0]);
-          params.append('day-of-week', this.weekdays[this.query_serviceday.getDay()]);
+        if(this.select_serviceday instanceof Date && !isNaN(this.select_serviceday)){
+          params.append('date', this.select_serviceday.toISOString().split('T')[0]);
+          params.append('day-of-week', this.weekdays[this.select_serviceday.getDay()]);
         }
 
         if(this.query_mots_cles.split(' ').length > 0){
