@@ -118,25 +118,25 @@
           </div>
           <label class="label has-text-centered bt-1 pt-2 is-size-5">Disponibilités</label>
           <div class="is-flex has-text-centered is-flex-wrap-wrap mt-2 is-justify-content-space-evenly is-family-monospace">
-              <span class="tag is-rounded ch-5 is-size-6" :class="offerToShow.monday == true? 'is-info' : 'is-dark'" title="Lundi">
+              <span class="tag is-rounded ch-5 is-size-5" :class="offerToShow.monday == true? 'is-info' : 'is-dark'" title="Lundi">
                 L
               </span> 
-              <span class="tag is-rounded ch-5 is-size-6" :class="offerToShow.tuesday == true? 'is-info' : 'is-dark'" title="Mardi">
+              <span class="tag is-rounded ch-5 is-size-5" :class="offerToShow.tuesday == true? 'is-info' : 'is-dark'" title="Mardi">
                 M
               </span>
-              <span class="tag is-rounded ch-5 is-size-6" :class="offerToShow.thursday == true? 'is-info' : 'is-dark'" title="Mercredi">
+              <span class="tag is-rounded ch-5 is-size-5" :class="offerToShow.thursday == true? 'is-info' : 'is-dark'" title="Mercredi">
                 M
               </span>     
-              <span class="tag is-rounded ch-5 is-size-6" :class="offerToShow.wednesday == true? 'is-info' : 'is-dark'" title="Jeudi">
+              <span class="tag is-rounded ch-5 is-size-5" :class="offerToShow.wednesday == true? 'is-info' : 'is-dark'" title="Jeudi">
                 J
               </span>
-              <span class="tag is-rounded ch-5 is-size-6" :class="offerToShow.friday == true? 'is-info' : 'is-dark'" title="Vendredi">
+              <span class="tag is-rounded ch-5 is-size-5" :class="offerToShow.friday == true? 'is-info' : 'is-dark'" title="Vendredi">
                 V
               </span>
-              <span class="tag is-rounded ch-5 is-size-6" :class="offerToShow.saturday == true? 'is-info' : 'is-dark'" title="Samedi">
+              <span class="tag is-rounded ch-5 is-size-5" :class="offerToShow.saturday == true? 'is-info' : 'is-dark'" title="Samedi">
                 S
               </span>
-              <span class="tag is-rounded ch-5 is-size-6" :class="offerToShow.sunday == true? 'is-info' : 'is-dark'" title="Dimanche">
+              <span class="tag is-rounded ch-5 is-size-5" :class="offerToShow.sunday == true? 'is-info' : 'is-dark'" title="Dimanche">
                 D
               </span>
           </div>
@@ -165,7 +165,7 @@
             </div>
             <div class="column">
               <div class="has-text-centered">
-                <label class="label is-size-5">Date d'éxpiration</label>
+                <label class="label is-size-5">Date d'expiration</label>
                 <p class="is-size-6">{{offerToShow.expiration_date}}</p>
               </div>
             </div>
@@ -277,20 +277,20 @@
             </span>
           </button>
           <button class="button is-primary is-rounded w-100"
+            v-if="currentStep < 3" 
             :disabled="currentStep == 2 && Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])"
             :title="currentStep == 2 && Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k]) ? 'Vous devez choisir au moins une journée':''"
-            v-if="currentStep < 3" 
-            @click="currentStep++">
+            @click="currentStep == 2 ? step2Completed = true : ''; currentStep++">
             <span class="icon">
               Suivant 
               <i class="fa fa-arrow-right ml-2"></i>
             </span>
           </button>
-          <button class="button is-primary is-rounded w-100"
+          <button class="button is-primary is-rounded w-100" 
+            v-if="currentStep == 3" 
             :disabled="currentStep == 3 && !confirmationCheckbox"
             :title="currentStep == 3 && !confirmationCheckbox ? 'Vous devez confirmer votre demande':''"
-            v-if="currentStep == 3" 
-            @click="clickedSend = true">
+            @click="clickedSend = true; step3Completed = true">
             <span class="icon">
               Envoyer 
               <i class="fa fa-paper-plane ml-2"></i>
