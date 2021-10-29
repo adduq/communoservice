@@ -47,7 +47,7 @@
                       <span class="icon is-small mr-3">
                         <i class="fas fa-cog"></i>
                       </span>
-                      <span> Paramêtres </span>
+                      <span> Paramètres </span>
                     </a>
                     <hr class="dropdown-divider" />
                     <a href="#" @click="logout()" class="dropdown-item has-text-danger">
@@ -81,12 +81,12 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Paramêtres</p>
+          <p class="modal-card-title">Paramètres</p>
           <button class="delete has-background-danger" v-on:click="modalSettingsisActive = !modalSettingsisActive"
             aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-          Configuration des paramêtres ici
+          Configuration des paramètres ici
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success w-100">Sauvegarder</button>
