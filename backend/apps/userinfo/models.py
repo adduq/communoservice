@@ -10,12 +10,13 @@ logger = logging.getLogger(__name__)
 
 @receiver(user_logged_in)
 def login_logger(sender, request, user, **kwargs):
-    try: 
+    try:
         userinfo = UserInfo.objects.get(user_id=user.id)
         userinfo.is_online = True
         userinfo.save()
     except:
-        newUser = UserInfo.objects.create(user_id = user, is_online=True)
+        newUser = UserInfo.objects.create(user_id=user, is_online=True)
+
 
 @receiver(user_logged_out)
 def got_offline(sender, request, user, **kwargs):
@@ -23,8 +24,10 @@ def got_offline(sender, request, user, **kwargs):
     userinfo.is_online = False
     userinfo.save()
 
+
 class UserInfo(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE, to_field="id")
+    user_id = models.OneToOneField(
+        User, on_delete=models.CASCADE, to_field="id")
 
     is_online = models.BooleanField(default=False)
 

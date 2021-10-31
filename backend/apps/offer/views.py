@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from .models import ActiveOffer, Offer, ReservedOffer, TerminatedOffer
 from apps.userinfo.models import UserInfo
-from .serializers import ActiveOfferSerializer, OfferSerializer, ReservedOfferSerializer, TerminatedOfferSerializer, UserSerializer
+from apps.userinfo.serializers import UserSerializer
+from .serializers import ActiveOfferSerializer, OfferSerializer, ReservedOfferSerializer, TerminatedOfferSerializer
 
 from rest_framework.decorators import api_view, schema
 from rest_framework.schemas import AutoSchema
@@ -70,35 +71,40 @@ class OfferDetail(APIView):
         return Response(serializer.data)
 
 
-# Note:
-# ? Utiliser activeOffer à la place ?
-class UserOffers(APIView):
-    """
-    Récupérer toutes les offres d'un employé.
-    """
+# # Note:
+# # ? Utiliser activeOffer à la place ?
+# class UserOffers(APIView):
+#     """
+#     Récupérer toutes les offres d'un employé.
+#     """
 
-    def get_object(self, no_user):
-        try:
-            return Offer.objects.filter(user=no_user)
-        except User.DoesNotExist:
-            raise Http404
+#     def get_object(self, no_user):
+#         try:
+#             return Offer.objects.filter(user=no_user)
+#         except User.DoesNotExist:
+#             raise Http404
 
-    def get(self, request, no_user, format=None):
-        offer = self.get_object(no_user)
-        serializer = OfferSerializer(offer, many=True)
-        return Response(serializer.data)
+#     def get(self, request, no_user, format=None):
+#         offer = self.get_object(no_user)
+#         serializer = OfferSerializer(offer, many=True)
+#         return Response(serializer.data)
+
+# region ActiveOffers
 
 
-# Note:
-# ? Utiliser id_offer comme id pour les autres classes ?
 class ActiveOffers(APIView):
     """
     Permet d'avoir les offres actives.
     """
 
+    def get_offers(self):
+        active_offers = list(
+            ActiveOffer.objects.all().values_list('id_offer', flat=True))
+        return Offer.objects.filter(id__in=active_offers)
+
     def get(self, request, format=None):
-        active_offers = ActiveOffer.objects.all()
-        serializer = ActiveOfferSerializer(active_offers, many=True)
+        active_offers = self.get_offers()
+        serializer = OfferSerializer(active_offers, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -107,6 +113,22 @@ class ActiveOffers(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ActiveOffersByUser(APIView):
+    """
+    Permet d'avoir les offres actives par utilisateur.
+    """
+
+    def get_offers(self, no_user):
+        active_offers = list(
+            ActiveOffer.objects.filter(id_user=no_user).values_list('id_offer', flat=True))
+        return Offer.objects.filter(id__in=active_offers)
+
+    def get(self, request, no_user, format=None):
+        active_offers = self.get_offers(no_user)
+        serializer = OfferSerializer(active_offers, many=True)
+        return Response(serializer.data)
 
 
 class ActiveOfferDetail(APIView):
@@ -130,10 +152,14 @@ class ActiveOfferDetail(APIView):
         active_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# endregion
+
+# region ReservedOffers
+
 
 class ReservedOffers(APIView):
     """
-    Permet d'avoir les offres actives.
+    Permet d'avoir les offres réservées.
     """
 
     def get(self, request, format=None):
@@ -149,9 +175,41 @@ class ReservedOffers(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ReservedOffersByUser(APIView):
+    """
+    Permet d'avoir les offres réservées par utilisateur.
+    """
+
+    def get_offers(self, no_user):
+        reserved_offers = list(
+            ReservedOffer.objects.filter(id_user=no_user).values_list('id_offer', flat=True))
+        return Offer.objects.filter(id__in=reserved_offers)
+
+    def get(self, request, no_user, format=None):
+        reserved_offers = self.get_offers(no_user)
+        serializer = OfferSerializer(reserved_offers, many=True)
+        return Response(serializer.data)
+
+
+class ReservedOffersByRecruiter(APIView):
+    """
+    Permet d'avoir les offres réservées en tant qu'employeur.
+    """
+
+    def get_offers(self, no_recruiter):
+        reserved_offers = list(ReservedOffer.objects.filter(
+            id_recruiter=no_recruiter).values_list('id_offer', flat=True))
+        return Offer.objects.filter(id__in=reserved_offers)
+
+    def get(self, request, no_recruiter, format=None):
+        reserved_offers = self.get_offers(no_recruiter)
+        serializer = OfferSerializer(reserved_offers, many=True)
+        return Response(serializer.data)
+
+
 class ReservedOfferDetail(APIView):
     """
-    Permet d'avoir une offre active.
+    Permet d'avoir une offre réservée.
     """
 
     def get_object(self, id_reserved_offer):
@@ -170,10 +228,14 @@ class ReservedOfferDetail(APIView):
         reserved_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# endregion
+
+# region TerminatedOffers
+
 
 class TerminatedOffers(APIView):
     """
-    Permet d'avoir les offres actives.
+    Permet d'avoir les offres terminées.
     """
 
     def get(self, request, format=None):
@@ -189,9 +251,41 @@ class TerminatedOffers(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class TerminatedOffersByUser(APIView):
+    """
+    Permet d'avoir les offres terminées par utilisateur.
+    """
+
+    def get_offers(self, no_user):
+        terminated_offers = list(
+            TerminatedOffer.objects.filter(id_user=no_user).values_list('id_offer', flat=True))
+        return Offer.objects.filter(id__in=terminated_offers)
+
+    def get(self, request, no_user, format=None):
+        terminated_offers = self.get_offers(no_user)
+        serializer = OfferSerializer(terminated_offers, many=True)
+        return Response(serializer.data)
+
+
+class TerminatedOffersByRecruiter(APIView):
+    """
+    Permet d'avoir les offres terminées en tant qu'employeur.
+    """
+
+    def get_offers(self, no_recruiter):
+        terminated_offers = list(TerminatedOffer.objects.filter(
+            id_recruiter=no_recruiter).values_list('id_offer', flat=True))
+        return Offer.objects.filter(id__in=terminated_offers)
+
+    def get(self, request, no_recruiter, format=None):
+        terminated_offers = self.get_offers(no_recruiter)
+        serializer = OfferSerializer(terminated_offers, many=True)
+        return Response(serializer.data)
+
+
 class TerminatedOfferDetail(APIView):
     """
-    Permet d'avoir une offre active.
+    Permet d'avoir une offre terminée.
     """
 
     def get_object(self, id_terminated_offer):
@@ -210,18 +304,20 @@ class TerminatedOfferDetail(APIView):
         terminated_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# endregion
+
 
 """
 Permet de rechercher des offres selon le type de service.
 """
 
-# ? NOTE: Est-ce qu'on cherche dans les actives offers à la place ?
-# ? Si oui, modification de l'url ?
-
 
 @api_view(['GET'])
 def search(request):
-    queryset = Offer.objects.all()
+    active_offers = list(
+        ActiveOffer.objects.all().values_list('id_offer', flat=True))
+    queryset = Offer.objects.filter(id__in=active_offers)
+
     if "type-service" in request.GET:
         queryset = queryset.filter(
             type_service__icontains=request.GET.get('type-service'))
