@@ -48,3 +48,21 @@ class TerminatedOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = TerminatedOffer
         fields = '__all__'
+
+
+class ActiveOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActiveOffer
+        fields = '__all__'
+
+
+class ReservedOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReservedOffer
+        fields = '__all__'
+
+
+class TerminatedOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TerminatedOffer
+        fields = '__all__'
