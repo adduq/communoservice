@@ -1,5 +1,7 @@
+from django.db import models
+from django.db.models import fields
 from rest_framework import serializers
-from .models import Offer, ServiceType
+from .models import ActiveOffer, Offer, ReservedOffer, TerminatedOffer, ServiceType
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -27,4 +29,22 @@ class OfferSerializer(serializers.ModelSerializer):
 class ServiceTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceType
+        fields = '__all__'
+
+
+class ActiveOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActiveOffer
+        fields = '__all__'
+
+
+class ReservedOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReservedOffer
+        fields = '__all__'
+
+
+class TerminatedOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TerminatedOffer
         fields = '__all__'
