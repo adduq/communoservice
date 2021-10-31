@@ -8,7 +8,8 @@ from django.contrib.auth.models import User
 
 from rest_framework import status
 from .models import Offer
-from .serializers import OfferSerializer, UserSerializer
+from apps.userinfo.models import UserInfo
+from .serializers import OfferSerializer
 
 from rest_framework.decorators import api_view, schema
 from rest_framework.schemas import AutoSchema
@@ -31,14 +32,23 @@ class Offers(APIView):
     """
     Création d'une offre.
     """
+    def user_can_create(self, user_id):
+        user = UserInfo.objects.get(user_id=user_id)
+        return user.profile_is_completed
 
     def post(self, request, format=None):
-        serializer = OfferSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_anonymous:
+            return HttpResponse('Unauthorized', status=401)
 
+        if self.user_can_create(request.user.id):
+            serializer = OfferSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            data = {'error':'profile_incomplete'}
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 class OfferDetail(APIView):
 
@@ -78,8 +88,6 @@ class UserOffers(APIView):
 '''
 Permet de rechercher des offres selon le type de service.
 '''
-
-
 @api_view(['GET'])
 def search(request):
     queryset = Offer.objects.all()

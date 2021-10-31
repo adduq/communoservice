@@ -6,7 +6,9 @@
     <a href="https://github.com/vp-0/communoservice"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://communoservice.herokuapp.com">View Demo</a>
+    <a href="https://communoservice.herokuapp.com">Production Website</a>
+    ·
+    <a href="https://dev-communoservice.herokuapp.com">Development Website</a>
     ·
     <a href="https://github.com/vp-0/communoservice/issues">Report a bug</a>
     ·

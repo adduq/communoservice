@@ -43,11 +43,11 @@
                 </div>
                 <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
                   <div class="dropdown-content has-text-left">
-                    <a href="#" class="dropdown-item" v-on:click="modalSettingsisActive = !modalSettingsisActive">
+                    <a href="#" class="dropdown-item" v-on:click="openSettingsModal()">
                       <span class="icon is-small mr-3">
                         <i class="fas fa-cog"></i>
                       </span>
-                      <span> Paramêtres </span>
+                      <span> Paramètres </span>
                     </a>
                     <hr class="dropdown-divider" />
                     <a href="#" @click="logout()" class="dropdown-item has-text-danger">
@@ -81,17 +81,42 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Paramêtres</p>
-          <button class="delete" v-on:click="modalSettingsisActive = !modalSettingsisActive"
+          <p class="modal-card-title">Paramètres</p>
+          <button class="delete has-background-danger" v-on:click="modalSettingsisActive = !modalSettingsisActive"
             aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-          Configuration des paramêtres ici
+          <div class="field">
+            <label class="label">Prénom</label>
+            <div class="control">
+              <input class="input" type="text" :placeholder="userInfo.first_name" v-model="updatedUserInfo.first_name">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Nom</label>
+            <div class="control">
+              <input class="input" type="text" :placeholder="userInfo.last_name" v-model="updatedUserInfo.last_name">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Courriel</label>
+            <div class="control">
+              <input class="input" type="email" :placeholder="userInfo.email" v-model="updatedUserInfo.email">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Adresse</label>
+            <div class="control">
+              <input class="input" type="email" :placeholder="userInfo.address" v-model="updatedUserInfo.address">
+            </div>
+          </div>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success w-100">Sauvegarder</button>
+          <button class="button is-success w-100" @click="validateUserInfo()">Sauvegarder</button>
           <button class="button is-danger w-100"
-            v-on:click="modalSettingsisActive = !modalSettingsisActive">Canceler</button>
+            v-on:click="modalSettingsisActive = !modalSettingsisActive">Fermer</button>
         </footer>
       </div>
     </div>
@@ -123,6 +148,13 @@
         },
         dropdownRight: true,
         modalSettingsisActive: false,
+        userInfo: {},
+        updatedUserInfo: {
+          first_name: '',
+          last_name: '',
+          email: '',
+          address: ''
+        }
       };
     },
     beforeCreate() {
@@ -179,6 +211,86 @@
           });
 				});
       },
+      openSettingsModal(){
+        this.getUserInfo();
+        this.modalSettingsisActive = !this.modalSettingsisActive;
+      },
+      async getUserInfo(){
+        await axios
+        .get('api/v1/userinfo/me/')
+        .then((response)=>{
+          this.userInfo = response.data;
+          this.updatedUserInfo.first_name = response.data['first_name'];
+          this.updatedUserInfo.last_name = response.data['last_name'];
+          this.updatedUserInfo.email = response.data['email'];
+          this.updatedUserInfo.address = response.data['address'];
+        })
+        .catch((error)=>{
+          console.log(error);
+        });
+      },
+      async validateUserInfo(){
+        let data = {}
+        if(this.updatedUserInfo.first_name != this.userInfo.first_name){
+          data.first_name = this.updatedUserInfo.first_name;
+        }
+        if(this.updatedUserInfo.last_name != this.userInfo.last_name){
+          data.last_name = this.updatedUserInfo.last_name;
+        }
+        if(this.updatedUserInfo.email != this.userInfo.email){
+          data.email = this.updatedUserInfo.email;
+        }
+        if(this.updatedUserInfo.address != this.userInfo.address){
+          data.address = this.updatedUserInfo.address;
+        }
+        if(Object.keys(data).length != 0){
+          await axios
+          .put('api/v1/userinfo/me/update/', data)
+          .then((response)=>{
+            this.userInfo = response.data;
+            toast({
+              message: "Informations sauvegardés avec succès!",
+              type: "is-success",
+              dismissible: true,
+              pauseOnHover: false,
+              duration: 3000,
+              position: "bottom-right",
+              animate: {
+                in: "fadeInRightBig",
+                out: "fadeOutRightBig",
+              },
+            });
+          })
+          .catch((error)=>{
+            console.log(error);
+            toast({
+              message: "Une erreur est survenue...",
+              type: "is-danger",
+              dismissible: false,
+              pauseOnHover: false,
+              duration: 3000,
+              position: "bottom-right",
+              animate: {
+                in: "fadeInRightBig",
+                out: "fadeOutRightBig",
+              },
+            });
+          });
+        }else{
+          toast({
+            message: "Informations sauvegardés avec succès!",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: false,
+            duration: 3000,
+            position: "bottom-right",
+            animate: {
+              in: "fadeInRightBig",
+              out: "fadeOutRightBig",
+            },
+          });
+        }
+      },
       handleResize() {
         this.window.width = window.innerWidth;
         this.window.height = window.innerHeight;
@@ -195,21 +307,27 @@
 
 <style lang="scss">
   @import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
-  .test-classe {
-    @extend .title;
-    @extend .is-4;
-    @extend .has-text-centered;
-  }
   .navbar {
     border-radius: 0 !important;
   }
+
   .w-80{
     width: 80px!important;
   }
+
+  .w-200 {
+    width: 200px;
+  }
+
+  .bt-1{
+    border-top: 1px solid #d3d3d3;
+  }
+
   .panel-section{
     border-bottom: 1px solid #ededed;
     padding: 10px 0 10px 0;
   }
+
   .datepicker{
     background-color: white;
     border-color: #dee2e5;
@@ -223,4 +341,59 @@
     padding-right: calc(0.75em - 1px);
     padding-top: calc(0.5em - 1px);
   }
+
+  .active-icon {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    font-size: 1.5em;
+    color: #3ef100;
+    box-shadow: 0px 0px 8px 0px lime;
+    border-radius: 9999px;
+  }
+  
+  .not-active-icon {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    font-size: 1.5em;
+    color: grey;
+  }
+  
+  .tagline {
+    padding: 20px 0;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  
+  .avatar {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    box-shadow: 0px 2px 8px 3px darkgrey;
+  }
+  
+  p.title.is-bold {
+    font-weight: bold;
+  }
+  
+  .h-100p{
+    height: 100%;
+  }
+  
+  .has-image-centered {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .round-shadow {
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px #ccc;
+  }
+
+  .w-100 {
+    width: 100px;
+  }
+
 </style>
