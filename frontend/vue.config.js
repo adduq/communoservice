@@ -2,8 +2,11 @@
 module.exports = {
 	lintOnSave: false,
 	devServer: {
-		hot: true,
-		hotOnly: true,
+		// hot: true,
+		// hotOnly: true,
+		// liveReload: false,
+		bonjour: true,
+		port: 8080,
 		disableHostCheck: true,
 		historyApiFallback: true,
 		public: "0.0.0.0:8000",

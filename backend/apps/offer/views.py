@@ -1,16 +1,18 @@
+import json
 from django.db.models import Q
 from django.http import Http404
+from django.http.response import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view  # Pour utilser annotations
 from django.contrib.auth.models import User
 
-from rest_framework import status
-from .models import ActiveOffer, Offer, ReservedOffer, TerminatedOffer
+from rest_framework import serializers, status
+from .models import ActiveOffer, Offer, ReservedOffer, ServiceType, TerminatedOffer
 from apps.userinfo.models import UserInfo
 from apps.userinfo.serializers import UserSerializer
-from .serializers import ActiveOfferSerializer, OfferSerializer, ReservedOfferSerializer, TerminatedOfferSerializer
+from .serializers import ActiveOfferSerializer, OfferSerializer, ReservedOfferSerializer, ServiceTypeSerializer, TerminatedOfferSerializer
 
 from rest_framework.decorators import api_view, schema
 from rest_framework.schemas import AutoSchema
@@ -70,6 +72,12 @@ class OfferDetail(APIView):
         serializer = OfferSerializer(offer)
         return Response(serializer.data)
 
+
+class ServiceTypes(APIView):
+    def get(self, request, format=None):
+        service_types = ServiceType.objects.all()
+        serializer = ServiceTypeSerializer(service_types, many=True)
+        return Response(serializer.data)
 
 # # Note:
 # # ? Utiliser activeOffer à la place ?
@@ -256,15 +264,43 @@ class TerminatedOffersByUser(APIView):
     Permet d'avoir les offres terminées par utilisateur.
     """
 
-    def get_offers(self, no_user):
-        terminated_offers = list(
-            TerminatedOffer.objects.filter(id_user=no_user).values_list('id_offer', flat=True))
-        return Offer.objects.filter(id__in=terminated_offers)
+    def get_offers(self, no_user, terminated_offers):
+        sort_offers = list(
+            terminated_offers.values_list('id_offer', flat=True))
+        # return Offer.objects.filter(id__in=sort_offers)
+        return Offer.objects.filter(id__in=sort_offers)
 
     def get(self, request, no_user, format=None):
-        terminated_offers = self.get_offers(no_user)
-        serializer = OfferSerializer(terminated_offers, many=True)
+        terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)
+        # terminated_serializer = TerminatedOfferSerializer(
+        #     terminated_offers, many=True)
+
+        # offers = self.get_offers(no_user, terminated_offers)
+        # serializer = OfferSerializer(terminated_offers, many=True)
+
+        # out_dict = list(terminated_serializer.data)
+        # out_dict = dict(zip(serializer.data))
+        # out_dict.update(serializer.data)
+        # test = TerminatedOffer.objects.select_related(
+        #     'id_offer').filter(id_user=no_user)
+        serializer = TerminatedOfferSerializer(terminated_offers, many=True)
+
+        # print(offers.query)
+
+        # del out_dict[id]
+        # del out_dict[user]
+        # out_dict = {
+        #     "completed_date": out_dict.get("completed_date"),
+        #     "status": out_dict.get("status"),
+        #     "rating": out_dict.get("rating")
+        # }
+        # out_dict = {}
+        # out_dict.update(terminated_serializer.data)
+        # out_dict.update(serializer.data)
+
         return Response(serializer.data)
+        # return Response(serializer.data)
+        # return Response(serializer.data)
 
 
 class TerminatedOffersByRecruiter(APIView):

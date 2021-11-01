@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import fields
 from rest_framework import serializers
+
+from apps.userinfo.serializers import UserSerializer
 from .models import ActiveOffer, Offer, ReservedOffer, TerminatedOffer, ServiceType
 from django.contrib.auth.models import User
 from datetime import date
@@ -45,24 +47,10 @@ class ReservedOfferSerializer(serializers.ModelSerializer):
 
 
 class TerminatedOfferSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TerminatedOffer
-        fields = '__all__'
+    id_offer = OfferSerializer(read_only=True)
+    # id_user = UserSerializer(read_only=True)
+    # id_recruiter = UserSerializer(read_only=True)
 
-
-class ActiveOfferSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ActiveOffer
-        fields = '__all__'
-
-
-class ReservedOfferSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ReservedOffer
-        fields = '__all__'
-
-
-class TerminatedOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = TerminatedOffer
         fields = '__all__'

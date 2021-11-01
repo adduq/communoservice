@@ -48,7 +48,9 @@
 							<p>services rendus</p>
 						</div>
 						<div class="has-text-centered">
-							<p class="has-text-weight-bold is-size-3">{{ offers.length }}</p>
+							<p class="has-text-weight-bold is-size-3">
+								{{ activeOffers.length }}
+							</p>
 							<p>services actifs</p>
 						</div>
 						<div class="has-text-centered">
@@ -90,10 +92,11 @@
 							<div class="control">
 								<div class="select">
 									<select v-model="serviceType" class="w-200">
-										<option>Tonte de pelouse</option>
-										<option>Déneigement</option>
-										<option>Gardiennage</option>
-										<option>Administration</option>
+										<option
+											v-for="type in serviceTypes"
+											v-bind:key="type.name"
+											>{{ type.name }}</option
+										>
 									</select>
 								</div>
 							</div>
@@ -255,7 +258,7 @@
 						<p class="title has-text-centered">Mes services actifs</p>
 
 						<DetailedOffer
-							v-for="offer in offers"
+							v-for="offer in activeOffers"
 							v-bind:key="offer.id"
 							v-bind:offer="offer"
 						/>
@@ -265,131 +268,12 @@
 				<div class="column">
 					<div class="box">
 						<p class="title has-text-centered">Historique</p>
-						<div class="card mb-3 h-140">
-							<div class="card-content">
-								<div class="media">
-									<div class="media-left">
-										<figure class="image is-48x48">
-											<img
-												src="https://bulma.io/images/placeholders/96x96.png"
-												alt="Placeholder image"
-											/>
-										</figure>
-									</div>
-									<div class="media-content">
-										<p class="title is-4">Type de service</p>
-										<p class="subtitle is-6">Location ici</p>
-									</div>
-								</div>
 
-								<div class="columns">
-									<div class="column is-half">
-										<time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-									</div>
-									<div class="column is-half pb-0">
-										<span class="icon-text has-text-success">
-											<span class="icon">
-												<i class="fas fa-check-square"></i>
-											</span>
-											<span>Complété</span>
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card mb-3 h-140">
-							<div class="card-content">
-								<div class="media">
-									<div class="media-left">
-										<figure class="image is-48x48">
-											<img
-												src="https://bulma.io/images/placeholders/96x96.png"
-												alt="Placeholder image"
-											/>
-										</figure>
-									</div>
-									<div class="media-content">
-										<p class="title is-4">Type de service</p>
-										<p class="subtitle is-6">Location ici</p>
-									</div>
-								</div>
-								<div class="columns">
-									<div class="column is-half">
-										<time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-									</div>
-									<div class="column is-half pb-0">
-										<span class="icon-text has-text-warning">
-											<span class="icon">
-												<i class="fas fa-exclamation-triangle"></i>
-											</span>
-											<span>Cancelé</span>
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card mb-3 h-140">
-							<div class="card-content">
-								<div class="media">
-									<div class="media-left">
-										<figure class="image is-48x48">
-											<img
-												src="https://bulma.io/images/placeholders/96x96.png"
-												alt="Placeholder image"
-											/>
-										</figure>
-									</div>
-									<div class="media-content">
-										<p class="title is-4">Type de service</p>
-										<p class="subtitle is-6">Location ici</p>
-									</div>
-								</div>
-								<div class="columns">
-									<div class="column is-half">
-										<time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-									</div>
-									<div class="column is-half pb-0">
-										<span class="icon-text has-text-success">
-											<span class="icon">
-												<i class="fas fa-check-square"></i>
-											</span>
-											<span>Complété</span>
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card mb-3 h-140">
-							<div class="card-content">
-								<div class="media">
-									<div class="media-left">
-										<figure class="image is-48x48">
-											<img
-												src="https://bulma.io/images/placeholders/96x96.png"
-												alt="Placeholder image"
-											/>
-										</figure>
-									</div>
-									<div class="media-content">
-										<p class="title is-4">Type de service</p>
-										<p class="subtitle is-6">Localisation ici</p>
-									</div>
-								</div>
-								<div class="columns">
-									<div class="column is-half">
-										<time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-									</div>
-									<div class="column is-half pb-0">
-										<span class="icon-text has-text-danger">
-											<span class="icon">
-												<i class="fas fa-ban"></i>
-											</span>
-											<span>Non complété</span>
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
+						<TerminatedOffer
+							v-for="offer in terminatedOffers"
+							v-bind:key="offer.id"
+							v-bind:terminatedOffer="offer"
+						/>
 					</div>
 				</div>
 			</template>
@@ -399,7 +283,7 @@
 						<p class="title has-text-centered">Mes services prévus</p>
 
 						<ActiveOffer
-							v-for="offer in offers"
+							v-for="offer in activeOffers"
 							v-bind:key="offer.id"
 							v-bind:offer="offer"
 						/>
@@ -577,12 +461,15 @@
 <script>
 import axios from "axios";
 import DetailedOffer from "@/components/DetailedOffer";
+import TerminatedOffer from "@/components/TerminatedOffer";
 
 export default {
 	name: "MyAccount",
 	data() {
 		return {
-			offers: [],
+			activeOffers: [],
+			terminatedOffers: [],
+			serviceTypes: [],
 			modalCreateisActive: false,
 			serviceType: "",
 			description: "",
@@ -608,11 +495,13 @@ export default {
 	//Les components qu'on veut utiliser
 	components: {
 		DetailedOffer,
+		TerminatedOffer,
 	},
 	mounted() {
 		document.title = "Mon compte | Communoservice";
 		this.getUserInfo();
 		this.tomorrow = this.getTomorrow();
+		this.getServiceTypes();
 	},
 	methods: {
 		getTomorrow() {
@@ -628,7 +517,29 @@ export default {
 			await axios
 				.get(`/api/v1/active-offers/user/${userId}/`)
 				.then((response) => {
-					this.offers = response.data;
+					this.activeOffers = response.data;
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async getTerminatedOffersForUser(userId) {
+			await axios
+				.get(`/api/v1/terminated-offers/user/${userId}/`)
+				.then((res) => {
+					console.log(res.data);
+
+					this.terminatedOffers = res.data;
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async getServiceTypes() {
+			await axios
+				.get("/api/v1/service-types/")
+				.then((res) => {
+					this.serviceTypes = res.data;
 				})
 				.catch((error) => {
 					console.log(error);
@@ -684,7 +595,7 @@ export default {
 					this.modalCreateisActive = false;
 					// console.log(response);
 
-					this.updateActiveOffers({
+					this.addActiveOffers({
 						id_offer: response.data.id,
 						id_user: response.data.user,
 					});
@@ -704,12 +615,10 @@ export default {
 		toSelectDate(payload) {
 			alert(payload);
 		},
-		async updateActiveOffers(activeOffer) {
+		async addActiveOffers(activeOffer) {
 			await axios
 				.post("/api/v1/active-offers/", activeOffer)
 				.then((response, userId) => {
-					// console.log(response);
-
 					this.getAllOffers(activeOffer.id_user);
 				})
 				.catch((error) => {
@@ -723,6 +632,7 @@ export default {
 					this.userInfo = response.data;
 					this.userIsActive = this.userInfo["is_online"];
 					this.getAllOffers(this.userInfo.user_id);
+					this.getTerminatedOffersForUser(this.userInfo.user_id);
 				})
 				.catch((error) => {
 					console.log(error);

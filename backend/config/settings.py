@@ -4,12 +4,6 @@ from pathlib import Path
 
 import dj_database_url
 
-# ! Note: TEST !
-import mimetypes
-mimetypes.add_type("text/html", ".css", True)
-mimetypes.add_type("text/html", ".js", True)
-# ! Note: TEST !
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -25,7 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # 'django.contrib.staticfiles',
+    'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -77,12 +71,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -138,24 +126,15 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-# STATIC_URL = '/app/static/'
-# STATIC_ROOT = BASE_DIR / 'static/'
-# STATIC_URL = '/static/'
-# STATIC_ROOT = '/app/static/'
-STATIC_URL = "static/"
+STATIC_URL = "/app/staticfiles/"
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-if DEBUG:
-    STATIC_ROOT = "/static"
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-# MEDIA_URL = '/app/media/'
-# MEDIA_ROOT = BASE_DIR / 'media/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = '/app/media/'
+MEDIA_URL = '/app/media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

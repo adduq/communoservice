@@ -11,6 +11,10 @@ __pycache__
 .env
 */**/.env
 
+# staticfiles
+*/**/staticfiles/*
+*/**/static/**/
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
