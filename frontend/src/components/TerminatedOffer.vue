@@ -24,9 +24,9 @@
 
 			<div class="columns">
 				<div class="column is-half">
-					<time datetime="2016-1-1" v-if="terminatedOffer.completed_date">{{
-						terminatedOffer.completed_date
-					}}</time>
+					<time datetime="2016-1-1" v-if="terminatedOffer.completed_date">
+						Terminé le : {{ terminatedOffer.completed_date }}</time
+					>
 					<p v-else>L'offre n'a pas été achevée.</p>
 				</div>
 				<div class="column is-half pb-0">

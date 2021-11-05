@@ -42,11 +42,9 @@
 
 						<div class="select ml-2 mt-1">
 							<select v-model="query_typeservice">
-								<option>Tout</option>
-								<option>Tonte de pelouse</option>
-								<option>Gardiennage</option>
-								<option>Déneigement</option>
-								<option>Administration</option>
+								<option v-for="type in serviceTypes" v-bind:key="type.name">{{
+									type.name
+								}}</option>
 							</select>
 						</div>
 					</div>
@@ -391,37 +389,53 @@
 					</div>
 				</div>
 				<div v-if="currentStep == 3">
-					<div class="has-text-centered" v-if="!clickedSend">
-						<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
-						<label class="checkbox mb-5">
-							<input type="checkbox" v-model="confirmationCheckbox" />
-							Je confirme avoir validé ma demande
-						</label>
-					</div>
-					<div v-if="clickedSend">
-						<h2 class="title has-text-centered mb-5">
-							Demande envoyée avec succès
-						</h2>
-						<div class="animate__animated animate__zoomInDown">
-							<svg
-								class="checkmark"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 52 52"
-							>
-								<circle
-									class="checkmark__circle"
-									cx="26"
-									cy="26"
-									r="25"
-									fill="none"
-								/>
-								<path
-									class="checkmark__check"
-									fill="none"
-									d="M14.1 27.2l7.1 7.2 16.7-16.8"
-								/>
-							</svg>
+					<div v-if="$store.state.isAuthenticated">
+						<div class="has-text-centered" v-if="!clickedSend">
+							<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
+							<label class="checkbox mb-5">
+								<input type="checkbox" v-model="confirmationCheckbox" />
+								Je confirme avoir validé ma demande
+							</label>
 						</div>
+						<div
+							v-if="clickedSend"
+							:class="isFetchingOffers ? 'is-loading' : ''"
+						>
+							<h2 class="title has-text-centered mb-5">
+								Demande envoyée avec succès
+							</h2>
+							<div class="animate__animated animate__zoomInDown">
+								<svg
+									class="checkmark"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 52 52"
+								>
+									<circle
+										class="checkmark__circle"
+										cx="26"
+										cy="26"
+										r="25"
+										fill="none"
+									/>
+									<path
+										class="checkmark__check"
+										fill="none"
+										d="M14.1 27.2l7.1 7.2 16.7-16.8"
+									/>
+								</svg>
+							</div>
+						</div>
+					</div>
+					<div
+						v-else
+						class="icon-text has-text-warning is-justify-content-center subtitle"
+					>
+						<span class="icon">
+							<i class="fas fa-exclamation-triangle"></i>
+						</span>
+						<span class="has-text-black"
+							>Vous devez être connecté pour pouvoir réserver !</span
+						>
 					</div>
 				</div>
 			</section>
@@ -462,16 +476,18 @@
 				<button
 					class="button is-primary is-rounded w-100"
 					v-if="currentStep == 3"
-					:disabled="currentStep == 3 && !confirmationCheckbox"
+					:disabled="
+						currentStep == 3 &&
+							(!confirmationCheckbox || !$store.state.isAuthenticated)
+					"
 					:title="
-						currentStep == 3 && !confirmationCheckbox
+						currentStep == 3 &&
+						!confirmationCheckbox &&
+						$store.state.isAuthenticated
 							? 'Vous devez confirmer votre demande'
 							: ''
 					"
-					@click="
-						clickedSend = true;
-						step3Completed = true;
-					"
+					@click="reserveOffer(offerToShow)"
 				>
 					<span class="icon">
 						Envoyer
@@ -510,12 +526,21 @@ export default {
 			confirmationCheckbox: false,
 			clickedSend: false,
 
+			offerToReserve: {
+				reservation_date: null,
+				id_active_offer: null,
+				id_recruiter: null,
+				id_offer: null,
+				id_user: null,
+			},
+
 			// La valeur de "query" est hard codé pour le moment. Il va falloir faire categories[0]
 			// lorsque nous allons avoir la liste des catégories pour peupler le dropdown.
 			query_typeservice: "Tout",
 			query_serviceday: new Date(),
 			query_mots_cles: "",
 			offers: [],
+			serviceTypes: [],
 			isFetchingOffers: false,
 			select_serviceday: "",
 			dateToday: "",
@@ -538,6 +563,7 @@ export default {
 		this.getAllOffers();
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
+		this.getServiceTypes();
 	},
 	methods: {
 		async getAllOffers() {
@@ -551,6 +577,65 @@ export default {
 					console.log(error);
 				});
 			this.isFetchingOffers = false;
+		},
+		async getServiceTypes() {
+			await axios
+				.get("/api/v1/service-types/")
+				.then((res) => {
+					this.serviceTypes = res.data;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		async reserveOffer(offer) {
+			this.isFetchingOffers = true;
+
+			this.offerToReserve.id_offer = offer.id;
+			this.offerToReserve.id_user = offer.user;
+
+			await this.getActiveOfferId(offer);
+			await this.getRecruiterId();
+
+			console.log(this.offerToReserve);
+
+			await axios
+				.post("/api/v1/reserved-offers/", this.offerToReserve)
+				.then((res) => {
+					console.log(res);
+					console.log(this.offerToReserve);
+
+					this.isFetchingOffers = false;
+					this.clickedSend = true;
+					this.step3Completed = true;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		async getRecruiterId() {
+			return axios
+				.get("/api/v1/userinfo/me/")
+				.then((res) => {
+					this.offerToReserve.id_recruiter = res.data.user_id;
+
+					console.log(this.offerToReserve);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		async getActiveOfferId(offer) {
+			return axios
+				.get(`/api/v1/active-offers/${offer.id}/${offer.user}/`)
+				.then((res) => {
+					this.offerToReserve.id_active_offer = res.data.id;
+
+					console.log(this.offerToReserve);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		},
 		async sendQuery() {
 			const params = new URLSearchParams();

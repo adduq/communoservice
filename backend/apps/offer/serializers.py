@@ -44,13 +44,24 @@ class ReservedOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservedOffer
         fields = '__all__'
+        depth = 1
+
+
+class ReservedOfferCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReservedOffer
+        fields = '__all__'
 
 
 class TerminatedOfferSerializer(serializers.ModelSerializer):
-    id_offer = OfferSerializer(read_only=True)
-    # id_user = UserSerializer(read_only=True)
-    # id_recruiter = UserSerializer(read_only=True)
+    # id_offer = OfferSerializer(read_only=True)
+    class Meta:
+        model = TerminatedOffer
+        fields = '__all__'
+        depth = 1
 
+
+class TerminatedOfferCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TerminatedOffer
         fields = '__all__'

@@ -1,399 +1,456 @@
 <template>
-  <div id="wrapper">
-    <nav class="navbar">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <h4 class="title is-4 has-text-weight-bold has-text-white">Communoservice</h4>
-        </a>
-        <div class="navbar-burger" @click="showNav = !showNav" :class="{ 'is-active': showNav }">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-      <div class="navbar-menu" :class="{ 'is-active': showNav }">
-        <div class="navbar-start">
-          <a class="navbar-item" href="/" @click="showNav = !showNav">
-            Accueil
-          </a>
-          <a class="navbar-item" href="https://github.com/VP-0/communoservice" @click="showNav = !showNav">
-            <span class="mr-2">GitHub</span>
-            <span class="icon is-small">
-              <i class="fab fa-github"></i>
-            </span>
-          </a>
-        </div>
-        <div class="navbar-end">
-          <template v-if="$store.state.isAuthenticated">
-            <router-link to="/mon-compte" class="navbar-item" @click="showNav = !showNav">
-              <span class="mr-3">Mon compte</span>
-              <span class="icon is-small mr-3">
-                <i class="fas fa-user-circle"></i>
-              </span>
-            </router-link>
-            <div class="navbar-item">
-              <div class="dropdown is-hoverable" :class="dropdownRight ? 'is-right' : 'is-left'">
-                <div class="dropdown-trigger">
-                  <button class="button is-rounded has-text-centered" aria-haspopup="true"
-                    aria-controls="dropdown-menu3">
-                    <span class="icon is-small">
-                      <i class="fas fa-angle-down" aria-hidden="true"></i>
-                    </span>
-                  </button>
-                </div>
-                <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
-                  <div class="dropdown-content has-text-left">
-                    <a href="#" class="dropdown-item" v-on:click="openSettingsModal()">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-cog"></i>
-                      </span>
-                      <span> Paramètres </span>
-                    </a>
-                    <hr class="dropdown-divider" />
-                    <a href="#" @click="logout()" class="dropdown-item has-text-danger">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-sign-out-alt"></i>
-                      </span>
-                      <span> Déconnexion </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+	<div id="wrapper">
+		<nav class="navbar">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="/">
+					<h4 class="title is-4 has-text-weight-bold has-text-white">
+						Communoservice
+					</h4>
+				</a>
+				<div
+					class="navbar-burger"
+					@click="showNav = !showNav"
+					:class="{ 'is-active': showNav }"
+				>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</div>
+			<div class="navbar-menu" :class="{ 'is-active': showNav }">
+				<div class="navbar-start">
+					<a class="navbar-item" href="/" @click="showNav = !showNav">
+						Accueil
+					</a>
+					<a
+						class="navbar-item"
+						href="https://github.com/VP-0/communoservice"
+						@click="showNav = !showNav"
+					>
+						<span class="mr-2">GitHub</span>
+						<span class="icon is-small">
+							<i class="fab fa-github"></i>
+						</span>
+					</a>
+				</div>
+				<div class="navbar-end">
+					<template v-if="$store.state.isAuthenticated">
+						<router-link
+							to="/mon-compte"
+							class="navbar-item"
+							@click="showNav = !showNav"
+						>
+							<span class="mr-3">Mon compte</span>
+							<span class="icon is-small mr-3">
+								<i class="fas fa-user-circle"></i>
+							</span>
+						</router-link>
+						<div class="navbar-item">
+							<div
+								class="dropdown is-hoverable"
+								:class="dropdownRight ? 'is-right' : 'is-left'"
+							>
+								<div class="dropdown-trigger">
+									<button
+										class="button is-rounded has-text-centered"
+										aria-haspopup="true"
+										aria-controls="dropdown-menu3"
+									>
+										<span class="icon is-small">
+											<i class="fas fa-angle-down" aria-hidden="true"></i>
+										</span>
+									</button>
+								</div>
+								<div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
+									<div class="dropdown-content has-text-left">
+										<a
+											href="#"
+											class="dropdown-item"
+											v-on:click="openSettingsModal()"
+										>
+											<span class="icon is-small mr-3">
+												<i class="fas fa-cog"></i>
+											</span>
+											<span> Paramètres </span>
+										</a>
+										<hr class="dropdown-divider" />
+										<a
+											href="#"
+											@click="logout()"
+											class="dropdown-item has-text-danger"
+										>
+											<span class="icon is-small mr-3">
+												<i class="fas fa-sign-out-alt"></i>
+											</span>
+											<span> Déconnexion </span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</template>
 
-          <template v-else>
-            <router-link to="/connexion" class="navbar-item">
-              <span class="mr-3">Connexion</span>
-              <span class="icon is-small mr-3">
-                <i class="fas fa-sign-in-alt"></i>
-              </span>
-            </router-link>
-          </template>
-        </div>
-      </div>
-    </nav>
-    <section class="section">
-      <router-view />
-    </section>
+					<template v-else>
+						<router-link to="/connexion" class="navbar-item">
+							<span class="mr-3">Connexion</span>
+							<span class="icon is-small mr-3">
+								<i class="fas fa-sign-in-alt"></i>
+							</span>
+						</router-link>
+					</template>
+				</div>
+			</div>
+		</nav>
+		<section class="section">
+			<router-view />
+		</section>
 
-    <div class="modal" v-bind:class="{ 'is-active': modalSettingsisActive}">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Paramètres</p>
-          <button class="delete has-background-danger" v-on:click="modalSettingsisActive = !modalSettingsisActive"
-            aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field">
-            <label class="label">Prénom</label>
-            <div class="control">
-              <input class="input" type="text" :placeholder="userInfo.first_name" v-model="updatedUserInfo.first_name">
-            </div>
-          </div>
+		<div class="modal" v-bind:class="{ 'is-active': modalSettingsisActive }">
+			<div
+				class="modal-background"
+				@click="modalSettingsisActive = !modalSettingsisActive"
+			></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title">Paramètres</p>
+					<button
+						class="delete has-background-danger"
+						v-on:click="modalSettingsisActive = !modalSettingsisActive"
+						aria-label="close"
+					></button>
+				</header>
+				<section class="modal-card-body">
+					<div class="field">
+						<label class="label">Prénom</label>
+						<div class="control">
+							<input
+								class="input"
+								type="text"
+								:placeholder="userInfo.first_name"
+								v-model="updatedUserInfo.first_name"
+							/>
+						</div>
+					</div>
 
-          <div class="field">
-            <label class="label">Nom</label>
-            <div class="control">
-              <input class="input" type="text" :placeholder="userInfo.last_name" v-model="updatedUserInfo.last_name">
-            </div>
-          </div>
+					<div class="field">
+						<label class="label">Nom</label>
+						<div class="control">
+							<input
+								class="input"
+								type="text"
+								:placeholder="userInfo.last_name"
+								v-model="updatedUserInfo.last_name"
+							/>
+						</div>
+					</div>
 
-          <div class="field">
-            <label class="label">Courriel</label>
-            <div class="control">
-              <input class="input" type="email" :placeholder="userInfo.email" v-model="updatedUserInfo.email">
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Adresse</label>
-            <div class="control">
-              <input class="input" type="email" :placeholder="userInfo.address" v-model="updatedUserInfo.address">
-            </div>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success w-100" @click="validateUserInfo()">Sauvegarder</button>
-          <button class="button is-danger w-100"
-            v-on:click="modalSettingsisActive = !modalSettingsisActive">Fermer</button>
-        </footer>
-      </div>
-    </div>
+					<div class="field">
+						<label class="label">Courriel</label>
+						<div class="control">
+							<input
+								class="input"
+								type="email"
+								:placeholder="userInfo.email"
+								v-model="updatedUserInfo.email"
+							/>
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Adresse</label>
+						<div class="control">
+							<input
+								class="input"
+								type="email"
+								:placeholder="userInfo.address"
+								v-model="updatedUserInfo.address"
+							/>
+						</div>
+					</div>
+				</section>
+				<footer class="modal-card-foot">
+					<button class="button is-success w-100" @click="validateUserInfo()">
+						Sauvegarder
+					</button>
+					<button
+						class="button is-danger w-100"
+						v-on:click="modalSettingsisActive = !modalSettingsisActive"
+					>
+						Fermer
+					</button>
+				</footer>
+			</div>
+		</div>
 
-    <footer class="footer">
-      <div class="content has-text-centered">
-        <p>
-          Copyright
-          <i class="fas fa-copyright" aria-hidden="true"></i>
-          Communoservice 2021
-        </p>
-      </div>
-    </footer>
-  </div>
+		<footer class="footer">
+			<div class="content has-text-centered">
+				<p>
+					Copyright
+					<i class="fas fa-copyright" aria-hidden="true"></i>
+					Communoservice 2021
+				</p>
+			</div>
+		</footer>
+	</div>
 </template>
 
 <script>
-  import axios from "axios";
-  import {
-    toast
-  } from "bulma-toast";
-  export default {
-    data() {
-      return {
-        showNav: false,
-        window: {
-          width: 0,
-          height: 0
-        },
-        dropdownRight: true,
-        modalSettingsisActive: false,
-        userInfo: {},
-        updatedUserInfo: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          address: ''
-        }
-      };
-    },
-    beforeCreate() {
-      this.$store.commit("initializeStore");
-      const token = this.$store.state.token;
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = "Token " + token;
-      } else {
-        axios.defaults.headers.common["Authorization"] = "";
-      }
-      console.log(token);
-    },
-    mounted() {
-      window.addEventListener('resize', this.handleResize);
-      this.handleResize();
-    },
-    computed: {},
-    methods: {
-      async logout() {
-        await axios
+import axios from "axios";
+import { toast } from "bulma-toast";
+export default {
+	data() {
+		return {
+			showNav: false,
+			window: {
+				width: 0,
+				height: 0,
+			},
+			dropdownRight: true,
+			modalSettingsisActive: false,
+			userInfo: {},
+			updatedUserInfo: {
+				first_name: "",
+				last_name: "",
+				email: "",
+				address: "",
+			},
+		};
+	},
+	beforeCreate() {
+		this.$store.commit("initializeStore");
+		const token = this.$store.state.token;
+		if (token) {
+			axios.defaults.headers.common["Authorization"] = "Token " + token;
+		} else {
+			axios.defaults.headers.common["Authorization"] = "";
+		}
+		console.log(token);
+	},
+	mounted() {
+		window.addEventListener("resize", this.handleResize);
+		this.handleResize();
+	},
+	computed: {},
+	methods: {
+		async logout() {
+			await axios
 				.post("/api/v1/token/logout/")
 				.then((response) => {
 					axios.defaults.headers.common["Authorization"] = "";
-          localStorage.removeItem("token");
-          localStorage.removeItem("username");
-          localStorage.removeItem("userid");
-          this.$store.commit("removeToken");
-          this.$router.push("/");
-          toast({
-            message: "Déconnecté avec succès!",
-            type: "is-success",
-            dismissible: false,
-            pauseOnHover: false,
-            duration: 3000,
-            position: "center",
-            animate: {
-              in: "fadeInRightBig",
-              out: "fadeOutLeftBig",
-            },
-          });
+					localStorage.removeItem("token");
+					localStorage.removeItem("username");
+					localStorage.removeItem("userid");
+					this.$store.commit("removeToken");
+					this.$router.push("/");
+					toast({
+						message: "Déconnecté avec succès!",
+						type: "is-success",
+						dismissible: false,
+						pauseOnHover: false,
+						duration: 3000,
+						position: "center",
+						animate: {
+							in: "fadeInRightBig",
+							out: "fadeOutLeftBig",
+						},
+					});
 				})
 				.catch((error) => {
 					toast({
-            message: "Une erreur est survenue...",
-            type: "is-danger",
-            dismissible: false,
-            pauseOnHover: false,
-            duration: 3000,
-            position: "center",
-            animate: {
-              in: "fadeInRightBig",
-              out: "fadeOutLeftBig",
-            },
-          });
+						message: "Une erreur est survenue...",
+						type: "is-danger",
+						dismissible: false,
+						pauseOnHover: false,
+						duration: 3000,
+						position: "center",
+						animate: {
+							in: "fadeInRightBig",
+							out: "fadeOutLeftBig",
+						},
+					});
 				});
-      },
-      openSettingsModal(){
-        this.getUserInfo();
-        this.modalSettingsisActive = !this.modalSettingsisActive;
-      },
-      async getUserInfo(){
-        await axios
-        .get('api/v1/userinfo/me/')
-        .then((response)=>{
-          this.userInfo = response.data;
-          this.updatedUserInfo.first_name = response.data['first_name'];
-          this.updatedUserInfo.last_name = response.data['last_name'];
-          this.updatedUserInfo.email = response.data['email'];
-          this.updatedUserInfo.address = response.data['address'];
-        })
-        .catch((error)=>{
-          console.log(error);
-        });
-      },
-      async validateUserInfo(){
-        let data = {}
-        if(this.updatedUserInfo.first_name != this.userInfo.first_name){
-          data.first_name = this.updatedUserInfo.first_name;
-        }
-        if(this.updatedUserInfo.last_name != this.userInfo.last_name){
-          data.last_name = this.updatedUserInfo.last_name;
-        }
-        if(this.updatedUserInfo.email != this.userInfo.email){
-          data.email = this.updatedUserInfo.email;
-        }
-        if(this.updatedUserInfo.address != this.userInfo.address){
-          data.address = this.updatedUserInfo.address;
-        }
-        if(Object.keys(data).length != 0){
-          await axios
-          .put('api/v1/userinfo/me/update/', data)
-          .then((response)=>{
-            this.userInfo = response.data;
-            toast({
-              message: "Informations sauvegardés avec succès!",
-              type: "is-success",
-              dismissible: true,
-              pauseOnHover: false,
-              duration: 3000,
-              position: "bottom-right",
-              animate: {
-                in: "fadeInRightBig",
-                out: "fadeOutRightBig",
-              },
-            });
-          })
-          .catch((error)=>{
-            console.log(error);
-            toast({
-              message: "Une erreur est survenue...",
-              type: "is-danger",
-              dismissible: false,
-              pauseOnHover: false,
-              duration: 3000,
-              position: "bottom-right",
-              animate: {
-                in: "fadeInRightBig",
-                out: "fadeOutRightBig",
-              },
-            });
-          });
-        }else{
-          toast({
-            message: "Informations sauvegardés avec succès!",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: false,
-            duration: 3000,
-            position: "bottom-right",
-            animate: {
-              in: "fadeInRightBig",
-              out: "fadeOutRightBig",
-            },
-          });
-        }
-      },
-      handleResize() {
-        this.window.width = window.innerWidth;
-        this.window.height = window.innerHeight;
-        if (window.innerWidth > 1006) {
-          this.showNav = false;
-          this.dropdownRight = true;
-        } else {
-          this.dropdownRight = false;
-        }
-      },
-    },
-  };
+		},
+		openSettingsModal() {
+			this.getUserInfo();
+			this.modalSettingsisActive = !this.modalSettingsisActive;
+		},
+		async getUserInfo() {
+			await axios
+				.get("api/v1/userinfo/me/")
+				.then((response) => {
+					this.userInfo = response.data;
+					this.updatedUserInfo.first_name = response.data["first_name"];
+					this.updatedUserInfo.last_name = response.data["last_name"];
+					this.updatedUserInfo.email = response.data["email"];
+					this.updatedUserInfo.address = response.data["address"];
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async validateUserInfo() {
+			let data = {};
+			if (this.updatedUserInfo.first_name != this.userInfo.first_name) {
+				data.first_name = this.updatedUserInfo.first_name;
+			}
+			if (this.updatedUserInfo.last_name != this.userInfo.last_name) {
+				data.last_name = this.updatedUserInfo.last_name;
+			}
+			if (this.updatedUserInfo.email != this.userInfo.email) {
+				data.email = this.updatedUserInfo.email;
+			}
+			if (this.updatedUserInfo.address != this.userInfo.address) {
+				data.address = this.updatedUserInfo.address;
+			}
+			if (Object.keys(data).length != 0) {
+				await axios
+					.put("api/v1/userinfo/me/update/", data)
+					.then((response) => {
+						this.userInfo = response.data;
+						toast({
+							message: "Informations sauvegardés avec succès!",
+							type: "is-success",
+							dismissible: true,
+							pauseOnHover: false,
+							duration: 3000,
+							position: "bottom-right",
+							animate: {
+								in: "fadeInRightBig",
+								out: "fadeOutRightBig",
+							},
+						});
+					})
+					.catch((error) => {
+						console.log(error);
+						toast({
+							message: "Une erreur est survenue...",
+							type: "is-danger",
+							dismissible: false,
+							pauseOnHover: false,
+							duration: 3000,
+							position: "bottom-right",
+							animate: {
+								in: "fadeInRightBig",
+								out: "fadeOutRightBig",
+							},
+						});
+					});
+			} else {
+				toast({
+					message: "Informations sauvegardés avec succès!",
+					type: "is-success",
+					dismissible: true,
+					pauseOnHover: false,
+					duration: 3000,
+					position: "bottom-right",
+					animate: {
+						in: "fadeInRightBig",
+						out: "fadeOutRightBig",
+					},
+				});
+			}
+		},
+		handleResize() {
+			this.window.width = window.innerWidth;
+			this.window.height = window.innerHeight;
+			if (window.innerWidth > 1006) {
+				this.showNav = false;
+				this.dropdownRight = true;
+			} else {
+				this.dropdownRight = false;
+			}
+		},
+	},
+};
 </script>
 
 <style lang="scss">
-  @import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
-  .navbar {
-    border-radius: 0 !important;
-  }
+@import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
+.navbar {
+	border-radius: 0 !important;
+}
 
-  .w-80{
-    width: 80px!important;
-  }
+.w-80 {
+	width: 80px !important;
+}
 
-  .w-200 {
-    width: 200px;
-  }
+.w-200 {
+	width: 200px;
+}
 
-  .bt-1{
-    border-top: 1px solid #d3d3d3;
-  }
+.bt-1 {
+	border-top: 1px solid #d3d3d3;
+}
 
-  .panel-section{
-    border-bottom: 1px solid #ededed;
-    padding: 10px 0 10px 0;
-  }
+.panel-section {
+	border-bottom: 1px solid #ededed;
+	padding: 10px 0 10px 0;
+}
 
-  .datepicker{
-    background-color: white;
-    border-color: #dee2e5;
-    border-radius: 0.4em;
-    color: #2b3c4e;
-    border-width: 2px;
-    border-style: solid;
-    font-size: 1em;
-    padding-bottom: calc(0.5em - 1px);
-    padding-left: calc(0.75em - 1px);
-    padding-right: calc(0.75em - 1px);
-    padding-top: calc(0.5em - 1px);
-  }
+.datepicker {
+	background-color: white;
+	border-color: #dee2e5;
+	border-radius: 0.4em;
+	color: #2b3c4e;
+	border-width: 2px;
+	border-style: solid;
+	font-size: 1em;
+	padding-bottom: calc(0.5em - 1px);
+	padding-left: calc(0.75em - 1px);
+	padding-right: calc(0.75em - 1px);
+	padding-top: calc(0.5em - 1px);
+}
 
-  .active-icon {
-    position: absolute;
-    right: 6%;
-    bottom: 6%;
-    font-size: 1.5em;
-    color: #3ef100;
-    box-shadow: 0px 0px 8px 0px lime;
-    border-radius: 9999px;
-  }
-  
-  .not-active-icon {
-    position: absolute;
-    right: 6%;
-    bottom: 6%;
-    font-size: 1.5em;
-    color: grey;
-  }
-  
-  .tagline {
-    padding: 20px 0;
-    font-size: 16px;
-    line-height: 1.4;
-  }
-  
-  .avatar {
-    object-fit: cover;
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    box-shadow: 0px 2px 8px 3px darkgrey;
-  }
-  
-  p.title.is-bold {
-    font-weight: bold;
-  }
-  
-  .h-100p{
-    height: 100%;
-  }
-  
-  .has-image-centered {
-    margin-left: auto;
-    margin-right: auto;
-  }
+.active-icon {
+	position: absolute;
+	right: 6%;
+	bottom: 6%;
+	font-size: 1.5em;
+	color: #3ef100;
+	box-shadow: 0px 0px 8px 0px lime;
+	border-radius: 9999px;
+}
 
-  .round-shadow {
-    border-radius: 50%;
-    box-shadow: 0px 0px 10px #ccc;
-  }
+.not-active-icon {
+	position: absolute;
+	right: 6%;
+	bottom: 6%;
+	font-size: 1.5em;
+	color: grey;
+}
 
-  .w-100 {
-    width: 100px;
-  }
+.tagline {
+	padding: 20px 0;
+	font-size: 16px;
+	line-height: 1.4;
+}
 
+.avatar {
+	object-fit: cover;
+	border-radius: 50%;
+	width: 150px;
+	height: 150px;
+	box-shadow: 0px 2px 8px 3px darkgrey;
+}
+
+p.title.is-bold {
+	font-weight: bold;
+}
+
+.h-100p {
+	height: 100%;
+}
+
+.has-image-centered {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.round-shadow {
+	border-radius: 50%;
+	box-shadow: 0px 0px 10px #ccc;
+}
+
+.w-100 {
+	width: 100px;
+}
 </style>

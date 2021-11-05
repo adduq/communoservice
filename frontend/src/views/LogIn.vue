@@ -25,7 +25,12 @@
 
 					<div class="field">
 						<div class="control">
-							<button class="button is-dark" :class="isLoading ? 'is-loading' : ''">Connexion</button>
+							<button
+								class="button is-dark"
+								:class="isLoading ? 'is-loading' : ''"
+							>
+								Connexion
+							</button>
 						</div>
 					</div>
 
@@ -70,6 +75,7 @@ export default {
 					const token = response.data.auth_token;
 					this.$store.commit("setToken", token);
 
+					// axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 					axios.defaults.headers.common["Authorization"] = "Token " + token;
 					console.log(axios.defaults.headers.common["Authorization"]);
 					localStorage.setItem("token", token);
@@ -81,7 +87,7 @@ export default {
 						this.errors.splice(0);
 						for (const property in error.response.data) {
 							var outvar = "";
-							switch(property){
+							switch (property) {
 								case "username":
 									outvar = "Nom d'utilisateur";
 									break;

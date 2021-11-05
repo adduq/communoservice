@@ -1,7 +1,7 @@
 import json
 from django.db.models import Q
 from django.http import Http404
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,7 +12,7 @@ from rest_framework import serializers, status
 from .models import ActiveOffer, Offer, ReservedOffer, ServiceType, TerminatedOffer
 from apps.userinfo.models import UserInfo
 from apps.userinfo.serializers import UserSerializer
-from .serializers import ActiveOfferSerializer, OfferSerializer, ReservedOfferSerializer, ServiceTypeSerializer, TerminatedOfferSerializer
+from .serializers import ActiveOfferSerializer, OfferSerializer, ReservedOfferCreationSerializer, ReservedOfferSerializer, ServiceTypeSerializer, TerminatedOfferCreationSerializer, TerminatedOfferSerializer
 
 from rest_framework.decorators import api_view, schema
 from rest_framework.schemas import AutoSchema
@@ -139,6 +139,13 @@ class ActiveOffersByUser(APIView):
         return Response(serializer.data)
 
 
+class ActiveOfferWithId(APIView):
+    def get(self, request, no_user, id_offer, format=None):
+        offers = ActiveOffer.objects.get(id_offer=id_offer, id_user=no_user)
+        serializer = ActiveOfferSerializer(offers)
+        return Response(serializer.data)
+
+
 class ActiveOfferDetail(APIView):
     """
     Permet d'avoir ou de supprimer une offre active selon son id.
@@ -160,6 +167,7 @@ class ActiveOfferDetail(APIView):
         active_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # endregion
 
 # region ReservedOffers
@@ -176,7 +184,7 @@ class ReservedOffers(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = ReservedOfferSerializer(data=request.data)
+        serializer = ReservedOfferCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -188,14 +196,9 @@ class ReservedOffersByUser(APIView):
     Permet d'avoir les offres réservées par utilisateur.
     """
 
-    def get_offers(self, no_user):
-        reserved_offers = list(
-            ReservedOffer.objects.filter(id_user=no_user).values_list('id_offer', flat=True))
-        return Offer.objects.filter(id__in=reserved_offers)
-
     def get(self, request, no_user, format=None):
-        reserved_offers = self.get_offers(no_user)
-        serializer = OfferSerializer(reserved_offers, many=True)
+        reserved_offers = ReservedOffer.objects.filter(id_user=no_user)
+        serializer = ReservedOfferSerializer(reserved_offers, many=True)
         return Response(serializer.data)
 
 
@@ -204,14 +207,10 @@ class ReservedOffersByRecruiter(APIView):
     Permet d'avoir les offres réservées en tant qu'employeur.
     """
 
-    def get_offers(self, no_recruiter):
-        reserved_offers = list(ReservedOffer.objects.filter(
-            id_recruiter=no_recruiter).values_list('id_offer', flat=True))
-        return Offer.objects.filter(id__in=reserved_offers)
-
     def get(self, request, no_recruiter, format=None):
-        reserved_offers = self.get_offers(no_recruiter)
-        serializer = OfferSerializer(reserved_offers, many=True)
+        reserved_offers = ReservedOffer.objects.filter(
+            id_recruiter=no_recruiter)
+        serializer = ReservedOfferSerializer(reserved_offers, many=True)
         return Response(serializer.data)
 
 
@@ -236,6 +235,15 @@ class ReservedOfferDetail(APIView):
         reserved_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def put(self, request, id_reserved_offer, format=None):
+        reserved_offer = self.get_object(id_reserved_offer)
+        serializer = ReservedOfferCreationSerializer(
+            reserved_offer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # endregion
 
 # region TerminatedOffers
@@ -252,7 +260,7 @@ class TerminatedOffers(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = TerminatedOfferSerializer(data=request.data)
+        serializer = TerminatedOfferCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -264,43 +272,10 @@ class TerminatedOffersByUser(APIView):
     Permet d'avoir les offres terminées par utilisateur.
     """
 
-    def get_offers(self, no_user, terminated_offers):
-        sort_offers = list(
-            terminated_offers.values_list('id_offer', flat=True))
-        # return Offer.objects.filter(id__in=sort_offers)
-        return Offer.objects.filter(id__in=sort_offers)
-
     def get(self, request, no_user, format=None):
         terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)
-        # terminated_serializer = TerminatedOfferSerializer(
-        #     terminated_offers, many=True)
-
-        # offers = self.get_offers(no_user, terminated_offers)
-        # serializer = OfferSerializer(terminated_offers, many=True)
-
-        # out_dict = list(terminated_serializer.data)
-        # out_dict = dict(zip(serializer.data))
-        # out_dict.update(serializer.data)
-        # test = TerminatedOffer.objects.select_related(
-        #     'id_offer').filter(id_user=no_user)
         serializer = TerminatedOfferSerializer(terminated_offers, many=True)
-
-        # print(offers.query)
-
-        # del out_dict[id]
-        # del out_dict[user]
-        # out_dict = {
-        #     "completed_date": out_dict.get("completed_date"),
-        #     "status": out_dict.get("status"),
-        #     "rating": out_dict.get("rating")
-        # }
-        # out_dict = {}
-        # out_dict.update(terminated_serializer.data)
-        # out_dict.update(serializer.data)
-
         return Response(serializer.data)
-        # return Response(serializer.data)
-        # return Response(serializer.data)
 
 
 class TerminatedOffersByRecruiter(APIView):
@@ -308,14 +283,10 @@ class TerminatedOffersByRecruiter(APIView):
     Permet d'avoir les offres terminées en tant qu'employeur.
     """
 
-    def get_offers(self, no_recruiter):
-        terminated_offers = list(TerminatedOffer.objects.filter(
-            id_recruiter=no_recruiter).values_list('id_offer', flat=True))
-        return Offer.objects.filter(id__in=terminated_offers)
-
     def get(self, request, no_recruiter, format=None):
-        terminated_offers = self.get_offers(no_recruiter)
-        serializer = OfferSerializer(terminated_offers, many=True)
+        terminated_offers = TerminatedOffer.objects.filter(
+            id_recruiter=no_recruiter)
+        serializer = TerminatedOfferSerializer(terminated_offers, many=True)
         return Response(serializer.data)
 
 
@@ -339,6 +310,15 @@ class TerminatedOfferDetail(APIView):
         terminated_offer = self.get_object(id_terminated_offer)
         terminated_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, id_terminated_offer, format=None):
+        terminated_offer = self.get_object(id_terminated_offer)
+        serializer = TerminatedOfferCreationSerializer(
+            terminated_offer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # endregion
 
