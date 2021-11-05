@@ -16,12 +16,26 @@ class OfferSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('already exists')
         return value
 
-    def validate_expiration_date(self, value):
+    def validate_end_date(self, value):
         if value is not None:
             if value < date.today():
                 raise serializers.ValidationError(
-                    "Expiration date is not valid.")
+                    "End date is not valid.")
             return value
+
+    def validate_start_date(self, value):
+        if value is not None:
+            if value < date.today():
+                raise serializers.ValidationError(
+                    "Start date is not valid.")
+            return value
+
+    def validate_date_range(self, start, end):
+        if start is not None & end is not None:
+            if start > end:
+                raise serializers.ValidationError(
+                    "Start date must be before end date.")
+            return
 
     class Meta:
         model = Offer

@@ -325,6 +325,10 @@
 									/>
 								</p>
 							</div>
+            <div class="field">
+              <label class="label">Entrez le range</label>
+              <FullCalendar :options="calendarOptions" :header="header" />
+            </div>
 
 							<label class="label">Distance maximale</label>
 							<div class="field has-addons">
@@ -518,6 +522,12 @@ import TerminatedOffer from "@/components/TerminatedOffer";
 import ReservedOffer from "@/components/ReservedOffer";
 import { toast } from "bulma-toast";
 
+import "@fullcalendar/core/vdom"; // solves problem with Vite
+import FullCalendar from "@fullcalendar/vue3";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import frLocale from "@fullcalendar/core/locales/fr";
+
 export default {
 	name: "MyAccount",
 	data() {
@@ -571,6 +581,23 @@ export default {
 			var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
 			var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
 			var yyyy = tomorrow.getFullYear();
+      calendarOptions: {
+        plugins: [dayGridPlugin, interactionPlugin],
+        initialView: "dayGridMonth",
+        locales: [frLocale],
+        selectable: true,
+        dayHeaderFormat: { weekday: "short", omitCommas: true },
+        headerToolbar: {
+          start: "title", // will normally be on the left. if RTL, will be on the right
+          center: "",
+          end: "today prevYear,prev,next,nextYear", // will normally be on the right. if RTL, will be on the left
+        },
+      },
+      header: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+      },
 
 			tomorrow = yyyy + "-" + mm + "-" + dd;
 			return tomorrow;
@@ -791,7 +818,7 @@ export default {
 
 <style lang="scss" scoped>
 .profile-toggle {
-	width: 8em !important;
+  width: 8em !important;
 }
 option[value=""][disabled] {
 	display: none;
