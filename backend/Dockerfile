@@ -1,5 +1,8 @@
 FROM python:3.9-alpine
 
+ARG APP_USER=communoservice
+RUN groupadd -r ${APP_USER} && useradd --no-log-init -r -g ${APP_USER} ${APP_USER}
+
 WORKDIR /app/
 
 # Install Python dependencies
@@ -32,7 +35,7 @@ ENV UWSGI_STATIC_MAP="/static/=/app/static/" UWSGI_STATIC_EXPIRES_URI="/static/.
 # ENV UWSGI_ROUTE_HOST="^(?!localhost:8000$) break:400"
 
 # Change to a non-root user
-# USER ${APP_USER}:${APP_USER}
+USER ${APP_USER}:${APP_USER}
 
 # Uncomment after creating your docker-entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
