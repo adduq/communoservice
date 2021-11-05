@@ -28,7 +28,7 @@ RUN python manage.py collectstatic --noinput
 USER ${APP_USER}:${APP_USER}
 
 # Uncomment after creating your docker-entrypoint.sh
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
 
 # RUN sed -i 's/\r$//g' ./entrypoint.sh && chmod +x ./entrypoint.sh
 
