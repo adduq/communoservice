@@ -6,6 +6,11 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ! Note: tester avec l'ption nosniff dans uwsgi.ini
+# import mimetypes
+# mimetypes.add_type("text/css", ".css", True)
+# mimetypes.add_type("text/javascript", ".js", True)
+# ! Note: tester avec l'ption nosniff dans uwsgi.ini
 
 DEBUG = os.environ.get('DEBUG')
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -127,28 +132,26 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-# STATIC_URL = "/app/staticfiles/"
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_URL = "/static/"
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-# MEDIA_URL = '/app/media/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media/'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
 
-# if DEBUG:
-#     STATIC_URL = "/app/staticfiles/"
-#     STATIC_ROOT = BASE_DIR / 'staticfiles'
-#     MEDIA_URL = '/app/media/'
-#     MEDIA_ROOT = BASE_DIR / 'media/'
-# else:
-#     STATIC_URL = "/static/"
-#     STATIC_ROOT = BASE_DIR / 'static'
-#     MEDIA_URL = '/media/'
-#     MEDIA_ROOT = BASE_DIR / 'media/'
+if DEBUG:
+    STATIC_URL = "/staticfiles/"
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    STATIC_URL = "/static/"
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
