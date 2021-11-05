@@ -16,10 +16,8 @@ COPY . /app/
 
 EXPOSE $PORT
 
-RUN python3 manage.py makemigrations --no-input
-RUN python3 manage.py migrate --no-input
+
 RUN python3 manage.py collectstatic --no-input
-RUN python3 manage.py loaddata apps/fixtures.json
 
 CMD ["uwsgi", '--http 0.0.0.0:$PORT', '--module config.wsgi:application', '--master', '--processes 4', '--threads 2']
 
