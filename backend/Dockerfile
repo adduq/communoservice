@@ -1,7 +1,7 @@
 FROM python:3.9-alpine
 
 ARG APP_USER=communoservice
-RUN groupadd -r ${APP_USER} && useradd --no-log-init -r -g ${APP_USER} ${APP_USER}
+RUN addgroup -r ${APP_USER} && adduser --no-log-init -r -g ${APP_USER} ${APP_USER}
 
 WORKDIR /app/
 
