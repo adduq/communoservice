@@ -244,7 +244,7 @@
 						<div class="column">
 							<div class="has-text-centered">
 								<label class="label is-size-5">Date d'expiration</label>
-								<p class="is-size-6">{{ offerToShow.expiration_date }}</p>
+								<p class="is-size-6">{{ offerToShow.end_date }}</p>
 							</div>
 						</div>
 					</div>
@@ -725,7 +725,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../node_modules/bulma-steps";
+	@import "../../node_modules/bulma-steps";
+	
 .ch-5 {
 	width: 5ch;
 }

@@ -42,10 +42,11 @@ class Offers(APIView):
 
     def post(self, request, format=None):
         if request.user.is_anonymous:
-            return HttpResponse('Unauthorized', status=401)
+            return Response('Unauthorized', status=401)
 
         if self.user_can_create(request.user.id):
             serializer = OfferSerializer(data=request.data)
+            OfferSerializer.validate_date_range(request.date)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -357,7 +358,7 @@ def search(request):
         if dow == "sunday":
             queryset = queryset.filter(sunday=True)
 
-        queryset.filter(expiration_date__gte=date)
+        queryset.filter(end_date__gte=date)
 
     if "mots-cles" in request.GET:
         mots_cles = request.GET.getlist('mots-cles')[0].split(',')

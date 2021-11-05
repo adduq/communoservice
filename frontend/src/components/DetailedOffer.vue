@@ -24,9 +24,9 @@
 				</div>
 
 				<div class="columns has-text-danger">
-					<div class="column" v-if="offer.expiration_date != null">
-						<time datetime="{{offer.expiration_date}}">
-							Valide jusqu'au {{ offer.expiration_date }}
+					<div class="column" v-if="offer.end_date != null">
+						<time datetime="{{offer.end_date}}">
+							Valide jusqu'au {{ offer.end_date }}
 						</time>
 					</div>
 					<div
