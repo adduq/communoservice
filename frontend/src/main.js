@@ -4,6 +4,12 @@ import router from "./router";
 import store from "./store";
 import axios from "axios";
 
+const app = createApp(App);
+
+// TODO: Faire en sorte que MAPBOX_API_KEY soit changé dynamiquement selon l'environnement d'exécution
+// NOTE: Pour l'instant, nous utilisons une clé publique pour les tests
+app.config.globalProperties.MAPBOX_API_KEY = 'pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA';
+
 if (process.env.VUE_APP_AXIOS_URL === undefined) {
     if (window.location.hostname.includes("dev-"))
         axios.defaults.baseURL = "https://dev-api-communoservice.herokuapp.com/";
@@ -13,7 +19,4 @@ if (process.env.VUE_APP_AXIOS_URL === undefined) {
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-createApp(App)
-    .use(store)
-    .use(router, axios)
-    .mount("#app");
+app.use(store).use(router, axios).mount('#app');

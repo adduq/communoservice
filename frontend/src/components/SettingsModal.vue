@@ -88,7 +88,6 @@
         accessToken: mapboxgl.accessToken,
         placeholder: 'Chercher une addresse',
         language: 'fr-CA',
-        types: 'address',
         countries: 'ca',
         limit: 3,
         minLength: 3,
@@ -171,12 +170,11 @@
             });
 
             if(this.homeMarker){
-                this.homeMarker.remove();
+              this.homeMarker.remove();
+              this.homeMarker = new mapboxgl.Marker()
+              .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])
+              .addTo(this.map);
             }
-
-            this.homeMarker = new mapboxgl.Marker()
-            .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])
-            .addTo(this.map);
           })
           .catch((error)=>{
             console.log(error);
@@ -195,7 +193,7 @@
           });
         }else{
           toast({
-            message: "Informations sauvegardés avec succès!",
+            message: "Informations sauvegardées avec succès!",
             type: "is-success",
             dismissible: true,
             pauseOnHover: false,
