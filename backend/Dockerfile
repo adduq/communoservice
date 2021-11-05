@@ -48,7 +48,7 @@ COPY requirements.txt ${WORKDIR}/
 
 RUN cd ${WORKDIR} \
     && pip install pipenv \
-    && pipenv install --system -r requirements.txt
+    && pipenv install -r requirements.txt
 
 # Create the final container with the app
 FROM python:${PYTHON_VERSION}-alpine
