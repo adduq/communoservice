@@ -4,7 +4,7 @@ WORKDIR /app/
 
 # Install Python dependencies
 COPY ./requirements.txt /app/
-# COPY ./scripts/entrypoint.sh .
+COPY ./scripts/entrypoint.sh .
 
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
 RUN pip install psycopg2-binary
