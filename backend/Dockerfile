@@ -23,7 +23,7 @@ EXPOSE $PORT
 ENV SECRET_KEY='test'
 RUN python manage.py collectstatic --noinput
 
-ENV UWSGI_HTTP_SOCKET=:$PORT UWSGI_MASTER=1 UWSGI_HTTP_AUTO_CHUNKED=1 UWSGI_HTTP_KEEPALIVE=1 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
+ENV UWSGI_MASTER=1 UWSGI_HTTP_AUTO_CHUNKED=1 UWSGI_HTTP_KEEPALIVE=1 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
 
 # Number of uWSGI workers and threads per worker (customize as needed):
 ENV UWSGI_WORKERS=2 UWSGI_THREADS=4
@@ -41,7 +41,7 @@ USER ${APP_USER}:${APP_USER}
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Start uWSGI
-CMD ["uwsgi", "--show-config"]
+CMD ["uwsgi", "--http-socket=:$PORT", "--show-config"]
 
 # RUN sed -i 's/\r$//g' ./entrypoint.sh && chmod +x ./entrypoint.sh
 
