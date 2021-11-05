@@ -4,7 +4,7 @@ WORKDIR /app/
 
 # Install Python dependencies
 COPY ./requirements.txt /app/
-COPY ./scripts/entrypoint.sh .
+# COPY ./scripts/entrypoint.sh .
 
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
 RUN pip install psycopg2-binary
@@ -16,6 +16,13 @@ COPY . /app/
 
 EXPOSE $PORT
 
-RUN sed -i 's/\r$//g' ./entrypoint.sh && chmod +x ./entrypoint.sh
+RUN python3 manage.py makemigrations --no-input
+RUN python3 manage.py migrate --no-input
+RUN python3 manage.py collectstatic --no-input
+RUN python3 manage.py loaddata apps/fixtures.json
 
-CMD ["./entrypoint.sh"]
+CMD ["uwsgi", '--http 0.0.0.0:$PORT', '--module config.wsgi:application', '--master', '--processes 4', '--threads 2']
+
+# RUN sed -i 's/\r$//g' ./entrypoint.sh && chmod +x ./entrypoint.sh
+
+# CMD ["./entrypoint.sh"]
