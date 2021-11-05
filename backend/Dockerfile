@@ -18,10 +18,7 @@ EXPOSE $PORT
 
 
 ENV SECRET_KEY='test'
-RUN python manage.py makemigrations --no-input
-RUN python manage.py migrate --no-input
 RUN python manage.py collectstatic --noinput
-RUN python manage.py loaddata apps/fixtures.json
 
 ENV UWSGI_HTTP=:$PORT UWSGI_MASTER=1 UWSGI_HTTP_AUTO_CHUNKED=1 UWSGI_HTTP_KEEPALIVE=1 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
 
