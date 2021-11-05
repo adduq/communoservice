@@ -261,6 +261,10 @@
 									/>
 								</p>
 							</div>
+            <div class="field">
+              <label class="label">Entrez le range</label>
+              <FullCalendar :options="calendarOptions" :header="header" />
+            </div>
 
 							<label class="label">Distance maximale</label>
 							<div class="field has-addons">
@@ -334,17 +338,17 @@
 					</div>
 				</div>
 
-				<div class="column">
-					<div class="box">
-						<p class="title has-text-centered">Mes services actifs</p>
+        <div class="column">
+          <div class="box">
+            <p class="title has-text-centered">Mes services actifs</p>
 
-						<DetailedOffer
-							v-for="offer in activeOffers"
-							v-bind:key="offer.id"
-							v-bind:offer="offer"
-						/>
-					</div>
-				</div>
+            <DetailedOffer
+              v-for="offer in activeOffers"
+              v-bind:key="offer.id"
+              v-bind:offer="offer"
+            />
+          </div>
+        </div>
 
 				<div class="column">
 					<div class="box">
@@ -593,6 +597,12 @@ import ReservedOffer from "@/components/ReservedOffer";
 // import StepsWizard from "../../node_modules/bulma-steps/dist/js/bulma-steps.js";
 import { toast } from "bulma-toast";
 
+import "@fullcalendar/core/vdom"; // solves problem with Vite
+import FullCalendar from "@fullcalendar/vue3";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import frLocale from "@fullcalendar/core/locales/fr";
+
 export default {
 	name: "MyAccount",
 	data() {
@@ -653,6 +663,23 @@ export default {
 			var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
 			var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
 			var yyyy = tomorrow.getFullYear();
+      calendarOptions: {
+        plugins: [dayGridPlugin, interactionPlugin],
+        initialView: "dayGridMonth",
+        locales: [frLocale],
+        selectable: true,
+        dayHeaderFormat: { weekday: "short", omitCommas: true },
+        headerToolbar: {
+          start: "title", // will normally be on the left. if RTL, will be on the right
+          center: "",
+          end: "today prevYear,prev,next,nextYear", // will normally be on the right. if RTL, will be on the left
+        },
+      },
+      header: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+      },
 
 			tomorrow = yyyy + "-" + mm + "-" + dd;
 			return tomorrow;
@@ -741,17 +768,17 @@ export default {
 				this.errors.push("La description ne peut pas être vide.");
 			}
 
-			if (this.hourlyRate < 0) {
-				this.errors.push("Le taux horaire doit être un nombre positif.");
-			}
-			if (this.maxDistance < 0) {
-				this.errors.push("La distance maximal doit être positive.");
-			}
-			let tomorrow = new Date();
-			let selectedDate = new Date(this.expirationDate);
-			if (selectedDate.getTime() < tomorrow.getTime()) {
-				this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
-			}
+      if (this.hourlyRate < 0) {
+        this.errors.push("Le taux horaire doit être un nombre positif.");
+      }
+      if (this.maxDistance < 0) {
+        this.errors.push("La distance maximal doit être positive.");
+      }
+      let tomorrow = new Date();
+      let selectedDate = new Date(this.expirationDate);
+      if (selectedDate.getTime() < tomorrow.getTime()) {
+        this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
+      }
 
 			if (!this.errors.length) {
 				this.modalCreateisActive = true;
@@ -881,6 +908,6 @@ export default {
 
 <style lang="scss" scoped>
 .profile-toggle {
-	width: 8em !important;
+  width: 8em !important;
 }
 </style>
