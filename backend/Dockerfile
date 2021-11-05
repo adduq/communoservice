@@ -17,7 +17,7 @@ COPY . /app/
 EXPOSE $PORT
 
 
-RUN python3 manage.py collectstatic --no-input
+RUN DATABASE_URL='' python manage.py collectstatic --noinput
 
 CMD ["uwsgi", '--http 0.0.0.0:$PORT', '--module config.wsgi:application', '--master', '--processes 4', '--threads 2']
 
