@@ -9,6 +9,14 @@ urlpatterns = [
     path('api/v1/', include('djoser.urls.authtoken')),
     path('api/v1/', include('apps.offer.urls')),
     path('api/v1/', include('apps.userinfo.urls'))
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns = urlpatterns + \
+        static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns = urlpatterns + \
+        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
