@@ -44,12 +44,11 @@ ARG PYTHON_VERSION=3.7
 # Build dependencies in separate container
 FROM python:${PYTHON_VERSION}-alpine AS builder
 ENV WORKDIR /app
-COPY Pipfile ${WORKDIR}/
-COPY Pipfile.lock ${WORKDIR}/
+COPY requirements.txt ${WORKDIR}/
 
 RUN cd ${WORKDIR} \
     && pip install pipenv \
-    && pipenv install --system
+    && pipenv install --system -r requirements.txt
 
 # Create the final container with the app
 FROM python:${PYTHON_VERSION}-alpine
