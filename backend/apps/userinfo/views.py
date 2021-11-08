@@ -121,10 +121,18 @@ class UpdateUserInfo(APIView):
             if 'user_bio' in body:
                 user.user_bio = body['user_bio']
             
+            if 'location_lat' in body:
+                user.location_lat = body['location_lat']
+            
+            if 'location_lon' in body:
+                user.location_lon = body['location_lon']
+
             if user.first_name != '' and user.first_name != None and \
                 user.last_name != '' and user.last_name != None and \
                 user.email != '' and user.email != None and \
-                user.address != '' and user.address != None:
+                user.address != '' and user.address != None and\
+                user.location_lat != '' and user.location_lat != None and\
+                user.location_lon != '' and user.location_lon != None:
 
                 user.profile_is_completed = True
             else:

@@ -3,9 +3,6 @@ import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
     state: {
-        cart: {
-            items: [],
-        },
         isAuthenticated: false,
         token: "",
         isLoading: false,
