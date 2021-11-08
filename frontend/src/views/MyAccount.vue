@@ -179,16 +179,16 @@
 									</div>
 								</div>
 
-								<div class="field mb-2 mr-6">
-									<label class="label">Expiration</label>
-									<input
-										type="date"
-										class="datepicker"
-										v-bind:min="tomorrow"
-										v-model="expirationDate"
-									/>
-								</div>
-							</div>
+                <div class="field mb-2 mr-6">
+                  <label class="label">Expiration</label>
+                  <input
+                    type="date"
+                    class="datepicker"
+                    v-bind:min="tomorrow"
+                    v-model="expirationDate"
+                  />
+                </div>
+              </div>
 
 							<div class="field">
 								<label class="label">Disponibilités</label>
@@ -305,53 +305,57 @@
 								</div>
 							</div>
 
-							<label class="label">Taux horaire</label>
-							<div class="field has-addons">
-								<p class="control">
-									<span class="select">
-										<select>
-											<option>$</option>
-											<option>BTC</option>
-											<option>ETH</option>
-										</select>
-									</span>
-								</p>
-								<p class="control">
-									<input
-										v-model="hourlyRate"
-										class="input"
-										type="number"
-										placeholder="Montant"
-									/>
-								</p>
-							</div>
-            <div class="field">
-              <label class="label">Entrez le range</label>
-              <FullCalendar :options="calendarOptions" :header="header" />
-            </div>
+              <label class="label">Taux horaire</label>
+              <div class="field has-addons">
+                <p class="control">
+                  <span class="select">
+                    <select>
+                      <option>$</option>
+                      <option>BTC</option>
+                      <option>ETH</option>
+                    </select>
+                  </span>
+                </p>
+                <p class="control">
+                  <input
+                    v-model="hourlyRate"
+                    class="input"
+                    type="number"
+                    placeholder="Montant"
+                  />
+                </p>
+              </div>
+              <div class="">
+                <label class="label">Entrez le range</label>
+                <FullCalendar
+                  ref="fullCalendar"
+                  :options="calendarOptions"
+                  :header="header"
+                />
+              </div>
 
-							<label class="label">Distance maximale</label>
-							<div class="field has-addons">
-								<p class="control">
-									<input
-										v-model="maxDistance"
-										class="input"
-										type="number"
-										placeholder="Distance"
-									/>
-								</p>
-							</div>
+              <label class="label">Distance maximale</label>
+              <div class="field has-addons">
+                <p class="control">
+                  <input
+                    v-model="maxDistance"
+                    class="input"
+                    type="number"
+                    placeholder="Distance"
+                  />
+                </p>
+              </div>
 
-							<div class="field">
-								<label class="label">Message</label>
-								<div class="control">
-									<textarea
-										v-model="description"
-										class="textarea"
-										placeholder="Votre message ici..."
-									></textarea>
-								</div>
-							</div>
+              <div class="field">
+                <label class="label">Message</label>
+                <div class="control">
+                  <textarea
+                    v-model="description"
+                    class="textarea"
+                    placeholder="Votre message ici..."
+                  ></textarea>
+                </div>
+              </div>
 
 							<div class="field">
 								<div class="control">
@@ -539,7 +543,7 @@ export default {
 			reservedOffersForRecruiter: [],
 			serviceTypes: [],
 
-			modalCreateisActive: false,
+      modalCreateisActive: false,
 
 			serviceType: "",
 			description: "",
@@ -586,6 +590,7 @@ export default {
         initialView: "dayGridMonth",
         locales: [frLocale],
         selectable: true,
+        select: this.select,
         dayHeaderFormat: { weekday: "short", omitCommas: true },
         headerToolbar: {
           start: "title", // will normally be on the left. if RTL, will be on the right
@@ -598,6 +603,44 @@ export default {
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
       },
+      startDate: String,
+      endDate: String,
+      profileSwitch: false,
+      userIsActive: true,
+      userInfo: {},
+      errors: [],
+      tomorrow: "",
+      creationModalIsActive: false,
+    };
+  },
+  //Les components qu'on veut utiliser
+  components: {
+    DetailedOffer,
+    TerminatedOffer,
+    ReservedOffer,
+    FullCalendar,
+  },
+  mounted() {
+    document.title = "Mon compte | Communoservice";
+    this.getUserInfo();
+    this.tomorrow = this.getTomorrow();
+    this.getServiceTypes();
+  },
+  create() {
+    let test = document.getElementsByClassName(".fc");
+    // let test = this.$refs.fullCalendar.$el;
+    console.log(test);
+    test.render();
+  },
+  methods: {
+    select(info) {
+      alert("selected " + info.startStr + " to " + info.endStr);
+    },
+    getTomorrow() {
+      var tomorrow = new Date();
+      var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
+      var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
+      var yyyy = tomorrow.getFullYear();
 
 			tomorrow = yyyy + "-" + mm + "-" + dd;
 			return tomorrow;
@@ -676,10 +719,10 @@ export default {
 				this.errors.push("Il faut choisir un type.");
 			}
 
-			this.description = this.description.trim();
-			if (!this.description) {
-				this.errors.push("La description ne peut pas être vide.");
-			}
+      this.description = this.description.trim();
+      if (!this.description) {
+        this.errors.push("La description ne peut pas être vide.");
+      }
 
 			if (this.hourlyRate < 0) {
 				this.errors.push(
@@ -697,8 +740,8 @@ export default {
 				);
 			}
 
-			if (!this.errors.length) {
-				this.modalCreateisActive = true;
+      if (!this.errors.length) {
+        this.modalCreateisActive = true;
 
 				this.creationModalIsActive = false;
 			} else {
