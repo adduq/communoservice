@@ -263,10 +263,12 @@
               </div>
               <div class="">
                 <label class="label">Entrez le range</label>
-                <FullCalendar
-                  ref="fullCalendar"
-                  :options="calendarOptions"
-                  :header="header"
+                <!-- <Calendar /> -->
+                <DatePicker
+                  v-model="range"
+                  mode="dateTime"
+                  :masks="masks"
+                  is-range
                 />
               </div>
 
@@ -600,13 +602,7 @@ import TerminatedOffer from "@/components/TerminatedOffer";
 import ReservedOffer from "@/components/ReservedOffer";
 // import StepsWizard from "../../node_modules/bulma-steps/dist/js/bulma-steps.js";
 import { toast } from "bulma-toast";
-
-import "@fullcalendar/core/vdom"; // solves problem with Vite
-import FullCalendar from "@fullcalendar/vue3";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import frLocale from "@fullcalendar/core/locales/fr";
-
+//import { Calendar, DatePicker } from "v-calendar";
 export default {
   name: "MyAccount",
   data() {
@@ -616,7 +612,13 @@ export default {
       // step3Completed: false,
       // clickedSend: false,
       // confirmeCreation: false,
-
+      range: {
+        start: new Date(2020, 0, 6),
+        end: new Date(2020, 0, 23),
+      },
+      masks: {
+        input: "YYYY-MM-DD h:mm A",
+      },
       activeOffers: [],
       terminatedOffersForUser: [],
       terminatedOffersForRecruiter: [],
@@ -640,24 +642,7 @@ export default {
         saturday: false,
         sunday: false,
       },
-      calendarOptions: {
-        plugins: [dayGridPlugin, interactionPlugin],
-        initialView: "dayGridMonth",
-        locales: [frLocale],
-        selectable: true,
-        select: this.select,
-        dayHeaderFormat: { weekday: "short", omitCommas: true },
-        headerToolbar: {
-          start: "title", // will normally be on the left. if RTL, will be on the right
-          center: "",
-          end: "today prevYear,prev,next,nextYear", // will normally be on the right. if RTL, will be on the left
-        },
-      },
-      header: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
-      },
+
       startDate: String,
       endDate: String,
       profileSwitch: false,
@@ -673,7 +658,6 @@ export default {
     DetailedOffer,
     TerminatedOffer,
     ReservedOffer,
-    FullCalendar,
   },
   mounted() {
     document.title = "Mon compte | Communoservice";
@@ -762,21 +746,8 @@ export default {
     },
     openCreationModal() {
       this.creationModalIsActive = !this.creationModalIsActive;
-      //  this.$refs.fullCalendar.updateSize();
-      this.$refs.fullCalendar.$forceUpdate();
-      // calendarApi.setOption("height", 700);
-      console.log(this.$refs.fullCalendar.$el);
-      // console.dir(this.$refs.fullCalendar);
-      // console.table(this.$refs.fullCalendar);
-      // this.calendarOptions.initialView = "dayGridMonth";
-      // console.log(JSON.stringify(calendarApi));
-      // calendarApi.updateSize();
     },
-    async refreshCalendar() {
-      let calendarApi = this.$refs.fullCalendar.getApi();
-      this.calendarOptions.initialView = "dayGridMonth";
-      calendarApi.render();
-    },
+
     closeOfferModal() {
       this.creationModalIsActive = false;
       // this.confirmeCreation = false;
