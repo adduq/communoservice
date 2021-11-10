@@ -327,10 +327,12 @@
               </div>
               <div class="">
                 <label class="label">Entrez le range</label>
-                <FullCalendar
-                  ref="fullCalendar"
-                  :options="calendarOptions"
-                  :header="header"
+                <!-- <Calendar /> -->
+                <DatePicker
+                  v-model="range"
+                  mode="dateTime"
+                  :masks="masks"
+                  is-range
                 />
               </div>
 
@@ -525,13 +527,7 @@ import DetailedOffer from "@/components/DetailedOffer";
 import TerminatedOffer from "@/components/TerminatedOffer";
 import ReservedOffer from "@/components/ReservedOffer";
 import { toast } from "bulma-toast";
-
-import "@fullcalendar/core/vdom"; // solves problem with Vite
-import FullCalendar from "@fullcalendar/vue3";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import frLocale from "@fullcalendar/core/locales/fr";
-
+//import { Calendar, DatePicker } from "v-calendar";
 export default {
 	name: "MyAccount",
 	data() {
@@ -618,7 +614,6 @@ export default {
     DetailedOffer,
     TerminatedOffer,
     ReservedOffer,
-    FullCalendar,
   },
   mounted() {
     document.title = "Mon compte | Communoservice";

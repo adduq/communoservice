@@ -1,8 +1,15 @@
-import { createApp } from "vue";
+import {
+    createApp
+} from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import axios from "axios";
+import {
+    SetupCalendar,
+    Calendar,
+    DatePicker
+} from 'v-calendar';
 
 const app = createApp(App);
 
@@ -19,4 +26,9 @@ if (process.env.VUE_APP_AXIOS_URL === undefined) {
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-app.use(store).use(router, axios).mount('#app');
+createApp(App)
+    .use(store)
+    .use(router, axios)
+    .component('Calendar', Calendar)
+    .component('DatePicker', DatePicker)
+    .mount("#app");
