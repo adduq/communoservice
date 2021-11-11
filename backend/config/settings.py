@@ -128,21 +128,12 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# STATIC FILE CONFIGURATION
+# STATIC FILE AND MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-# STATIC_URL = "/static/"
-# STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-
-# MEDIA CONFIGURATION
-# ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
-
 if DEBUG:
     STATIC_URL = "/staticfiles/"
     STATIC_ROOT = BASE_DIR / 'staticfiles'
