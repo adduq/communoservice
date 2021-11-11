@@ -1,4 +1,3 @@
-import mimetypes
 import os
 
 from pathlib import Path
@@ -6,11 +5,6 @@ from pathlib import Path
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# ! Note: tester avec l'ption nosniff dans uwsgi.ini
-mimetypes.add_type("text/css", ".css", True)
-mimetypes.add_type("application/javascript", ".js", True)
-# ! Note: tester avec l'ption nosniff dans uwsgi.ini
 
 DEBUG = os.environ.get('DEBUG')
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -39,6 +33,7 @@ CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(",")
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
