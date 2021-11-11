@@ -4,7 +4,6 @@ WORKDIR /app/
 
 # Install Python dependencies
 COPY ./requirements.txt /app/
-COPY ./mime.types /app/
 COPY ./scripts/entrypoint.sh .
 
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
