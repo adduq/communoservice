@@ -1,3 +1,4 @@
+import mimetypes
 import os
 
 from pathlib import Path
@@ -7,9 +8,8 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ! Note: tester avec l'ption nosniff dans uwsgi.ini
-# import mimetypes
-# mimetypes.add_type("text/css", ".css", True)
-# mimetypes.add_type("text/javascript", ".js", True)
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("application/javascript", ".js", True)
 # ! Note: tester avec l'ption nosniff dans uwsgi.ini
 
 DEBUG = os.environ.get('DEBUG')
