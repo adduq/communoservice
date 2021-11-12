@@ -22,15 +22,23 @@
 				</div>
 			</div>
 
-			<div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
-				<time
+			<time datetime="2016-1-1" v-if="reservedOffer.reservation_date">
+				Réservé pour le : {{ reservedOffer.reservation_date }}</time
+			>
+
+			<!-- <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between"> -->
+			<div class="is-flex is-flex-wrap-wrap is-justify-content-end mt-4">
+				<!-- <time
 					class="is-align-self-center"
 					datetime="2016-1-1"
 					v-if="reservedOffer.reservation_date"
 				>
 					Réservé pour le : {{ reservedOffer.reservation_date }}</time
-				>
-				<button class="button is-danger mt-2 w-100">
+				> -->
+				<button class="button is-success w-100 mr-2">
+					Terminer
+				</button>
+				<button class="button is-danger w-100">
 					Annuler
 				</button>
 			</div>
@@ -46,9 +54,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-h1 {
-	text-align: center;
-}
-</style>

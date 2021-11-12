@@ -503,6 +503,8 @@
 import axios from "axios";
 import DetailedOffer from "@/components/DetailedOffer";
 import StepsWizard from "bulma-steps/dist/js/bulma-steps.js";
+import { toast } from "bulma-toast";
+
 export default {
 	name: "Home",
 	data() {
@@ -533,6 +535,8 @@ export default {
 				id_offer: null,
 				id_user: null,
 			},
+
+			recruiter: Object,
 
 			// La valeur de "query" est hard codé pour le moment. Il va falloir faire categories[0]
 			// lorsque nous allons avoir la liste des catégories pour peupler le dropdown.
@@ -568,10 +572,21 @@ export default {
 	methods: {
 		async getAllOffers() {
 			this.isFetchingOffers = true;
+
+			await this.getRecruiterId();
+
 			await axios
 				.get("/api/v1/active-offers/")
-				.then((response) => {
-					this.offers = response.data;
+				.then((res) => {
+					let offersWithoutCurrentUser = res.data;
+
+					if (this.recruiter) {
+						offersWithoutCurrentUser = res.data.filter((offre) => {
+							return offre.user !== this.recruiter.user_id;
+						});
+					}
+
+					this.offers = offersWithoutCurrentUser;
 				})
 				.catch((error) => {
 					console.log(error);
@@ -595,34 +610,51 @@ export default {
 			this.offerToReserve.id_user = offer.user;
 
 			await this.getActiveOfferId(offer);
-			await this.getRecruiterId();
+			// await this.getRecruiterId();
 
-			console.log(this.offerToReserve);
+			// console.log(this.offerToReserve);
 
-			await axios
-				.post("/api/v1/reserved-offers/", this.offerToReserve)
-				.then((res) => {
-					console.log(res);
-					console.log(this.offerToReserve);
+			if (this.recruiter) {
+				await axios
+					.post("/api/v1/reserved-offers/", this.offerToReserve)
+					.then((res) => {
+						console.log(res);
+						console.log(this.offerToReserve);
 
-					this.isFetchingOffers = false;
-					this.clickedSend = true;
-					this.step3Completed = true;
-				})
-				.catch((err) => {
-					console.log(err);
+						this.isFetchingOffers = false;
+						this.clickedSend = true;
+						this.step3Completed = true;
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			} else {
+				toast({
+					message: "Vous devez être connecté pour pouvoir réserver un service.",
+					type: "is-danger",
+					dismissible: true,
+					pauseOnHover: true,
+					duration: 4000,
+					position: "bottom-right",
+					animate: {
+						in: "fadeInRightBig",
+						out: "fadeOutRightBig",
+					},
 				});
+			}
 		},
 		async getRecruiterId() {
 			return axios
 				.get("/api/v1/userinfo/me/")
 				.then((res) => {
 					this.offerToReserve.id_recruiter = res.data.user_id;
+					this.recruiter = res.data;
 
-					console.log(this.offerToReserve);
+					// console.log(this.offerToReserve);
 				})
 				.catch((err) => {
-					console.log(err);
+					console.log("L'utilisateur n'est pas connecté.");
+					this.recruiter = null;
 				});
 		},
 		async getActiveOfferId(offer) {
@@ -631,7 +663,7 @@ export default {
 				.then((res) => {
 					this.offerToReserve.id_active_offer = res.data.id;
 
-					console.log(this.offerToReserve);
+					// console.log(this.offerToReserve);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -725,8 +757,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	@import "../../node_modules/bulma-steps";
-	
+@import "../../node_modules/bulma-steps";
+
 .ch-5 {
 	width: 5ch;
 }

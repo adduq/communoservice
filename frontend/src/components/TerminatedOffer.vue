@@ -22,7 +22,40 @@
 				</div>
 			</div>
 
-			<div class="columns">
+			<div
+				class="is-flex is-flex-wrap-wrap is-justify-content-space-between mt-4"
+			>
+				<time datetime="2016-1-1" v-if="terminatedOffer.completed_date">
+					Terminé le : {{ terminatedOffer.completed_date }}</time
+				>
+				<p v-else>L'offre n'a pas été achevée.</p>
+				<span
+					class="icon-text has-text-success"
+					v-if="terminatedOffer.status === this.statusDispo.GIVEN"
+				>
+					<span class="icon">
+						<i class="fas fa-check-square"></i>
+					</span>
+					<span>Complété</span>
+				</span>
+				<span
+					class="icon-text has-text-warning"
+					v-else-if="terminatedOffer.status === this.statusDispo.CANCEL"
+				>
+					<span class="icon">
+						<i class="fas fa-exclamation-triangle"></i>
+					</span>
+					<span>Annulé</span>
+				</span>
+				<span class="icon-text has-text-danger" v-else>
+					<span class="icon">
+						<i class="fas fa-ban"></i>
+					</span>
+					<span>Non complété</span>
+				</span>
+			</div>
+
+			<!-- <div class="columns">
 				<div class="column is-half">
 					<time datetime="2016-1-1" v-if="terminatedOffer.completed_date">
 						Terminé le : {{ terminatedOffer.completed_date }}</time
@@ -55,7 +88,7 @@
 						<span>Non complété</span>
 					</span>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
