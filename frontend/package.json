@@ -10,6 +10,7 @@
 		"test:unit": "vue-cli-service test:unit"
 	},
 	"dependencies": {
+		"@creativebulma/bulma-badge": "^1.0.1",
 		"axios": "^0.21.3",
 		"bulma": "^0.9.3",
 		"bulma-steps": "^2.2.1",

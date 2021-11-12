@@ -24,43 +24,51 @@
           </a>
         </div>
         <div class="navbar-end">
-          <template v-if="$store.state.isAuthenticated">
-            <router-link to="/mon-compte" class="navbar-item" @click="showNav = !showNav">
-              <span class="mr-3">Mon compte</span>
-              <span class="icon is-small mr-3">
-                <i class="fas fa-user-circle"></i>
-              </span>
-            </router-link>
-            <div class="navbar-item">
-              <div class="dropdown is-hoverable" :class="dropdownRight ? 'is-right' : 'is-left'">
-                <div class="dropdown-trigger">
-                  <button class="button is-rounded has-text-centered" aria-haspopup="true"
-                    aria-controls="dropdown-menu3">
-                    <span class="icon is-small">
-                      <i class="fas fa-angle-down" aria-hidden="true"></i>
-                    </span>
-                  </button>
-                </div>
-                <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
-                  <div class="dropdown-content has-text-left">
-                    <a href="#" class="dropdown-item" v-on:click="this.modalSettingsisActive = !this.modalSettingsisActive; this.showNav = !this.showNav">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-cog"></i>
-                      </span>
-                      <span> Paramètres </span>
-                    </a>
-                    <hr class="dropdown-divider" />
-                    <a href="#" @click="logout(); this.showNav = !this.showNav" class="dropdown-item has-text-danger">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-sign-out-alt"></i>
-                      </span>
-                      <span> Déconnexion </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+            <template v-if="$store.state.isAuthenticated">
+				<router-link to="/mon-compte" class="navbar-item" @click="showNav = !showNav">
+					<span class="mr-3">Mon compte</span>
+					<span class="icon is-small mr-3">
+						<i class="fas fa-user-circle"></i>
+					</span>
+				</router-link>
+				<div class="navbar-item">
+				<div class="dropdown is-hoverable" :class="dropdownRight ? 'is-right' : 'is-left'">
+					<div class="dropdown-trigger">
+					<button class="button is-rounded has-text-centered is-relative" aria-haspopup="true"
+						aria-controls="dropdown-menu3">
+						<span class="icon is-small">
+						<span class="badge is-danger">8</span>
+						<i class="fas fa-angle-down" aria-hidden="true"></i>
+						</span>
+					</button>
+					</div>
+					<div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
+					<div class="dropdown-content has-text-left">
+						<a href="#" class="dropdown-item">
+							<span class="icon is-small mr-3">
+								<i class="fas fa-bell"></i>
+							</span>
+							<span>Notifications</span>
+						</a>
+						<hr class="dropdown-divider" />
+						<a href="#" class="dropdown-item" v-on:click="this.modalSettingsisActive = !this.modalSettingsisActive; this.showNav = !this.showNav">
+						<span class="icon is-small mr-3">
+							<i class="fas fa-cog"></i>
+						</span>
+						<span>Paramètres</span>
+						</a>
+						<hr class="dropdown-divider" />
+						<a href="#" @click="logout(); this.showNav = !this.showNav" class="dropdown-item has-text-danger">
+						<span class="icon is-small mr-3">
+							<i class="fas fa-sign-out-alt"></i>
+						</span>
+						<span>Déconnexion</span>
+						</a>
+					</div>
+					</div>
+				</div>
+				</div>
+          	</template>
 
           <template v-else>
             <router-link to="/connexion" class="navbar-item" @click="this.showNav = !this.showNav">
@@ -273,6 +281,7 @@
 
 <style lang="scss">
 @import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
+@import "../node_modules/@creativebulma/bulma-badge/dist/bulma-badge.css";
 .navbar {
 	border-radius: 0 !important;
 }

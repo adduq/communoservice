@@ -5,7 +5,9 @@
 				<div class="section profile-heading">
 					<div class="columns">
 						<div class="column has-text-centered">
-							<figure class="image is-128x128 round-shadow has-image-centered">
+							<figure
+								class="image is-128x128 round-shadow has-image-centered"
+							>
 								<img
 									class="is-rounded"
 									src="https://owcdn.net/img/5bda50b474984.jpg"
@@ -13,19 +15,33 @@
 								<i
 									class="fas fa-circle"
 									:class="
-										userInfo.is_active ? 'active-icon' : 'not-active-icon'
+										userInfo.is_active
+											? 'active-icon'
+											: 'not-active-icon'
 									"
-									:title="userInfo.is_active ? 'Actif' : 'Inactif'"
+									:title="
+										userInfo.is_active ? 'Actif' : 'Inactif'
+									"
 								></i>
 							</figure>
 							<p class="mt-2">
 								<span
 									class="title is-bold has-text-white"
-									v-if="userInfo.first_name && userInfo.last_name"
+									v-if="
+										userInfo.first_name &&
+											userInfo.last_name
+									"
 								>
-									{{ userInfo.first_name + " " + userInfo.last_name }}
+									{{
+										userInfo.first_name +
+											" " +
+											userInfo.last_name
+									}}
 								</span>
-								<span class="title is-bold has-text-white" v-else>
+								<span
+									class="title is-bold has-text-white"
+									v-else
+								>
 									{{ userInfo.username }}
 								</span>
 							</p>
@@ -48,7 +64,10 @@
 							v-on:click="openCreationModal()"
 						>
 							<span class="icon is-small mr-3">
-								<i class="fa fa-plus-circle" aria-hidden="true"></i>
+								<i
+									class="fa fa-plus-circle"
+									aria-hidden="true"
+								></i>
 							</span>
 							<span> Créer un service </span>
 						</a>
@@ -102,14 +121,18 @@
 				<button
 					class="button profile-toggle"
 					v-on:click="profileSwitch = false"
-					:class="profileSwitch == false ? 'is-success is-selected' : ''"
+					:class="
+						profileSwitch == false ? 'is-success is-selected' : ''
+					"
 				>
 					Employé
 				</button>
 				<button
 					class="button profile-toggle"
 					v-on:click="profileSwitch = true"
-					:class="profileSwitch == true ? 'is-success is-selected' : ''"
+					:class="
+						profileSwitch == true ? 'is-success is-selected' : ''
+					"
 				>
 					Employeur
 				</button>
@@ -117,8 +140,14 @@
 		</div>
 		<div class="columns">
 			<template v-if="profileSwitch == false">
-				<div class="modal" :class="creationModalIsActive ? 'is-active' : ''">
-					<div class="modal-background" @click="closeOfferModal()"></div>
+				<div
+					class="modal"
+					:class="creationModalIsActive ? 'is-active' : ''"
+				>
+					<div
+						class="modal-background"
+						@click="closeOfferModal()"
+					></div>
 					<div class="modal-card">
 						<header class="modal-card-head">
 							<p class="modal-card-title">Créer un service</p>
@@ -129,7 +158,6 @@
 							></button>
 						</header>
 
-						<!-- <div v-if="!confirmeCreation"> -->
 						<section class="modal-card-body">
 							<div
 								class="is-flex-desktop is-justify-content-space-between mr-6"
@@ -138,7 +166,11 @@
 									<label class="label">Type de service</label>
 									<div class="control">
 										<div class="select">
-											<select v-model="serviceType" class="w-200">
+											<select
+												v-model="serviceType"
+												class="w-200"
+											>
+											    <option value="" disabled selected>Choisir parmi</option>
 												<option
 													v-for="type in serviceTypes"
 													v-bind:key="type.name"
@@ -169,8 +201,14 @@
 										<div class="control ml-0">
 											<a
 												class="button is-rounded"
-												:class="daysSelected.monday ? 'is-success' : ''"
-												v-on:click="daysSelected.monday = !daysSelected.monday"
+												:class="
+													daysSelected.monday
+														? 'is-success'
+														: ''
+												"
+												v-on:click="
+													daysSelected.monday = !daysSelected.monday
+												"
 											>
 												L
 											</a>
@@ -178,7 +216,11 @@
 										<div class="control">
 											<a
 												class="button is-rounded"
-												:class="daysSelected.tuesday ? 'is-success' : ''"
+												:class="
+													daysSelected.tuesday
+														? 'is-success'
+														: ''
+												"
 												v-on:click="
 													daysSelected.tuesday = !daysSelected.tuesday
 												"
@@ -189,7 +231,11 @@
 										<div class="control">
 											<a
 												class="button is-rounded"
-												:class="daysSelected.wednesday ? 'is-success' : ''"
+												:class="
+													daysSelected.wednesday
+														? 'is-success'
+														: ''
+												"
 												v-on:click="
 													daysSelected.wednesday = !daysSelected.wednesday
 												"
@@ -200,7 +246,11 @@
 										<div class="control">
 											<a
 												class="button is-rounded"
-												:class="daysSelected.thursday ? 'is-success' : ''"
+												:class="
+													daysSelected.thursday
+														? 'is-success'
+														: ''
+												"
 												v-on:click="
 													daysSelected.thursday = !daysSelected.thursday
 												"
@@ -211,8 +261,14 @@
 										<div class="control">
 											<a
 												class="button is-rounded"
-												:class="daysSelected.friday ? 'is-success' : ''"
-												v-on:click="daysSelected.friday = !daysSelected.friday"
+												:class="
+													daysSelected.friday
+														? 'is-success'
+														: ''
+												"
+												v-on:click="
+													daysSelected.friday = !daysSelected.friday
+												"
 											>
 												V
 											</a>
@@ -220,7 +276,11 @@
 										<div class="control">
 											<a
 												class="button is-rounded"
-												:class="daysSelected.saturday ? 'is-success' : ''"
+												:class="
+													daysSelected.saturday
+														? 'is-success'
+														: ''
+												"
 												v-on:click="
 													daysSelected.saturday = !daysSelected.saturday
 												"
@@ -231,8 +291,14 @@
 										<div class="control mr-0">
 											<a
 												class="button is-rounded"
-												:class="daysSelected.sunday ? 'is-success' : ''"
-												v-on:click="daysSelected.sunday = !daysSelected.sunday"
+												:class="
+													daysSelected.sunday
+														? 'is-success'
+														: ''
+												"
+												v-on:click="
+													daysSelected.sunday = !daysSelected.sunday
+												"
 											>
 												D
 											</a>
@@ -289,18 +355,20 @@
 								<div class="control">
 									<label class="checkbox">
 										<input type="checkbox" />
-										J'accepte les <a href="#">termes et conditions</a>
+										J'accepte les
+										<a href="#">termes et conditions</a>
 									</label>
 								</div>
 							</div>
-
-							<!-- <div class="notification is-danger mt-4" v-if="errors.length">
-									<p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-								</div> -->
 						</section>
 
-						<footer class="modal-card-foot is-flex is-justify-content-center">
-							<button class="button is-success w-200" v-on:click="validateForm">
+						<footer
+							class="modal-card-foot is-flex is-justify-content-center"
+						>
+							<button
+								class="button is-success w-200"
+								v-on:click="validateForm"
+							>
 								Créer
 							</button>
 							<button
@@ -310,33 +378,14 @@
 								Fermer
 							</button>
 						</footer>
-						<!-- </div>
-
-						<div v-else>
-							<section class="modal-card-body">
-								Êtes-vous certain de vouloir créer ce service?
-							</section>
-							<footer class="modal-card-foot">
-								<button
-									class="button is-danger w-100"
-									v-on:click="closeOfferModal()"
-								>
-									Non
-								</button>
-								<button
-									v-on:click="addNewOffer"
-									class="button is-success w-100"
-								>
-									Oui
-								</button>
-							</footer>
-						</div> -->
 					</div>
 				</div>
 
 				<div class="column">
 					<div class="box">
-						<p class="title has-text-centered">Mes services actifs</p>
+						<p class="title has-text-centered">
+							Mes services actifs
+						</p>
 
 						<DetailedOffer
 							v-for="offer in activeOffers"
@@ -348,7 +397,9 @@
 
 				<div class="column">
 					<div class="box">
-						<p class="title has-text-centered">Mes services réservés</p>
+						<p class="title has-text-centered">
+							Mes services réservés
+						</p>
 
 						<ReservedOffer
 							v-for="offer in reservedOffersForUser"
@@ -373,7 +424,9 @@
 			<template v-if="profileSwitch == true">
 				<div class="column">
 					<div class="box">
-						<p class="title has-text-centered">Mes services prévus</p>
+						<p class="title has-text-centered">
+							Mes services prévus
+						</p>
 
 						<ReservedOffer
 							v-for="offer in reservedOffersForRecruiter"
@@ -420,167 +473,22 @@
 					Êtes-vous certain de vouloir créer ce service?
 				</section>
 				<footer class="modal-card-foot">
-					<button class="button is-danger w-100" v-on:click="closeOfferModal()">
+					<button
+						class="button is-danger w-100"
+						v-on:click="closeOfferModal()"
+					>
 						Non
 					</button>
-					<button v-on:click="addNewOffer" class="button is-success w-100">
+					<button
+						v-on:click="addNewOffer"
+						class="button is-success w-100"
+					>
 						Oui
 					</button>
 				</footer>
 			</div>
 		</div>
 	</div>
-
-	<!-- 
-	<header class="modal-card-head">
-				<p class="modal-card-title" v-if="currentStep == 1">
-					Détails de l'offre
-				</p>
-				<p class="modal-card-title" v-if="currentStep == 2">
-					Choix des disponibilités
-				</p>
-				<p class="modal-card-title" v-if="currentStep == 3">Confirmation</p>
-				<button
-					class="delete has-background-danger"
-					aria-label="close"
-					@click="closeOfferModal()"
-				></button>
-			</header>
-			<section class="modal-card-body">
-				<ul class="steps is-small" ref="stepsSection">
-					<li
-						class="step-item is-info is-completed"
-						:class="currentStep >= 1 ? 'is-active ' : ''"
-					>
-						<div class="step-marker">
-							<span class="icon">
-								<i class="fa fa-align-justify"></i>
-							</span>
-						</div>
-					</li>
-					<li
-						class="step-item is-info"
-						:class="[
-							currentStep >= 2 ? 'is-active' : '',
-							step2Completed ? 'is-completed' : '',
-						]"
-					>
-						<div class="step-marker">
-							<span class="icon">
-								<i class="fa fa-calendar-check"></i>
-							</span>
-						</div>
-					</li>
-					<li
-						class="step-item is-info"
-						:class="[
-							currentStep >= 3 ? 'is-active' : '',
-							step3Completed ? 'is-completed' : '',
-						]"
-					>
-						<div class="step-marker">
-							<span class="icon">
-								<i class="fa fa-check"></i>
-							</span>
-						</div>
-					</li>
-				</ul>
-				<div v-if="currentStep == 1">
-
-				</div>
-				<div v-if="currentStep == 2">
-					
-				</div>
-				<div v-if="currentStep == 3">
-					<div class="has-text-centered" v-if="!clickedSend">
-						<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
-						<label class="checkbox mb-5">
-							<input type="checkbox" v-model="confirmationCheckbox" />
-							Je confirme avoir validé ma demande
-						</label>
-					</div>
-					<div v-if="clickedSend">
-						<h2 class="title has-text-centered mb-5">
-							Demande envoyée avec succès
-						</h2>
-						<div class="animate__animated animate__zoomInDown">
-							<svg
-								class="checkmark"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 52 52"
-							>
-								<circle
-									class="checkmark__circle"
-									cx="26"
-									cy="26"
-									r="25"
-									fill="none"
-								/>
-								<path
-									class="checkmark__check"
-									fill="none"
-									d="M14.1 27.2l7.1 7.2 16.7-16.8"
-								/>
-							</svg>
-						</div>
-					</div>
-				</div>
-			</section>
-			<footer class="modal-card-foot is-flex is-justify-content-space-evenly">
-				<button
-					class="button is-primary is-rounded w-100"
-					v-if="currentStep > 1"
-					@click="currentStep--"
-				>
-					<span class="icon">
-						<i class="fa fa-arrow-left mr-2"></i>
-						Retour
-					</span>
-				</button>
-				<button
-					class="button is-primary is-rounded w-100"
-					v-if="currentStep < 3"
-					:disabled="
-						currentStep == 2 &&
-							Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
-					"
-					:title="
-						currentStep == 2 &&
-						Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
-							? 'Vous devez choisir au moins une journée'
-							: ''
-					"
-					@click="
-						currentStep == 2 ? (step2Completed = true) : '';
-						currentStep++;
-					"
-				>
-					<span class="icon">
-						Suivant
-						<i class="fa fa-arrow-right ml-2"></i>
-					</span>
-				</button>
-				<button
-					class="button is-primary is-rounded w-100"
-					v-if="currentStep == 3"
-					:disabled="currentStep == 3 && !confirmationCheckbox"
-					:title="
-						currentStep == 3 && !confirmationCheckbox
-							? 'Vous devez confirmer votre demande'
-							: ''
-					"
-					@click="
-						clickedSend = true;
-						step3Completed = true;
-					"
-				>
-					<span class="icon">
-						Envoyer
-						<i class="fa fa-paper-plane ml-2"></i>
-					</span>
-				</button>
-			</footer>
-		</div> -->
 </template>
 
 <script>
@@ -590,19 +498,12 @@ import axios from "axios";
 import DetailedOffer from "@/components/DetailedOffer";
 import TerminatedOffer from "@/components/TerminatedOffer";
 import ReservedOffer from "@/components/ReservedOffer";
-// import StepsWizard from "../../node_modules/bulma-steps/dist/js/bulma-steps.js";
 import { toast } from "bulma-toast";
 
 export default {
 	name: "MyAccount",
 	data() {
 		return {
-			// currentStep: 1,
-			// step2Completed: false,
-			// step3Completed: false,
-			// clickedSend: false,
-			// confirmeCreation: false,
-
 			activeOffers: [],
 			terminatedOffersForUser: [],
 			terminatedOffersForRecruiter: [],
@@ -615,7 +516,7 @@ export default {
 			serviceType: "",
 			description: "",
 			hourlyRate: 10.5,
-			maxDistance: 2,
+			maxDistance: 1,
 			expirationDate: "",
 			daysSelected: {
 				monday: false,
@@ -645,7 +546,6 @@ export default {
 		this.getUserInfo();
 		this.tomorrow = this.getTomorrow();
 		this.getServiceTypes();
-		// StepsWizard.attach(this.$refs.stepsSection.el);
 	},
 	methods: {
 		getTomorrow() {
@@ -722,12 +622,7 @@ export default {
 		},
 		closeOfferModal() {
 			this.creationModalIsActive = false;
-			// this.confirmeCreation = false;
 			this.errors = [];
-			// this.clickedSend = false;
-			// Object.keys(this.daysSelected).forEach(
-			// 	(value) => (this.daysSelected[value] = false)
-			// );
 			this.modalCreateisActive = false;
 		},
 		validateForm() {
@@ -742,7 +637,9 @@ export default {
 			}
 
 			if (this.hourlyRate < 0) {
-				this.errors.push("Le taux horaire doit être un nombre positif.");
+				this.errors.push(
+					"Le taux horaire doit être un nombre positif."
+				);
 			}
 			if (this.maxDistance < 0) {
 				this.errors.push("La distance maximal doit être positive.");
@@ -750,14 +647,15 @@ export default {
 			let tomorrow = new Date();
 			let selectedDate = new Date(this.expirationDate);
 			if (selectedDate.getTime() < tomorrow.getTime()) {
-				this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
+				this.errors.push(
+					"Il faut choisir une date postérieure à aujourd'hui."
+				);
 			}
 
 			if (!this.errors.length) {
 				this.modalCreateisActive = true;
 
 				this.creationModalIsActive = false;
-				// this.confirmeCreation = true;
 			} else {
 				for (let index = 0; index < this.errors.length; index++) {
 					toast({
@@ -777,7 +675,8 @@ export default {
 		},
 		async addNewOffer() {
 			this.isLoading = true;
-			let expiration = this.expirationDate == "" ? null : this.expirationDate;
+			let expiration =
+				this.expirationDate == "" ? null : this.expirationDate;
 			const newOffer = {
 				user: this.userInfo.user_id,
 				type_service: this.serviceType,
@@ -793,14 +692,12 @@ export default {
 				saturday: this.daysSelected.saturday,
 				sunday: this.daysSelected.sunday,
 			};
-			//alert(JSON.stringify(newOffer));//pour validation.
 			await axios
 				.post("/api/v1/offers/", newOffer)
 				.then((response) => {
 					this.isLoading = false;
 					this.modalCreateisActive = false;
 					this.creationModalIsActive = false;
-					// this.confirmeCreation = false;
 
 					this.addActiveOffers({
 						id_offer: response.data.id,
@@ -810,7 +707,6 @@ export default {
 				.catch((error) => {
 					this.modalCreateisActive = false;
 					this.creationModalIsActive = true;
-					// this.confirmeCreation = false;
 					if (error.response.data["error"] == "profile_incomplete") {
 						toast({
 							message:
@@ -825,13 +721,11 @@ export default {
 								out: "fadeOutRightBig",
 							},
 						});
-						// this.errors.push(
-						// 	"Profil incomplet. Veuillez completer votre profil dans les paramètres."
-						// );
+
 					} else {
-						// this.errors.push("Une erreur est survenue. Essayez à nouveau.");
 						toast({
-							message: "Une erreur est survenue. Essayez à nouveau.",
+							message:
+								"Une erreur est survenue. Essayez à nouveau.",
 							type: "is-danger",
 							dismissible: true,
 							pauseOnHover: true,
@@ -843,7 +737,6 @@ export default {
 							},
 						});
 					}
-					// console.log(error);
 				});
 		},
 		toSelectDate(payload) {
@@ -882,5 +775,8 @@ export default {
 <style lang="scss" scoped>
 .profile-toggle {
 	width: 8em !important;
+}
+option[value=""][disabled] {
+	display: none;
 }
 </style>
