@@ -181,12 +181,7 @@
 
                 <div class="field mb-2 mr-6">
                   <label class="label">Expiration</label>
-                  <input
-                    type="date"
-                    class="datepicker"
-                    v-bind:min="tomorrow"
-                    v-model="expirationDate"
-                  />
+                  <input type="date" class="datepicker" v-bind:min="tomorrow" />
                 </div>
               </div>
 
@@ -330,9 +325,12 @@
                 <!-- <Calendar /> -->
                 <DatePicker
                   v-model="range"
-                  mode="dateTime"
+                  mode="date"
                   :masks="masks"
                   is-range
+                  :min-date="minDate"
+                  v-on:drag="clickOnDatePicker"
+                  :attributes="attributes"
                 />
               </div>
 
@@ -529,78 +527,75 @@ import ReservedOffer from "@/components/ReservedOffer";
 import { toast } from "bulma-toast";
 //import { Calendar, DatePicker } from "v-calendar";
 export default {
-	name: "MyAccount",
-	data() {
-		return {
-			activeOffers: [],
-			terminatedOffersForUser: [],
-			terminatedOffersForRecruiter: [],
-			reservedOffersForUser: [],
-			reservedOffersForRecruiter: [],
-			serviceTypes: [],
+  name: "MyAccount",
+  data() {
+    return {
+      // currentStep: 1,
+      // step2Completed: false,
+      // step3Completed: false,
+      // clickedSend: false,
+      // confirmeCreation: false,
+      attributes: [
+        {
+          key: "today",
+          highlight: {
+            color: "purple",
+            fillMode: "solid",
+            contentClass: "italic",
+          },
+          dates: new Date(2021, 11, 12),
+        },
+        {
+          highlight: {
+            color: "purple",
+            fillMode: "light",
+          },
+          dates: new Date(2021, 11, 13),
+        },
+        {
+          highlight: {
+            color: "purple",
+            fillMode: "outline",
+          },
+          dates: new Date(2021, 11, 14),
+        },
+      ],
+      range: { start: new Date(2021, 11, 16), end: new Date(2021, 11, 29) },
+      masks: {
+        title: "MMMM YYYY",
+        weekdays: "W",
+        navMonths: "MMM",
+        input: ["L", "YYYY-MM-DD", "YYYY/MM/DD"],
+        dayPopover: "WWW, MMM D, YYYY",
+        data: ["YYYY-MM-DD"],
+      },
+      daysPattern: [5, 4],
+      minDate: new Date(),
+      activeOffers: [],
+      terminatedOffersForUser: [],
+      terminatedOffersForRecruiter: [],
+      reservedOffersForUser: [],
+      reservedOffersForRecruiter: [],
+      serviceTypes: [],
 
       modalCreateisActive: false,
 
-			serviceType: "",
-			description: "",
-			hourlyRate: 10.5,
-			maxDistance: 1,
-			expirationDate: "",
-			daysSelected: {
-				monday: false,
-				tuesday: false,
-				wednesday: false,
-				thursday: false,
-				friday: false,
-				saturday: false,
-				sunday: false,
-			},
-			profileSwitch: false,
-			userIsActive: true,
-			userInfo: {},
-			errors: [],
-			tomorrow: "",
-			creationModalIsActive: false,
-		};
-	},
-	//Les components qu'on veut utiliser
-	components: {
-		DetailedOffer,
-		TerminatedOffer,
-		ReservedOffer,
-	},
-	mounted() {
-		document.title = "Mon compte | Communoservice";
-		this.getUserInfo();
-		this.tomorrow = this.getTomorrow();
-		this.getServiceTypes();
-	},
-	methods: {
-		getTomorrow() {
-			var tomorrow = new Date();
-			var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
-			var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
-			var yyyy = tomorrow.getFullYear();
-      calendarOptions: {
-        plugins: [dayGridPlugin, interactionPlugin],
-        initialView: "dayGridMonth",
-        locales: [frLocale],
-        selectable: true,
-        select: this.select,
-        dayHeaderFormat: { weekday: "short", omitCommas: true },
-        headerToolbar: {
-          start: "title", // will normally be on the left. if RTL, will be on the right
-          center: "",
-          end: "today prevYear,prev,next,nextYear", // will normally be on the right. if RTL, will be on the left
-        },
+      serviceType: "",
+      description: "",
+      hourlyRate: 10.5,
+      maxDistance: 2,
+      daysSelected: {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false,
       },
-      header: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
-      },
-      startDate: String,
-      endDate: String,
+
+      startDate: "",
+      endDate: "",
       profileSwitch: false,
       userIsActive: true,
       userInfo: {},
@@ -628,6 +623,9 @@ export default {
     test.render();
   },
   methods: {
+    clickOnDatePicker(value) {
+      console.log("Start : " + value.start + "     End : " + value.end);
+    },
     select(info) {
       alert("selected " + info.startStr + " to " + info.endStr);
     },
@@ -719,68 +717,67 @@ export default {
         this.errors.push("La description ne peut pas être vide.");
       }
 
-			if (this.hourlyRate < 0) {
-				this.errors.push(
-					"Le taux horaire doit être un nombre positif."
-				);
-			}
-			if (this.maxDistance < 0) {
-				this.errors.push("La distance maximal doit être positive.");
-			}
-			let tomorrow = new Date();
-			let selectedDate = new Date(this.expirationDate);
-			if (selectedDate.getTime() < tomorrow.getTime()) {
-				this.errors.push(
-					"Il faut choisir une date postérieure à aujourd'hui."
-				);
-			}
+      if (this.hourlyRate < 0) {
+        this.errors.push("Le taux horaire doit être un nombre positif.");
+      }
+      if (this.maxDistance < 0) {
+        this.errors.push("La distance maximal doit être positive.");
+      }
+      let tomorrow = new Date();
+      // let selectedDate = new Date(this.expirationDate);
+      // if (selectedDate.getTime() < tomorrow.getTime()) {
+      //   this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
+      // }
 
       if (!this.errors.length) {
         this.modalCreateisActive = true;
 
-				this.creationModalIsActive = false;
-			} else {
-				for (let index = 0; index < this.errors.length; index++) {
-					toast({
-						message: this.errors[index],
-						type: "is-danger",
-						dismissible: true,
-						pauseOnHover: true,
-						duration: 4000,
-						position: "bottom-right",
-						animate: {
-							in: "fadeInRightBig",
-							out: "fadeOutRightBig",
-						},
-					});
-				}
-			}
-		},
-		async addNewOffer() {
-			this.isLoading = true;
-			let expiration =
-				this.expirationDate == "" ? null : this.expirationDate;
-			const newOffer = {
-				user: this.userInfo.user_id,
-				type_service: this.serviceType,
-				description: this.description,
-				hourly_rate: this.hourlyRate,
-				max_distance: this.maxDistance,
-				expiration_date: expiration,
-				monday: this.daysSelected.monday,
-				tuesday: this.daysSelected.tuesday,
-				wednesday: this.daysSelected.wednesday,
-				thursday: this.daysSelected.thursday,
-				friday: this.daysSelected.friday,
-				saturday: this.daysSelected.saturday,
-				sunday: this.daysSelected.sunday,
-			};
-			await axios
-				.post("/api/v1/offers/", newOffer)
-				.then((response) => {
-					this.isLoading = false;
-					this.modalCreateisActive = false;
-					this.creationModalIsActive = false;
+        this.creationModalIsActive = false;
+        // this.confirmeCreation = true;
+      } else {
+        for (let index = 0; index < this.errors.length; index++) {
+          toast({
+            message: this.errors[index],
+            type: "is-danger",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 4000,
+            position: "bottom-right",
+            animate: {
+              in: "fadeInRightBig",
+              out: "fadeOutRightBig",
+            },
+          });
+        }
+      }
+    },
+    async addNewOffer() {
+      this.isLoading = true;
+      let expiration = this.expirationDate == "" ? null : this.expirationDate;
+      const newOffer = {
+        user: this.userInfo.user_id,
+        type_service: this.serviceType,
+        description: this.description,
+        hourly_rate: this.hourlyRate,
+        max_distance: this.maxDistance,
+        monday: this.daysSelected.monday,
+        tuesday: this.daysSelected.tuesday,
+        wednesday: this.daysSelected.wednesday,
+        thursday: this.daysSelected.thursday,
+        friday: this.daysSelected.friday,
+        saturday: this.daysSelected.saturday,
+        sunday: this.daysSelected.sunday,
+        start_date: this.range.start.toISOString().substr(0, 10),
+        end_date: this.range.end.toISOString().substr(0, 10),
+      };
+      alert(JSON.stringify(newOffer)); //pour validation.
+      await axios
+        .post("/api/v1/offers/", newOffer)
+        .then((response) => {
+          this.isLoading = false;
+          this.modalCreateisActive = false;
+          this.creationModalIsActive = false;
+          // this.confirmeCreation = false;
 
 					this.addActiveOffers({
 						id_offer: response.data.id,

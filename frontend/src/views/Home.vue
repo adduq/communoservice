@@ -1,44 +1,44 @@
 <template>
-	<div class="home">
-		<section class="hero is-medium is-dark mb-6">
-			<div class="hero-body has-text-centered">
-				<p class="title mb-6">Bienvenue sur Communoservice</p>
-				<p class="subtitle">
-					Le meilleur site pour les services communautaires
-				</p>
-			</div>
-		</section>
+  <div class="home">
+    <section class="hero is-medium is-dark mb-6">
+      <div class="hero-body has-text-centered">
+        <p class="title mb-6">Bienvenue sur Communoservice</p>
+        <p class="subtitle">
+          Le meilleur site pour les services communautaires
+        </p>
+      </div>
+    </section>
 
-		<div class="columns is-multiline is-12">
-			<div class="column is-12">
-				<h2 class="is-size-2 has-text-centered">
-					Liste des services
-				</h2>
-			</div>
-		</div>
-		<div class="columns mt-6">
-			<div class="column">
-				<nav class="panel">
-					<p class="panel-heading">
-						Recherche
-					</p>
-					<div class="panel-block is-flex-wrap-wrap">
-						<p class="control has-icons-left is-full-width">
-							<input
-								class="input"
-								type="text"
-								placeholder="Mots Clé(s)"
-								v-model="query_mots_cles"
-							/>
-							<span class="icon is-left">
-								<i class="fas fa-search" aria-hidden="true"></i>
-							</span>
-						</p>
-					</div>
-					<div class="panel-section">
-						<p class="ml-2 has-text-weight-bold has-text-black">
-							Type de service
-						</p>
+    <div class="columns is-multiline is-12">
+      <div class="column is-12">
+        <h2 class="is-size-2 has-text-centered">
+          Liste des services
+        </h2>
+      </div>
+    </div>
+    <div class="columns mt-6">
+      <div class="column">
+        <nav class="panel">
+          <p class="panel-heading">
+            Recherche
+          </p>
+          <div class="panel-block is-flex-wrap-wrap">
+            <p class="control has-icons-left is-full-width">
+              <input
+                class="input"
+                type="text"
+                placeholder="Mots Clé(s)"
+                v-model="query_mots_cles"
+              />
+              <span class="icon is-left">
+                <i class="fas fa-search" aria-hidden="true"></i>
+              </span>
+            </p>
+          </div>
+          <div class="panel-section">
+            <p class="ml-2 has-text-weight-bold has-text-black">
+              Type de service
+            </p>
 
 						<div class="select ml-2 mt-1">
 							<select v-model="query_typeservice">
@@ -505,35 +505,35 @@ import axios from "axios";
 import DetailedOffer from "@/components/DetailedOffer";
 import StepsWizard from "bulma-steps/dist/js/bulma-steps.js";
 export default {
-	name: "Home",
-	data() {
-		return {
-			// Offer modal
-			currentStep: 1,
-			step2Completed: false,
-			step3Completed: false,
-			offerToShow: Object,
-			offerUserInfo: Object,
-			offerModalActive: false,
-			selectedWeekdays: {
-				monday: false,
-				tuesday: false,
-				wednesday: false,
-				thursday: false,
-				friday: false,
-				saturday: false,
-				sunday: false,
-			},
-			confirmationCheckbox: false,
-			clickedSend: false,
+  name: "Home",
+  data() {
+    return {
+      // Offer modal
+      currentStep: 1,
+      step2Completed: false,
+      step3Completed: false,
+      offerToShow: Object,
+      offerUserInfo: Object,
+      offerModalActive: false,
+      selectedWeekdays: {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false,
+      },
+      confirmationCheckbox: false,
+      clickedSend: false,
 
-			offerToReserve: {
-				reservation_date: null,
-				id_active_offer: null,
-				id_recruiter: null,
-				id_offer: null,
-				id_user: null,
-			},
+      offerToReserve: {
+        reservation_date: null,
+        id_active_offer: null,
+        id_recruiter: null,
+        id_offer: null,
+        id_user: null,
+      },
 
 			query_typeservice: "Tout",
 			query_serviceday: new Date(),
@@ -590,54 +590,54 @@ export default {
 		async reserveOffer(offer) {
 			this.isFetchingOffers = true;
 
-			this.offerToReserve.id_offer = offer.id;
-			this.offerToReserve.id_user = offer.user;
+      this.offerToReserve.id_offer = offer.id;
+      this.offerToReserve.id_user = offer.user;
 
-			await this.getActiveOfferId(offer);
-			await this.getRecruiterId();
+      await this.getActiveOfferId(offer);
+      await this.getRecruiterId();
 
-			console.log(this.offerToReserve);
+      console.log(this.offerToReserve);
 
-			await axios
-				.post("/api/v1/reserved-offers/", this.offerToReserve)
-				.then((res) => {
-					console.log(res);
-					console.log(this.offerToReserve);
+      await axios
+        .post("/api/v1/reserved-offers/", this.offerToReserve)
+        .then((res) => {
+          console.log(res);
+          console.log(this.offerToReserve);
 
-					this.isFetchingOffers = false;
-					this.clickedSend = true;
-					this.step3Completed = true;
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		},
-		async getRecruiterId() {
-			return axios
-				.get("/api/v1/userinfo/me/")
-				.then((res) => {
-					this.offerToReserve.id_recruiter = res.data.user_id;
+          this.isFetchingOffers = false;
+          this.clickedSend = true;
+          this.step3Completed = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async getRecruiterId() {
+      return axios
+        .get("/api/v1/userinfo/me/")
+        .then((res) => {
+          this.offerToReserve.id_recruiter = res.data.user_id;
 
-					console.log(this.offerToReserve);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		},
-		async getActiveOfferId(offer) {
-			return axios
-				.get(`/api/v1/active-offers/${offer.id}/${offer.user}/`)
-				.then((res) => {
-					this.offerToReserve.id_active_offer = res.data.id;
+          console.log(this.offerToReserve);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async getActiveOfferId(offer) {
+      return axios
+        .get(`/api/v1/active-offers/${offer.id}/${offer.user}/`)
+        .then((res) => {
+          this.offerToReserve.id_active_offer = res.data.id;
 
-					console.log(this.offerToReserve);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		},
-		async sendQuery() {
-			const params = new URLSearchParams();
+          console.log(this.offerToReserve);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async sendQuery() {
+      const params = new URLSearchParams();
 
 			params.append("type-service", this.query_typeservice);
 			
@@ -656,69 +656,69 @@ export default {
 				);
 			}
 
-			let array_mots_cles = [];
-			array_mots_cles = this.query_mots_cles.split(" ");
-			if (array_mots_cles.length == 1 && array_mots_cles[0] == "") {
-				array_mots_cles = [];
-			}
+      let array_mots_cles = [];
+      array_mots_cles = this.query_mots_cles.split(" ");
+      if (array_mots_cles.length == 1 && array_mots_cles[0] == "") {
+        array_mots_cles = [];
+      }
 
-			if (array_mots_cles.length > 0) {
-				this.query_mots_cles.trim();
-				params.append("mots-cles", array_mots_cles);
-			}
+      if (array_mots_cles.length > 0) {
+        this.query_mots_cles.trim();
+        params.append("mots-cles", array_mots_cles);
+      }
 
-			if (Array.from(params).length > 0) {
-				this.isFetchingOffers = true;
-				await axios
-					.get("/api/v1/active-offers/search?" + params.toString())
-					.then((response) => {
-						this.offers = response.data;
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-				this.isFetchingOffers = false;
-			}
-		},
-		async getOfferUserInfo(user_id) {
-			await axios
-				.get(`api/v1/userinfo/${user_id}/`)
-				.then((response) => {
-					this.offerUserInfo = response.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		updateCalendarToday() {
-			var current = new Date();
-			this.query_serviceday = this.dateToday = `${current.getFullYear()}-${current.getMonth() +
-				1}-${current.getDate()}`;
-		},
-		showOfferModal(offer) {
-			this.offerToShow = offer;
-			this.offerModalActive = true;
-			if (this.offerUserInfo.user != offer.user) {
-				this.getOfferUserInfo(offer.user);
-			}
-		},
-		closeOfferModal() {
-			this.resetOfferModal();
-		},
-		resetOfferModal() {
-			this.offerModalActive = false;
-			this.currentStep = 1;
-			(this.step2Completed = false),
-				(this.step3Completed = false),
-				(this.offerToShow = {});
-			this.offerUserInfo = {};
-			this.confirmationCheckbox = false;
-			this.clickedSend = false;
-			Object.keys(this.selectedWeekdays).forEach(
-				(value) => (this.selectedWeekdays[value] = false)
-			);
-		},
-	},
+      if (Array.from(params).length > 0) {
+        this.isFetchingOffers = true;
+        await axios
+          .get("/api/v1/active-offers/search?" + params.toString())
+          .then((response) => {
+            this.offers = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        this.isFetchingOffers = false;
+      }
+    },
+    async getOfferUserInfo(user_id) {
+      await axios
+        .get(`api/v1/userinfo/${user_id}/`)
+        .then((response) => {
+          this.offerUserInfo = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    updateCalendarToday() {
+      var current = new Date();
+      this.query_serviceday = this.dateToday = `${current.getFullYear()}-${current.getMonth() +
+        1}-${current.getDate()}`;
+    },
+    showOfferModal(offer) {
+      this.offerToShow = offer;
+      this.offerModalActive = true;
+      if (this.offerUserInfo.user != offer.user) {
+        this.getOfferUserInfo(offer.user);
+      }
+    },
+    closeOfferModal() {
+      this.resetOfferModal();
+    },
+    resetOfferModal() {
+      this.offerModalActive = false;
+      this.currentStep = 1;
+      (this.step2Completed = false),
+        (this.step3Completed = false),
+        (this.offerToShow = {});
+      this.offerUserInfo = {};
+      this.confirmationCheckbox = false;
+      this.clickedSend = false;
+      Object.keys(this.selectedWeekdays).forEach(
+        (value) => (this.selectedWeekdays[value] = false)
+      );
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
