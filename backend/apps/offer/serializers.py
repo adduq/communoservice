@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.db.models import fields
 from rest_framework import serializers
@@ -31,11 +32,17 @@ class OfferSerializer(serializers.ModelSerializer):
             return value
 
     def validate_date_range(self, start, end):
-        if start is not None & end is not None:
-            if start > end:
+        dateformat = "%Y-%m-%d"
+        try:
+            startdate = datetime.datetime.strptime(
+                start, dateformat)
+            enddate = datetime.datetime.strptime(end, dateformat)
+            if startdate > enddate:
                 raise serializers.ValidationError(
                     "Start date must be before end date.")
-            return
+        except:
+            raise serializers.ValidationError(
+                "Both start and end dates must be complete.")
 
     class Meta:
         model = Offer
@@ -68,7 +75,6 @@ class ReservedOfferCreationSerializer(serializers.ModelSerializer):
 
 
 class TerminatedOfferSerializer(serializers.ModelSerializer):
-    # id_offer = OfferSerializer(read_only=True)
     class Meta:
         model = TerminatedOffer
         fields = '__all__'

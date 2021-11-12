@@ -1,5 +1,5 @@
 <template>
-	<div class="card mb-3 h-140">
+	<div class="card mb-3 h-140" v-if="reservedOffer">
 		<div class="card-content">
 			<div class="media">
 				<div class="media-left">
@@ -22,15 +22,31 @@
 				</div>
 			</div>
 
-			<div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
-				<time
+			<time datetime="2016-1-1" v-if="reservedOffer.reservation_date">
+				Réservé pour le : {{ reservedOffer.reservation_date }}
+			</time>
+			<p>
+				<!-- TODO: Différencier employé / employeur pour le référent -->
+				Référent : {{ reservedOffer.recruiter.first_name }}
+				{{ reservedOffer.recruiter.last_name }}
+			</p>
+
+			<!-- <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between"> -->
+			<div class="is-flex is-flex-wrap-wrap is-justify-content-end mt-4">
+				<!-- <time
 					class="is-align-self-center"
 					datetime="2016-1-1"
 					v-if="reservedOffer.reservation_date"
 				>
 					Réservé pour le : {{ reservedOffer.reservation_date }}</time
+				> -->
+				<button
+					class="button is-success w-100 mr-2"
+					v-on:click="terminateOffer"
 				>
-				<button class="button is-danger mt-2 w-100">
+					Terminer
+				</button>
+				<button class="button is-danger w-100" v-on:click="cancelOffer">
 					Annuler
 				</button>
 			</div>
@@ -39,16 +55,66 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
 	name: "ReservedOffer",
 	props: {
 		reservedOffer: Object,
 	},
+	data() {
+		return {
+			statusDispo: {
+				GIVEN: 0,
+				NOT_GIVEN: 1,
+				CANCEL: 2,
+				NO_PRESENCE: 3,
+			},
+		};
+	},
+	mounted() {
+		console.log(this.reservedOffer ? "True" : "Nope");
+	},
+	methods: {
+		async cancelOffer() {
+			this.reservedOffer["status"] = this.statusDispo.CANCEL;
+			this.reservedOffer["completed_date"] = new Date()
+				.toISOString()
+				.split("T")[0];
+			this.reservedOffer["id_offer"] = this.reservedOffer.id_offer.id;
+			this.reservedOffer[
+				"id_active_offer"
+			] = this.reservedOffer.id_active_offer.id;
+			this.reservedOffer["id_user"] = this.reservedOffer.user.id;
+			this.reservedOffer["id_recruiter"] = this.reservedOffer.recruiter.id;
+
+			await axios
+				.post("/api/v1/terminated-offers/", this.reservedOffer)
+				.then((res) => {
+					console.log(res.data);
+
+					this.deleteFromReservedOffer();
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async terminateOffer() {
+			alert(this.reservedOffer.recruiter.first_name);
+		},
+		async deleteFromReservedOffer() {
+			await axios
+				.delete(
+					`/api/v1/reserved-offers/${this.reservedOffer.id}`,
+					this.reservedOffer
+				)
+				.then((res) => {
+					console.log(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+	},
 };
 </script>
-
-<style lang="scss" scoped>
-h1 {
-	text-align: center;
-}
-</style>

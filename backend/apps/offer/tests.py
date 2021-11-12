@@ -489,23 +489,31 @@ class OfferViewTest(TestCase):
 
     def test_OffersView_whenCreateOfferWithPastEndDate_thenResponseStatusCode400(self):
 
+
         # given
-        test_user = self.user
-        past_end_date = date.today() - timedelta(days=1)
-        past_end_date = past_end_date.__str__
-        payload = {
-            "user": test_user,
-            "type_service": "Dressage d'animaux",
-            "description": "Utilisation de gâteries véganes!",
-            "hourly_rate": "10.50",
-            "max_distance": 2,
-            "start_date": date.today().__str__,
-            "end_date": past_end_date
-        }
-        request = self.factory.post('/offer/', payload)
+<< << << < HEAD
+test_user = self.user
+== == == =
+non_existent_user = 999
+>>>>>> > 2466edb640055bd42af1125fd25b2fb41e962048
+past_end_date = date.today() - timedelta(days=1)
+past_end_date = past_end_date.__str__
+payload = {
+    "user": test_user,
+    "type_service": "Dressage d'animaux",
+    "description": "Utilisation de gâteries véganes!",
+    "hourly_rate": "10.50",
+    "max_distance": 2,
+    << << << < HEAD
+    "start_date": date.today().__str__,
+    == == == =
+    >>>>>> > 2466edb640055bd42af1125fd25b2fb41e962048
+    "end_date": past_end_date
+}
+request = self.factory.post('/offer/', payload)
 
-        # when
-        response = Offers.as_view()(request)
+# when
+response = Offers.as_view()(request)
 
-        # then
-        self.assertEqual(response.status_code, 400)
+# then
+self.assertEqual(response.status_code, 400)

@@ -46,7 +46,8 @@ class Offers(APIView):
 
         if self.user_can_create(request.user.id):
             serializer = OfferSerializer(data=request.data)
-            # OfferSerializer.validate_date_range(request.date)
+            OfferSerializer.validate_date_range(self,
+                                                request.data['start_date'], request.data['end_date'])
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -117,6 +118,9 @@ class ActiveOffers(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         serializer = ActiveOfferSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -135,6 +139,9 @@ class ActiveOffersByUser(APIView):
         return Offer.objects.filter(id__in=active_offers)
 
     def get(self, request, no_user, format=None):
+        # if request.user.is_anonymous or request.user.id != no_user:
+        #     return Response('Unauthorized', status=401)
+
         active_offers = self.get_offers(no_user)
         serializer = OfferSerializer(active_offers, many=True)
         return Response(serializer.data)
@@ -164,6 +171,9 @@ class ActiveOfferDetail(APIView):
         return Response(serializer.data)
 
     def delete(self, request, id_active_offer, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         active_offer = self.get_object(id_active_offer)
         active_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -179,12 +189,15 @@ class ReservedOffers(APIView):
     Permet d'avoir les offres réservées.
     """
 
-    def get(self, request, format=None):
-        reserved_offers = ReservedOffer.objects.all()
-        serializer = ReservedOfferSerializer(reserved_offers, many=True)
-        return Response(serializer.data)
+    # def get(self, request, format=None):
+    #     reserved_offers = ReservedOffer.objects.all()
+    #     serializer = ReservedOfferSerializer(reserved_offers, many=True)
+    #     return Response(serializer.data)
 
     def post(self, request, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         serializer = ReservedOfferCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -198,8 +211,14 @@ class ReservedOffersByUser(APIView):
     """
 
     def get(self, request, no_user, format=None):
+        if request.user.is_anonymous or request.user.id != no_user:
+            return Response('Unauthorized', status=401)
+
         reserved_offers = ReservedOffer.objects.filter(id_user=no_user)
         serializer = ReservedOfferSerializer(reserved_offers, many=True)
+
+        remove_user_infos(serializer)
+
         return Response(serializer.data)
 
 
@@ -209,9 +228,15 @@ class ReservedOffersByRecruiter(APIView):
     """
 
     def get(self, request, no_recruiter, format=None):
+        if request.user.is_anonymous or request.user.id != no_recruiter:
+            return Response('Unauthorized', status=401)
+
         reserved_offers = ReservedOffer.objects.filter(
             id_recruiter=no_recruiter)
         serializer = ReservedOfferSerializer(reserved_offers, many=True)
+
+        remove_user_infos(serializer)
+
         return Response(serializer.data)
 
 
@@ -226,17 +251,23 @@ class ReservedOfferDetail(APIView):
         except User.DoesNotExist:
             raise Http404
 
-    def get(self, request, id_reserved_offer, format=None):
-        reserved_offer = self.get_object(id_reserved_offer)
-        serializer = ReservedOfferSerializer(reserved_offer)
-        return Response(serializer.data)
+    # def get(self, request, id_reserved_offer, format=None):
+    #     reserved_offer = self.get_object(id_reserved_offer)
+    #     serializer = ReservedOfferSerializer(reserved_offer)
+    #     return Response(serializer.data)
 
     def delete(self, request, id_reserved_offer, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         reserved_offer = self.get_object(id_reserved_offer)
         reserved_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, id_reserved_offer, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         reserved_offer = self.get_object(id_reserved_offer)
         serializer = ReservedOfferCreationSerializer(
             reserved_offer, data=request.data)
@@ -261,10 +292,14 @@ class TerminatedOffers(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         serializer = TerminatedOfferCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -274,8 +309,14 @@ class TerminatedOffersByUser(APIView):
     """
 
     def get(self, request, no_user, format=None):
+        if request.user.is_anonymous or request.user.id != no_user:
+            return Response('Unauthorized', status=401)
+
         terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)
         serializer = TerminatedOfferSerializer(terminated_offers, many=True)
+
+        remove_user_infos(serializer)
+
         return Response(serializer.data)
 
 
@@ -285,9 +326,15 @@ class TerminatedOffersByRecruiter(APIView):
     """
 
     def get(self, request, no_recruiter, format=None):
+        if request.user.is_anonymous or request.user.id != no_recruiter:
+            return Response('Unauthorized', status=401)
+
         terminated_offers = TerminatedOffer.objects.filter(
             id_recruiter=no_recruiter)
         serializer = TerminatedOfferSerializer(terminated_offers, many=True)
+
+        remove_user_infos(serializer)
+
         return Response(serializer.data)
 
 
@@ -302,17 +349,23 @@ class TerminatedOfferDetail(APIView):
         except User.DoesNotExist:
             raise Http404
 
-    def get(self, request, id_terminated_offer, format=None):
-        terminated_offer = self.get_object(id_terminated_offer)
-        serializer = TerminatedOfferSerializer(terminated_offer)
-        return Response(serializer.data)
+    # def get(self, request, id_terminated_offer, format=None):
+    #     terminated_offer = self.get_object(id_terminated_offer)
+    #     serializer = TerminatedOfferSerializer(terminated_offer)
+    #     return Response(serializer.data)
 
     def delete(self, request, id_terminated_offer, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         terminated_offer = self.get_object(id_terminated_offer)
         terminated_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, id_terminated_offer, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=401)
+
         terminated_offer = self.get_object(id_terminated_offer)
         serializer = TerminatedOfferCreationSerializer(
             terminated_offer, data=request.data)
@@ -322,6 +375,27 @@ class TerminatedOfferDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # endregion
+
+
+def remove_user_infos(serializer):
+    for elem in serializer.data:
+        elem['user'] = {
+            'id': elem['id_user']['id'],
+            'last_name': elem['id_user']['last_name'],
+            'first_name': elem['id_user']['first_name'],
+            'username': elem['id_user']['username'],
+        }
+        del elem['id_user']
+
+        elem['recruiter'] = {
+            'id': elem['id_recruiter']['id'],
+            'last_name': elem['id_recruiter']['last_name'],
+            'first_name': elem['id_recruiter']['first_name'],
+            'username': elem['id_recruiter']['username'],
+        }
+        del elem['id_recruiter']
+
+    return serializer.data
 
 
 """
