@@ -1,4 +1,6 @@
 import json
+from django.http import response
+import requests
 from django.db.models import Q
 from django.http import Http404
 from django.http.response import HttpResponse, JsonResponse
@@ -19,7 +21,10 @@ from rest_framework.schemas import AutoSchema
 
 from functools import reduce
 from operator import and_
+from pprint import pprint
+from math import cos, asin, sqrt, pi
 
+MAPBOX_MATRIX_KEY = "pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA"
 
 class Offers(APIView):
 
@@ -122,6 +127,63 @@ class ActiveOffers(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ActiveOffersDistance(APIView):
+    """
+    Permet d'avoir les offres qui se .
+    """
+    def get_me(self, id):
+        self.me = UserInfo.objects.get(user_id=id)
+
+    def haversine(self, lat1, lon1, lat2, lon2):
+        p = pi/180
+        a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p) * cos(lat2*p) * (1-cos((lon2-lon1)*p))/2
+        return 12742 * asin(sqrt(a))
+
+    def check_distance(self, offer):
+        employe = UserInfo.objects.get(user_id=offer['user'])
+        dist = self.haversine(float(self.me.location_lat), float(self.me.location_lon), float(employe.location_lat), float(employe.location_lon))
+        if dist < float(offer['max_distance']):
+            return self.driving_distance(employe.location_lon, employe.location_lat, offer['max_distance'])
+        else:
+            return False
+    
+    def driving_distance(self, employe_lon, employe_lat, max_distance):
+        #if driving distance > offer['max_distance'] then exclude from candidates
+        formated_url = "https://api.mapbox.com/directions/v5/mapbox/driving/{0},{1};{2},{3}?access_token={4}".format(self.me.location_lon, self.me.location_lat, employe_lon, employe_lat, MAPBOX_MATRIX_KEY)
+        response = requests.get(formated_url)
+        data = response.json()
+        print(data)
+        if data['code'] == 'NoRoute':
+            return False
+        else:
+            print(data['routes'][0]['distance'])
+            return float(data['routes'][0]['distance']) < float(max_distance)
+
+    def potential_candidates(self, offers):
+        #zipped = zip([me_id]*len(offers), offers) # [(1, offer1), (1, offer2), (1, offer3)]
+        potential_offers = map(self.check_distance, offers) # true false true
+        return [d for (d, keep) in zip(offers, potential_offers) if keep] # [offer1, offer3]
+
+    def get_offers(self):
+        active_offers = list(ActiveOffer.objects.all().values_list('id_offer', flat=True))
+        return Offer.objects.filter(id__in=active_offers)
+
+    def get(self, request, format=None):
+        active_offers = self.get_offers()
+        serializer = OfferSerializer(active_offers, many=True)
+       
+        # Pass active offers to distance sort
+        self.get_me(request.user.id)
+        candidates = self.potential_candidates([dict(obj) for obj in serializer.data])
+        #self.potential_candidates(request.user.id, serializer.data)
+        return Response(candidates)
+
+    def post(self, request, format=None):
+        serializer = ActiveOfferSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ActiveOffersByUser(APIView):
     """
@@ -335,8 +397,9 @@ def search(request):
     queryset = Offer.objects.filter(id__in=active_offers)
 
     if "type-service" in request.GET:
-        queryset = queryset.filter(
-            type_service__icontains=request.GET.get('type-service'))
+        if not request.GET.get('type-service') == 'Tout':
+            queryset = queryset.filter(
+                type_service__icontains=request.GET.get('type-service'))
 
     if "day-of-week" in request.GET:
         date = request.GET.get('date')
@@ -364,5 +427,6 @@ def search(request):
         queryset = queryset.filter(
             reduce(and_, (Q(description__icontains=mot) for mot in mots_cles)))
 
+    
     serializer = OfferSerializer(queryset, many=True)
     return Response(serializer.data)
