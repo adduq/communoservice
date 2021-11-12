@@ -151,12 +151,7 @@
 
                 <div class="field mb-2 mr-6">
                   <label class="label">Expiration</label>
-                  <input
-                    type="date"
-                    class="datepicker"
-                    v-bind:min="tomorrow"
-                    v-model="expirationDate"
-                  />
+                  <input type="date" class="datepicker" v-bind:min="tomorrow" />
                 </div>
               </div>
 
@@ -266,9 +261,12 @@
                 <!-- <Calendar /> -->
                 <DatePicker
                   v-model="range"
-                  mode="dateTime"
+                  mode="date"
                   :masks="masks"
                   is-range
+                  :min-date="minDate"
+                  v-on:drag="clickOnDatePicker"
+                  :attributes="attributes"
                 />
               </div>
 
@@ -612,13 +610,42 @@ export default {
       // step3Completed: false,
       // clickedSend: false,
       // confirmeCreation: false,
-      range: {
-        start: new Date(2020, 0, 6),
-        end: new Date(2020, 0, 23),
-      },
+      attributes: [
+        {
+          key: "today",
+          highlight: {
+            color: "purple",
+            fillMode: "solid",
+            contentClass: "italic",
+          },
+          dates: new Date(2021, 11, 12),
+        },
+        {
+          highlight: {
+            color: "purple",
+            fillMode: "light",
+          },
+          dates: new Date(2021, 11, 13),
+        },
+        {
+          highlight: {
+            color: "purple",
+            fillMode: "outline",
+          },
+          dates: new Date(2021, 11, 14),
+        },
+      ],
+      range: { start: new Date(2021, 11, 16), end: new Date(2021, 11, 29) },
       masks: {
-        input: "YYYY-MM-DD h:mm A",
+        title: "MMMM YYYY",
+        weekdays: "W",
+        navMonths: "MMM",
+        input: ["L", "YYYY-MM-DD", "YYYY/MM/DD"],
+        dayPopover: "WWW, MMM D, YYYY",
+        data: ["YYYY-MM-DD"],
       },
+      daysPattern: [5, 4],
+      minDate: new Date(),
       activeOffers: [],
       terminatedOffersForUser: [],
       terminatedOffersForRecruiter: [],
@@ -632,7 +659,6 @@ export default {
       description: "",
       hourlyRate: 10.5,
       maxDistance: 2,
-      expirationDate: "",
       daysSelected: {
         monday: false,
         tuesday: false,
@@ -643,8 +669,8 @@ export default {
         sunday: false,
       },
 
-      startDate: String,
-      endDate: String,
+      startDate: "",
+      endDate: "",
       profileSwitch: false,
       userIsActive: true,
       userInfo: {},
@@ -672,6 +698,9 @@ export default {
     test.render();
   },
   methods: {
+    clickOnDatePicker(value) {
+      console.log("Start : " + value.start + "     End : " + value.end);
+    },
     select(info) {
       alert("selected " + info.startStr + " to " + info.endStr);
     },
@@ -776,10 +805,10 @@ export default {
         this.errors.push("La distance maximal doit être positive.");
       }
       let tomorrow = new Date();
-      let selectedDate = new Date(this.expirationDate);
-      if (selectedDate.getTime() < tomorrow.getTime()) {
-        this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
-      }
+      // let selectedDate = new Date(this.expirationDate);
+      // if (selectedDate.getTime() < tomorrow.getTime()) {
+      //   this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
+      // }
 
       if (!this.errors.length) {
         this.modalCreateisActive = true;
@@ -812,7 +841,6 @@ export default {
         description: this.description,
         hourly_rate: this.hourlyRate,
         max_distance: this.maxDistance,
-        expiration_date: expiration,
         monday: this.daysSelected.monday,
         tuesday: this.daysSelected.tuesday,
         wednesday: this.daysSelected.wednesday,
@@ -820,8 +848,10 @@ export default {
         friday: this.daysSelected.friday,
         saturday: this.daysSelected.saturday,
         sunday: this.daysSelected.sunday,
+        start_date: this.range.start.toISOString().substr(0, 10),
+        end_date: this.range.end.toISOString().substr(0, 10),
       };
-      //alert(JSON.stringify(newOffer));//pour validation.
+      alert(JSON.stringify(newOffer)); //pour validation.
       await axios
         .post("/api/v1/offers/", newOffer)
         .then((response) => {

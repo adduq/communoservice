@@ -46,7 +46,7 @@ class Offers(APIView):
 
         if self.user_can_create(request.user.id):
             serializer = OfferSerializer(data=request.data)
-            OfferSerializer.validate_date_range(request.date)
+            # OfferSerializer.validate_date_range(request.date)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
