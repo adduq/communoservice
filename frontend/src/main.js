@@ -21,7 +21,7 @@ if (process.env.VUE_APP_AXIOS_URL === undefined) {
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-createApp(App)
+app
 	.use(store)
 	.use(router, axios)
 	.component("Calendar", Calendar)

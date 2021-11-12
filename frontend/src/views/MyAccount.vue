@@ -108,11 +108,18 @@
 				</button>
 				<button
 					class="button profile-toggle"
-					v-on:click="profileSwitch = true"
+					v-on:click="generaterecruiterSection"
 					:class="profileSwitch == true ? 'is-success is-selected' : ''"
 				>
 					Employeur
 				</button>
+				<!-- <button
+					class="button profile-toggle"
+					v-on:click="profileSwitch = true"
+					:class="profileSwitch == true ? 'is-success is-selected' : ''"
+				>
+					Employeur
+				</button> -->
 			</div>
 		</div>
 		<div class="columns">
@@ -318,10 +325,9 @@
 					</div>
 				</div>
 
-				<div class="column">
-					<div class="box">
-						<p class="title has-text-centered">Mes services actifs</p>
-
+				<div class="column box mr-4">
+					<p class="title has-text-centered">Mes services actifs</p>
+					<div class="boxOverflow">
 						<DetailedOffer
 							v-for="offer in activeOffers"
 							v-bind:key="offer.id"
@@ -330,10 +336,9 @@
 					</div>
 				</div>
 
-				<div class="column">
-					<div class="box">
-						<p class="title has-text-centered">Mes services réservés</p>
-
+				<div class="column box mr-4">
+					<p class="title has-text-centered">Mes services réservés</p>
+					<div class="boxOverflow">
 						<ReservedOffer
 							v-for="offer in reservedOffersForUser"
 							v-bind:key="offer.id"
@@ -342,10 +347,9 @@
 					</div>
 				</div>
 
-				<div class="column">
-					<div class="box">
-						<p class="title has-text-centered">Historique</p>
-
+				<div class="column box mb-5">
+					<p class="title has-text-centered">Historique</p>
+					<div class="boxOverflow">
 						<TerminatedOffer
 							v-for="offer in terminatedOffersForUser"
 							v-bind:key="offer.id"
@@ -355,26 +359,26 @@
 				</div>
 			</template>
 			<template v-if="profileSwitch == true">
-				<div class="column">
-					<div class="box">
-						<p class="title has-text-centered">Mes services prévus</p>
-
+				<div class="column box mr-4">
+					<p class="title has-text-centered">Mes services prévus</p>
+					<div class="boxOverflow">
 						<ReservedOffer
 							v-for="offer in reservedOffersForRecruiter"
 							v-bind:key="offer.id"
 							v-bind:reservedOffer="offer"
+							v-bind:isRecruiterCard="true"
 						/>
 					</div>
 				</div>
 
-				<div class="column">
-					<div class="box">
-						<p class="title has-text-centered">Historique</p>
-
+				<div class="column box mb-5">
+					<p class="title has-text-centered">Historique</p>
+					<div class="boxOverflow">
 						<TerminatedOffer
 							v-for="offer in terminatedOffersForRecruiter"
 							v-bind:key="offer.id"
 							v-bind:terminatedOffer="offer"
+							v-bind:isRecruiterCard="true"
 						/>
 					</div>
 				</div>
@@ -483,12 +487,6 @@ export default {
 		this.tomorrow = this.getTomorrow();
 		this.getServiceTypes();
 	},
-	// create() {
-	// 	let test = document.getElementsByClassName(".fc");
-	// 	// let test = this.$refs.fullCalendar.$el;
-	// 	console.log(test);
-	// 	test.render();
-	// },
 	methods: {
 		select(info) {
 			alert("selected " + info.startStr + " to " + info.endStr);
@@ -720,41 +718,25 @@ export default {
 					this.userIsActive = this.userInfo["is_online"];
 					this.getAllOffers(this.userInfo.user_id);
 					this.getTerminatedOffersForUser(this.userInfo.user_id);
-					this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
+					// this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
 					this.getReservedOffersForUser(this.userInfo.user_id);
-					this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					// this.getReservedOffersForRecruiter(this.userInfo.user_id);
 				})
 				.catch((error) => {
 					console.log(error);
 				});
 		},
-
-		// ! Note: TEST
-		// async terminateOffer(offer) {
-		// 	alert(offer.recruiter.first_name);
-		// },
-		// async cancelOffer(offer) {
-		// 	await axios
-		// 		.post("/api/v1/terminated-offers/", offer)
-		// 		.then((res) => {
-		// 			console.log(res.data);
-
-		// 			this.deleteFromReservedOffer(offer);
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// },
-		// async deleteFromReservedOffer(offer) {
-		// 	await axios
-		// 		.delete(`/api/v1/reserved-offers/${offer.id}`, offer)
-		// 		.then((res) => {
-		// 			console.log(res.data);
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// },
+		// ! TODO: Implémenter une limite et un offset pour les requêtes, puis new on scroll
+		async generaterecruiterSection() {
+			if (
+				!this.reservedOffersForRecruiter.length &&
+				!this.terminatedOffersForRecruiter.length
+			) {
+				await this.getReservedOffersForRecruiter(this.userInfo.user_id);
+				await this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
+			}
+			this.profileSwitch = true;
+		},
 	},
 };
 </script>
@@ -780,5 +762,10 @@ export default {
 .fc {
 	min-height: 50%;
 	min-width: 50%;
+}
+
+.boxOverflow {
+	max-height: 110vh;
+	overflow: hidden auto;
 }
 </style>

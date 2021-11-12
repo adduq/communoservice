@@ -1,87 +1,126 @@
 <template>
-  <div id="wrapper">
-    <nav class="navbar">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <h4 class="title is-4 has-text-weight-bold has-text-white">Communoservice</h4>
-        </a>
-        <div class="navbar-burger" @click="showNav = !showNav" :class="{ 'is-active': showNav }">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-      <div class="navbar-menu" :class="{ 'is-active': showNav }">
-        <div class="navbar-start">
-          <a class="navbar-item" href="/" @click="showNav = !showNav">
-            Accueil
-          </a>
-          <a class="navbar-item" href="https://github.com/VP-0/communoservice" @click="showNav = !showNav">
-            <span class="mr-2">GitHub</span>
-            <span class="icon is-small">
-              <i class="fab fa-github"></i>
-            </span>
-          </a>
-        </div>
-        <div class="navbar-end">
-          <template v-if="$store.state.isAuthenticated">
-            <router-link to="/mon-compte" class="navbar-item" @click="showNav = !showNav">
-              <span class="mr-3">Mon compte</span>
-              <span class="icon is-small mr-3">
-                <i class="fas fa-user-circle"></i>
-              </span>
-            </router-link>
-            <div class="navbar-item">
-              <div class="dropdown is-hoverable" :class="dropdownRight ? 'is-right' : 'is-left'">
-                <div class="dropdown-trigger">
-                  <button class="button is-rounded has-text-centered" aria-haspopup="true"
-                    aria-controls="dropdown-menu3">
-                    <span class="icon is-small">
-                      <i class="fas fa-angle-down" aria-hidden="true"></i>
-                    </span>
-                  </button>
-                </div>
-                <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
-                  <div class="dropdown-content has-text-left">
-                    <a href="#" class="dropdown-item" v-on:click="this.modalSettingsisActive = !this.modalSettingsisActive; this.showNav = !this.showNav">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-cog"></i>
-                      </span>
-                      <span> Paramètres </span>
-                    </a>
-                    <hr class="dropdown-divider" />
-                    <a href="#" @click="logout(); this.showNav = !this.showNav" class="dropdown-item has-text-danger">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-sign-out-alt"></i>
-                      </span>
-                      <span> Déconnexion </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+	<div id="wrapper">
+		<nav class="navbar">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="/">
+					<h4 class="title is-4 has-text-weight-bold has-text-white">
+						Communoservice
+					</h4>
+				</a>
+				<div
+					class="navbar-burger"
+					@click="showNav = !showNav"
+					:class="{ 'is-active': showNav }"
+				>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</div>
+			<div class="navbar-menu" :class="{ 'is-active': showNav }">
+				<div class="navbar-start">
+					<a class="navbar-item" href="/" @click="showNav = !showNav">
+						Accueil
+					</a>
+					<a
+						class="navbar-item"
+						href="https://github.com/VP-0/communoservice"
+						@click="showNav = !showNav"
+					>
+						<span class="mr-2">GitHub</span>
+						<span class="icon is-small">
+							<i class="fab fa-github"></i>
+						</span>
+					</a>
+				</div>
+				<div class="navbar-end">
+					<template v-if="$store.state.isAuthenticated">
+						<router-link
+							to="/mon-compte"
+							class="navbar-item"
+							@click="showNav = !showNav"
+						>
+							<span class="mr-3">Mon compte</span>
+							<span class="icon is-small mr-3">
+								<i class="fas fa-user-circle"></i>
+							</span>
+						</router-link>
+						<div class="navbar-item">
+							<div
+								class="dropdown is-hoverable"
+								:class="dropdownRight ? 'is-right' : 'is-left'"
+							>
+								<div class="dropdown-trigger">
+									<button
+										class="button is-rounded has-text-centered"
+										aria-haspopup="true"
+										aria-controls="dropdown-menu3"
+									>
+										<span class="icon is-small">
+											<i class="fas fa-angle-down" aria-hidden="true"></i>
+										</span>
+									</button>
+								</div>
+								<div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
+									<div class="dropdown-content has-text-left">
+										<a
+											href="#"
+											class="dropdown-item"
+											v-on:click="
+												this.modalSettingsisActive = !this
+													.modalSettingsisActive;
+												this.showNav = !this.showNav;
+											"
+										>
+											<span class="icon is-small mr-3">
+												<i class="fas fa-cog"></i>
+											</span>
+											<span> Paramètres </span>
+										</a>
+										<hr class="dropdown-divider" />
+										<a
+											href="#"
+											@click="
+												logout();
+												this.showNav = !this.showNav;
+											"
+											class="dropdown-item has-text-danger"
+										>
+											<span class="icon is-small mr-3">
+												<i class="fas fa-sign-out-alt"></i>
+											</span>
+											<span> Déconnexion </span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</template>
 
-          <template v-else>
-            <router-link to="/connexion" class="navbar-item" @click="this.showNav = !this.showNav">
-              <span class="mr-3">Connexion</span>
-              <span class="icon is-small mr-3">
-                <i class="fas fa-sign-in-alt"></i>
-              </span>
-            </router-link>
-          </template>
-        </div>
-      </div>
-    </nav>
-    <section class="section">
-      <router-view />
-    </section>
+					<template v-else>
+						<router-link
+							to="/connexion"
+							class="navbar-item"
+							@click="this.showNav = !this.showNav"
+						>
+							<span class="mr-3">Connexion</span>
+							<span class="icon is-small mr-3">
+								<i class="fas fa-sign-in-alt"></i>
+							</span>
+						</router-link>
+					</template>
+				</div>
+			</div>
+		</nav>
+		<section class="section">
+			<router-view />
+		</section>
 
-    <SettingsModal 
-      v-if="modalSettingsisActive" 
-      @exitSettingsModal="modalSettingsisActive = !modalSettingsisActive"
-    >
-    </SettingsModal>
+		<SettingsModal
+			v-if="modalSettingsisActive"
+			@exitSettingsModal="modalSettingsisActive = !modalSettingsisActive"
+		>
+		</SettingsModal>
 
 		<footer class="footer">
 			<div class="content has-text-centered">
@@ -96,51 +135,50 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import SettingsModal from "@/components/SettingsModal";
-  import {
-    toast
-  } from "bulma-toast";
-  export default {
-    data() {
-      return {
-        showNav: false,
-        window: {
-          width: 0,
-          height: 0
-        },
-        dropdownRight: true,
-        modalSettingsisActive: false,
-        userInfo: {},
-        updatedUserInfo: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          address: ''
-        }
-      };
-    },
-    components: {
-      SettingsModal,
-    },
-    beforeCreate() {
-      this.$store.commit("initializeStore");
-      const token = this.$store.state.token;
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = "Token " + token;
-      } else {
-        axios.defaults.headers.common["Authorization"] = "";
-      }
-      console.log(token);
-    },
-    mounted() {
-      window.addEventListener('resize', this.handleResize);
-      this.handleResize();
-    },
-    computed: {},
-    methods: {
-      async logout() {
-        await axios
+import axios from "axios";
+import SettingsModal from "@/components/SettingsModal";
+import { toast } from "bulma-toast";
+
+export default {
+	data() {
+		return {
+			showNav: false,
+			window: {
+				width: 0,
+				height: 0,
+			},
+			dropdownRight: true,
+			modalSettingsisActive: false,
+			userInfo: {},
+			updatedUserInfo: {
+				first_name: "",
+				last_name: "",
+				email: "",
+				address: "",
+			},
+		};
+	},
+	components: {
+		SettingsModal,
+	},
+	beforeCreate() {
+		this.$store.commit("initializeStore");
+		const token = this.$store.state.token;
+		if (token) {
+			axios.defaults.headers.common["Authorization"] = "Token " + token;
+		} else {
+			axios.defaults.headers.common["Authorization"] = "";
+		}
+		console.log(token);
+	},
+	mounted() {
+		window.addEventListener("resize", this.handleResize);
+		this.handleResize();
+	},
+	computed: {},
+	methods: {
+		async logout() {
+			await axios
 				.post("/api/v1/token/logout/")
 				.then((response) => {
 					axios.defaults.headers.common["Authorization"] = "";

@@ -1,5 +1,5 @@
 <template>
-	<div class="card mb-3 h-140" v-if="reservedOffer">
+	<div class="card mb-3 h-140">
 		<div class="card-content">
 			<div class="media">
 				<div class="media-left">
@@ -11,8 +11,13 @@
 					</figure>
 				</div>
 				<div class="media-content">
-					<p class="title is-4">{{ reservedOffer.id_offer.type_service }}</p>
-					<p class="subtitle is-6">
+					<p class="title is-4">
+						{{ reservedOffer.id_offer.type_service }}
+					</p>
+					<p
+						class="subtitle is-6"
+						v-if="this.reservedOffer.id_offer.description"
+					>
 						{{
 							reservedOffer.id_offer.description.length >= 50
 								? reservedOffer.id_offer.description.substring(0, 50) + "..."
@@ -25,10 +30,13 @@
 			<time datetime="2016-1-1" v-if="reservedOffer.reservation_date">
 				Réservé pour le : {{ reservedOffer.reservation_date }}
 			</time>
-			<p>
-				<!-- TODO: Différencier employé / employeur pour le référent -->
-				Référent : {{ reservedOffer.recruiter.first_name }}
-				{{ reservedOffer.recruiter.last_name }}
+			<p v-if="this.isRecruiterCard">
+				Employé : {{ reservedOffer.id_user.first_name }}
+				{{ reservedOffer.id_user.last_name }}
+			</p>
+			<p v-else>
+				Recruteur : {{ reservedOffer.id_recruiter.first_name }}
+				{{ reservedOffer.id_recruiter.last_name }}
 			</p>
 
 			<!-- <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between"> -->
@@ -60,7 +68,8 @@ import axios from "axios";
 export default {
 	name: "ReservedOffer",
 	props: {
-		reservedOffer: Object,
+		reservedOffer: null,
+		isRecruiterCard: false,
 	},
 	data() {
 		return {
@@ -72,47 +81,66 @@ export default {
 			},
 		};
 	},
-	mounted() {
-		console.log(this.reservedOffer ? "True" : "Nope");
-	},
 	methods: {
 		async cancelOffer() {
 			this.reservedOffer["status"] = this.statusDispo.CANCEL;
 			this.reservedOffer["completed_date"] = new Date()
 				.toISOString()
 				.split("T")[0];
-			this.reservedOffer["id_offer"] = this.reservedOffer.id_offer.id;
-			this.reservedOffer[
-				"id_active_offer"
-			] = this.reservedOffer.id_active_offer.id;
-			this.reservedOffer["id_user"] = this.reservedOffer.user.id;
-			this.reservedOffer["id_recruiter"] = this.reservedOffer.recruiter.id;
 
-			await axios
-				.post("/api/v1/terminated-offers/", this.reservedOffer)
-				.then((res) => {
-					console.log(res.data);
-
-					this.deleteFromReservedOffer();
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+			await this.addToTerminatedOffer();
 		},
 		async terminateOffer() {
-			alert(this.reservedOffer.recruiter.first_name);
+			// alert("terminé");
+			this.addToParentTerminatedList(this.reservedOffer);
+			this.removeFromParentReservedList(this.reservedOffer);
 		},
-		async deleteFromReservedOffer() {
+		async addToTerminatedOffer() {
 			await axios
 				.delete(
 					`/api/v1/reserved-offers/${this.reservedOffer.id}`,
 					this.reservedOffer
 				)
 				.then((res) => {
-					console.log(res.data);
+					if (this.isRecruiterCard) {
+						this.$parent.getReservedOffersForRecruiter(
+							this.reservedOffer.id_recruiter.id
+						);
+					} else {
+						this.$parent.getReservedOffersForUser(
+							this.reservedOffer.id_user.id
+						);
+					}
+
+					this.deleteFromReservedOffer();
 				})
-				.catch((error) => {
-					console.log(error);
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		async deleteFromReservedOffer() {
+			this.reservedOffer["id_offer"] = this.reservedOffer.id_offer.id;
+			this.reservedOffer[
+				"id_active_offer"
+			] = this.reservedOffer.id_active_offer.id;
+			this.reservedOffer["id_user"] = this.reservedOffer.id_user.id;
+			this.reservedOffer["id_recruiter"] = this.reservedOffer.id_recruiter.id;
+
+			await axios
+				.post("/api/v1/terminated-offers/", this.reservedOffer)
+				.then((res) => {
+					if (this.isRecruiterCard) {
+						this.$parent.getTerminatedOffersForRecruiter(
+							this.reservedOffer["id_recruiter"]
+						);
+					} else {
+						this.$parent.getTerminatedOffersForUser(
+							this.reservedOffer["id_user"]
+						);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
 				});
 		},
 	},

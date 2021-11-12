@@ -299,7 +299,6 @@ class TerminatedOffers(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -386,6 +385,8 @@ def remove_user_infos(serializer):
             'username': elem['id_user']['username'],
         }
         del elem['id_user']
+        elem['id_user'] = elem['user']
+        del elem['user']
 
         elem['recruiter'] = {
             'id': elem['id_recruiter']['id'],
@@ -394,6 +395,8 @@ def remove_user_infos(serializer):
             'username': elem['id_recruiter']['username'],
         }
         del elem['id_recruiter']
+        elem['id_recruiter'] = elem['recruiter']
+        del elem['recruiter']
 
     return serializer.data
 
