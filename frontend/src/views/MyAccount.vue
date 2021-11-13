@@ -185,120 +185,99 @@
                 </div>
               </div>
 
-							<div class="field">
-								<label class="label">Disponibilités</label>
-								<div>
-									<div
-										class="columns is-mobile is-family-monospace buttons is-grouped is-justify-content-space-around mt-2"
-									>
-										<div class="control ml-0">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.monday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.monday = !daysSelected.monday
-												"
-											>
-												L
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.tuesday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.tuesday = !daysSelected.tuesday
-												"
-											>
-												M
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.wednesday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.wednesday = !daysSelected.wednesday
-												"
-											>
-												M
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.thursday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.thursday = !daysSelected.thursday
-												"
-											>
-												J
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.friday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.friday = !daysSelected.friday
-												"
-											>
-												V
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.saturday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.saturday = !daysSelected.saturday
-												"
-											>
-												S
-											</a>
-										</div>
-										<div class="control mr-0">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.sunday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.sunday = !daysSelected.sunday
-												"
-											>
-												D
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
+              <div class="field">
+                <label class="label">Disponibilités</label>
+                <div>
+                  <div
+                    class="columns is-mobile is-family-monospace buttons is-grouped is-justify-content-space-around mt-2"
+                  >
+                    <div class="control ml-0">
+                      <a
+                        class="button is-rounded"
+                        :class="daysSelected.monday ? 'is-success' : ''"
+                        v-on:click="
+                          daysSelected.monday = !daysSelected.monday;
+                          clickOnButton(2);
+                        "
+                      >
+                        L
+                      </a>
+                    </div>
+                    <div class="control">
+                      <a
+                        class="button is-rounded"
+                        :class="daysSelected.tuesday ? 'is-success' : ''"
+                        v-on:click="
+                          daysSelected.tuesday = !daysSelected.tuesday;
+                          clickOnButton(3);
+                        "
+                      >
+                        M
+                      </a>
+                    </div>
+                    <div class="control">
+                      <a
+                        class="button is-rounded"
+                        :class="daysSelected.wednesday ? 'is-success' : ''"
+                        v-on:click="
+                          daysSelected.wednesday = !daysSelected.wednesday;
+                          clickOnButton(4);
+                        "
+                      >
+                        M
+                      </a>
+                    </div>
+                    <div class="control">
+                      <a
+                        class="button is-rounded"
+                        :class="daysSelected.thursday ? 'is-success' : ''"
+                        v-on:click="
+                          daysSelected.thursday = !daysSelected.thursday;
+                          clickOnButton(5);
+                        "
+                      >
+                        J
+                      </a>
+                    </div>
+                    <div class="control">
+                      <a
+                        class="button is-rounded"
+                        :class="daysSelected.friday ? 'is-success' : ''"
+                        v-on:click="
+                          daysSelected.friday = !daysSelected.friday;
+                          clickOnButton(6);
+                        "
+                      >
+                        V
+                      </a>
+                    </div>
+                    <div class="control">
+                      <a
+                        class="button is-rounded"
+                        :class="daysSelected.saturday ? 'is-success' : ''"
+                        v-on:click="
+                          daysSelected.saturday = !daysSelected.saturday;
+                          clickOnButton(7);
+                        "
+                      >
+                        S
+                      </a>
+                    </div>
+                    <div class="control mr-0">
+                      <a
+                        class="button is-rounded"
+                        :class="daysSelected.sunday ? 'is-success' : ''"
+                        v-on:click="
+                          daysSelected.sunday = !daysSelected.sunday;
+                          clickOnButton(1);
+                        "
+                      >
+                        D
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <label class="label">Taux horaire</label>
               <div class="field has-addons">
@@ -329,8 +308,12 @@
                   :masks="masks"
                   is-range
                   :min-date="minDate"
-                  v-on:drag="clickOnDatePicker"
                   :attributes="attributes"
+                  :drag-attribute="dragAttribute"
+                  :select-attribute="selectAttribute"
+                  @change="inputEvent"
+                  @drag="clickOnDrag"
+                  :key="componentKey"
                 />
               </div>
 
@@ -528,6 +511,12 @@ import { toast } from "bulma-toast";
 //import { Calendar, DatePicker } from "v-calendar";
 export default {
   name: "MyAccount",
+  //Les components qu'on veut utiliser
+  components: {
+    DetailedOffer,
+    TerminatedOffer,
+    ReservedOffer,
+  },
   data() {
     return {
       // currentStep: 1,
@@ -535,42 +524,7 @@ export default {
       // step3Completed: false,
       // clickedSend: false,
       // confirmeCreation: false,
-      attributes: [
-        {
-          key: "today",
-          highlight: {
-            color: "purple",
-            fillMode: "solid",
-            contentClass: "italic",
-          },
-          dates: new Date(2021, 11, 12),
-        },
-        {
-          highlight: {
-            color: "purple",
-            fillMode: "light",
-          },
-          dates: new Date(2021, 11, 13),
-        },
-        {
-          highlight: {
-            color: "purple",
-            fillMode: "outline",
-          },
-          dates: new Date(2021, 11, 14),
-        },
-      ],
-      range: { start: new Date(2021, 11, 16), end: new Date(2021, 11, 29) },
-      masks: {
-        title: "MMMM YYYY",
-        weekdays: "W",
-        navMonths: "MMM",
-        input: ["L", "YYYY-MM-DD", "YYYY/MM/DD"],
-        dayPopover: "WWW, MMM D, YYYY",
-        data: ["YYYY-MM-DD"],
-      },
-      daysPattern: [5, 4],
-      minDate: new Date(),
+
       activeOffers: [],
       terminatedOffersForUser: [],
       terminatedOffersForRecruiter: [],
@@ -594,21 +548,48 @@ export default {
         sunday: false,
       },
 
-      startDate: "",
-      endDate: "",
       profileSwitch: false,
       userIsActive: true,
       userInfo: {},
       errors: [],
       tomorrow: "",
       creationModalIsActive: false,
+
+      ///////////////////////////////////////
+      startDate: "",
+      endDate: "",
+      minDate: new Date(),
+      componenKey: 0,
+      username: "",
+      password: "",
+      errors: [],
+      dragAttribute: {
+        highlight: {
+          color: "green",
+          fillMode: "light",
+        },
+      },
+      selectAttribute: {
+        highlight: {
+          color: "green",
+          fillMode: "light",
+        },
+        dates: this.range,
+        order: 0,
+      },
+
+      attributes: [],
+      range: null,
+      masks: {
+        title: "MMMM YYYY",
+        weekdays: "W",
+        navMonths: "MMM",
+        input: ["L", "YYYY-MM-DD", "YYYY/MM/DD"],
+        dayPopover: "WWW, MMM D, YYYY",
+        data: ["YYYY-MM-DD"],
+      },
+      /////////////////////////////////////
     };
-  },
-  //Les components qu'on veut utiliser
-  components: {
-    DetailedOffer,
-    TerminatedOffer,
-    ReservedOffer,
   },
   mounted() {
     document.title = "Mon compte | Communoservice";
@@ -779,75 +760,182 @@ export default {
           this.creationModalIsActive = false;
           // this.confirmeCreation = false;
 
-					this.addActiveOffers({
-						id_offer: response.data.id,
-						id_user: response.data.user,
-					});
-				})
-				.catch((error) => {
-					this.modalCreateisActive = false;
-					this.creationModalIsActive = true;
-					if (error.response.data["error"] == "profile_incomplete") {
-						toast({
-							message:
-								"Profil incomplet. Veuillez completer votre profil dans les paramètres.",
-							type: "is-danger",
-							dismissible: true,
-							pauseOnHover: true,
-							duration: 4000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					} else {
-						toast({
-							message:
-								"Une erreur est survenue. Essayez à nouveau.",
-							type: "is-danger",
-							dismissible: true,
-							pauseOnHover: true,
-							duration: 4000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					}
-				});
-		},
-		toSelectDate(payload) {
-			alert(payload);
-		},
-		async addActiveOffers(activeOffer) {
-			await axios
-				.post("/api/v1/active-offers/", activeOffer)
-				.then((response, userId) => {
-					this.getAllOffers(activeOffer.id_user);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		async getUserInfo() {
-			await axios
-				.get("/api/v1/userinfo/me/")
-				.then((response) => {
-					this.userInfo = response.data;
-					this.userIsActive = this.userInfo["is_online"];
-					this.getAllOffers(this.userInfo.user_id);
-					this.getTerminatedOffersForUser(this.userInfo.user_id);
-					this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
-					this.getReservedOffersForUser(this.userInfo.user_id);
-					this.getReservedOffersForRecruiter(this.userInfo.user_id);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-	},
+          this.addActiveOffers({
+            id_offer: response.data.id,
+            id_user: response.data.user,
+          });
+        })
+        .catch((error) => {
+          this.modalCreateisActive = false;
+          this.creationModalIsActive = true;
+          // this.confirmeCreation = false;
+          if (error.response.data["error"] == "profile_incomplete") {
+            toast({
+              message:
+                "Profil incomplet. Veuillez completer votre profil dans les paramètres.",
+              type: "is-danger",
+              dismissible: true,
+              pauseOnHover: true,
+              duration: 4000,
+              position: "bottom-right",
+              animate: {
+                in: "fadeInRightBig",
+                out: "fadeOutRightBig",
+              },
+            });
+            // this.errors.push(
+            // 	"Profil incomplet. Veuillez completer votre profil dans les paramètres."
+            // );
+          } else {
+            // this.errors.push("Une erreur est survenue. Essayez à nouveau.");
+            toast({
+              message: "Une erreur est survenue. Essayez à nouveau.",
+              type: "is-danger",
+              dismissible: true,
+              pauseOnHover: true,
+              duration: 4000,
+              position: "bottom-right",
+              animate: {
+                in: "fadeInRightBig",
+                out: "fadeOutRightBig",
+              },
+            });
+          }
+          // console.log(error);
+        });
+    },
+    toSelectDate(payload) {
+      alert(payload);
+    },
+    async addActiveOffers(activeOffer) {
+      await axios
+        .post("/api/v1/active-offers/", activeOffer)
+        .then((response, userId) => {
+          this.getAllOffers(activeOffer.id_user);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async getUserInfo() {
+      await axios
+        .get("/api/v1/userinfo/me/")
+        .then((response) => {
+          this.userInfo = response.data;
+          this.userIsActive = this.userInfo["is_online"];
+          this.getAllOffers(this.userInfo.user_id);
+          this.getTerminatedOffersForUser(this.userInfo.user_id);
+          this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
+          this.getReservedOffersForUser(this.userInfo.user_id);
+          this.getReservedOffersForRecruiter(this.userInfo.user_id);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    /////////////////////////////////////////////////
+    datepickerChanged() {
+      console.log("day clicked");
+      this.resetPattern();
+    },
+    InputEvent() {
+      console.log("new input!");
+    },
+    confirm() {
+      console.log("Choix : " + JSON.stringify(this.range));
+      console.log("Valeur de Value : " + JSON.stringify(this.range.value));
+      console.log("Pattern choisi : " + JSON.stringify(this.attributes));
+    },
+    clickOnButton(weekDayIndex) {
+      alert(JSON.stringify(this.attributes));
+      let debut = this.range.start;
+      let fin = this.range.end;
+      let span = this.range.end - this.range.start;
+
+      if (span == 0) {
+        console.log("Pattern can't be added");
+        return;
+      }
+      console.log(weekDayIndex);
+      let notFound = true;
+      let i = 0;
+      let indexToDelete = -1;
+      while (notFound && i < this.attributes.length) {
+        if (this.attributes[i].hasOwnProperty("key")) {
+          console.log("Has property Key!!!");
+          if (this.attributes[i].key == weekDayIndex) {
+            console.log("Has the right value : " + this.attributes[i].key);
+
+            indexToDelete = i;
+            console.log("toDelete : " + i);
+            notFound = false;
+          } else i++;
+        }
+      }
+
+      if (indexToDelete != -1) {
+        //Est présent
+        this.attributes.splice(indexToDelete, 1);
+      } else {
+        this.attributes.push({
+          key: weekDayIndex,
+          highlight: {
+            color: "green",
+            fillMode: "solid",
+          },
+          dates: {
+            start: debut,
+            end: fin,
+            weekdays: [weekDayIndex],
+          },
+          order: 1,
+        });
+      }
+    },
+    secondFunction() {
+      alert("Seconde fonction.");
+    },
+    resetPattern() {
+      console.log(JSON.stringify(this.range));
+      console.log("Suppression du pattern.");
+
+      while (this.attributes.length > 0) {
+        console.log("Remove one attribute.");
+        this.attributes.pop();
+      } //note: this.attributes=[] ne marche pas.
+    },
+    clickOnDrag() {
+      this.componentKey += 1;
+      this.range = null;
+      this.resetPattern();
+      return;
+      this.attributes = [
+        {
+          highlight: {
+            start: { fillMode: "outline" },
+            base: { fillMode: "solid" },
+            end: { fillMode: "outline" },
+          },
+          dates: { start: new Date(2021, 11, 14), end: new Date(2021, 11, 18) },
+        },
+      ];
+      this.selectAttribute = {
+        highlight: {
+          start: { fillMode: "outline" },
+          base: { fillMode: "light" },
+          end: { fillMode: "outline" },
+        },
+      };
+      console.log("click drag");
+    },
+
+    resetRange() {
+      if (this.resetNextDayClick) {
+        this.resetNextDayClick = false;
+        this.$nextTick(() => (this.range = null));
+      }
+    },
+  },
 };
 </script>
 
