@@ -119,13 +119,6 @@
         },
         dropdownRight: true,
         modalSettingsisActive: false,
-        userInfo: {},
-        updatedUserInfo: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          address: ''
-        }
       };
     },
     components: {
@@ -188,82 +181,6 @@
 		openSettingsModal() {
 			this.getUserInfo();
 			this.modalSettingsisActive = !this.modalSettingsisActive;
-		},
-		async getUserInfo() {
-			await axios
-				.get("api/v1/userinfo/me/")
-				.then((response) => {
-					this.userInfo = response.data;
-					this.updatedUserInfo.first_name = response.data["first_name"];
-					this.updatedUserInfo.last_name = response.data["last_name"];
-					this.updatedUserInfo.email = response.data["email"];
-					this.updatedUserInfo.address = response.data["address"];
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		async validateUserInfo() {
-			let data = {};
-			if (this.updatedUserInfo.first_name != this.userInfo.first_name) {
-				data.first_name = this.updatedUserInfo.first_name;
-			}
-			if (this.updatedUserInfo.last_name != this.userInfo.last_name) {
-				data.last_name = this.updatedUserInfo.last_name;
-			}
-			if (this.updatedUserInfo.email != this.userInfo.email) {
-				data.email = this.updatedUserInfo.email;
-			}
-			if (this.updatedUserInfo.address != this.userInfo.address) {
-				data.address = this.updatedUserInfo.address;
-			}
-			if (Object.keys(data).length != 0) {
-				await axios
-					.put("api/v1/userinfo/me/update/", data)
-					.then((response) => {
-						this.userInfo = response.data;
-						toast({
-							message: "Informations sauvegardés avec succès!",
-							type: "is-success",
-							dismissible: true,
-							pauseOnHover: false,
-							duration: 3000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					})
-					.catch((error) => {
-						console.log(error);
-						toast({
-							message: "Une erreur est survenue...",
-							type: "is-danger",
-							dismissible: false,
-							pauseOnHover: false,
-							duration: 3000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					});
-			} else {
-				toast({
-					message: "Informations sauvegardés avec succès!",
-					type: "is-success",
-					dismissible: true,
-					pauseOnHover: false,
-					duration: 3000,
-					position: "bottom-right",
-					animate: {
-						in: "fadeInRightBig",
-						out: "fadeOutRightBig",
-					},
-				});
-			}
 		},
 		handleResize() {
 			this.window.width = window.innerWidth;

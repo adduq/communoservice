@@ -178,11 +178,22 @@
               },
             });
 
-            if(this.homeMarker && response.data.location_lon && response.data.location_lon){
-              this.homeMarker.remove();
+            if(response.data.location_lon && response.data.location_lon){
+              if(this.homeMarker){
+                this.homeMarker.remove();
+              }
               this.homeMarker = new mapboxgl.Marker()
               .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])
               .addTo(this.map);
+            }else{
+              if(this.homeMarker){
+                this.homeMarker.remove();
+              }
+              this.map.flyTo({
+                center: [-71.207981, 46.813878],
+                essential: true,
+                zoom: 9
+              });
             }
           })
           .catch((error)=>{
