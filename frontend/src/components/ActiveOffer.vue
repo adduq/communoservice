@@ -10,7 +10,7 @@
             />
           </figure>
         </div>
-        <div class="media-content">
+        <div class="media-content is-clipped">
           <p class="title is-4">{{offer.type_service}}</p>
           <p class="subtitle is-6">Location ici</p>
         </div>

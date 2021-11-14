@@ -12,8 +12,8 @@
 									class="is-rounded"
 									src="https://owcdn.net/img/5bda50b474984.jpg"
 								/>
-								<i
-									class="fas fa-circle"
+								<span
+									class="badge is-bottom-right"
 									:class="
 										userInfo.is_active
 											? 'active-icon'
@@ -22,7 +22,7 @@
 									:title="
 										userInfo.is_active ? 'Actif' : 'Inactif'
 									"
-								></i>
+								></span>
 							</figure>
 							<p class="mt-2">
 								<span
@@ -52,25 +52,13 @@
 								<i class="has-text-success">@</i>
 								{{ userInfo.username }}
 							</p>
+							<p v-if="userInfo.user_bio" class="has-text-grey mt-3 is-italic">{{ '“ ' +  userInfo.user_bio + ' ”'}}</p>
 						</div>
 					</div>
 					<div
 						v-if="!profileSwitch"
 						class="is-flex is-flex-wrap-wrap is-justify-content-space-evenly"
 					>
-						<a
-							href="#"
-							class="button is-align-self-center is-info"
-							v-on:click="openCreationModal()"
-						>
-							<span class="icon is-small mr-3">
-								<i
-									class="fa fa-plus-circle"
-									aria-hidden="true"
-								></i>
-							</span>
-							<span> Créer un service </span>
-						</a>
 						<div class="has-text-centered">
 							<p class="has-text-weight-bold is-size-3">
 								{{ userInfo.nb_services_given }}
@@ -386,12 +374,28 @@
 						<p class="title has-text-centered">
 							Mes services actifs
 						</p>
-
-						<DetailedOffer
-							v-for="offer in activeOffers"
-							v-bind:key="offer.id"
-							v-bind:offer="offer"
-						/>
+						<div class="offers-container">
+							<DetailedOffer
+								v-for="offer in activeOffers"
+								v-bind:key="offer.id"
+								v-bind:offer="offer"
+							/>
+						</div>
+						<div class="is-flex is-justify-content-center">
+							<a
+								href="#"
+								class="button is-info mt-5"
+								v-on:click="openCreationModal()"
+							>
+								<span class="icon is-small mr-3">
+									<i
+										class="fa fa-plus-circle"
+										aria-hidden="true"
+									></i>
+								</span>
+								<span> Créer un service </span>
+							</a>
+						</div>
 					</div>
 				</div>
 
@@ -400,24 +404,26 @@
 						<p class="title has-text-centered">
 							Mes services réservés
 						</p>
-
-						<ReservedOffer
-							v-for="offer in reservedOffersForUser"
-							v-bind:key="offer.id"
-							v-bind:reservedOffer="offer"
-						/>
+						<div class="offers-container">
+							<ReservedOffer
+								v-for="offer in reservedOffersForUser"
+								v-bind:key="offer.id"
+								v-bind:reservedOffer="offer"
+							/>
+						</div>
 					</div>
 				</div>
 
 				<div class="column">
 					<div class="box">
 						<p class="title has-text-centered">Historique</p>
-
-						<TerminatedOffer
-							v-for="offer in terminatedOffersForUser"
-							v-bind:key="offer.id"
-							v-bind:terminatedOffer="offer"
-						/>
+						<div class="offers-container">
+							<TerminatedOffer
+								v-for="offer in terminatedOffersForUser"
+								v-bind:key="offer.id"
+								v-bind:terminatedOffer="offer"
+							/>
+						</div>
 					</div>
 				</div>
 			</template>
@@ -427,24 +433,26 @@
 						<p class="title has-text-centered">
 							Mes services prévus
 						</p>
-
-						<ReservedOffer
-							v-for="offer in reservedOffersForRecruiter"
-							v-bind:key="offer.id"
-							v-bind:reservedOffer="offer"
-						/>
+						<div class="offers-container">
+							<ReservedOffer
+								v-for="offer in reservedOffersForRecruiter"
+								v-bind:key="offer.id"
+								v-bind:reservedOffer="offer"
+							/>
+						</div>
 					</div>
 				</div>
 
 				<div class="column">
 					<div class="box">
 						<p class="title has-text-centered">Historique</p>
-
-						<TerminatedOffer
-							v-for="offer in terminatedOffersForRecruiter"
-							v-bind:key="offer.id"
-							v-bind:terminatedOffer="offer"
-						/>
+						<div class="offers-container">
+							<TerminatedOffer
+								v-for="offer in terminatedOffersForRecruiter"
+								v-bind:key="offer.id"
+								v-bind:terminatedOffer="offer"
+							/>
+						</div>
 					</div>
 				</div>
 			</template>
@@ -778,5 +786,21 @@ export default {
 }
 option[value=""][disabled] {
 	display: none;
+}
+
+.offers-container{
+	max-height: 500px;
+	overflow: hidden;
+	overflow-y: scroll;
+}
+.offers-container::-webkit-scrollbar {
+  width: 14px;
+}
+
+.offers-container::-webkit-scrollbar-thumb {
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
+  background-color: #AAAAAA;
 }
 </style>

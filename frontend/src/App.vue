@@ -37,7 +37,7 @@
 					<button class="button is-rounded has-text-centered is-relative" aria-haspopup="true"
 						aria-controls="dropdown-menu3">
 						<span class="icon is-small">
-						<span class="badge is-danger">8</span>
+						<span class="badge is-danger notification-badge">8</span>
 						<i class="fas fa-angle-down" aria-hidden="true"></i>
 						</span>
 					</button>
@@ -318,21 +318,24 @@
 }
 
 .active-icon {
-	position: absolute;
-	right: 6%;
-	bottom: 6%;
-	font-size: 1.5em;
-	color: #3ef100;
-	box-shadow: 0px 0px 8px 0px lime;
-	border-radius: 9999px;
+	height: 20px!important;
+	min-width: 20px!important;
+	right: 14%!important;
+	bottom: 14%!important;
+	background-color: lime!important;
+	box-shadow: 0px 0px 8px 0px lime!important;
+}
+
+.notification-badge{
+	box-shadow: 0 0 6px 3px red!important;
 }
 
 .not-active-icon {
-	position: absolute;
-	right: 6%;
-	bottom: 6%;
-	font-size: 1.5em;
-	color: grey;
+	height: 20px!important;
+	min-width: 20px!important;
+	right: 14%!important;
+	bottom: 14%!important;
+	background-color: grey!important;
 }
 
 .tagline {

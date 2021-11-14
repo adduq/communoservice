@@ -262,11 +262,11 @@
 											class="is-rounded"
 											src="https://owcdn.net/img/5bda50b474984.jpg"
 										/>
-										<i
-											class="fas fa-circle"
-											:class="offerUserInfo ? 'active-icon' : 'not-active-icon'"
-											:title="offerUserInfo ? 'Actif' : 'Inactif'"
-										></i>
+										<span
+											class="badge is-bottom-right"
+											:class="offerUserInfo.is_online ? 'active-icon' : 'not-active-icon'"
+											:title="offerUserInfo.is_online ? 'Actif' : 'Inactif'"
+										></span>
 									</figure>
 									<p>
 										<span class="title is-4 is-bold">
