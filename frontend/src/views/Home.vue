@@ -568,7 +568,7 @@ export default {
 		async getAllOffers() {
 			this.isFetchingOffers = true;
 			await axios
-				.get("/api/v1/active-offers-distance/")
+				.get("/api/v1/active-offers/")
 				.then((response) => {
 					this.offers = response.data;
 				})
