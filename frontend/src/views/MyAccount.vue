@@ -52,7 +52,12 @@
 								<i class="has-text-success">@</i>
 								{{ userInfo.username }}
 							</p>
-							<p v-if="userInfo.user_bio" class="has-text-grey mt-3 is-italic">{{ '“ ' +  userInfo.user_bio + ' ”'}}</p>
+							<p
+								v-if="userInfo.user_bio"
+								class="has-text-grey mt-3 is-italic user-bio"
+							>
+								{{ "“ " + userInfo.user_bio + " ”" }}
+							</p>
 						</div>
 					</div>
 					<div
@@ -158,7 +163,12 @@
 												v-model="serviceType"
 												class="w-200"
 											>
-											    <option value="" disabled selected>Choisir parmi</option>
+												<option
+													value=""
+													disabled
+													selected
+													>Choisir parmi</option
+												>
 												<option
 													v-for="type in serviceTypes"
 													v-bind:key="type.name"
@@ -729,7 +739,6 @@ export default {
 								out: "fadeOutRightBig",
 							},
 						});
-
 					} else {
 						toast({
 							message:
@@ -788,19 +797,23 @@ option[value=""][disabled] {
 	display: none;
 }
 
-.offers-container{
+.offers-container {
 	max-height: 500px;
 	overflow: hidden;
 	overflow-y: scroll;
 }
 .offers-container::-webkit-scrollbar {
-  width: 14px;
+	width: 14px;
 }
 
 .offers-container::-webkit-scrollbar-thumb {
-  border: 4px solid rgba(0, 0, 0, 0);
-  background-clip: padding-box;
-  border-radius: 9999px;
-  background-color: #AAAAAA;
+	border: 4px solid rgba(0, 0, 0, 0);
+	background-clip: padding-box;
+	border-radius: 9999px;
+	background-color: #aaaaaa;
+}
+.user-bio{
+	margin:auto;
+	max-width: 500px;
 }
 </style>

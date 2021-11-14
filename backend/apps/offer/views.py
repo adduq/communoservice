@@ -24,7 +24,7 @@ from operator import and_
 from pprint import pprint
 from math import cos, asin, sqrt, pi
 
-MAPBOX_MATRIX_KEY = "pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA"
+PUBLIC_MAPBOX_KEY = "pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA"
 
 class Offers(APIView):
 
@@ -149,7 +149,7 @@ class ActiveOffersDistance(APIView):
     
     def driving_distance(self, employe_lon, employe_lat, max_distance):
         #if driving distance > offer['max_distance'] then exclude from candidates
-        formated_url = "https://api.mapbox.com/directions/v5/mapbox/driving/{0},{1};{2},{3}?access_token={4}".format(self.me.location_lon, self.me.location_lat, employe_lon, employe_lat, MAPBOX_MATRIX_KEY)
+        formated_url = "https://api.mapbox.com/directions/v5/mapbox/driving/{0},{1};{2},{3}?access_token={4}".format(self.me.location_lon, self.me.location_lat, employe_lon, employe_lat, PUBLIC_MAPBOX_KEY)
         response = requests.get(formated_url)
         data = response.json()
         print(data)
@@ -174,8 +174,10 @@ class ActiveOffersDistance(APIView):
        
         # Pass active offers to distance sort
         self.get_me(request.user.id)
-        candidates = self.potential_candidates([dict(obj) for obj in serializer.data])
-        #self.potential_candidates(request.user.id, serializer.data)
+        if self.me.location_lat != '' or self.me.location_lon != '':
+            candidates = self.potential_candidates([dict(obj) for obj in serializer.data])
+        else:
+            candidates = serializer.data
         return Response(candidates)
 
     def post(self, request, format=None):
