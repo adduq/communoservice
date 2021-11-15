@@ -9,34 +9,38 @@
                         v-on:click="$emit('exitSettingsModal', true)" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    <div class="field">
-                        <label class="label">Prénom</label>
-                        <div class="control">
-                            <input class="input" type="text" :placeholder="this.userInfo.first_name"
-                                v-model="this.updatedUserInfo.first_name">
-                        </div>
-                    </div>
+                  <div class="field">
+                      <label class="label">Prénom</label>
+                      <div class="control">
+                          <input class="input" type="text" :placeholder="this.userInfo.first_name"
+                              v-model="this.updatedUserInfo.first_name">
+                      </div>
+                  </div>
 
-                    <div class="field">
-                        <label class="label">Nom</label>
-                        <div class="control">
-                            <input class="input" type="text" :placeholder="this.userInfo.last_name"
-                                v-model="this.updatedUserInfo.last_name">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Courriel</label>
-                        <div class="control">
-                            <input class="input" type="email" :placeholder="this.userInfo.email"
-                                v-model="this.updatedUserInfo.email">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Localisation</label>
-                        <div id="map"></div>
-                    </div>
+                  <div class="field">
+                      <label class="label">Nom</label>
+                      <div class="control">
+                          <input class="input" type="text" :placeholder="this.userInfo.last_name"
+                              v-model="this.updatedUserInfo.last_name">
+                      </div>
+                  </div>
+                  <div class="field">
+                      <label class="label">Courriel</label>
+                      <div class="control">
+                          <input class="input" type="email" :placeholder="this.userInfo.email"
+                              v-model="this.updatedUserInfo.email">
+                      </div>
+                  </div>
+                  <div class="field">
+                      <label class="label">Biographie</label>
+                      <div class="control">
+                          <textarea class="textarea" :placeholder="this.userInfo.user_bio" v-model="this.updatedUserInfo.user_bio"></textarea>
+                      </div>
+                  </div>
+                  <div class="field">
+                      <label class="label">Localisation</label>
+                      <div id="map"></div>
+                  </div>
                 </section>
                 <footer class="modal-card-foot is-flex is-justify-content-space-evenly">
                     <button class="button is-success is-rounded w-100" @click="validateUserInfo()">Sauvegarder</button>
@@ -62,7 +66,8 @@
           email: '',
           address: '',
           location_lat: '',
-          location_lon: ''
+          location_lon: '',
+          user_bio:''
         },
       };
     },
@@ -110,6 +115,7 @@
           this.updatedUserInfo.last_name = response.data['last_name'];
           this.updatedUserInfo.email = response.data['email'];
           this.updatedUserInfo.address = response.data['address'];
+          this.updatedUserInfo.user_bio = response.data['user_bio'];
           if(response.data['location_lat'] && response.data['location_lon']){
             this.homeMarker = new mapboxgl.Marker()
                   .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])
@@ -151,6 +157,9 @@
         if(this.updatedUserInfo.location_lon != this.userInfo.location_lon){
           data.location_lon = this.updatedUserInfo.location_lon;
         }
+        if(this.updatedUserInfo.user_bio != this.userInfo.user_bio){
+          data.user_bio = this.updatedUserInfo.user_bio;
+        }
         if(Object.keys(data).length != 0){
           await axios
           .put('api/v1/userinfo/me/update/', data)
@@ -169,11 +178,22 @@
               },
             });
 
-            if(this.homeMarker){
-              this.homeMarker.remove();
+            if(response.data.location_lon && response.data.location_lon){
+              if(this.homeMarker){
+                this.homeMarker.remove();
+              }
               this.homeMarker = new mapboxgl.Marker()
               .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])
               .addTo(this.map);
+            }else{
+              if(this.homeMarker){
+                this.homeMarker.remove();
+              }
+              this.map.flyTo({
+                center: [-71.207981, 46.813878],
+                essential: true,
+                zoom: 9
+              });
             }
           })
           .catch((error)=>{

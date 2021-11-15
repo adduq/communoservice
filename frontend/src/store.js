@@ -6,6 +6,9 @@ export default createStore({
         isAuthenticated: false,
         token: "",
         isLoading: false,
+        isLocationSet: false,
+        // TODO: Centraliser le userInfo afin de diminuer la rendondance
+        userInfo: {}
     },
     mutations: {
         initializeStore(state) {

@@ -10,7 +10,7 @@
 						/>
 					</figure>
 				</div>
-				<div class="media-content">
+				<div class="media-content is-clipped">
 					<p class="title is-4">{{ terminatedOffer.id_offer.type_service }}</p>
 					<p class="subtitle is-6">
 						{{

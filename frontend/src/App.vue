@@ -24,43 +24,51 @@
           </a>
         </div>
         <div class="navbar-end">
-          <template v-if="$store.state.isAuthenticated">
-            <router-link to="/mon-compte" class="navbar-item" @click="showNav = !showNav">
-              <span class="mr-3">Mon compte</span>
-              <span class="icon is-small mr-3">
-                <i class="fas fa-user-circle"></i>
-              </span>
-            </router-link>
-            <div class="navbar-item">
-              <div class="dropdown is-hoverable" :class="dropdownRight ? 'is-right' : 'is-left'">
-                <div class="dropdown-trigger">
-                  <button class="button is-rounded has-text-centered" aria-haspopup="true"
-                    aria-controls="dropdown-menu3">
-                    <span class="icon is-small">
-                      <i class="fas fa-angle-down" aria-hidden="true"></i>
-                    </span>
-                  </button>
-                </div>
-                <div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
-                  <div class="dropdown-content has-text-left">
-                    <a href="#" class="dropdown-item" v-on:click="this.modalSettingsisActive = !this.modalSettingsisActive; this.showNav = !this.showNav">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-cog"></i>
-                      </span>
-                      <span> Paramètres </span>
-                    </a>
-                    <hr class="dropdown-divider" />
-                    <a href="#" @click="logout(); this.showNav = !this.showNav" class="dropdown-item has-text-danger">
-                      <span class="icon is-small mr-3">
-                        <i class="fas fa-sign-out-alt"></i>
-                      </span>
-                      <span> Déconnexion </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+            <template v-if="$store.state.isAuthenticated">
+				<router-link to="/mon-compte" class="navbar-item" @click="showNav = !showNav">
+					<span class="mr-3">Mon compte</span>
+					<span class="icon is-small mr-3">
+						<i class="fas fa-user-circle"></i>
+					</span>
+				</router-link>
+				<div class="navbar-item">
+				<div class="dropdown is-hoverable" :class="dropdownRight ? 'is-right' : 'is-left'">
+					<div class="dropdown-trigger">
+					<button class="button is-rounded has-text-centered is-relative" aria-haspopup="true"
+						aria-controls="dropdown-menu3">
+						<span class="icon is-small">
+						<span class="badge is-danger notification-badge">8</span>
+						<i class="fas fa-angle-down" aria-hidden="true"></i>
+						</span>
+					</button>
+					</div>
+					<div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
+					<div class="dropdown-content has-text-left">
+						<a href="#" class="dropdown-item">
+							<span class="icon is-small mr-3">
+								<i class="fas fa-bell"></i>
+							</span>
+							<span>Notifications</span>
+						</a>
+						<hr class="dropdown-divider" />
+						<a href="#" class="dropdown-item" v-on:click="this.modalSettingsisActive = !this.modalSettingsisActive; this.showNav = !this.showNav">
+						<span class="icon is-small mr-3">
+							<i class="fas fa-cog"></i>
+						</span>
+						<span>Paramètres</span>
+						</a>
+						<hr class="dropdown-divider" />
+						<a href="#" @click="logout(); this.showNav = !this.showNav" class="dropdown-item has-text-danger">
+						<span class="icon is-small mr-3">
+							<i class="fas fa-sign-out-alt"></i>
+						</span>
+						<span>Déconnexion</span>
+						</a>
+					</div>
+					</div>
+				</div>
+				</div>
+          	</template>
 
           <template v-else>
             <router-link to="/connexion" class="navbar-item" @click="this.showNav = !this.showNav">
@@ -111,13 +119,6 @@
         },
         dropdownRight: true,
         modalSettingsisActive: false,
-        userInfo: {},
-        updatedUserInfo: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          address: ''
-        }
       };
     },
     components: {
@@ -181,82 +182,6 @@
 			this.getUserInfo();
 			this.modalSettingsisActive = !this.modalSettingsisActive;
 		},
-		async getUserInfo() {
-			await axios
-				.get("api/v1/userinfo/me/")
-				.then((response) => {
-					this.userInfo = response.data;
-					this.updatedUserInfo.first_name = response.data["first_name"];
-					this.updatedUserInfo.last_name = response.data["last_name"];
-					this.updatedUserInfo.email = response.data["email"];
-					this.updatedUserInfo.address = response.data["address"];
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		async validateUserInfo() {
-			let data = {};
-			if (this.updatedUserInfo.first_name != this.userInfo.first_name) {
-				data.first_name = this.updatedUserInfo.first_name;
-			}
-			if (this.updatedUserInfo.last_name != this.userInfo.last_name) {
-				data.last_name = this.updatedUserInfo.last_name;
-			}
-			if (this.updatedUserInfo.email != this.userInfo.email) {
-				data.email = this.updatedUserInfo.email;
-			}
-			if (this.updatedUserInfo.address != this.userInfo.address) {
-				data.address = this.updatedUserInfo.address;
-			}
-			if (Object.keys(data).length != 0) {
-				await axios
-					.put("api/v1/userinfo/me/update/", data)
-					.then((response) => {
-						this.userInfo = response.data;
-						toast({
-							message: "Informations sauvegardés avec succès!",
-							type: "is-success",
-							dismissible: true,
-							pauseOnHover: false,
-							duration: 3000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					})
-					.catch((error) => {
-						console.log(error);
-						toast({
-							message: "Une erreur est survenue...",
-							type: "is-danger",
-							dismissible: false,
-							pauseOnHover: false,
-							duration: 3000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					});
-			} else {
-				toast({
-					message: "Informations sauvegardés avec succès!",
-					type: "is-success",
-					dismissible: true,
-					pauseOnHover: false,
-					duration: 3000,
-					position: "bottom-right",
-					animate: {
-						in: "fadeInRightBig",
-						out: "fadeOutRightBig",
-					},
-				});
-			}
-		},
 		handleResize() {
 			this.window.width = window.innerWidth;
 			this.window.height = window.innerHeight;
@@ -273,6 +198,7 @@
 
 <style lang="scss">
 @import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
+@import "../node_modules/@creativebulma/bulma-badge/dist/bulma-badge.css";
 .navbar {
 	border-radius: 0 !important;
 }
@@ -309,21 +235,24 @@
 }
 
 .active-icon {
-	position: absolute;
-	right: 6%;
-	bottom: 6%;
-	font-size: 1.5em;
-	color: #3ef100;
-	box-shadow: 0px 0px 8px 0px lime;
-	border-radius: 9999px;
+	height: 20px!important;
+	min-width: 20px!important;
+	right: 14%!important;
+	bottom: 14%!important;
+	background-color: lime!important;
+	box-shadow: 0px 0px 8px 0px lime!important;
+}
+
+.notification-badge{
+	box-shadow: 0 0 6px 3px red!important;
 }
 
 .not-active-icon {
-	position: absolute;
-	right: 6%;
-	bottom: 6%;
-	font-size: 1.5em;
-	color: grey;
+	height: 20px!important;
+	min-width: 20px!important;
+	right: 14%!important;
+	bottom: 14%!important;
+	background-color: grey!important;
 }
 
 .tagline {

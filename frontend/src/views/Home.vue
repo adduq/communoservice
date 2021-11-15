@@ -42,6 +42,7 @@
 
 						<div class="select ml-2 mt-1">
 							<select v-model="query_typeservice">
+								<option>Tout</option>
 								<option v-for="type in serviceTypes" v-bind:key="type.name">{{
 									type.name
 								}}</option>
@@ -261,11 +262,11 @@
 											class="is-rounded"
 											src="https://owcdn.net/img/5bda50b474984.jpg"
 										/>
-										<i
-											class="fas fa-circle"
-											:class="offerUserInfo ? 'active-icon' : 'not-active-icon'"
-											:title="offerUserInfo ? 'Actif' : 'Inactif'"
-										></i>
+										<span
+											class="badge is-bottom-right"
+											:class="offerUserInfo.is_online ? 'active-icon' : 'not-active-icon'"
+											:title="offerUserInfo.is_online ? 'Actif' : 'Inactif'"
+										></span>
 									</figure>
 									<p>
 										<span class="title is-4 is-bold">
@@ -534,8 +535,6 @@ export default {
 				id_user: null,
 			},
 
-			// La valeur de "query" est hard codé pour le moment. Il va falloir faire categories[0]
-			// lorsque nous allons avoir la liste des catégories pour peupler le dropdown.
 			query_typeservice: "Tout",
 			query_serviceday: new Date(),
 			query_mots_cles: "",
@@ -640,10 +639,8 @@ export default {
 		async sendQuery() {
 			const params = new URLSearchParams();
 
-			if (this.query_typeservice != "Tout") {
-				params.append("type-service", this.query_typeservice);
-			}
-
+			params.append("type-service", this.query_typeservice);
+			
 			this.query_serviceday = new Date(this.select_serviceday);
 			if (
 				this.query_serviceday instanceof Date &&
@@ -725,67 +722,67 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../node_modules/bulma-steps";
-.ch-5 {
-	width: 5ch;
-}
-
-.checkmark__circle {
-	stroke-dasharray: 166;
-	stroke-dashoffset: 166;
-	stroke-width: 4;
-	stroke-miterlimit: 10;
-	stroke: #26ad80;
-	fill: none;
-	animation: stroke 0.75s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-}
-
-.checkmark {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	display: block;
-	stroke-width: 2;
-	stroke: #26ad80;
-	stroke-miterlimit: 10;
-	margin: 0 auto 30px;
-	box-shadow: inset 0px 0px 0px #26ad80;
-	animation: fill 0.5s ease-in-out 0.5s forwards,
-		scale 0.5s ease-in-out 0.9s both;
-	animation-delay: 1s;
-}
-
-.checkmark__check {
-	transform-origin: 50% 50%;
-	stroke-dasharray: 48;
-	stroke-dashoffset: 48;
-	animation: stroke 0.5s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-	animation-delay: 1s;
-}
-
-@keyframes stroke {
-	100% {
-		stroke-dashoffset: 0;
+	@import "../../node_modules/bulma-steps";
+	.ch-5 {
+		width: 5ch;
 	}
-}
 
-@keyframes scale {
-	0%,
-	100% {
-		transform: none;
+	.checkmark__circle {
+		stroke-dasharray: 166;
+		stroke-dashoffset: 166;
+		stroke-width: 4;
+		stroke-miterlimit: 10;
+		stroke: #26ad80;
+		fill: none;
+		animation: stroke 0.75s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 	}
-	50% {
-		transform: scale3d(1.1, 1.1, 1);
-	}
-}
 
-@keyframes fill {
-	100% {
-		box-shadow: inset 0px 0px 0px 60px transparent;
+	.checkmark {
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		display: block;
+		stroke-width: 2;
+		stroke: #26ad80;
+		stroke-miterlimit: 10;
+		margin: 0 auto 30px;
+		box-shadow: inset 0px 0px 0px #26ad80;
+		animation: fill 0.5s ease-in-out 0.5s forwards,
+			scale 0.5s ease-in-out 0.9s both;
+		animation-delay: 1s;
 	}
-}
 
-.step-item {
-	flex-basis: 0 !important;
-}
+	.checkmark__check {
+		transform-origin: 50% 50%;
+		stroke-dasharray: 48;
+		stroke-dashoffset: 48;
+		animation: stroke 0.5s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+		animation-delay: 1s;
+	}
+
+	@keyframes stroke {
+		100% {
+			stroke-dashoffset: 0;
+		}
+	}
+
+	@keyframes scale {
+		0%,
+		100% {
+			transform: none;
+		}
+		50% {
+			transform: scale3d(1.1, 1.1, 1);
+		}
+	}
+
+	@keyframes fill {
+		100% {
+			box-shadow: inset 0px 0px 0px 60px transparent;
+		}
+	}
+
+	.step-item {
+		flex-basis: 0 !important;
+	}
 </style>

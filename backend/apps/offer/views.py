@@ -1,25 +1,62 @@
-import json
+import requests
 from django.db.models import Q
 from django.http import Http404
-from django.http.response import HttpResponse, JsonResponse
+from django.http.response import HttpResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view  # Pour utilser annotations
 from django.contrib.auth.models import User
 
-from rest_framework import serializers, status
+from rest_framework import status
 from .models import ActiveOffer, Offer, ReservedOffer, ServiceType, TerminatedOffer
 from apps.userinfo.models import UserInfo
-from apps.userinfo.serializers import UserSerializer
 from .serializers import ActiveOfferSerializer, OfferSerializer, ReservedOfferCreationSerializer, ReservedOfferSerializer, ServiceTypeSerializer, TerminatedOfferCreationSerializer, TerminatedOfferSerializer
 
-from rest_framework.decorators import api_view, schema
-from rest_framework.schemas import AutoSchema
+from rest_framework.decorators import api_view
 
 from functools import reduce
 from operator import and_
+from math import cos, asin, sqrt, pi
 
+PUBLIC_MAPBOX_KEY = "pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA"
+
+def sort_offers_by_distance(user_id, offers):
+
+    me = UserInfo.objects.get(user_id=user_id)
+
+    def haversine(lat1, lon1, lat2, lon2):
+        p = pi/180
+        a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p) * cos(lat2*p) * (1-cos((lon2-lon1)*p))/2
+        return 12742 * asin(sqrt(a))
+
+    def check_distance(offer):
+        employe = UserInfo.objects.get(user_id=offer['user'])
+        dist = haversine(float(me.location_lat), float(me.location_lon), float(employe.location_lat), float(employe.location_lon))
+        if dist < float(offer['max_distance']):
+            return driving_distance(employe.location_lon, employe.location_lat, offer['max_distance'])
+        else:
+            return False
+    
+    def driving_distance(employe_lon, employe_lat, max_distance):
+        #if driving distance > offer['max_distance'] then exclude from candidates
+        formated_url = "https://api.mapbox.com/directions/v5/mapbox/driving/{0},{1};{2},{3}?access_token={4}".format(me.location_lon, me.location_lat, employe_lon, employe_lat, PUBLIC_MAPBOX_KEY)
+        response = requests.get(formated_url)
+        data = response.json()
+        print(data)
+        if data['code'] == 'NoRoute':
+            return False
+        else:
+            print(data['routes'][0]['distance'])
+            return float(data['routes'][0]['distance'])/1000 < float(max_distance)
+                                                                        
+    if me.location_lat != '' and me.location_lon != '':
+        print('Sorting offers for user ' + str(user_id))
+        potential_offers = map(check_distance, offers)
+        return [d for (d, keep) in zip(offers, potential_offers) if keep]
+    else:
+        print('User not compliant for sort_offers_by_distance')
+        return offers
 
 class Offers(APIView):
 
@@ -113,7 +150,12 @@ class ActiveOffers(APIView):
     def get(self, request, format=None):
         active_offers = self.get_offers()
         serializer = OfferSerializer(active_offers, many=True)
-        return Response(serializer.data)
+
+        if not request.user.is_anonymous:
+            offers = sort_offers_by_distance(request.user.id, [dict(obj) for obj in serializer.data])
+        else:
+            offers = serializer.data
+        return Response(offers)
 
     def post(self, request, format=None):
         serializer = ActiveOfferSerializer(data=request.data)
@@ -121,8 +163,6 @@ class ActiveOffers(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class ActiveOffersByUser(APIView):
     """
     Permet d'avoir les offres actives par utilisateur.
@@ -324,10 +364,8 @@ class TerminatedOfferDetail(APIView):
 
 
 """
-Permet de rechercher des offres selon le type de service.
+Permet de rechercher des offres.
 """
-
-
 @api_view(['GET'])
 def search(request):
     active_offers = list(
@@ -335,8 +373,9 @@ def search(request):
     queryset = Offer.objects.filter(id__in=active_offers)
 
     if "type-service" in request.GET:
-        queryset = queryset.filter(
-            type_service__icontains=request.GET.get('type-service'))
+        if not request.GET.get('type-service') == 'Tout':
+            queryset = queryset.filter(
+                type_service__icontains=request.GET.get('type-service'))
 
     if "day-of-week" in request.GET:
         date = request.GET.get('date')
@@ -364,5 +403,10 @@ def search(request):
         queryset = queryset.filter(
             reduce(and_, (Q(description__icontains=mot) for mot in mots_cles)))
 
+    
     serializer = OfferSerializer(queryset, many=True)
-    return Response(serializer.data)
+    if not request.user.is_anonymous:
+        offers = sort_offers_by_distance(request.user.id, [dict(obj) for obj in serializer.data])
+    else:
+        offers = serializer.data
+    return Response(offers)
