@@ -1,6 +1,7 @@
 import unittest
 from django.test import RequestFactory, TestCase
-from django.test import Client
+from rest_framework.authtoken.models import Token
+from rest_framework.test import APIClient
 from django.core.exceptions import *
 from django.db.utils import IntegrityError
 from django.db import DataError
@@ -11,6 +12,8 @@ from .fixtures import OfferFixtures
 from .views import Offers
 from datetime import date, timedelta
 from pprint import pprint
+from django.urls import reverse 
+
 
 
 '''https://www.geeksforgeeks.org/python-assertion-error/'''
@@ -403,31 +406,127 @@ class OfferViewTest(TestCase):
     def setUp(self):
         # Chaque test de ce type requiert la factory.
         self.factory = RequestFactory()
-        self.user = User.objects.create_user(
-            username='jacob', email='jacob@…', password='top_secret')
-        UserInfo.objects.create(
+        
+        # Measurement line
+        #   from: 46.848205, -71.138826
+        #   to  : 47.021290, -70.804165
 
-            user_id=self.user,
-
-            profile_is_completed=True,
-
-            first_name="Jacob",
-
-            last_name="Jr",
-
-            nb_services_received=2,
-
-            nb_services_given=2,
-
-            avg_rating_as_employee=0,
-
-            nb_rating_as_employe=0,
-
-            avg_rating_as_employer=0,
-
-            nb_rating_as_employer=0
-
+        # RECRUITER DATASET
+        self.recruiter = User.objects.create(
+            username='gandalf',
+            email='gandalf@globetrotter.net'
         )
+        self.recruiter.set_password('qwerty1234')
+        self.recruiter.save()
+        self.recruiter_userInfo = UserInfo.objects.create(
+            user_id=self.recruiter,
+            first_name='Gandalf',
+            last_name='LeBlanc',
+            email='gandalf@globetrotter.net',
+            location_lat='46.848193',
+            location_lon='-71.138846',
+            address='837 Rte Prévost, Saint-Pierre, QC',
+        )
+
+        # EMPLOYES DATASET
+
+        # Region Andrew
+        self.employe_andrew = User.objects.create(
+            username='andrew',
+            email='andrew@globetrotter.net'
+        )
+        self.employe_andrew.set_password('qwerty1234')
+        self.employe_andrew.save()
+
+        # Distance de l'employeur à vol d'oiseau: 1.57 km
+        self.employe_andrew_userInfo = UserInfo.objects.create(
+            user_id=self.employe_andrew,
+            first_name='Andrew',
+            last_name='Communo',
+            email='andrew@globetrotter.net',
+            location_lat='46.856773',
+            location_lon='-71.122421',
+            address='17 Rue d\'Orléans, Sainte-Pétronille, QC',
+        )
+        # End region Andrew
+
+        # Region Danic
+        self.employe_danic = User.objects.create(
+            username='danic',
+            email='danic@globetrotter.net'
+        )
+        self.employe_danic.set_password('qwerty1234')
+        self.employe_danic.save()
+
+        # Distance de l'employeur à vol d'oiseau: 4.35 km
+        self.employe_danic_userInfo = UserInfo.objects.create(
+            user_id=self.employe_danic,
+            first_name='Danic',
+            last_name='Communo',
+            email='danic@globetrotter.net',
+            location_lat='46.871947',
+            location_lon='-71.093098',
+            address='933 Rte Prévost, Saint-Pierre, QC',
+        )
+        # End region Danic
+
+        # Region Daisy
+        self.employe_daisy = User.objects.create(
+            username='daisy',
+            email='daisy@globetrotter.net'
+        )
+        self.employe_daisy.set_password('qwerty1234')
+        self.employe_daisy.save()
+
+        # Distance de l'employeur à vol d'oiseau: 6.85 km
+        self.employe_daisy_userInfo = UserInfo.objects.create(
+            user_id=self.employe_daisy,
+            first_name='Daisy',
+            last_name='Communo',
+            email='daisy@globetrotter.net',
+            location_lat='46.885554',
+            location_lon='-71.066911',
+            address='576 Rte des Prêtres, Saint-Pierre, QC',
+        )
+        # End region Daisy
+
+        # Region Pierrick
+        self.employe_pierrick = User.objects.create(
+            username='pierrick',
+            email='pierrick@globetrotter.net'
+        )
+        self.employe_pierrick.set_password('qwerty1234')
+        self.employe_pierrick.save()
+
+        # Distance de l'employeur à vol d'oiseau: 19.37 km
+        self.employe_pierrick_userInfo = UserInfo.objects.create(
+            user_id=self.employe_pierrick,
+            first_name='Pierrick',
+            last_name='Communo',
+            email='pierrick@globetrotter.net',
+            location_lat='46.954251',
+            location_lon='-70.936578',
+            address='1099 Rte du Mitan, Sainte-Famille, QC',
+        )
+        # End region Pierrick
+
+    def test_OffersView_whenGetAllActiveOffersWithNoToken_thenNoDistanceCalulated(self):
+        pass
+
+    def test_OffersView_whenLoginAsRecruiter_thenAuthTokenReturned(self):
+        login_data = {
+            'username': self.recruiter.username,
+            'password': 'qwerty1234',
+        }
+        response = self.client.post(reverse('login'), login_data, format='json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('auth_token', response.data)
+
+        token = Token.objects.get(user=self.recruiter)
+        self.assertEqual(response.data['auth_token'], token.key)
+
+        # TODO: Utiliser API Client => https://stackoverflow.com/questions/29140353/testing-django-api-login-using-credentials-and-djoser
 
     def test_OffersView_whenGetMethod_thenResponseStatusCode200(self):
         # given

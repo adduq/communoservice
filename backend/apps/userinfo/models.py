@@ -15,7 +15,7 @@ def login_logger(sender, request, user, **kwargs):
         userinfo.is_online = True
         userinfo.save()
     except:
-        newUser = UserInfo.objects.create(user_id=user, is_online=True)
+        UserInfo.objects.create(user_id=user, is_online=True)
 
 
 @receiver(user_logged_out)
