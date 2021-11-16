@@ -304,7 +304,6 @@
                   :attributes="attributes"
                   :drag-attribute="dragAttribute"
                   :select-attribute="selectAttribute"
-                  @drag="resetDatepicker"
                   :key="componentKey"
                   is-expanded
                 />
@@ -547,6 +546,15 @@ export default {
       datePickerError: [],
       /////////////////////////////////////
     };
+  },
+  watch: {
+    range(val) {
+      if (val) {
+        console.log("watche reset pattern");
+        this.resetPattern();
+        this.datePickerError = [];
+      }
+    },
   },
   mounted() {
     document.title = "Mon compte | Communoservice";
@@ -819,11 +827,17 @@ export default {
     },
     manageButtonClickWithRangeRestriction(weekDayIndex, isWeekdaySelected) {
       alert("With range lmits");
+      let errorMessage =
+        "Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours.";
+      let errorMessage2 =
+        "Ce jour de de semaine n'apparaît pas dans la sélection du calendrier.";
+
       console.log("range is " + JSON.stringify(this.range));
       if (this.range == null) {
-        this.datePickerError.push(
-          "Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours. "
-        );
+        if (!datePickerError.includes(errorMessage)) {
+          this.datePickerError.push(errorMessage);
+        }
+
         alert(JSON.stringify(this.datePickerError));
         document.getElementById(weekDayIndex.toString()).blur();
         return;
@@ -834,12 +848,48 @@ export default {
       let span = this.range.end - this.range.start;
       console.log("span is " + span);
       if (span == 0) {
-        this.datePickerError.push(
-          "Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours. "
-        );
+        if (!datePickerError.includes(errorMessage)) {
+          this.datePickerError.push(errorMessage);
+        }
         alert(JSON.stringify(this.datePickerError));
         return;
       }
+
+      /////////////////////////////////
+      var daysArray = this.getDaysArray(debut, fin);
+      alert(JSON.stringify(daysArray));
+      let indexDayOfRangeSelected = [];
+      daysArray.forEach((day, weekDayIndex) => {
+        console.log(day + " est un " + day.getDay());
+        indexDayOfRangeSelected.push(day.getDay());
+
+        // isADay = this.validateDateIsADayOfWeek(day, weekDayIndex);
+        // if (!isADay) {
+        //   this.datePickerError.push(
+        //     "Ce jour de de semaine n'apparaît pas dans la sélection du calendrier. "
+        //   );
+        // }
+      });
+
+      // let isOkValue = true;
+      // let i = 0;
+      // while (isOkValue && i<indexDayOfRangeSelected.length){
+      //   let indexToCheck = weekDayIndex - 1;
+      //   if (indexToCheck != indexDayOfRangeSelected[i]) {
+      //     console.log("L'index " + weekDayIndex + "pas valide");
+      //   }
+      let indexToCheck = weekDayIndex - 1;
+      if (indexDayOfRangeSelected.includes(indexToCheck)) {
+        console.log("L'index " + weekDayIndex + "est valide");
+      } else {
+        if (!datePickerError.includes(errorMessage2)) {
+          this.datePickerError.push(errorMessage2);
+        }
+        document.getElementById(weekDayIndex.toString()).blur();
+        return;
+      }
+
+      /////////////////////////////////////
 
       console.log("Selected index : " + weekDayIndex);
 
@@ -910,7 +960,8 @@ export default {
           order: 1,
         });
       }
-      console.log("fin fct");
+      console.log("Ajout dans le pattern réussi");
+      this.datePickerError = [];
     },
     manageButtonWithoutRangeRestriction(weekDayIndex, isWeekdaySelected) {
       alert("no range restriction");
@@ -982,6 +1033,25 @@ export default {
         default:
       }
       isWeekdaySelected = !isWeekdaySelected;
+    },
+    getDaysArray(start, end) {
+      for (
+        var arr = [], dt = new Date(start);
+        dt <= end;
+        dt.setDate(dt.getDate() + 1)
+      ) {
+        arr.push(new Date(dt));
+      }
+      return arr;
+    },
+    validateDateIsADayOfWeek(day, indexToCheck) {
+      console.log("entré dan fct." + indexToCheck);
+      //Corriger décalage de VCalendar, dont les indices
+      //commencent à 1 à partir du dimanche.
+      indexToCheck = indexToCheck - 1;
+      if (indexToCheck !== day.getDay()) {
+        return false;
+      }
     },
   },
 };
