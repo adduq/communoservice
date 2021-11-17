@@ -151,33 +151,24 @@
 							></button>
 						</header>
 
-						<section class="modal-card-body">
-							<div
-								class="is-flex-desktop is-justify-content-space-between mr-6"
-							>
-								<div class="field">
-									<label class="label">Type de service</label>
-									<div class="control">
-										<div class="select">
-											<select
-												v-model="serviceType"
-												class="w-200"
-											>
-												<option
-													value=""
-													disabled
-													selected
-													>Choisir parmi</option
-												>
-												<option
-													v-for="type in serviceTypes"
-													v-bind:key="type.name"
-													>{{ type.name }}</option
-												>
-											</select>
-										</div>
-									</div>
-								</div>
+            <section class="modal-card-body">
+              <div
+                class="is-flex-desktop is-justify-content-space-between mr-6"
+              >
+                <div class="field">
+                  <label class="label">Type de service</label>
+                  <div class="control">
+                    <div class="select">
+                      <select v-model="serviceType" class="w-200">
+                        <option
+                          v-for="type in serviceTypes"
+                          v-bind:key="type.name"
+                          >{{ type.name }}</option
+                        >
+                      </select>
+                    </div>
+                  </div>
+                </div>
 
                 <label class="label">Distance maximale</label>
                 <div class="field has-addons">
@@ -186,6 +177,7 @@
                       v-model="maxDistance"
                       class="input"
                       type="number"
+                      min="1"
                       placeholder="Distance"
                     />
                   </p>
@@ -212,15 +204,20 @@
                   />
                 </p>
               </div>
-
+              <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                  <textarea
+                    v-model="description"
+                    class="textarea"
+                    placeholder="Votre message ici..."
+                  ></textarea>
+                </div>
+              </div>
               <div class="field">
                 <label class="label">Disponibilités</label>
                 <div>
                   <div class="field mb-2 mr-6"></div>
-                  <label @click="resetDatepicker()" class="checkbox">
-                    <input type="checkbox" v-model="isDatePickerPresent" />
-                    Options de calendrier
-                  </label>
                   <div
                     class="is-flex has-text-centered is-flex-wrap-wrap mt-2 mb-6 is-justify-content-space-evenly is-family-monospace"
                   >
@@ -289,12 +286,15 @@
                   </div>
                 </div>
               </div>
+              <label @click="resetDatepicker()" class="checkbox">
+                <input type="checkbox" v-model="isDatePickerPresent" />
+                Préciser une date ou une sélection de jours
+              </label>
               <div
                 :class="[isDatePickerPresent ? '' : 'hidden']"
                 id="datepicker"
               >
                 <label class="label">Choisissez un ou plusieurs jours</label>
-                <!-- <Calendar /> -->
                 <DatePicker
                   v-model="range"
                   mode="date"
@@ -315,16 +315,6 @@
                 <p v-for="error in datePickerError" v-bind:key="error">
                   {{ error }}
                 </p>
-              </div>
-              <div class="field">
-                <label class="label">Message</label>
-                <div class="control">
-                  <textarea
-                    v-model="description"
-                    class="textarea"
-                    placeholder="Votre message ici..."
-                  ></textarea>
-                </div>
               </div>
             </section>
 
@@ -552,6 +542,7 @@ export default {
       if (val) {
         console.log("watche reset pattern");
         this.resetPattern();
+        this.resetDaysButtons();
         this.datePickerError = [];
       }
     },
@@ -659,16 +650,11 @@ export default {
         this.errors.push("La distance maximal doit être positive.");
       }
       let tomorrow = new Date();
-      // let selectedDate = new Date(this.expirationDate);
-      // if (selectedDate.getTime() < tomorrow.getTime()) {
-      //   this.errors.push("Il faut choisir une date postérieure à aujourd'hui.");
-      // }
 
       if (!this.errors.length) {
         this.modalCreateisActive = true;
 
         this.creationModalIsActive = false;
-        // this.confirmeCreation = true;
       } else {
         for (let index = 0; index < this.errors.length; index++) {
           toast({
@@ -711,9 +697,7 @@ export default {
         this.range == null ? null : this.range.end.toISOString().substr(0, 10);
       newOffer.start_date = startDate;
       newOffer.end_date = endDate;
-      alert(JSON.stringify(newOffer)); //pour validation.
-      alert("Pas envoyé");
-      return;
+      //alert(JSON.stringify(newOffer)); //pour validation.
       await axios
         .post("/api/v1/offers/", newOffer)
         .then((response) => {
@@ -766,9 +750,7 @@ export default {
           // console.log(error);
         });
     },
-    toSelectDate(payload) {
-      alert(payload);
-    },
+
     async addActiveOffers(activeOffer) {
       await axios
         .post("/api/v1/active-offers/", activeOffer)
@@ -806,12 +788,14 @@ export default {
       console.log("Pattern choisi : " + JSON.stringify(this.attributes));
     },
     clickOnButton(weekDayIndex, isWeekdaySelected) {
-      alert(JSON.stringify(this.attributes));
+      console.log("attributes : " + JSON.stringify(this.attributes));
       /**
        * 1.Tester si checkbox tru ou false
        * 2.Tester si indice == lundi, mardi, etc...
        *
        */
+
+      this.datePickerError = [];
 
       if (document.getElementById("datepicker").className.includes("hidden")) {
         this.manageButtonWithoutRangeRestriction(
@@ -826,7 +810,7 @@ export default {
       }
     },
     manageButtonClickWithRangeRestriction(weekDayIndex, isWeekdaySelected) {
-      alert("With range lmits");
+      console.log("With range lmits");
       let errorMessage =
         "Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours.";
       let errorMessage2 =
@@ -834,11 +818,11 @@ export default {
 
       console.log("range is " + JSON.stringify(this.range));
       if (this.range == null) {
-        if (!datePickerError.includes(errorMessage)) {
-          this.datePickerError.push(errorMessage);
-        }
+        this.datePickerError.push(errorMessage);
 
-        alert(JSON.stringify(this.datePickerError));
+        console.log(
+          "erreurs datepicker : " + JSON.stringify(this.datePickerError)
+        );
         document.getElementById(weekDayIndex.toString()).blur();
         return;
       }
@@ -848,48 +832,28 @@ export default {
       let span = this.range.end - this.range.start;
       console.log("span is " + span);
       if (span == 0) {
-        if (!datePickerError.includes(errorMessage)) {
-          this.datePickerError.push(errorMessage);
-        }
-        alert(JSON.stringify(this.datePickerError));
+        this.datePickerError.push(errorMessage);
         return;
       }
 
       /////////////////////////////////
       var daysArray = this.getDaysArray(debut, fin);
-      alert(JSON.stringify(daysArray));
+      console.log("dates de la sélection : " + JSON.stringify(daysArray));
       let indexDayOfRangeSelected = [];
       daysArray.forEach((day, weekDayIndex) => {
         console.log(day + " est un " + day.getDay());
         indexDayOfRangeSelected.push(day.getDay());
-
-        // isADay = this.validateDateIsADayOfWeek(day, weekDayIndex);
-        // if (!isADay) {
-        //   this.datePickerError.push(
-        //     "Ce jour de de semaine n'apparaît pas dans la sélection du calendrier. "
-        //   );
-        // }
       });
 
-      // let isOkValue = true;
-      // let i = 0;
-      // while (isOkValue && i<indexDayOfRangeSelected.length){
-      //   let indexToCheck = weekDayIndex - 1;
-      //   if (indexToCheck != indexDayOfRangeSelected[i]) {
-      //     console.log("L'index " + weekDayIndex + "pas valide");
-      //   }
       let indexToCheck = weekDayIndex - 1;
       if (indexDayOfRangeSelected.includes(indexToCheck)) {
         console.log("L'index " + weekDayIndex + "est valide");
       } else {
-        if (!datePickerError.includes(errorMessage2)) {
-          this.datePickerError.push(errorMessage2);
-        }
+        this.datePickerError.push(errorMessage2);
+
         document.getElementById(weekDayIndex.toString()).blur();
         return;
       }
-
-      /////////////////////////////////////
 
       console.log("Selected index : " + weekDayIndex);
 
@@ -917,7 +881,6 @@ export default {
         this.attributes.splice(indexToDelete, 1);
       } else {
         console.log("est pas present encore");
-        //toggleSelectedDay(weekDayIndex, isWeekdaySelected);
         switch (weekDayIndex) {
           case 2:
             this.daysSelected.monday = !this.daysSelected.monday;
@@ -964,7 +927,7 @@ export default {
       this.datePickerError = [];
     },
     manageButtonWithoutRangeRestriction(weekDayIndex, isWeekdaySelected) {
-      alert("no range restriction");
+      console.log("no range restriction");
       this.toggleSelectedDay(weekDayIndex, isWeekdaySelected);
     },
     toEnableDaysButtons() {
@@ -1081,6 +1044,6 @@ option[value=""][disabled] {
 	background-color: #aaaaaa;
 }
 .hidden {
-  visibility: hidden;
+  display: none;
 }
 </style>
