@@ -4,6 +4,12 @@ import router from "./router";
 import store from "./store";
 import axios from "axios";
 
+import {
+    SetupCalendar,
+    Calendar,
+    DatePicker
+} from 'v-calendar';
+
 const app = createApp(App);
 
 // TODO: Faire en sorte que MAPBOX_API_KEY soit changé dynamiquement selon l'environnement d'exécution
@@ -19,4 +25,9 @@ if (process.env.VUE_APP_AXIOS_URL === undefined) {
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-app.use(store).use(router, axios).mount('#app');
+app
+.use(store)
+.use(router, axios)
+.component('Calendar', Calendar)
+.component('DatePicker', DatePicker)
+.mount("#app");
