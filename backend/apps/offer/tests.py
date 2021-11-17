@@ -1,10 +1,11 @@
 import unittest
 from django.test import RequestFactory, TestCase
-
+from django.test import Client
 from django.core.exceptions import *
 from django.db.utils import IntegrityError
 from django.db import DataError
 from django.contrib.auth.models import User
+from apps.userinfo.models import UserInfo
 from .models import Offer
 from .fixtures import OfferFixtures
 from .views import Offers
@@ -225,7 +226,7 @@ class TestOffer(unittest.TestCase):
             print(e.args)
             print('**********************************************************')
 
-    def test_givenPastExpirationDate_whenCreatingInstance_thenExpectError(self):
+    def test_givenPastEndDate_whenCreatingInstance_thenExpectError(self):
         '''TODO: Revoir, car le message d'erreur n'apparait pas dans les logs. Cela veut
         dire que l'exception n'est pas soulevée. Validators seulement pour formulaire.'''
         # given
@@ -234,7 +235,7 @@ class TestOffer(unittest.TestCase):
         test_description = OfferFixtures.any_description()
         test_hourly_rate = OfferFixtures.any_hourly_rate()
         test_max_dist = OfferFixtures.any_max_distance()
-        test_expiration_date = date.today() - timedelta(days=1)
+        test_end_date = date.today() - timedelta(days=1)
 
         # then
         try:
@@ -243,97 +244,156 @@ class TestOffer(unittest.TestCase):
                                  description=test_description,
                                  hourly_rate=test_hourly_rate,
                                  max_distance=test_max_dist,
-                                 expiration_date=test_expiration_date)
+                                 end_date=test_end_date)
         except IntegrityError as e:
             self.assertRaisesRegexp(
-                IntegrityError, "^.*ERREUR:  Expiration date is not valid.*")
+                IntegrityError, "^.*ERREUR:  End date date is not valid.*")
             print('**********************************************************')
             print(self._testMethodName)
             print(e.args)
             print('**********************************************************')
 
-    def test_givenNoExpirationDate_whenCreatingInstance_thenReturnNewInstance(self):
 
-        # given
-        test_user = self.user
-        test_type_service = OfferFixtures.any_type_service()
-        test_description = OfferFixtures.any_description()
-        test_hourly_rate = OfferFixtures.any_hourly_rate()
-        test_max_dist = OfferFixtures.any_max_distance()
-        test_expiration_date = None
+def test_givenStarDate_whenCreatingInstance_thenReturnNewInstance(self):
 
-        # when
-        offer = Offer.objects.create(user=test_user,
-                                     type_service=test_type_service,
-                                     description=test_description,
-                                     hourly_rate=test_hourly_rate,
-                                     max_distance=test_max_dist)
+    # given
+    test_user = self.user
+    test_type_service = OfferFixtures.any_type_service()
+    test_description = OfferFixtures.any_description()
+    test_hourly_rate = OfferFixtures.any_hourly_rate()
+    test_max_dist = OfferFixtures.any_max_distance()
+    test_start_date = None
 
-        # then
-        self.assertEqual(offer.user, test_user)
-        self.assertEqual(offer.type_service, test_type_service)
-        self.assertEqual(offer.description, test_description)
-        self.assertEqual(offer.hourly_rate, test_hourly_rate)
-        self.assertEqual(offer.max_distance, test_max_dist)
-        self.assertEqual(offer.expiration_date, test_expiration_date)
+    # when
+    offer = Offer.objects.create(user=test_user,
+                                 type_service=test_type_service,
+                                 description=test_description,
+                                 hourly_rate=test_hourly_rate,
+                                 max_distance=test_max_dist,
+                                 start_date=test_start_date)
 
-    def test_givenNoDisponibilies_whenCreatingInstance_thenReturnNewInstance(self):
+    # then
+    self.assertEqual(offer.user, test_user)
+    self.assertEqual(offer.type_service, test_type_service)
+    self.assertEqual(offer.description, test_description)
+    self.assertEqual(offer.hourly_rate, test_hourly_rate)
+    self.assertEqual(offer.max_distance, test_max_dist)
+    self.assertEqual(offer.end_date, test_start_date)
 
-        # given
-        test_user = self.user
-        test_type_service = OfferFixtures.any_type_service()
-        test_description = OfferFixtures.any_description()
-        test_hourly_rate = OfferFixtures.any_hourly_rate()
-        test_max_dist = OfferFixtures.any_max_distance()
-        test_expiration_date = date.today() - timedelta(days=1)
 
-        # when
-        offer = Offer.objects.create(user=test_user,
-                                     type_service=test_type_service,
-                                     description=test_description,
-                                     hourly_rate=test_hourly_rate,
-                                     max_distance=test_max_dist,
-                                     expiration_date=test_expiration_date)
-        # then
-        self.assertEqual(offer.user, test_user)
-        self.assertEqual(offer.type_service, test_type_service)
-        self.assertEqual(offer.description, test_description)
-        self.assertEqual(offer.hourly_rate, test_hourly_rate)
-        self.assertEqual(offer.max_distance, test_max_dist)
-        self.assertEqual(offer.monday, False)
-        self.assertEqual(offer.tuesday, False)
-        self.assertEqual(offer.wednesday, False)
-        self.assertEqual(offer.thursday, False)
-        self.assertEqual(offer.friday, False)
-        self.assertEqual(offer.saturday, False)
-        self.assertEqual(offer.sunday, False)
+def test_givenNoEndDate_whenCreatingInstance_thenReturnNewInstance(self):
 
-    def test_givenExistingOfferId_whenCreatingInstance_expectError(self):
-        # given
-        test_user = self.user
-        test_type_service = OfferFixtures.any_type_service()
-        test_description = OfferFixtures.any_description()
-        test_hourly_rate = OfferFixtures.any_hourly_rate()
-        test_max_dist = OfferFixtures.any_max_distance()
-        offer = Offer.objects.create(id=5, user=test_user,
-                                     type_service=test_type_service,
-                                     description=test_description,
-                                     hourly_rate=test_hourly_rate,
-                                     max_distance=test_max_dist)
-        # then
-        try:
-            Offer.objects.create(id=offer.id, user=test_user,
+    # given
+    test_user = self.user
+    test_type_service = OfferFixtures.any_type_service()
+    test_description = OfferFixtures.any_description()
+    test_hourly_rate = OfferFixtures.any_hourly_rate()
+    test_max_dist = OfferFixtures.any_max_distance()
+    test_end_date = None
+
+    # when
+    offer = Offer.objects.create(user=test_user,
                                  type_service=test_type_service,
                                  description=test_description,
                                  hourly_rate=test_hourly_rate,
                                  max_distance=test_max_dist)
-        except IntegrityError as e:
-            self.assertRaisesRegexp(
-                IntegrityError, "^.*la valeur d'une clé dupliquée rompt la contrainte unique « offer_offer_pkey »*")
-            print('**********************************************************')
-            print(self._testMethodName)
-            print(e.args)
-            print('**********************************************************')
+
+    # then
+    self.assertEqual(offer.user, test_user)
+    self.assertEqual(offer.type_service, test_type_service)
+    self.assertEqual(offer.description, test_description)
+    self.assertEqual(offer.hourly_rate, test_hourly_rate)
+    self.assertEqual(offer.max_distance, test_max_dist)
+    self.assertEqual(offer.end_date, test_end_date)
+
+
+def test_givenStarDateAfterEndDatewhenCreatingInstance_thenExpectError(self):
+
+    # given
+    test_user = self.user
+    test_type_service = OfferFixtures.any_type_service()
+    test_description = OfferFixtures.any_description()
+    test_hourly_rate = OfferFixtures.any_hourly_rate()
+    test_max_dist = OfferFixtures.any_max_distance()
+    test_start_date = date.today()
+    test_end_date = date.today() - timedelta(days=1)
+
+    # when
+    offer = Offer.objects.create(user=test_user,
+                                 type_service=test_type_service,
+                                 description=test_description,
+                                 hourly_rate=test_hourly_rate,
+                                 max_distance=test_max_dist,
+                                 start_date=test_start_date,
+                                 end_date=test_end_date)
+
+    # then
+    self.assertEqual(offer.user, test_user)
+    self.assertEqual(offer.type_service, test_type_service)
+    self.assertEqual(offer.description, test_description)
+    self.assertEqual(offer.hourly_rate, test_hourly_rate)
+    self.assertEqual(offer.max_distance, test_max_dist)
+    self.assertEqual(offer.end_date, test_start_date)
+
+
+def test_givenNoDisponibilies_whenCreatingInstance_thenReturnNewInstance(self):
+
+    # given
+    test_user = self.user
+    test_type_service = OfferFixtures.any_type_service()
+    test_description = OfferFixtures.any_description()
+    test_hourly_rate = OfferFixtures.any_hourly_rate()
+    test_max_dist = OfferFixtures.any_max_distance()
+    test_end_date = date.today() - timedelta(days=1)
+
+    # when
+    offer = Offer.objects.create(user=test_user,
+                                 type_service=test_type_service,
+                                 description=test_description,
+                                 hourly_rate=test_hourly_rate,
+                                 max_distance=test_max_dist,
+                                 end_date=test_end_date)
+    # then
+    self.assertEqual(offer.user, test_user)
+    self.assertEqual(offer.type_service, test_type_service)
+    self.assertEqual(offer.description, test_description)
+    self.assertEqual(offer.hourly_rate, test_hourly_rate)
+    self.assertEqual(offer.max_distance, test_max_dist)
+    self.assertEqual(offer.monday, False)
+    self.assertEqual(offer.tuesday, False)
+    self.assertEqual(offer.wednesday, False)
+    self.assertEqual(offer.thursday, False)
+    self.assertEqual(offer.friday, False)
+    self.assertEqual(offer.saturday, False)
+    self.assertEqual(offer.sunday, False)
+
+
+def test_givenExistingOfferId_whenCreatingInstance_expectError(self):
+    # given
+    test_user = self.user
+    test_type_service = OfferFixtures.any_type_service()
+    test_description = OfferFixtures.any_description()
+    test_hourly_rate = OfferFixtures.any_hourly_rate()
+    test_max_dist = OfferFixtures.any_max_distance()
+    offer = Offer.objects.create(id=5, user=test_user,
+                                 type_service=test_type_service,
+                                 description=test_description,
+                                 hourly_rate=test_hourly_rate,
+                                 max_distance=test_max_dist)
+    # then
+    try:
+        Offer.objects.create(id=offer.id, user=test_user,
+                             type_service=test_type_service,
+                             description=test_description,
+                             hourly_rate=test_hourly_rate,
+                             max_distance=test_max_dist)
+    except IntegrityError as e:
+        self.assertRaisesRegexp(
+            IntegrityError, "^.*la valeur d'une clé dupliquée rompt la contrainte unique « offer_offer_pkey »*")
+        print('**********************************************************')
+        print(self._testMethodName)
+        print(e.args)
+        print('**********************************************************')
 
 
 '''Tests des endpoints'''
@@ -345,10 +405,34 @@ class OfferViewTest(TestCase):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
             username='jacob', email='jacob@…', password='top_secret')
+        UserInfo.objects.create(
+
+            user_id=self.user,
+
+            profile_is_completed=True,
+
+            first_name="Jacob",
+
+            last_name="Jr",
+
+            nb_services_received=2,
+
+            nb_services_given=2,
+
+            avg_rating_as_employee=0,
+
+            nb_rating_as_employe=0,
+
+            avg_rating_as_employer=0,
+
+            nb_rating_as_employer=0
+
+        )
 
     def test_OffersView_whenGetMethod_thenResponseStatusCode200(self):
         # given
         request = self.factory.get('/offer/')
+        request.user = self.user
 
         # when
         response = Offers.as_view()(request)
@@ -358,7 +442,9 @@ class OfferViewTest(TestCase):
 
     def test_OffersView_whenIllegalPutMethod_thenResponseStatusCode405(self):
         # given
-        request = self.factory.put('/offer/')
+        request = self.factory.put(
+            '/offer/', {}, content_type="MULTIPART_CONTENT", follow=False, secure=True)
+        request.user = self.user
 
         # when
         response = Offers.as_view()(request)
@@ -376,7 +462,11 @@ class OfferViewTest(TestCase):
             "hourly_rate": "10.50",
             "max_distance": 2
         }
-        request = self.factory.post('/offer/', payload)
+        self.factory.login(username=self.user.username,
+                           password=self.user.password)
+        request = self.factory.post(
+            '/offer/', payload, content_type="MULTIPART_CONTENT", follow=False, secure=True)
+        request.user = self.user
 
         # when
         response = Offers.as_view()(request)
@@ -395,7 +485,9 @@ class OfferViewTest(TestCase):
             "hourly_rate": "10.50",
             "max_distance": 2
         }
-        request = self.factory.post('/offer/', payload)
+        request = self.factory.post(
+            '/offer/', payload, content_type="MULTIPART_CONTENT", follow=False, secure=True)
+        request.user = self.user
 
         # when
         response = Offers.as_view()(request)
@@ -403,21 +495,22 @@ class OfferViewTest(TestCase):
         # then
         self.assertEqual(response.status_code, 400)
 
-    def test_OffersView_whenCreateOfferWithPastExpirationDate_thenResponseStatusCode400(self):
+    def test_OffersView_whenCreateOfferWithPastEndDate_thenResponseStatusCode400(self):
 
         # given
-        non_existent_user = 999
-        past_expiration_date = date.today() - timedelta(days=1)
-        past_expiration_date = past_expiration_date.__str__
+        past_end_date = date.today() - timedelta(days=1)
+        past_end_date = past_end_date.__str__
         payload = {
-            "user": non_existent_user,
+            "user": self.user,
             "type_service": "Dressage d'animaux",
             "description": "Utilisation de gâteries véganes!",
             "hourly_rate": "10.50",
             "max_distance": 2,
-            "expiration_date": past_expiration_date
+            "end_date": past_end_date
         }
-        request = self.factory.post('/offer/', payload)
+        request = self.factory.post(
+            '/offer/', content_type="MULTIPART_CONTENT", follow=False, secure=True)
+        request.user = self.user
 
         # when
         response = Offers.as_view()(request)

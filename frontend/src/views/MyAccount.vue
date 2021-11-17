@@ -151,214 +151,162 @@
 							></button>
 						</header>
 
-						<section class="modal-card-body">
-							<div
-								class="is-flex-desktop is-justify-content-space-between mr-6"
-							>
-								<div class="field">
-									<label class="label">Type de service</label>
-									<div class="control">
-										<div class="select">
-											<select
-												v-model="serviceType"
-												class="w-200"
-											>
-												<option
-													value=""
-													disabled
-													selected
-													>Choisir parmi</option
-												>
-												<option
-													v-for="type in serviceTypes"
-													v-bind:key="type.name"
-													>{{ type.name }}</option
-												>
-											</select>
-										</div>
-									</div>
-								</div>
+            <section class="modal-card-body">
 
-								<div class="field mb-2 mr-6">
-									<label class="label">Expiration</label>
-									<input
-										type="date"
-										class="datepicker"
-										v-bind:min="tomorrow"
-										v-model="expirationDate"
-									/>
-								</div>
-							</div>
+                <div class="field">
+                  <label class="label">Type de service</label>
+                  <div class="control">
+                    <div class="select">
+                      <select v-model="serviceType" class="w-200">
+                        <option
+                          v-for="type in serviceTypes"
+                          v-bind:key="type.name"
+                          >{{ type.name }}</option
+                        >
+                      </select>
+                    </div>
+                  </div>
+                </div>
 
-							<div class="field">
-								<label class="label">Disponibilités</label>
-								<div>
-									<div
-										class="columns is-mobile is-family-monospace buttons is-grouped is-justify-content-space-around mt-2"
-									>
-										<div class="control ml-0">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.monday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.monday = !daysSelected.monday
-												"
-											>
-												L
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.tuesday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.tuesday = !daysSelected.tuesday
-												"
-											>
-												M
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.wednesday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.wednesday = !daysSelected.wednesday
-												"
-											>
-												M
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.thursday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.thursday = !daysSelected.thursday
-												"
-											>
-												J
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.friday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.friday = !daysSelected.friday
-												"
-											>
-												V
-											</a>
-										</div>
-										<div class="control">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.saturday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.saturday = !daysSelected.saturday
-												"
-											>
-												S
-											</a>
-										</div>
-										<div class="control mr-0">
-											<a
-												class="button is-rounded"
-												:class="
-													daysSelected.sunday
-														? 'is-success'
-														: ''
-												"
-												v-on:click="
-													daysSelected.sunday = !daysSelected.sunday
-												"
-											>
-												D
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
+                <label class="label">Distance maximale</label>
+                <div class="field has-addons">
+                  <p class="control">
+                    <input
+                      v-model="maxDistance"
+                      class="input"
+                      type="number"
+                      min="1"
+                      placeholder="Distance"
+                    />
+                  </p>
+                </div>
 
-							<label class="label">Taux horaire</label>
-							<div class="field has-addons">
-								<p class="control">
-									<span class="select">
-										<select>
-											<option>$</option>
-											<option>BTC</option>
-											<option>ETH</option>
-										</select>
-									</span>
-								</p>
-								<p class="control">
-									<input
-										v-model="hourlyRate"
-										class="input"
-										type="number"
-										placeholder="Montant"
-									/>
-								</p>
-							</div>
+				<label class="label">Taux horaire</label>
+				<div class="field has-addons">
+					<p class="control">
+					<input
+						v-model="hourlyRate"
+						class="input"
+						type="number"
+						min="0"
+						placeholder="Montant"
+					/>
+					</p>
+				</div>
+              
+              <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                  <textarea
+                    v-model="description"
+                    class="textarea"
+                    placeholder="Votre message ici..."
+                  ></textarea>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Disponibilités</label>
+                <div>
+                  <div class="field mb-2 mr-6"></div>
+                  <div
+                    class="is-flex has-text-centered is-flex-wrap-wrap mt-2 is-justify-content-space-evenly is-family-monospace"
+                  >
+                    <button
+                      id="2"
+                      class="button is-rounded day-button"
+                      :class="daysSelected.monday ? 'is-success' : ''"
+                      v-on:click="clickOnButton(2, daysSelected.monday)"
+                    >
+                      L
+                    </button>
 
-							<label class="label">Distance maximale</label>
-							<div class="field has-addons">
-								<p class="control">
-									<input
-										v-model="maxDistance"
-										class="input"
-										type="number"
-										placeholder="Distance"
-									/>
-								</p>
-							</div>
+                    <button
+                      id="3"
+                      class="button is-rounded day-button"
+                      :class="daysSelected.tuesday ? 'is-success' : ''"
+                      v-on:click="clickOnButton(3, daysSelected.tuesday)"
+                    >
+                      M
+                    </button>
 
-							<div class="field">
-								<label class="label">Message</label>
-								<div class="control">
-									<textarea
-										v-model="description"
-										class="textarea"
-										placeholder="Votre message ici..."
-									></textarea>
-								</div>
-							</div>
+                    <button
+                      id="4"
+                      class="button is-rounded day-button"
+                      :class="daysSelected.wednesday ? 'is-success' : ''"
+                      v-on:click="clickOnButton(4, daysSelected.wednesday)"
+                    >
+                      M
+                    </button>
 
-							<div class="field">
-								<div class="control">
-									<label class="checkbox">
-										<input type="checkbox" />
-										J'accepte les
-										<a href="#">termes et conditions</a>
-									</label>
-								</div>
-							</div>
-						</section>
+                    <button
+                      id="5"
+                      class="button is-rounded day-button"
+                      :class="daysSelected.thursday ? 'is-success' : ''"
+                      v-on:click="clickOnButton(5, daysSelected.thursday)"
+                    >
+                      J
+                    </button>
+
+                    <button
+                      id="6"
+                      class="button is-rounded day-button"
+                      :class="daysSelected.friday ? 'is-success' : ''"
+                      v-on:click="clickOnButton(6), daysSelected.friday"
+                    >
+                      V
+                    </button>
+
+                    <button
+                      id="7"
+                      class="button is-rounded day-button"
+                      :class="daysSelected.saturday ? 'is-success' : ''"
+                      v-on:click="clickOnButton(7, daysSelected.saturday)"
+                    >
+                      S
+                    </button>
+
+                    <button
+                      id="1"
+                      class="button is-rounded day-button"
+                      :class="daysSelected.sunday ? 'is-success' : ''"
+                      v-on:click="clickOnButton(1, daysSelected.sunday)"
+                    >
+                      D
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <label @click="resetDatepicker()" class="checkbox mb-4">
+                <input type="checkbox" v-model="isDatePickerPresent" />
+                Préciser une date ou une sélection de jours
+              </label>
+              <div
+                :class="[isDatePickerPresent ? '' : 'hidden']"
+                id="datepicker"
+              >
+                <label class="label">Sélectionner un ou plusieurs jours</label>
+                <DatePicker
+                  v-model="range"
+                  mode="date"
+                  :masks="masks"
+                  is-range
+                  :min-date="minDate"
+                  :attributes="attributes"
+                  :drag-attribute="dragAttribute"
+                  :select-attribute="selectAttribute"
+                  :key="componentKey"
+                  is-expanded
+                />
+              </div>
+              <div
+                class="notification is-danger mt-4"
+                v-if="datePickerError.length > 0"
+              >
+                <p v-for="error in datePickerError" v-bind:key="error">
+                  {{ error }}
+                </p>
+              </div>
+            </section>
 
 						<footer
 							class="modal-card-foot is-flex is-justify-content-center"
@@ -520,6 +468,12 @@ import { toast } from "bulma-toast";
 
 export default {
 	name: "MyAccount",
+	//Les components qu'on veut utiliser
+	components: {
+		DetailedOffer,
+		TerminatedOffer,
+		ReservedOffer,
+	},
 	data() {
 		return {
 			activeOffers: [],
@@ -551,14 +505,54 @@ export default {
 			errors: [],
 			tomorrow: "",
 			creationModalIsActive: false,
+
+			/***Datepicker Début**/
+			isDatePickerPresent: false,
+			startDate: "",
+			endDate: "",
+			minDate: new Date(),
+			componentKey: 0,
+			username: "",
+			password: "",
+			errors: [],
+			dragAttribute: {
+				highlight: {
+				color: "green",
+				fillMode: "light",
+				},
+			},
+			selectAttribute: {
+				highlight: {
+				color: "green",
+				fillMode: "light",
+				},
+				dates: this.range,
+				order: 0,
+			},
+			attributes: [],
+			range: null,
+			masks: {
+				title: "MMMM YYYY",
+				weekdays: "W",
+				navMonths: "MMM",
+				input: ["L", "YYYY-MM-DD", "YYYY/MM/DD"],
+				dayPopover: "WWW, MMM D, YYYY",
+				data: ["YYYY-MM-DD"],
+			},
+			datePickerError: [],
+			/***Datepicker Fin**/
 		};
 	},
-	//Les components qu'on veut utiliser
-	components: {
-		DetailedOffer,
-		TerminatedOffer,
-		ReservedOffer,
-	},
+	watch: {
+    range(val) {
+      if (val) {
+        //console.log("watch reset pattern");
+        this.resetPattern();
+        this.resetDaysButtons();
+        this.datePickerError = [];
+      }
+    },
+  },
 	mounted() {
 		document.title = "Mon compte | Communoservice";
 		this.getUserInfo();
@@ -582,7 +576,7 @@ export default {
 					this.activeOffers = response.data;
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
 		async getTerminatedOffersForUser(userId) {
@@ -592,7 +586,7 @@ export default {
 					this.terminatedOffersForUser = res.data;
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
 		async getReservedOffersForUser(userId) {
@@ -602,7 +596,7 @@ export default {
 					this.reservedOffersForUser = res.data;
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
 		async getTerminatedOffersForRecruiter(recruiterId) {
@@ -612,7 +606,7 @@ export default {
 					this.terminatedOffersForRecruiter = res.data;
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
 		async getReservedOffersForRecruiter(recruiterId) {
@@ -622,7 +616,7 @@ export default {
 					this.reservedOffersForRecruiter = res.data;
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
 		async getServiceTypes() {
@@ -632,7 +626,7 @@ export default {
 					this.serviceTypes = res.data;
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
 		openCreationModal() {
@@ -766,7 +760,7 @@ export default {
 					this.getAllOffers(activeOffer.id_user);
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
 		async getUserInfo() {
@@ -782,9 +776,257 @@ export default {
 					this.getReservedOffersForRecruiter(this.userInfo.user_id);
 				})
 				.catch((error) => {
-					console.log(error);
+					//console.log(error);
 				});
 		},
+	/***Méthodes Datepicker Début**/
+    datepickerChanged() {
+      //console.log("day clicked");
+      this.resetPattern();
+    },
+    confirm() {
+      //console.log("Choix : " + JSON.stringify(this.range));
+      //console.log("Valeurs du range : " + JSON.stringify(this.range.value));
+      //console.log("Pattern choisi : " + JSON.stringify(this.attributes));
+    },
+    clickOnButton(weekDayIndex, isWeekdaySelected) {
+      //console.log("attributes : " + JSON.stringify(this.attributes));
+
+      this.datePickerError = [];
+      if (document.getElementById("datepicker").className.includes("hidden")) {
+        this.manageButtonWithoutRangeRestriction(
+          weekDayIndex,
+          isWeekdaySelected
+        );
+      } else {
+        this.manageButtonClickWithRangeRestriction(
+          weekDayIndex,
+          isWeekdaySelected
+        );
+      }
+    },
+    manageButtonClickWithRangeRestriction(weekDayIndex, isWeekdaySelected) {
+      //console.log("With range limits");
+      let errorMessage =
+        "Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours.";
+      let errorMessage2 =
+        "Ce jour de semaine n'apparaît pas votre sélection du calendrier.";
+
+      //console.log("range is " + JSON.stringify(this.range));
+
+      if (this.range == null) {
+        this.datePickerError.push(errorMessage);
+        document.getElementById(weekDayIndex.toString()).blur();
+        return;
+      }
+      let debut = this.range.start;
+      let fin = this.range.end;
+      let span = this.range.end - this.range.start;
+      //console.log("span is " + span);
+      if (span == 0) {
+        this.datePickerError.push(errorMessage);
+        return;
+      }
+      
+      var daysArray = this.getDaysArray(debut, fin);
+      //console.log("dates de la sélection : " + JSON.stringify(daysArray));
+      let indexDayOfRangeSelected = [];
+      daysArray.forEach((day) => {
+        //console.log(day + " est un " + day.getDay());
+        indexDayOfRangeSelected.push(day.getDay());
+      });
+	  //Ajustement de l'indice par rapport à V-Calendar
+      let indexToCheck = weekDayIndex - 1;
+      if (indexDayOfRangeSelected.includes(indexToCheck)) {
+        //console.log("L'index " + weekDayIndex + "est valide");
+      } else {
+        this.datePickerError.push(errorMessage2);
+        document.getElementById(weekDayIndex.toString()).blur();
+        return;
+      }
+      //console.log("Selected index : " + weekDayIndex);
+      let notFound = true;
+      let i = 0;
+      let indexToDelete = -1;
+      //console.log("attr : " + JSON.stringify(this.attributes.length));
+      while (notFound && i < this.attributes.length) {
+        if (this.attributes[i].hasOwnProperty("key")) {
+          //console.log("Has property Key!!!");
+          if (this.attributes[i].key == weekDayIndex) {
+            //console.log("Has the right value : " + this.attributes[i].key);
+            indexToDelete = i;
+            //console.log("Element to delete in Attributes : " + i);
+            notFound = false;
+          } else i++;
+        }
+      }
+      //console.log(indexToDelete);
+      if (indexToDelete != -1 && this.attributes.length != 0) {
+        //console.log("est présent");
+        //Est présent
+        this.attributes.splice(indexToDelete, 1);
+		        switch (weekDayIndex) {
+          case 2:
+            this.daysSelected.monday = !this.daysSelected.monday;
+            break;
+          case 3:
+            this.daysSelected.tuesday = !this.daysSelected.tuesday;
+            break;
+          case 4:
+            this.daysSelected.wednesday = !this.daysSelected.wednesday;
+            break;
+          case 5:
+            this.daysSelected.thursday = !this.daysSelected.thursday;
+            break;
+          case 6:
+            this.daysSelected.friday = !this.daysSelected.friday;
+            break;
+          case 7:
+            this.daysSelected.saturday = !this.daysSelected.saturday;
+            break;
+          case 1:
+            this.daysSelected.sunday = !this.daysSelected.sunday;
+            break;
+          case 3:
+            break;
+          default:
+        }
+      } else {
+        //console.log("est pas présent encore");
+        switch (weekDayIndex) {
+          case 2:
+            this.daysSelected.monday = !this.daysSelected.monday;
+            break;
+          case 3:
+            this.daysSelected.tuesday = !this.daysSelected.tuesday;
+            break;
+          case 4:
+            this.daysSelected.wednesday = !this.daysSelected.wednesday;
+            break;
+          case 5:
+            this.daysSelected.thursday = !this.daysSelected.thursday;
+            break;
+          case 6:
+            this.daysSelected.friday = !this.daysSelected.friday;
+            break;
+          case 7:
+            this.daysSelected.saturday = !this.daysSelected.saturday;
+            break;
+          case 1:
+            this.daysSelected.sunday = !this.daysSelected.sunday;
+            break;
+          case 3:
+            break;
+          default:
+        }
+        
+        //console.log("a passé le toggle selected day");
+        this.attributes.push({
+          key: weekDayIndex,
+          highlight: {
+            color: "green",
+            fillMode: "solid",
+          },
+          dates: {
+            start: debut,
+            end: fin,
+            weekdays: [weekDayIndex],
+          },
+          order: 1,
+        });
+      }
+      //console.log("Ajout dans le pattern réussi");
+	 
+      this.datePickerError = [];
+    },
+    manageButtonWithoutRangeRestriction(weekDayIndex, isWeekdaySelected) {
+      //console.log("no range restriction");
+      this.toggleSelectedDay(weekDayIndex, isWeekdaySelected);
+    },
+    toEnableDaysButtons() {
+      let buttons = document.getElementsByClassName("day-button");
+      buttons.forEach((b) => (b.disabled = true));
+    },
+    toDisableDaysButtons() {
+      let buttons = document.getElementsByClassName("day-button");
+      buttons.forEach((b) => (b.disabled = false));
+    },
+    resetDaysButtons() {
+      for (const property in this.daysSelected) {
+        this.daysSelected[property] = false;
+      }
+    },
+    resetPattern() {
+      //console.log(JSON.stringify(this.range));
+      //console.log("Suppression du pattern.");
+      while (this.attributes.length > 0) {
+        //console.log("Remove one attribute.");
+        this.attributes.pop();
+      } //note: ne pas remplacer par this.attributes=[] -->ne marche pas.
+    },
+    resetDatepicker() {
+      this.range = null;
+      this.resetPattern();
+      this.resetDaysButtons();
+      this.datePickerError = [];
+    },
+    resetRange() {
+      if (this.resetNextDayClick) {
+        this.resetNextDayClick = false;
+        this.$nextTick(() => (this.range = null));
+      }
+    },
+    toggleSelectedDay(weekDayIndex, isWeekdaySelected) {
+      //console.log("dans fonction toggle");
+      //console.log("weekdayindex vaut : " + weekDayIndex);
+      //console.log("isWeekdaySelected vaut : " + isWeekdaySelected);
+      switch (weekDayIndex) {
+        case 2:
+          this.daysSelected.monday = !this.daysSelected.monday;
+          break;
+        case 3:
+          this.daysSelected.tuesday = !this.daysSelected.tuesday;
+          break;
+        case 4:
+          this.daysSelected.wednesday = !this.daysSelected.wednesday;
+          break;
+        case 5:
+          this.daysSelected.thursday = !this.daysSelected.thursday;
+          break;
+        case 6:
+          this.daysSelected.friday = !this.daysSelected.friday;
+          break;
+        case 7:
+          this.daysSelected.saturday = !this.daysSelected.saturday;
+          break;
+        case 1:
+          this.daysSelected.sunday = !this.daysSelected.sunday;
+          break;
+        case 3:
+          break;
+        default:
+      }
+      isWeekdaySelected = !isWeekdaySelected;
+    },
+    getDaysArray(start, end) {
+      for (
+        var arr = [], dt = new Date(start);
+        dt <= end;
+        dt.setDate(dt.getDate() + 1)
+      ) {
+        arr.push(new Date(dt));
+      }
+      return arr;
+    },
+    validateDateIsADayOfWeek(day, indexToCheck) {
+      //console.log("entré dan fct." + indexToCheck);
+      //Corriger décalage de VCalendar, dont les indices
+      //commencent à 1 à partir du dimanche.
+      indexToCheck = indexToCheck - 1;
+      if (indexToCheck !== day.getDay()) {
+        return false;
+      }
+    }
 	},
 };
 </script>
@@ -815,5 +1057,8 @@ option[value=""][disabled] {
 .user-bio{
 	margin:auto;
 	max-width: 500px;
+}
+.hidden {
+  display: none;
 }
 </style>
