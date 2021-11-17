@@ -266,7 +266,8 @@
 			"friday": true,
 			"saturday": true,
 			"sunday": true,
-			"expiration_date": "2021-12-20"
+			"start_date":"2021-12-01",
+			"end_date": "2021-12-31"
 		}
 	},
 	{
@@ -280,8 +281,7 @@
 			"max_distance": 2,
 			"date_added": "2020-05-05",
 			"friday": true,
-			"saturday": true,
-			"expiration_date": "2021-12-20"
+			"saturday": true
 		}
 	},
 	{
@@ -295,7 +295,8 @@
 			"max_distance": 4,
 			"date_added": "2020-09-20",
 			"wednesday": true,
-			"expiration_date": "2021-12-20"
+			"start_date":"2021-12-20",
+			"end_date": "2021-12-20"
 		}
 	},
 	{
@@ -310,7 +311,8 @@
 			"date_added": "2020-12-20",
 			"wednesday": true,
 			"sunday": true,
-			"expiration_date": "2021-12-20"
+			"start_date":"2021-12-01",
+			"end_date": "2021-12-20"
 		}
 	},
 	{
@@ -324,7 +326,8 @@
 			"max_distance": 4,
 			"date_added": "2020-12-20",
 			"saturday": true,
-			"expiration_date": "2021-12-20"
+			"start_date":"2021-09-24",
+			"end_date": "2021-12-20"
 		}
 	},
 	{
@@ -338,7 +341,8 @@
 			"max_distance": 4,
 			"date_added": "2020-12-20",
 			"saturday": true,
-			"expiration_date": "2021-12-20"
+			"start_date":"2021-11-24",
+			"end_date": "2021-12-20"
 		}
 	},
 	{
@@ -354,7 +358,8 @@
 			"monday": true,
 			"thursday": true,
 			"saturday": true,
-			"expiration_date": "2021-11-20"
+			"start_date":"2021-10-24",
+			"end_date": "2021-11-20"
 		}
 	},
 	{
@@ -370,7 +375,8 @@
 			"monday": true,
 			"tuesday": true,
 			"thursday": true,
-			"expiration_date": "2021-10-08"
+			"start_date":"2021-09-08",
+			"end_date": "2021-10-08"
 		}
 	},
 	{
@@ -385,7 +391,7 @@
 			"date_added": "2020-12-20",
 			"wednesday": true,
 			"thursday": true,
-			"expiration_date": "2021-12-24"
+			"end_date": "2021-12-24"
 		}
 	},
 	{
@@ -402,7 +408,6 @@
 			"tuesday": true,
 			"wednesday": true,
 			"thursday": true,
-			"expiration_date": "2021-10-29"
 		}
 	},
 	{
