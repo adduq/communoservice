@@ -7,7 +7,7 @@ from django.db.utils import IntegrityError
 from django.db import DataError
 from django.contrib.auth.models import User
 from apps.userinfo.models import UserInfo
-from .models import Offer
+from .models import Offer, ActiveOffer
 from .fixtures import OfferFixtures
 from .views import Offers
 from datetime import date, timedelta
@@ -448,6 +448,27 @@ class OfferViewTest(TestCase):
             location_lon='-71.122421',
             address='17 Rue d\'Orléans, Sainte-Pétronille, QC',
         )
+        self.employe_andrew_offer = Offer.objects.create(
+            user = self.employe_andrew,
+            type_service = 'Administration',
+            description = 'Bon service d\'administration.',
+            hourly_rate = 15,
+            max_distance = 4,
+            date_added = '2021-11-16',
+            monday = True,
+            tuesday = True,
+            wednesday = False,
+            thursday = False,
+            friday = True,
+            saturday = False,
+            sunday = True,
+            expiration_date = '2021-12-30'
+        )
+        ActiveOffer.objects.create(
+            id_offer = self.employe_andrew_offer,
+            id_user = self.employe_andrew
+        )
+
         # End region Andrew
 
         # Region Danic
@@ -467,6 +488,26 @@ class OfferViewTest(TestCase):
             location_lat='46.871947',
             location_lon='-71.093098',
             address='933 Rte Prévost, Saint-Pierre, QC',
+        )
+        self.employe_danic_offer = Offer.objects.create(
+            user = self.employe_danic,
+            type_service = 'Déneigement',
+            description = 'Bon service de déneigement.',
+            hourly_rate = 15,
+            max_distance = 3,
+            date_added = '2021-11-16',
+            monday = True,
+            tuesday = False,
+            wednesday = True,
+            thursday = False,
+            friday = True,
+            saturday = True,
+            sunday = True,
+            expiration_date = '2021-12-30'
+        )
+        ActiveOffer.objects.create(
+            id_offer = self.employe_danic_offer,
+            id_user = self.employe_danic
         )
         # End region Danic
 
@@ -488,6 +529,26 @@ class OfferViewTest(TestCase):
             location_lon='-71.066911',
             address='576 Rte des Prêtres, Saint-Pierre, QC',
         )
+        self.employe_daisy_offer = Offer.objects.create(
+            user = self.employe_daisy,
+            type_service = 'Tonte de pelouse',
+            description = 'Bon service de tondeuse.',
+            hourly_rate = 15,
+            max_distance = 15,
+            date_added = '2021-11-16',
+            monday = True,
+            tuesday = True,
+            wednesday = True,
+            thursday = False,
+            friday = True,
+            saturday = False,
+            sunday = True,
+            expiration_date = '2021-12-30'
+        )
+        ActiveOffer.objects.create(
+            id_offer = self.employe_daisy_offer,
+            id_user = self.employe_daisy
+        )
         # End region Daisy
 
         # Region Pierrick
@@ -508,10 +569,58 @@ class OfferViewTest(TestCase):
             location_lon='-70.936578',
             address='1099 Rte du Mitan, Sainte-Famille, QC',
         )
+        self.employe_pierrick_offer = Offer.objects.create(
+            user = self.employe_pierrick,
+            type_service = 'Gardiennage',
+            description = 'Bon service de gardiennage.',
+            hourly_rate = 15,
+            max_distance = 10,
+            date_added = '2021-11-16',
+            monday = False,
+            tuesday = False,
+            wednesday = True,
+            thursday = True,
+            friday = True,
+            saturday = False,
+            sunday = False,
+            expiration_date = '2021-12-30'
+        )
+        ActiveOffer.objects.create(
+            id_offer = self.employe_pierrick_offer,
+            id_user = self.employe_pierrick
+        )
         # End region Pierrick
 
-    def test_OffersView_whenGetAllActiveOffersWithNoToken_thenNoDistanceCalulated(self):
-        pass
+    def test_OffersView_whenGetAllActiveOffersWithoutToken_thenNoDistanceCalculated(self):
+        response = self.client.get(reverse('active-offers'))
+        offers = [dict(obj) for obj in response.data]
+        self.assertEqual(len(offers), 4)
+
+    def test_OffersView_whenGetAllActiveOffersWithToken_thenDistanceCalculated(self):
+        # Devrait contenir le service de andrew (Administration)
+        # Ne devrait pas contenir le service de Danic (Déneigement)
+        # Devrait contenir le service de Daisy (Tonte de pelouse)
+        # Ne devrait pas contenir le service de Pierrick (Gardiennage)
+
+        login_data = {
+            'username': self.recruiter.username,
+            'password': 'qwerty1234',
+        }
+
+        response = self.client.post(reverse('login'), login_data, format='json')
+        token = response.data['auth_token']
+
+        headers = {
+           'HTTP_AUTHORIZATION': 'Token  ' + token
+        }
+        response = self.client.get(reverse('active-offers'), **headers)
+        offers = [dict(obj) for obj in response.data]
+
+        self.assertTrue(any("Administration" in offer['type_service'] for offer in offers))
+        self.assertTrue(any("Tonte de pelouse" in offer['type_service'] for offer in offers))
+        self.assertFalse(any("Déneigement" in offer['type_service'] for offer in offers))
+        self.assertFalse(any("Gardiennage" in offer['type_service'] for offer in offers))
+        self.assertEqual(len(offers), 2)
 
     def test_OffersView_whenLoginAsRecruiter_thenAuthTokenReturned(self):
         login_data = {
