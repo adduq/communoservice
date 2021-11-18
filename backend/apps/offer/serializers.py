@@ -48,10 +48,17 @@ class ServiceTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ActiveOfferCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActiveOffer
+        fields = '__all__'
+
+
 class ActiveOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActiveOffer
         fields = '__all__'
+        depth = 1
 
 
 class ReservedOfferSerializer(serializers.ModelSerializer):
@@ -68,7 +75,6 @@ class ReservedOfferCreationSerializer(serializers.ModelSerializer):
 
 
 class TerminatedOfferSerializer(serializers.ModelSerializer):
-    # id_offer = OfferSerializer(read_only=True)
     class Meta:
         model = TerminatedOffer
         fields = '__all__'

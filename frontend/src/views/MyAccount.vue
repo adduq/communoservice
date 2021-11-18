@@ -132,7 +132,7 @@
 			</div>
 		</div>
 		<div class="columns">
-			<template v-if="profileSwitch == false">
+			<template v-if="!profileSwitch">
 				<div
 					class="modal"
 					:class="creationModalIsActive ? 'is-active' : ''"
@@ -392,7 +392,7 @@
 					</div>
 				</div>
 			</template>
-			<template v-if="profileSwitch == true">
+			<template v-if="profileSwitch">
 				<div class="column">
 					<div class="box">
 						<p class="title has-text-centered">
@@ -773,7 +773,7 @@ export default {
 					this.getAllOffers(activeOffer.id_user);
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getUserInfo() {

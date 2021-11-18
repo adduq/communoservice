@@ -601,8 +601,8 @@ export default {
 			await axios
 				.post("/api/v1/reserved-offers/", this.offerToReserve)
 				.then((res) => {
-					console.log(res);
-					console.log(this.offerToReserve);
+					// console.log(res);
+					// console.log(this.offerToReserve);
 
 					this.isFetchingOffers = false;
 					this.clickedSend = true;
@@ -618,7 +618,7 @@ export default {
 				.then((res) => {
 					this.offerToReserve.id_recruiter = res.data.user_id;
 
-					console.log(this.offerToReserve);
+					// console.log(this.offerToReserve);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -630,7 +630,8 @@ export default {
 				.then((res) => {
 					this.offerToReserve.id_active_offer = res.data.id;
 
-					console.log(this.offerToReserve);
+					// console.log(this.offerToReserve); 
+					// console.log(res.data); 
 				})
 				.catch((err) => {
 					console.log(err);

@@ -1,7 +1,7 @@
 <template>
     <div id="modal-settings">
         <div class="modal is-active">
-            <div class="modal-background"></div>
+            <div class="modal-background" @click="$emit('exitSettingsModal', true)"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
                     <p class="modal-card-title">Paramètres</p>

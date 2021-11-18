@@ -88,8 +88,7 @@
     <SettingsModal 
       v-if="modalSettingsisActive" 
       @exitSettingsModal="modalSettingsisActive = !modalSettingsisActive"
-    >
-    </SettingsModal>
+    />
 
 		<footer class="footer">
 			<div class="content has-text-centered">
