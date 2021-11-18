@@ -1,7 +1,6 @@
 import unittest
 from django.test import RequestFactory, TestCase
 from rest_framework.authtoken.models import Token
-from rest_framework.test import APIClient
 from django.core.exceptions import *
 from django.db.utils import IntegrityError
 from django.db import DataError
@@ -257,7 +256,7 @@ class TestOffer(unittest.TestCase):
             print('**********************************************************')
 
 
-def test_givenStarDate_whenCreatingInstance_thenReturnNewInstance(self):
+def test_givenStartDate_whenCreatingInstance_thenReturnNewInstance(self):
 
     # given
     test_user = self.user
@@ -310,7 +309,7 @@ def test_givenNoEndDate_whenCreatingInstance_thenReturnNewInstance(self):
     self.assertEqual(offer.end_date, test_end_date)
 
 
-def test_givenStarDateAfterEndDatewhenCreatingInstance_thenExpectError(self):
+def test_givenStartDateAfterEndDatewhenCreatingInstance_thenExpectError(self):
 
     # given
     test_user = self.user
@@ -339,7 +338,7 @@ def test_givenStarDateAfterEndDatewhenCreatingInstance_thenExpectError(self):
     self.assertEqual(offer.end_date, test_start_date)
 
 
-def test_givenNoDisponibilies_whenCreatingInstance_thenReturnNewInstance(self):
+def test_givenNoDisponibilities_whenCreatingInstance_thenReturnNewInstance(self):
 
     # given
     test_user = self.user
@@ -403,7 +402,7 @@ def test_givenExistingOfferId_whenCreatingInstance_expectError(self):
 
 
 class OfferViewTest(TestCase):
-    def setUp(self):
+    def setUp(self):    
         # Chaque test de ce type requiert la factory.
         self.factory = RequestFactory()
         
@@ -422,6 +421,7 @@ class OfferViewTest(TestCase):
             user_id=self.recruiter,
             first_name='Gandalf',
             last_name='LeBlanc',
+            profile_is_completed= True,
             email='gandalf@globetrotter.net',
             location_lat='46.848193',
             location_lon='-71.138846',
@@ -462,7 +462,7 @@ class OfferViewTest(TestCase):
             friday = True,
             saturday = False,
             sunday = True,
-            expiration_date = '2021-12-30'
+            end_date = '2021-12-30'
         )
         ActiveOffer.objects.create(
             id_offer = self.employe_andrew_offer,
@@ -503,7 +503,7 @@ class OfferViewTest(TestCase):
             friday = True,
             saturday = True,
             sunday = True,
-            expiration_date = '2021-12-30'
+            end_date = '2021-12-30'
         )
         ActiveOffer.objects.create(
             id_offer = self.employe_danic_offer,
@@ -543,7 +543,7 @@ class OfferViewTest(TestCase):
             friday = True,
             saturday = False,
             sunday = True,
-            expiration_date = '2021-12-30'
+            end_date = '2021-12-30'
         )
         ActiveOffer.objects.create(
             id_offer = self.employe_daisy_offer,
@@ -583,7 +583,7 @@ class OfferViewTest(TestCase):
             friday = True,
             saturday = False,
             sunday = False,
-            expiration_date = '2021-12-30'
+            end_date = '2021-12-30'
         )
         ActiveOffer.objects.create(
             id_offer = self.employe_pierrick_offer,
@@ -627,7 +627,7 @@ class OfferViewTest(TestCase):
             'username': self.recruiter.username,
             'password': 'qwerty1234',
         }
-        response = self.client.post(reverse('login'), login_data, format='json')
+        response = self.client.post(reverse('login'), data=login_data, format='json')
 
         self.assertEqual(response.status_code, 200)
         self.assertIn('auth_token', response.data)
@@ -637,91 +637,141 @@ class OfferViewTest(TestCase):
 
         # TODO: Utiliser API Client => https://stackoverflow.com/questions/29140353/testing-django-api-login-using-credentials-and-djoser
 
-    def test_OffersView_whenGetMethod_thenResponseStatusCode200(self):
-        # given
-        request = self.factory.get('/offer/')
-        request.user = self.user
-
+    def test_OffersView_whenGetMethodOnOffers_thenResponseStatusCode200(self):
         # when
-        response = Offers.as_view()(request)
-
+        response = self.client.get(reverse('offers'))
         # then
         self.assertEqual(response.status_code, 200)
 
-    def test_OffersView_whenIllegalPutMethod_thenResponseStatusCode405(self):
-        # given
-        request = self.factory.put(
-            '/offer/', {}, content_type="MULTIPART_CONTENT", follow=False, secure=True)
-        request.user = self.user
+    def test_OffersView_whenGettingOfferById_thenResponseStatusCode200(self):
+        created_offer= Offer.objects.create(
+            user = self.recruiter,
+            type_service = 'Gardiennage',
+            description = 'Bon service de gardiennage.',
+            hourly_rate = 15,
+            max_distance = 10,
+            date_added = '2021-11-16',
+            monday = False,
+            tuesday = False,
+            wednesday = True,
+            thursday = True,
+            friday = True,
+            saturday = False,
+            sunday = False,
+            end_date = '2021-12-30'
+        )
+        created_offer.save()
 
         # when
-        response = Offers.as_view()(request)
+        response = self.client.get(reverse('offers', kwargs={'no_offer': created_offer.id}))
+        
+        # then
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['id'], created_offer.id)
+        created_offer.delete()
 
+    def test_OffersView_whenIllegalPutMethod_thenResponseStatusCode405(self):
+        # when
+        response = self.client.put(reverse('offers'))
         # then
         self.assertEqual(response.status_code, 405)
 
-    def test_OffersView_whenCreateOffer_thenResponseStatusCode201(self):
-
+    def test_OffersView_whenCreateOfferWithoutToken_thenResponseStatusCode401(self):
         # given
         payload = {
-            "user": self.user.id,
-            "type_service": "Dressage d'animaux",
-            "description": "Utilisation de gâteries véganes!",
-            "hourly_rate": "10.50",
-            "max_distance": 2
+            "user" : self.recruiter.id,
+            "type_service" : 'Tonte de pelouse',
+            "description" : 'Service de tonte de pelouse.',
+            "hourly_rate" : 15,
+            "max_distance" : 10,
+            "date_added" : '2021-11-16',
+            "monday" : False,
+            "tuesday" : False,
+            "wednesday" : True,
+            "thursday" : True,
+            "friday" : True,
+            "saturday" : False,
+            "sunday" : False,
+            "end_date" : '2021-12-30'
         }
-        self.factory.login(username=self.user.username,
-                           password=self.user.password)
-        request = self.factory.post(
-            '/offer/', payload, content_type="MULTIPART_CONTENT", follow=False, secure=True)
-        request.user = self.user
-
-        # when
-        response = Offers.as_view()(request)
+        #when
+        response = self.client.post(reverse('offers'), data=payload)
 
         # then
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 401)
 
     def test_OffersView_whenCreateOfferWithNonExistentUser_thenResponseStatusCode400(self):
-
         # given
+        login_data = {
+            'username': self.recruiter.username,
+            'password': 'qwerty1234',
+        }
+
+        response = self.client.post(reverse('login'), data=login_data, format='json')
+        token = response.data['auth_token']
+
+        headers = {
+           'HTTP_AUTHORIZATION': 'Token  ' + token
+        }
+
         non_existent_user = 999
         payload = {
             "user": non_existent_user,
-            "type_service": "Dressage d'animaux",
-            "description": "Utilisation de gâteries véganes!",
-            "hourly_rate": "10.50",
-            "max_distance": 2
+            "type_service" : 'Tonte de pelouse',
+            "description" : 'Service de tonte de pelouse.',
+            "hourly_rate" : 15,
+            "max_distance" : 10,
+            "date_added" : '2021-11-16',
+            "monday" : False,
+            "tuesday" : False,
+            "wednesday" : True,
+            "thursday" : True,
+            "friday" : True,
+            "saturday" : False,
+            "sunday" : False,
+            "end_date" : '2021-12-30'
         }
-        request = self.factory.post(
-            '/offer/', payload, content_type="MULTIPART_CONTENT", follow=False, secure=True)
-        request.user = self.user
-
         # when
-        response = Offers.as_view()(request)
-
+        response = self.client.post(reverse('offers'), data=payload, **headers)
+       
         # then
         self.assertEqual(response.status_code, 400)
 
     def test_OffersView_whenCreateOfferWithPastEndDate_thenResponseStatusCode400(self):
 
         # given
+        login_data = {
+            'username': self.recruiter.username,
+            'password': 'qwerty1234',
+        }
+
+        response = self.client.post(reverse('login'), data=login_data, format='json')
+        token = response.data['auth_token']
+
+        headers = {
+           'HTTP_AUTHORIZATION': 'Token  ' + token
+        }
+
         past_end_date = date.today() - timedelta(days=1)
         past_end_date = past_end_date.__str__
         payload = {
-            "user": self.user,
-            "type_service": "Dressage d'animaux",
-            "description": "Utilisation de gâteries véganes!",
-            "hourly_rate": "10.50",
-            "max_distance": 2,
+            "user": self.recruiter.id,
+            "type_service" : 'Tonte de pelouse',
+            "description" : 'Service de tonte de pelouse.',
+            "hourly_rate" : 15,
+            "max_distance" : 10,
+            "date_added" : '2021-11-16',
+            "monday" : False,
+            "tuesday" : False,
+            "wednesday" : True,
+            "thursday" : True,
+            "friday" : True,
+            "saturday" : False,
+            "sunday" : False,
             "end_date": past_end_date
         }
-        request = self.factory.post(
-            '/offer/', content_type="MULTIPART_CONTENT", follow=False, secure=True)
-        request.user = self.user
-
         # when
-        response = Offers.as_view()(request)
+        response = self.client.post(reverse('offers'), data=payload, **headers)
 
         # then
         self.assertEqual(response.status_code, 400)
