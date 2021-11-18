@@ -153,57 +153,64 @@
 
             <section class="modal-card-body">
 
-                <div class="field">
-                  <label class="label">Type de service</label>
-                  <div class="control">
-                    <div class="select">
-                      <select v-model="serviceType" class="w-200">
-                        <option
-                          v-for="type in serviceTypes"
-                          v-bind:key="type.name"
-                          >{{ type.name }}</option
-                        >
-                      </select>
-                    </div>
-                  </div>
-                </div>
+				<div class="columns">
+					<div class="column is-one-third">
+						<div class="field">
+						<label class="label">Type de service</label>
+						<div class="control">
+							<div class="select">
+							<select v-model="serviceType" class="w-200">
+								<option
+								v-for="type in serviceTypes"
+								v-bind:key="type.name"
+								>{{ type.name }}</option
+								>
+							</select>
+							</div>
+						</div>
+						</div>
 
-                <label class="label">Distance maximale</label>
-                <div class="field has-addons">
-                  <p class="control">
-                    <input
-                      v-model="maxDistance"
-                      class="input"
-                      type="number"
-                      min="1"
-                      placeholder="Distance"
-                    />
-                  </p>
-                </div>
+						<label class="label">Distance maximale</label>
+						<div class="field has-addons">
+						<p class="control">
+							<input
+							v-model="maxDistance"
+							class="input"
+							type="number"
+							min="1"
+							placeholder="Distance"
+							/>
+						</p>
+						</div>
 
-				<label class="label">Taux horaire</label>
-				<div class="field has-addons">
-					<p class="control">
-					<input
-						v-model="hourlyRate"
-						class="input"
-						type="number"
-						min="0"
-						placeholder="Montant"
-					/>
-					</p>
+						<label class="label">Taux horaire</label>
+						<div class="field has-addons">
+							<p class="control">
+							<input
+								v-model="hourlyRate"
+								class="input"
+								type="number"
+								min="0"
+								placeholder="Montant"
+							/>
+							</p>
+						</div>
+					</div>
+					<div class="column">
+						<div class="field">
+							<label class="label">Description</label>
+							<div class="control">
+							<textarea
+								v-model="description"
+								class="textarea"
+								placeholder="Votre message ici..."
+							></textarea>
+							</div>
+						</div>
+					</div>
 				</div>
               
-              <div class="field">
-                <label class="label">Description</label>
-                <div class="control">
-                  <textarea
-                    v-model="description"
-                    class="textarea"
-                    placeholder="Votre message ici..."
-                  ></textarea>
-                </div>
-              </div>
+
               <div class="field">
                 <label class="label">Disponibilités</label>
                 <div>
@@ -264,7 +271,6 @@
                     >
                       S
                     </button>
-
                     <button
                       id="1"
                       class="button is-rounded day-button"
@@ -296,6 +302,7 @@
                   :select-attribute="selectAttribute"
                   :key="componentKey"
                   is-expanded
+				  locale="fr"
                 />
               </div>
               <div
@@ -687,15 +694,12 @@ export default {
 		},
 		async addNewOffer() {
 			this.isLoading = true;
-			let expiration =
-				this.expirationDate == "" ? null : this.expirationDate;
 			const newOffer = {
 				user: this.userInfo.user_id,
 				type_service: this.serviceType,
 				description: this.description,
 				hourly_rate: this.hourlyRate,
 				max_distance: this.maxDistance,
-				expiration_date: expiration,
 				monday: this.daysSelected.monday,
 				tuesday: this.daysSelected.tuesday,
 				wednesday: this.daysSelected.wednesday,
@@ -704,51 +708,60 @@ export default {
 				saturday: this.daysSelected.saturday,
 				sunday: this.daysSelected.sunday,
 			};
+			let startDate = this.range == null ? null : this.range.start.toISOString().substr(0, 10);
+			let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
+			newOffer.start_date = startDate;
+			newOffer.end_date = endDate;
+			//alert(JSON.stringify(newOffer)); //pour validation.
 			await axios
-				.post("/api/v1/offers/", newOffer)
-				.then((response) => {
-					this.isLoading = false;
-					this.modalCreateisActive = false;
-					this.creationModalIsActive = false;
-
-					this.addActiveOffers({
-						id_offer: response.data.id,
-						id_user: response.data.user,
-					});
-				})
-				.catch((error) => {
-					this.modalCreateisActive = false;
-					this.creationModalIsActive = true;
-					if (error.response.data["error"] == "profile_incomplete") {
-						toast({
-							message:
-								"Profil incomplet. Veuillez completer votre profil dans les paramètres.",
-							type: "is-danger",
-							dismissible: true,
-							pauseOnHover: true,
-							duration: 4000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					} else {
-						toast({
-							message:
-								"Une erreur est survenue. Essayez à nouveau.",
-							type: "is-danger",
-							dismissible: true,
-							pauseOnHover: true,
-							duration: 4000,
-							position: "bottom-right",
-							animate: {
-								in: "fadeInRightBig",
-								out: "fadeOutRightBig",
-							},
-						});
-					}
+			.post("/api/v1/offers/", newOffer)
+			.then((response) => {
+				this.isLoading = false;
+				this.modalCreateisActive = false;
+				this.creationModalIsActive = false;
+				// this.confirmeCreation = false;
+				this.addActiveOffers({
+					id_offer: response.data.id,
+					id_user: response.data.user,
 				});
+			})
+			.catch((error) => {
+				this.modalCreateisActive = false;
+				this.creationModalIsActive = true;
+				// this.confirmeCreation = false;
+				if (error.response.data["error"] == "profile_incomplete") {
+					toast({
+						message: "Profil incomplet. Veuillez completer votre profil dans les paramètres.",
+						type: "is-danger",
+						dismissible: true,
+						pauseOnHover: true,
+						duration: 4000,
+						position: "bottom-right",
+						animate: {
+							in: "fadeInRightBig",
+							out: "fadeOutRightBig",
+						},
+					});
+					// this.errors.push(
+					// 	"Profil incomplet. Veuillez completer votre profil dans les paramètres."
+					// );
+				} else {
+					// this.errors.push("Une erreur est survenue. Essayez à nouveau.");
+					toast({
+						message: "Une erreur est survenue. Essayez à nouveau.",
+						type: "is-danger",
+						dismissible: true,
+						pauseOnHover: true,
+						duration: 4000,
+						position: "bottom-right",
+						animate: {
+							in: "fadeInRightBig",
+							out: "fadeOutRightBig",
+						},
+					});
+				}
+				// console.log(error);
+			});
 		},
 		toSelectDate(payload) {
 			alert(payload);
