@@ -81,6 +81,7 @@ class Offers(APIView):
         if request.user.is_anonymous:
             return HttpResponse('Unauthorized', status=401)
 
+        #TODO: Vérifier que le id dans le payload == request.user.id
         if self.user_can_create(request.user.id):
             serializer = OfferSerializer(data=request.data)
             if serializer.is_valid():
