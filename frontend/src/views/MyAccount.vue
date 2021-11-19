@@ -160,6 +160,7 @@
 						<div class="control">
 							<div class="select">
 							<select v-model="serviceType" class="w-200">
+								<option value="" disabled selected>Choisir parmi</option>
 								<option
 								v-for="type in serviceTypes"
 								v-bind:key="type.name"
@@ -290,7 +291,16 @@
                 :class="[isDatePickerPresent ? '' : 'hidden']"
                 id="datepicker"
               >
-                <label class="label">Sélectionner un ou plusieurs jours</label>
+                <label class="label">Sélectionner un ou plusieurs jours
+					<span class="icon is-info tooltip">
+						<i class="fas fa-info-circle"></i>
+						<span class="tooltiptext has-background-primary">
+							Cliquez une fois pour choisir la date de début<br/>
+							Cliquez une deuxième fois pour choisir la date de fin
+						</span>
+					</span>
+				</label>
+				
                 <DatePicker
                   v-model="range"
                   mode="date"
@@ -496,8 +506,8 @@ export default {
 
 			serviceType: "",
 			description: "",
-			hourlyRate: 10.5,
-			maxDistance: 1,
+			hourlyRate: "",
+			maxDistance: "",
 			expirationDate: "",
 			daysSelected: {
 				monday: false,
@@ -721,6 +731,8 @@ export default {
 				this.isLoading = false;
 				this.modalCreateisActive = false;
 				this.creationModalIsActive = false;
+				this.resetDatepicker();
+				this.resetInputs();
 				// this.confirmeCreation = false;
 				this.addActiveOffers({
 					id_offer: response.data.id,
@@ -794,254 +806,259 @@ export default {
 					//console.log(error);
 				});
 		},
-	/***Méthodes Datepicker Début**/
-    datepickerChanged() {
-      //console.log("day clicked");
-      this.resetPattern();
-    },
-    confirm() {
-      //console.log("Choix : " + JSON.stringify(this.range));
-      //console.log("Valeurs du range : " + JSON.stringify(this.range.value));
-      //console.log("Pattern choisi : " + JSON.stringify(this.attributes));
-    },
-    clickOnButton(weekDayIndex, isWeekdaySelected) {
-      //console.log("attributes : " + JSON.stringify(this.attributes));
+		/***Méthodes Datepicker Début**/
+		datepickerChanged() {
+		//console.log("day clicked");
+		this.resetPattern();
+		},
+		confirm() {
+		//console.log("Choix : " + JSON.stringify(this.range));
+		//console.log("Valeurs du range : " + JSON.stringify(this.range.value));
+		//console.log("Pattern choisi : " + JSON.stringify(this.attributes));
+		},
+		clickOnButton(weekDayIndex, isWeekdaySelected) {
+		//console.log("attributes : " + JSON.stringify(this.attributes));
 
-      this.datePickerError = [];
-      if (document.getElementById("datepicker").className.includes("hidden")) {
-        this.manageButtonWithoutRangeRestriction(
-          weekDayIndex,
-          isWeekdaySelected
-        );
-      } else {
-        this.manageButtonClickWithRangeRestriction(
-          weekDayIndex,
-          isWeekdaySelected
-        );
-      }
-    },
-    manageButtonClickWithRangeRestriction(weekDayIndex, isWeekdaySelected) {
-      //console.log("With range limits");
-      let errorMessage =
-        "Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours.";
-      let errorMessage2 =
-        "Ce jour de semaine n'apparaît pas votre sélection du calendrier.";
+		this.datePickerError = [];
+		if (document.getElementById("datepicker").className.includes("hidden")) {
+			this.manageButtonWithoutRangeRestriction(
+			weekDayIndex,
+			isWeekdaySelected
+			);
+		} else {
+			this.manageButtonClickWithRangeRestriction(
+			weekDayIndex,
+			isWeekdaySelected
+			);
+		}
+		},
+		manageButtonClickWithRangeRestriction(weekDayIndex, isWeekdaySelected) {
+		//console.log("With range limits");
+		let errorMessage =
+			"Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours.";
+		let errorMessage2 =
+			"Ce jour de semaine n'apparaît pas votre sélection du calendrier.";
 
-      //console.log("range is " + JSON.stringify(this.range));
+		//console.log("range is " + JSON.stringify(this.range));
 
-      if (this.range == null) {
-        this.datePickerError.push(errorMessage);
-        document.getElementById(weekDayIndex.toString()).blur();
-        return;
-      }
-      let debut = this.range.start;
-      let fin = this.range.end;
-      let span = this.range.end - this.range.start;
-      //console.log("span is " + span);
-      if (span == 0) {
-        this.datePickerError.push(errorMessage);
-        return;
-      }
-      
-      var daysArray = this.getDaysArray(debut, fin);
-      //console.log("dates de la sélection : " + JSON.stringify(daysArray));
-      let indexDayOfRangeSelected = [];
-      daysArray.forEach((day) => {
-        //console.log(day + " est un " + day.getDay());
-        indexDayOfRangeSelected.push(day.getDay());
-      });
-	  //Ajustement de l'indice par rapport à V-Calendar
-      let indexToCheck = weekDayIndex - 1;
-      if (indexDayOfRangeSelected.includes(indexToCheck)) {
-        //console.log("L'index " + weekDayIndex + "est valide");
-      } else {
-        this.datePickerError.push(errorMessage2);
-        document.getElementById(weekDayIndex.toString()).blur();
-        return;
-      }
-      //console.log("Selected index : " + weekDayIndex);
-      let notFound = true;
-      let i = 0;
-      let indexToDelete = -1;
-      //console.log("attr : " + JSON.stringify(this.attributes.length));
-      while (notFound && i < this.attributes.length) {
-        if (this.attributes[i].hasOwnProperty("key")) {
-          //console.log("Has property Key!!!");
-          if (this.attributes[i].key == weekDayIndex) {
-            //console.log("Has the right value : " + this.attributes[i].key);
-            indexToDelete = i;
-            //console.log("Element to delete in Attributes : " + i);
-            notFound = false;
-          } else i++;
-        }
-      }
-      //console.log(indexToDelete);
-      if (indexToDelete != -1 && this.attributes.length != 0) {
-        //console.log("est présent");
-        //Est présent
-        this.attributes.splice(indexToDelete, 1);
-		        switch (weekDayIndex) {
-          case 2:
-            this.daysSelected.monday = !this.daysSelected.monday;
-            break;
-          case 3:
-            this.daysSelected.tuesday = !this.daysSelected.tuesday;
-            break;
-          case 4:
-            this.daysSelected.wednesday = !this.daysSelected.wednesday;
-            break;
-          case 5:
-            this.daysSelected.thursday = !this.daysSelected.thursday;
-            break;
-          case 6:
-            this.daysSelected.friday = !this.daysSelected.friday;
-            break;
-          case 7:
-            this.daysSelected.saturday = !this.daysSelected.saturday;
-            break;
-          case 1:
-            this.daysSelected.sunday = !this.daysSelected.sunday;
-            break;
-          case 3:
-            break;
-          default:
-        }
-      } else {
-        //console.log("est pas présent encore");
-        switch (weekDayIndex) {
-          case 2:
-            this.daysSelected.monday = !this.daysSelected.monday;
-            break;
-          case 3:
-            this.daysSelected.tuesday = !this.daysSelected.tuesday;
-            break;
-          case 4:
-            this.daysSelected.wednesday = !this.daysSelected.wednesday;
-            break;
-          case 5:
-            this.daysSelected.thursday = !this.daysSelected.thursday;
-            break;
-          case 6:
-            this.daysSelected.friday = !this.daysSelected.friday;
-            break;
-          case 7:
-            this.daysSelected.saturday = !this.daysSelected.saturday;
-            break;
-          case 1:
-            this.daysSelected.sunday = !this.daysSelected.sunday;
-            break;
-          case 3:
-            break;
-          default:
-        }
-        
-        //console.log("a passé le toggle selected day");
-        this.attributes.push({
-          key: weekDayIndex,
-          highlight: {
-            color: "green",
-            fillMode: "solid",
-          },
-          dates: {
-            start: debut,
-            end: fin,
-            weekdays: [weekDayIndex],
-          },
-          order: 1,
-        });
-      }
-      //console.log("Ajout dans le pattern réussi");
-	 
-      this.datePickerError = [];
-    },
-    manageButtonWithoutRangeRestriction(weekDayIndex, isWeekdaySelected) {
-      //console.log("no range restriction");
-      this.toggleSelectedDay(weekDayIndex, isWeekdaySelected);
-    },
-    toEnableDaysButtons() {
-      let buttons = document.getElementsByClassName("day-button");
-      buttons.forEach((b) => (b.disabled = true));
-    },
-    toDisableDaysButtons() {
-      let buttons = document.getElementsByClassName("day-button");
-      buttons.forEach((b) => (b.disabled = false));
-    },
-    resetDaysButtons() {
-      for (const property in this.daysSelected) {
-        this.daysSelected[property] = false;
-      }
-    },
-    resetPattern() {
-      //console.log(JSON.stringify(this.range));
-      //console.log("Suppression du pattern.");
-      while (this.attributes.length > 0) {
-        //console.log("Remove one attribute.");
-        this.attributes.pop();
-      } //note: ne pas remplacer par this.attributes=[] -->ne marche pas.
-    },
-    resetDatepicker() {
-      this.range = null;
-      this.resetPattern();
-      this.resetDaysButtons();
-      this.datePickerError = [];
-    },
-    resetRange() {
-      if (this.resetNextDayClick) {
-        this.resetNextDayClick = false;
-        this.$nextTick(() => (this.range = null));
-      }
-    },
-    toggleSelectedDay(weekDayIndex, isWeekdaySelected) {
-      //console.log("dans fonction toggle");
-      //console.log("weekdayindex vaut : " + weekDayIndex);
-      //console.log("isWeekdaySelected vaut : " + isWeekdaySelected);
-      switch (weekDayIndex) {
-        case 2:
-          this.daysSelected.monday = !this.daysSelected.monday;
-          break;
-        case 3:
-          this.daysSelected.tuesday = !this.daysSelected.tuesday;
-          break;
-        case 4:
-          this.daysSelected.wednesday = !this.daysSelected.wednesday;
-          break;
-        case 5:
-          this.daysSelected.thursday = !this.daysSelected.thursday;
-          break;
-        case 6:
-          this.daysSelected.friday = !this.daysSelected.friday;
-          break;
-        case 7:
-          this.daysSelected.saturday = !this.daysSelected.saturday;
-          break;
-        case 1:
-          this.daysSelected.sunday = !this.daysSelected.sunday;
-          break;
-        case 3:
-          break;
-        default:
-      }
-      isWeekdaySelected = !isWeekdaySelected;
-    },
-    getDaysArray(start, end) {
-      for (
-        var arr = [], dt = new Date(start);
-        dt <= end;
-        dt.setDate(dt.getDate() + 1)
-      ) {
-        arr.push(new Date(dt));
-      }
-      return arr;
-    },
-    validateDateIsADayOfWeek(day, indexToCheck) {
-      //console.log("entré dan fct." + indexToCheck);
-      //Corriger décalage de VCalendar, dont les indices
-      //commencent à 1 à partir du dimanche.
-      indexToCheck = indexToCheck - 1;
-      if (indexToCheck !== day.getDay()) {
-        return false;
-      }
-    }
+		if (this.range == null) {
+			this.datePickerError.push(errorMessage);
+			document.getElementById(weekDayIndex.toString()).blur();
+			return;
+		}
+		let debut = this.range.start;
+		let fin = this.range.end;
+		let span = this.range.end - this.range.start;
+		//console.log("span is " + span);
+		if (span == 0) {
+			this.datePickerError.push(errorMessage);
+			return;
+		}
+		
+		var daysArray = this.getDaysArray(debut, fin);
+		//console.log("dates de la sélection : " + JSON.stringify(daysArray));
+		let indexDayOfRangeSelected = [];
+		daysArray.forEach((day) => {
+			//console.log(day + " est un " + day.getDay());
+			indexDayOfRangeSelected.push(day.getDay());
+		});
+		//Ajustement de l'indice par rapport à V-Calendar
+		let indexToCheck = weekDayIndex - 1;
+		if (indexDayOfRangeSelected.includes(indexToCheck)) {
+			//console.log("L'index " + weekDayIndex + "est valide");
+		} else {
+			this.datePickerError.push(errorMessage2);
+			document.getElementById(weekDayIndex.toString()).blur();
+			return;
+		}
+		//console.log("Selected index : " + weekDayIndex);
+		let notFound = true;
+		let i = 0;
+		let indexToDelete = -1;
+		//console.log("attr : " + JSON.stringify(this.attributes.length));
+		while (notFound && i < this.attributes.length) {
+			if (this.attributes[i].hasOwnProperty("key")) {
+			//console.log("Has property Key!!!");
+			if (this.attributes[i].key == weekDayIndex) {
+				//console.log("Has the right value : " + this.attributes[i].key);
+				indexToDelete = i;
+				//console.log("Element to delete in Attributes : " + i);
+				notFound = false;
+			} else i++;
+			}
+		}
+		//console.log(indexToDelete);
+		if (indexToDelete != -1 && this.attributes.length != 0) {
+			//console.log("est présent");
+			//Est présent
+			this.attributes.splice(indexToDelete, 1);
+					switch (weekDayIndex) {
+			case 2:
+				this.daysSelected.monday = !this.daysSelected.monday;
+				break;
+			case 3:
+				this.daysSelected.tuesday = !this.daysSelected.tuesday;
+				break;
+			case 4:
+				this.daysSelected.wednesday = !this.daysSelected.wednesday;
+				break;
+			case 5:
+				this.daysSelected.thursday = !this.daysSelected.thursday;
+				break;
+			case 6:
+				this.daysSelected.friday = !this.daysSelected.friday;
+				break;
+			case 7:
+				this.daysSelected.saturday = !this.daysSelected.saturday;
+				break;
+			case 1:
+				this.daysSelected.sunday = !this.daysSelected.sunday;
+				break;
+			case 3:
+				break;
+			default:
+			}
+		} else {
+			//console.log("est pas présent encore");
+			switch (weekDayIndex) {
+			case 2:
+				this.daysSelected.monday = !this.daysSelected.monday;
+				break;
+			case 3:
+				this.daysSelected.tuesday = !this.daysSelected.tuesday;
+				break;
+			case 4:
+				this.daysSelected.wednesday = !this.daysSelected.wednesday;
+				break;
+			case 5:
+				this.daysSelected.thursday = !this.daysSelected.thursday;
+				break;
+			case 6:
+				this.daysSelected.friday = !this.daysSelected.friday;
+				break;
+			case 7:
+				this.daysSelected.saturday = !this.daysSelected.saturday;
+				break;
+			case 1:
+				this.daysSelected.sunday = !this.daysSelected.sunday;
+				break;
+			case 3:
+				break;
+			default:
+			}
+			
+			//console.log("a passé le toggle selected day");
+			this.attributes.push({
+			key: weekDayIndex,
+			highlight: {
+				color: "green",
+				fillMode: "solid",
+			},
+			dates: {
+				start: debut,
+				end: fin,
+				weekdays: [weekDayIndex],
+			},
+			order: 1,
+			});
+		}
+		//console.log("Ajout dans le pattern réussi");
+		
+		this.datePickerError = [];
+		},
+		manageButtonWithoutRangeRestriction(weekDayIndex, isWeekdaySelected) {
+		//console.log("no range restriction");
+		this.toggleSelectedDay(weekDayIndex, isWeekdaySelected);
+		},
+		toEnableDaysButtons() {
+		let buttons = document.getElementsByClassName("day-button");
+		buttons.forEach((b) => (b.disabled = true));
+		},
+		toDisableDaysButtons() {
+		let buttons = document.getElementsByClassName("day-button");
+		buttons.forEach((b) => (b.disabled = false));
+		},
+		resetDaysButtons() {
+		for (const property in this.daysSelected) {
+			this.daysSelected[property] = false;
+		}
+		},
+		resetPattern() {
+		//console.log(JSON.stringify(this.range));
+		//console.log("Suppression du pattern.");
+		while (this.attributes.length > 0) {
+			//console.log("Remove one attribute.");
+			this.attributes.pop();
+		} //note: ne pas remplacer par this.attributes=[] -->ne marche pas.
+		},
+		resetDatepicker() {
+		this.range = null;
+		this.resetPattern();
+		this.resetDaysButtons();
+		this.datePickerError = [];
+		},
+		resetRange() {
+		if (this.resetNextDayClick) {
+			this.resetNextDayClick = false;
+			this.$nextTick(() => (this.range = null));
+		}
+		},
+		toggleSelectedDay(weekDayIndex, isWeekdaySelected) {
+		//console.log("dans fonction toggle");
+		//console.log("weekdayindex vaut : " + weekDayIndex);
+		//console.log("isWeekdaySelected vaut : " + isWeekdaySelected);
+		switch (weekDayIndex) {
+			case 2:
+			this.daysSelected.monday = !this.daysSelected.monday;
+			break;
+			case 3:
+			this.daysSelected.tuesday = !this.daysSelected.tuesday;
+			break;
+			case 4:
+			this.daysSelected.wednesday = !this.daysSelected.wednesday;
+			break;
+			case 5:
+			this.daysSelected.thursday = !this.daysSelected.thursday;
+			break;
+			case 6:
+			this.daysSelected.friday = !this.daysSelected.friday;
+			break;
+			case 7:
+			this.daysSelected.saturday = !this.daysSelected.saturday;
+			break;
+			case 1:
+			this.daysSelected.sunday = !this.daysSelected.sunday;
+			break;
+			case 3:
+			break;
+			default:
+		}
+		isWeekdaySelected = !isWeekdaySelected;
+		},
+		getDaysArray(start, end) {
+		for (
+			var arr = [], dt = new Date(start);
+			dt <= end;
+			dt.setDate(dt.getDate() + 1)
+		) {
+			arr.push(new Date(dt));
+		}
+		return arr;
+		},
+		validateDateIsADayOfWeek(day, indexToCheck) {
+		//console.log("entré dan fct." + indexToCheck);
+		//Corriger décalage de VCalendar, dont les indices
+		//commencent à 1 à partir du dimanche.
+		indexToCheck = indexToCheck - 1;
+		if (indexToCheck !== day.getDay()) {
+			return false;
+		}
+		},
+		resetInputs(){
+			this.description = "";
+			this.hourlyRate = "";
+			this.serviceType = "";
+		}
 	},
 };
 </script>
@@ -1074,6 +1091,28 @@ option[value=""][disabled] {
 	max-width: 500px;
 }
 .hidden {
-  display: none;
+  	display: none;
+}
+.tooltip {
+	position: relative;
+	float: right;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 200px;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 10;
+	top: 100%;
+	right: 0;
+	margin-left: -200px;
+}
+
+.tooltip:hover .tooltiptext {
+  	visibility: visible;
 }
 </style>

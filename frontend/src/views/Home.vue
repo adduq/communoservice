@@ -238,14 +238,14 @@
 					<div class="columns bt-1 pt-2 is-gapless">
 						<div class="column">
 							<div class="has-text-centered">
-								<label class="label is-size-5">Date de création</label>
-								<p class="is-size-6">{{ offerToShow.date_added }}</p>
+								<label class="label is-size-5">Date de début</label>
+								<p class="is-size-6">{{ offerToShow.start_date ? offerToShow.start_date : "---"}}</p>
 							</div>
 						</div>
 						<div class="column">
 							<div class="has-text-centered">
-								<label class="label is-size-5">Date d'expiration</label>
-								<p class="is-size-6">{{ offerToShow.expiration_date }}</p>
+								<label class="label is-size-5">Date de fin</label>
+								<p class="is-size-6">{{offerToShow.end_date ? offerToShow.end_date : "---"}}</p>
 							</div>
 						</div>
 					</div>
