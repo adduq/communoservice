@@ -89,9 +89,6 @@ class TerminatedOffer(models.Model):
     id_recruiter = models.ForeignKey(User, on_delete=models.CASCADE,
                                      related_name="recruiter_terminated_offer")
     completed_date = models.DateField(null=True)
-    # ? Quel champ ?
-    # status = models.IntegerChoices()  => Enum
     status = models.IntegerField(
         default=StatusOffer.GIVEN, choices=StatusOffer.choices)
-    # ? Quel champ ?
     rating = models.FloatField(null=True)

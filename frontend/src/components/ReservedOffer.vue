@@ -39,18 +39,10 @@
 				{{ reservedOffer.id_recruiter.last_name }}
 			</p>
 
-			<!-- <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between"> -->
 			<div class="is-flex is-flex-wrap-wrap is-justify-content-end mt-4">
-				<!-- <time
-					class="is-align-self-center"
-					datetime="2016-1-1"
-					v-if="reservedOffer.reservation_date"
-				>
-					Réservé pour le : {{ reservedOffer.reservation_date }}</time
-				> -->
 				<button
 					class="button is-success w-100 mr-2"
-					v-on:click="terminateOffer"
+					v-on:click="terminateOfferIsActive = true"
 				>
 					Terminer
 				</button>
@@ -60,16 +52,80 @@
 			</div>
 		</div>
 	</div>
+
+
+	<div class="modal" :class="terminateOfferIsActive ? 'is-active' : ''">
+		<div class="modal-background" @click="terminateOfferIsActive = !terminateOfferIsActive">
+		</div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title">Terminer le service</p>
+						<button
+							class="delete has-background-danger"
+							@click="terminateOfferIsActive = !terminateOfferIsActive"
+							aria-label="close"
+						></button>
+				</header>
+
+            	<section class="modal-card-body">
+					<div class="field">
+						<label class="label">Status du service</label>
+						<div class="control">
+							<div class="select">
+								<select v-model="statusAttribue" class="w-200">
+									<option v-for="type in statusService"
+									v-bind:key="type.dispo" :value="type.dispo">
+										{{ type.name }}
+									</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="field">
+						<label class="label">Mettre une note</label>
+						<div class="control">
+							<div class="rating">
+								<star-rating :increment="0.05" :rating="noteService"
+									:border-width="1" :max-rating="10" @update:rating ="setRating"
+									:glow="5" glow-color="#ffd055" :star-size="30" text-class="affiche-note">									
+								</star-rating>
+							</div>
+						</div>
+					</div>
+            	</section>
+
+				<footer class="modal-card-foot is-flex is-justify-content-center">
+					<button
+						class="button is-success w-200"
+						@click="terminateOffer"
+					>
+						Terminer
+					</button>
+					<button
+						class="button is-danger w-200"
+						@click="terminateOfferIsActive = !terminateOfferIsActive"
+					>
+						Fermer
+					</button>
+				</footer>
+			</div>
+	</div>
 </template>
 
 <script>
 import axios from "axios";
+import StarRating from 'vue-star-rating';
 
 export default {
 	name: "ReservedOffer",
 	props: {
 		reservedOffer: null,
 		isRecruiterCard: false,
+		// userInfo: Object,
+	},
+	components: {
+		StarRating
 	},
 	data() {
 		return {
@@ -79,23 +135,43 @@ export default {
 				CANCEL: 2,
 				NO_PRESENCE: 3,
 			},
+			statusService: [
+				{name: "Rendu", dispo: 0},
+				{name: "Pas rendu", dispo: 1},
+				{name: "Annulé", dispo: 2},
+				{name: "Ne s'est pas présenté", dispo: 3},
+			],
+			statusAttribue: 0,
+			noteService: 0,
+			terminateOfferIsActive: false,
 		};
 	},
 	methods: {
+		setRating(note) {
+			this.noteService = note;
+		},
 		async cancelOffer() {
 			this.reservedOffer["status"] = this.statusDispo.CANCEL;
+
+			await this.finishOffer();
+		},
+		async terminateOffer() {			
+			if (parseInt(this.noteService) === 0)
+				this.noteService = null;
+
+			this.reservedOffer["status"] = this.statusAttribue;
+			this.reservedOffer["rating"] = this.noteService;
+
+			await this.finishOffer();
+		},
+		async finishOffer() {
 			this.reservedOffer["completed_date"] = new Date()
 				.toISOString()
 				.split("T")[0];
 
-			await this.addToTerminatedOffer();
+			await this.deleteFromReservedOffer();
 		},
-		async terminateOffer() {
-			// alert("terminé");
-			this.addToParentTerminatedList(this.reservedOffer);
-			this.removeFromParentReservedList(this.reservedOffer);
-		},
-		async addToTerminatedOffer() {
+		async deleteFromReservedOffer() {
 			await axios
 				.delete(
 					`/api/v1/reserved-offers/${this.reservedOffer.id}`,
@@ -112,13 +188,13 @@ export default {
 						);
 					}
 
-					this.deleteFromReservedOffer();
+					this.addToTerminatedOffer();
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
-		async deleteFromReservedOffer() {
+		async addToTerminatedOffer() {
 			this.reservedOffer["id_offer"] = this.reservedOffer.id_offer.id;
 			this.reservedOffer["id_active_offer"] = this.reservedOffer.id_active_offer.id;
 			this.reservedOffer["id_user"] = this.reservedOffer.id_user.id;
@@ -131,11 +207,68 @@ export default {
 						this.$parent.getTerminatedOffersForRecruiter(
 							this.reservedOffer["id_recruiter"]
 						);
+
+						this.refreshEmployeeInfos(this.reservedOffer["id_user"], this.reservedOffer["id_recruiter"]);
+
+						// let new_avg = this.averageWithIncrements(this.userInfo["avg_rating_as_employer"],
+						// this.userInfo["nb_rating_as_employer"], this.reservedOffer["rating"]);
+
+						// console.log(this.userInfo);
+						// console.log(new_avg);
+
+						// this.userInfo["nb_services_received"] += 1;
+						// this.userInfo["nb_rating_as_employer"] += 1;
+						// this.userInfo["avg_rating_as_employer"] = new_avg;
+
+						// console.log(this.userInfo);
 					} else {
 						this.$parent.getTerminatedOffersForUser(
 							this.reservedOffer["id_user"]
 						);
-					}
+
+						this.refreshRecruiterInfos(this.reservedOffer["id_recruiter"], this.reservedOffer["id_user"]);
+
+						// let new_avg = this.averageWithIncrements(this.userInfo["avg_rating_as_employee"],
+						// this.userInfo["nb_rating_as_employe"], this.reservedOffer["rating"]);
+
+						// console.log(this.userInfo);
+						// console.log(new_avg);
+
+						// this.userInfo["nb_services_given"] += 1;
+						// this.userInfo["nb_rating_as_employe"] += 1;
+						// this.userInfo["avg_rating_as_employee"] = new_avg;
+						
+						// console.log(this.userInfo);
+					}					
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		// averageWithIncrements(old_avg, old_total, new_value) {
+		// 	return ((old_avg * old_total) + new_value) / (old_total + 1);
+		// }
+		async refreshEmployeeInfos(user_id, recruiter_id) {
+			await axios
+				.put(
+					`/api/v1/userinfo/${user_id}/update-employee/${recruiter_id}/`,
+					this.reservedOffer
+				)
+				.then((res) => {
+					// console.log(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		async refreshRecruiterInfos(recruiter_id, user_id) {
+			await axios
+				.put(
+					`/api/v1/userinfo/${recruiter_id}/update-recruiter/${user_id}/`,
+					this.reservedOffer
+				)
+				.then((res) => {
+					// console.log(res.data);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -144,3 +277,10 @@ export default {
 	},
 };
 </script>
+
+<style>
+.affiche-note {
+	font-size: 3vh;
+	padding-left: 1vh;
+}
+</style>

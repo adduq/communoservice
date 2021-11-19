@@ -17,6 +17,8 @@ from django.core.validators import validate_email
 
 import re, json
 
+
+from pprint import pprint
 # Create your views here.
 
 
@@ -144,3 +146,56 @@ class UpdateUserInfo(APIView):
 
         except UserInfo.DoesNotExist:
             raise Http404
+
+class updateAvgDataEmployee(APIView):
+
+    def put(self, request, user_id, recruiter_id, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
+        if (recruiter_id is not None and request.user.id != recruiter_id):
+            return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+        # if ((recruiter_id is not None and request.user.id != recruiter_id) and
+        #         (user_id is not None and request.user.id != user_id)):
+        #     return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+
+        userinfo = UserInfo.objects.get(user_id=user_id)
+
+        if 'rating' in request.data and request.data['rating'] is not None:
+            userinfo.avg_rating_as_employee = (((float(userinfo.avg_rating_as_employee) * userinfo.nb_rating_as_employe)
+                                                + float(request.data['rating'])) / (userinfo.nb_rating_as_employe + 1))
+            userinfo.nb_rating_as_employe += 1
+            userinfo.nb_services_given += 1
+
+            userinfo.save()
+        
+        serializer = UserInfoSerializer(userinfo)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class updateAvgDataRecruiter(APIView):
+
+    def put(self, request, user_id, recruiter_id, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
+        if (user_id is not None and request.user.id != user_id):
+            return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+        # if ((recruiter_id is not None and request.user.id != recruiter_id) and
+        #         (user_id is not None and request.user.id != user_id)):
+        #     return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+
+        userinfo = UserInfo.objects.get(user_id=recruiter_id)
+
+        if 'rating' in request.data and request.data['rating'] is not None:
+            userinfo.avg_rating_as_employer = (((float(userinfo.avg_rating_as_employer) * userinfo.nb_rating_as_employer)
+                                                + float(request.data['rating'])) / (userinfo.nb_rating_as_employer + 1))
+            userinfo.nb_rating_as_employer += 1
+            userinfo.nb_services_received += 1
+
+            userinfo.save()
+        
+        serializer = UserInfoSerializer(userinfo)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
