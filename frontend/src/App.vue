@@ -105,9 +105,8 @@
 <script>
   import axios from "axios";
   import SettingsModal from "@/components/SettingsModal";
-  import {
-    toast
-  } from "bulma-toast";
+  import { toast } from "bulma-toast";
+
   export default {
     data() {
       return {
@@ -131,7 +130,7 @@
       } else {
         axios.defaults.headers.common["Authorization"] = "";
       }
-      console.log(token);
+    //   console.log(token);
     },
     mounted() {
       window.addEventListener('resize', this.handleResize);

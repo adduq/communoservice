@@ -443,7 +443,7 @@
 			<footer class="modal-card-foot is-flex is-justify-content-space-evenly">
 				<button
 					class="button is-primary is-rounded w-100"
-					v-if="currentStep > 1"
+					v-if="currentStep > 1 && !step3Completed"
 					@click="currentStep--"
 				>
 					<span class="icon">
@@ -453,7 +453,7 @@
 				</button>
 				<button
 					class="button is-primary is-rounded w-100"
-					v-if="currentStep < 3"
+					v-if="currentStep < 3 && !step3Completed"
 					:disabled="
 						currentStep == 2 &&
 							Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
@@ -476,7 +476,7 @@
 				</button>
 				<button
 					class="button is-primary is-rounded w-100"
-					v-if="currentStep == 3"
+					v-if="currentStep == 3 && !step3Completed"
 					:disabled="
 						currentStep == 3 &&
 							(!confirmationCheckbox || !$store.state.isAuthenticated)
@@ -596,7 +596,7 @@ export default {
 			await this.getActiveOfferId(offer);
 			await this.getRecruiterId();
 
-			console.log(this.offerToReserve);
+			// console.log(this.offerToReserve);
 
 			await axios
 				.post("/api/v1/reserved-offers/", this.offerToReserve)
