@@ -1,5 +1,5 @@
 <template>
-	<div class="card mb-3 h-140">
+	<div class="card mb-3 h-140" v-if="this.terminatedOffer">
 		<div class="card-content">
 			<div class="media">
 				<div class="media-left">
@@ -10,7 +10,7 @@
 						/>
 					</figure>
 				</div>
-				<div class="media-content is-clipped">
+				<div class="media-content">
 					<p class="title is-4">{{ terminatedOffer.id_offer.type_service }}</p>
 					<p class="subtitle is-6">
 						{{
@@ -22,14 +22,27 @@
 				</div>
 			</div>
 
-			<div class="columns">
-				<div class="column is-half">
-					<time datetime="2016-1-1" v-if="terminatedOffer.completed_date">
+			<div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
+				<div>
+					<time
+						datetime="2016-1-1"
+						v-if="terminatedOffer.status === this.statusDispo.GIVEN"
+					>
 						Terminé le : {{ terminatedOffer.completed_date }}</time
 					>
 					<p v-else>L'offre n'a pas été achevée.</p>
+					
+					<p v-if="this.isRecruiterCard">
+						Employé : {{ terminatedOffer.id_user.first_name }}
+						{{ terminatedOffer.id_user.last_name }}
+					</p>
+					<p v-else>
+						Recruteur : {{ terminatedOffer.id_recruiter.first_name }}
+						{{ terminatedOffer.id_recruiter.last_name }}
+					</p>
 				</div>
-				<div class="column is-half pb-0">
+
+				<div class="is-align-self-center">
 					<span
 						class="icon-text has-text-success"
 						v-if="terminatedOffer.status === this.statusDispo.GIVEN"
@@ -65,30 +78,17 @@ export default {
 	name: "TerminatedOffer",
 	props: {
 		terminatedOffer: Object,
+		isRecruiterCard: false,
 	},
-	created() {
-		this.statusDispo = {
-			GIVEN: 0,
-			NOT_GIVEN: 1,
-			CANCEL: 2,
-			NO_PRESENCE: 3,
+	data() {
+		return {
+			statusDispo: {
+				GIVEN: 0,
+				NOT_GIVEN: 1,
+				CANCEL: 2,
+				NO_PRESENCE: 3,
+			},
 		};
 	},
-	// data() {
-	// 	return {
-	// 		statusDispo: {
-	// 			GIVEN: 0,
-	// 			NOT_GIVEN: 1,
-	// 			CANCEL: 2,
-	// 			NO_PRESENCE: 3,
-	// 		},
-	// 	};
-	// },
 };
 </script>
-
-<style lang="scss" scoped>
-h1 {
-	text-align: center;
-}
-</style>

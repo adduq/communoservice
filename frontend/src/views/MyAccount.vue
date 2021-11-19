@@ -403,6 +403,7 @@
 								v-for="offer in reservedOffersForRecruiter"
 								v-bind:key="offer.id"
 								v-bind:reservedOffer="offer"
+								v-bind:isRecruiterCard="true"
 							/>
 						</div>
 					</div>
@@ -416,6 +417,7 @@
 								v-for="offer in terminatedOffersForRecruiter"
 								v-bind:key="offer.id"
 								v-bind:terminatedOffer="offer"
+								v-bind:isRecruiterCard="true"
 							/>
 						</div>
 					</div>
