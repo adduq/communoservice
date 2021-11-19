@@ -21,6 +21,7 @@
 		"v-calendar": "^3.0.0-alpha.6",
 		"vue": "^3.0.0",
 		"vue-router": "^4.0.0-0",
+		"vue-star-rating": "^2.1.0",
 		"vuex": "^4.0.0-0",
 		"vuex-persistedstate": "^4.1.0"
 	},
