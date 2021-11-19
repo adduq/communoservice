@@ -539,7 +539,7 @@ def search(request):
         if dow == "sunday":
             queryset = queryset.filter(sunday=True)
 
-        queryset.filter(end_date__gte=date)
+        queryset.filter(end_date__gte=date, start_date__lte=date)
 
     if "mots-cles" in request.GET:
         mots_cles = request.GET.getlist('mots-cles')[0].split(',')
