@@ -719,10 +719,14 @@ export default {
 						"Indiquez une récurrence ou une journée de disponibilité."
 						);
 					}
+
+					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
+						this.toggleAllDayThatAreInDatepicker();
+					}
 				}
 			}
 
-
+console.log("passe validation");
 
 			if (!this.errors.length) {
 				this.modalCreateisActive = true;
@@ -746,6 +750,7 @@ export default {
 			}
 		},
 		async addNewOffer() {
+			console.log("dans add new offer");
 			this.isLoading = true;
 			const newOffer = {
 				user: this.userInfo.user_id,
@@ -765,7 +770,8 @@ export default {
 			let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
 			newOffer.start_date = startDate;
 			newOffer.end_date = endDate;
-			//alert(JSON.stringify(newOffer)); //pour validation.
+			alert(JSON.stringify(newOffer)); //pour validation.
+				console.log("pret a envoyer");
 			await axios
 			.post("/api/v1/offers/", newOffer)
 			.then((response) => {
@@ -1121,6 +1127,46 @@ export default {
 		this.daysSelected.friday =true;
 		this.daysSelected.saturday =true;
 		this.daysSelected.sunday=true;
+	},
+	toggleAllDayThatAreInDatepicker(){
+		var daysArray = this.getDaysArray(this.range.start, this.range.end);
+      let indexDayOfRangeSelected = [];
+      daysArray.forEach((day) => {
+        console.log(day + " est un " + day.getDay());
+		switch (day.getDay()) {
+        case 1:
+          this.daysSelected.monday = true;
+          break;
+        case 2:
+          this.daysSelected.tuesday = true;
+          break;
+        case 3:
+          this.daysSelected.wednesday = true;
+          break;
+        case 4:
+          this.daysSelected.thursday = true;
+          break;
+        case 5:
+          this.daysSelected.friday = true;
+          break;
+        case 6:
+          this.daysSelected.saturday = true;
+          break;
+        case 0:
+          this.daysSelected.sunday = true;
+          break;
+        default:
+			break;
+      }
+    //     indexDayOfRangeSelected.push(day.getDay());
+	// 	indexDayOfRangeSelected.foreach((index)=>{
+	// 	  console.log("entre");
+	// 	  //0=dimanche, 1=lundi,etc.
+		   
+	//   });
+      });
+
+	  
 	}
 	},
 };
@@ -1156,5 +1202,24 @@ option[value=""][disabled] {
 .hidden {
   	display: none;
 }
-
+.tooltip {
+	position: relative;
+	float: right;
+}
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 200px;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 10;
+	top: 100%;
+	right: 0;
+	margin-left: -200px;
+}
+.tooltip:hover .tooltiptext {
+  	visibility: visible;
+}
 </style>
