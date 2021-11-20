@@ -9,37 +9,78 @@
                         v-on:click="$emit('exitSettingsModal', true)" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                  <div class="field">
-                      <label class="label">Prénom</label>
-                      <div class="control">
-                          <input class="input" type="text" :placeholder="this.userInfo.first_name"
-                              v-model="this.updatedUserInfo.first_name">
-                      </div>
+                  <div class="tabs is-centered is-boxed">
+                    <ul>
+                      <li :class="currentTab == 0 ? 'is-active' : ''" @click="currentTab = 0">
+                        <a>
+                          <span class="icon is-small"><i class="fas fa-user-circle" aria-hidden="true"></i></span>
+                          <span>Indentification</span>
+                        </a>
+                      </li>
+                      <li :class="currentTab == 1 ? 'is-active' : ''" @click="currentTab = 1">
+                        <a>
+                          <span class="icon is-small"><i class="fas fa-portrait" aria-hidden="true"></i></span>
+                          <span>Photo de profil</span>
+                        </a>
+                      </li>
+                      <li :class="currentTab == 2 ? 'is-active' : ''" @click="currentTab = 2">
+                        <a>
+                          <span class="icon is-small"><i class="fas fas fa-quote-right" aria-hidden="true"></i></span>
+                          <span>Biographie</span>
+                        </a>
+                      </li>
+                      <li :class="currentTab == 3 ? 'is-active' : ''" @click="currentTab = 3">
+                        <a>
+                          <span class="icon is-small"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
+                          <span>Localisation</span>
+                        </a>
+                      </li>
+                    </ul>
                   </div>
+                  <div class="tab-content" :class="currentTab == 0 ? 'is-active' : ''">
+                    <div class="field">
+                        <label class="label">Prénom</label>
+                        <div class="control">
+                            <input class="input" type="text" :placeholder="this.userInfo.first_name"
+                                v-model="this.updatedUserInfo.first_name">
+                        </div>
+                    </div>
 
-                  <div class="field">
-                      <label class="label">Nom</label>
-                      <div class="control">
-                          <input class="input" type="text" :placeholder="this.userInfo.last_name"
-                              v-model="this.updatedUserInfo.last_name">
-                      </div>
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control">
+                            <input class="input" type="text" :placeholder="this.userInfo.last_name"
+                                v-model="this.updatedUserInfo.last_name">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Courriel</label>
+                        <div class="control">
+                            <input class="input" type="email" :placeholder="this.userInfo.email"
+                                v-model="this.updatedUserInfo.email">
+                        </div>
+                    </div>
+
                   </div>
-                  <div class="field">
-                      <label class="label">Courriel</label>
-                      <div class="control">
-                          <input class="input" type="email" :placeholder="this.userInfo.email"
-                              v-model="this.updatedUserInfo.email">
-                      </div>
+                  <div class="tab-content" :class="currentTab == 1 ? 'is-active' : ''">
+                    <div class="field">
+                        <label class="label">Photo de profil</label>
+                    </div>
                   </div>
-                  <div class="field">
-                      <label class="label">Biographie</label>
-                      <div class="control">
-                          <textarea class="textarea" :placeholder="this.userInfo.user_bio" v-model="this.updatedUserInfo.user_bio"></textarea>
-                      </div>
+                  <div class="tab-content" :class="currentTab == 2 ? 'is-active' : ''">
+                    <div class="field">
+                        <label class="label">Biographie</label>
+                        <div class="control">
+                            <textarea class="textarea" :placeholder="this.userInfo.user_bio" v-model="this.updatedUserInfo.user_bio"></textarea>
+                        </div>
+                    </div>
                   </div>
-                  <div class="field">
-                      <label class="label">Localisation</label>
-                      <div id="map"></div>
+                  <div class="tab-content" :class="currentTab == 3 ? 'is-active' : ''">
+                      <div class="field">
+                        <label class="label">Localisation</label>
+                        <div id="map"></div>
+                    </div>
                   </div>
                 </section>
                 <footer class="modal-card-foot is-flex is-justify-content-space-evenly">
@@ -69,6 +110,7 @@
           location_lon: '',
           user_bio:''
         },
+        currentTab: 0,
       };
     },
     beforeCreate() {
@@ -86,9 +128,16 @@
       mapboxgl.accessToken = this.MAPBOX_API_KEY;
       this.map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11', 
+        style: 'mapbox://styles/mapbox/streets-v11',
+      });
+      const ro = new ResizeObserver(() => {
+        if (this.map) {
+          this.map.resize();
+        }
       });
 
+      // Observe the map div container.
+      ro.observe(document.getElementById('map'));
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         placeholder: 'Chercher une addresse',
@@ -239,5 +288,11 @@
     height: 300px;
     width: 100%;
     border-radius: 5px;
+  }
+  .tab-content{
+    display: none;
+  }
+  .tab-content.is-active {
+    display: block;
   }
 </style>
