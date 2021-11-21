@@ -214,7 +214,7 @@
 									<div class="control">
 									<label class="radio">
 										<input type="radio" @click="closeAllDispoChoices()" name="dispo" v-model="isAlwaysDispo"  v-bind:value="true" checked>
-										Toujours dispo
+										Toujours disponible
 									</label>
 									<label class="radio">
 										<input type="radio" @click="resetDatepicker()" name="dispo" v-model="isAlwaysDispo"  v-bind:value="false">
@@ -612,7 +612,7 @@ export default {
 					this.activeOffers = response.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getTerminatedOffersForUser(userId) {
@@ -622,7 +622,7 @@ export default {
 					this.terminatedOffersForUser = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getReservedOffersForUser(userId) {
@@ -632,7 +632,7 @@ export default {
 					this.reservedOffersForUser = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getTerminatedOffersForRecruiter(recruiterId) {
@@ -642,7 +642,7 @@ export default {
 					this.terminatedOffersForRecruiter = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getReservedOffersForRecruiter(recruiterId) {
@@ -652,7 +652,7 @@ export default {
 					this.reservedOffersForRecruiter = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getServiceTypes() {
@@ -662,7 +662,7 @@ export default {
 					this.serviceTypes = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		openCreationModal() {
@@ -700,10 +700,8 @@ export default {
 				);
 			}
 
-			if (this.isAlwaysDispo){
-				this.toggleAllDayButtonsToTrue();
-			}
-			else{
+			
+			if (!this.isAlwaysDispo){
 				if (!this.isDatePickerPresent){
 					//Utilisateur veut préciser récurrence seulement.
 					if (!this.validateAtLeastOneDisponibilityInWeek()){
@@ -718,10 +716,6 @@ export default {
 						this.errors.push(
 						"Indiquez une récurrence ou une journée de disponibilité."
 						);
-					}
-
-					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
-						this.toggleAllDayThatAreInDatepicker();
 					}
 				}
 			}
@@ -751,6 +745,19 @@ export default {
 		},
 		async addNewOffer() {
 			this.isLoading = true;
+
+
+			if (this.isAlwaysDispo){
+				this.toggleAllDayButtonsToTrue();
+			}
+			else{
+				if (this.isDatePickerPresent){
+					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
+						this.toggleAllDayThatAreInDatepicker();
+					}
+				}
+			}
+
 			const newOffer = {
 				user: this.userInfo.user_id,
 				type_service: this.serviceType,
@@ -769,6 +776,8 @@ export default {
 			let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
 			newOffer.start_date = startDate;
 			newOffer.end_date = endDate;
+
+
 			//alert(JSON.stringify(newOffer)); //pour validation.
 			await axios
 			.post("/api/v1/offers/", newOffer)
@@ -848,7 +857,7 @@ export default {
 					this.getReservedOffersForRecruiter(this.userInfo.user_id);
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		/***Méthodes Datepicker Début**/
