@@ -151,179 +151,194 @@
 							></button>
 						</header>
 
-            <section class="modal-card-body">
+						<section class="modal-card-body">
 
-				<div class="columns">
-					<div class="column is-one-third">
-						<div class="field">
-						<label class="label">Type de service</label>
-						<div class="control">
-							<div class="select">
-							<select v-model="serviceType" class="w-200">
-								<option value="" disabled selected>Choisir parmi</option>
-								<option
-								v-for="type in serviceTypes"
-								v-bind:key="type.name"
-								>{{ type.name }}</option
-								>
-							</select>
+							<div class="columns">
+								<div class="column is-one-third">
+									<div class="field">
+									<label class="label">Type de service</label>
+									<div class="control">
+										<div class="select">
+										<select v-model="serviceType" class="w-200">
+											<option value="" disabled selected>Choisir parmi</option>
+											<option
+											v-for="type in serviceTypes"
+											v-bind:key="type.name"
+											>{{ type.name }}</option
+											>
+										</select>
+										</div>
+									</div>
+									</div>
+
+									<label class="label">Distance maximale</label>
+									<div class="field has-addons">
+									<p class="control">
+										<input
+										v-model="maxDistance"
+										class="input"
+										type="number"
+										min="1"
+										placeholder="Distance"
+										/>
+									</p>
+									</div>
+
+									<label class="label">Taux horaire</label>
+									<div class="field has-addons">
+										<p class="control">
+										<input
+											v-model="hourlyRate"
+											class="input"
+											type="number"
+											min="0"
+											placeholder="Montant"
+										/>
+										</p>
+									</div>
+								</div>
+								<div class="column">
+									<div class="field">
+										<label class="label">Description</label>
+										<div class="control">
+										<textarea
+											v-model="description"
+											class="textarea"
+											placeholder="Votre message ici..."
+											rows="4"
+										></textarea>
+										</div>
+									</div>
+
+									<label class="label">Disponibilités</label>
+									<div class="control">
+									<label class="radio">
+										<input type="radio" @click="closeAllDispoChoices()" name="dispo" v-model="isAlwaysDispo"  v-bind:value="true" checked>
+										Toujours disponible
+									</label>
+									<label class="radio">
+										<input type="radio" @click="resetDatepicker()" name="dispo" v-model="isAlwaysDispo"  v-bind:value="false">
+										Préciser mes disponibilités
+									</label>
+									</div>
+								</div>
 							</div>
-						</div>
-						</div>
 
-						<label class="label">Distance maximale</label>
-						<div class="field has-addons">
-						<p class="control">
-							<input
-							v-model="maxDistance"
-							class="input"
-							type="number"
-							min="1"
-							placeholder="Distance"
-							/>
-						</p>
-						</div>
+						<div :class="[isAlwaysDispo ? 'hidden' : 'field']">
+							<div>
+							<label class="label">
+							Récurrence
+						</label>
+							<div class="field mb-2 mr-6"></div>
+							<div
+								class="is-flex has-text-centered is-flex-wrap-wrap mt-2 is-justify-content-space-evenly is-family-monospace"
+							>
+								<button
+								id="2"
+								class="button is-rounded day-button"
+								:class="daysSelected.monday ? 'is-success' : ''"
+								v-on:click="clickOnButton(2, daysSelected.monday)"
+								>
+								L
+								</button>
 
-						<label class="label">Taux horaire</label>
-						<div class="field has-addons">
-							<p class="control">
-							<input
-								v-model="hourlyRate"
-								class="input"
-								type="number"
-								min="0"
-								placeholder="Montant"
+								<button
+								id="3"
+								class="button is-rounded day-button"
+								:class="daysSelected.tuesday ? 'is-success' : ''"
+								v-on:click="clickOnButton(3, daysSelected.tuesday)"
+								>
+								M
+								</button>
+
+								<button
+								id="4"
+								class="button is-rounded day-button"
+								:class="daysSelected.wednesday ? 'is-success' : ''"
+								v-on:click="clickOnButton(4, daysSelected.wednesday)"
+								>
+								M
+								</button>
+
+								<button
+								id="5"
+								class="button is-rounded day-button"
+								:class="daysSelected.thursday ? 'is-success' : ''"
+								v-on:click="clickOnButton(5, daysSelected.thursday)"
+								>
+								J
+								</button>
+
+								<button
+								id="6"
+								class="button is-rounded day-button"
+								:class="daysSelected.friday ? 'is-success' : ''"
+								v-on:click="clickOnButton(6), daysSelected.friday"
+								>
+								V
+								</button>
+
+								<button
+								id="7"
+								class="button is-rounded day-button"
+								:class="daysSelected.saturday ? 'is-success' : ''"
+								v-on:click="clickOnButton(7, daysSelected.saturday)"
+								>
+								S
+								</button>
+								<button
+								id="1"
+								class="button is-rounded day-button"
+								:class="daysSelected.sunday ? 'is-success' : ''"
+								v-on:click="clickOnButton(1, daysSelected.sunday)"
+								>
+								D
+								</button>
+							</div>
+							</div>
+						<!---->
+						<label @click="resetDatepicker()" class="checkbox mb-4">
+							<input type="checkbox" v-model="isDatePickerPresent" />
+							Préciser une date ou une sélection de jours
+						</label>
+						<div
+							:class="[isDatePickerPresent ? '' : 'hidden']"
+							id="datepicker"
+						>
+							<label class="label">Sélectionner un ou plusieurs jours
+								<span class="icon is-info tooltip">
+									<i class="fas fa-info-circle"></i>
+									<span class="tooltiptext has-background-primary">
+										Cliquez une fois pour choisir la date de début<br/>
+										Cliquez une deuxième fois pour choisir la date de fin
+									</span>
+								</span>
+							</label>
+							
+							<DatePicker
+							v-model="range"
+							mode="date"
+							:masks="masks"
+							is-range
+							:min-date="minDate"
+							:attributes="attributes"
+							:drag-attribute="dragAttribute"
+							:select-attribute="selectAttribute"
+							:key="componentKey"
+							is-expanded
+							locale="fr"
 							/>
+						</div>
+						<div
+							class="notification is-danger p-2"
+							v-if="datePickerError.length > 0"
+						>
+							<p v-for="error in datePickerError" v-bind:key="error">
+							{{ error }}
 							</p>
 						</div>
-					</div>
-					<div class="column">
-						<div class="field">
-							<label class="label">Description</label>
-							<div class="control">
-							<textarea
-								v-model="description"
-								class="textarea"
-								placeholder="Votre message ici..."
-							></textarea>
-							</div>
 						</div>
-					</div>
-				</div>
-              
-
-              <div class="field">
-                <label class="label">Disponibilités</label>
-                <div>
-                  <div class="field mb-2 mr-6"></div>
-                  <div
-                    class="is-flex has-text-centered is-flex-wrap-wrap mt-2 is-justify-content-space-evenly is-family-monospace"
-                  >
-                    <button
-                      id="2"
-                      class="button is-rounded day-button"
-                      :class="daysSelected.monday ? 'is-success' : ''"
-                      v-on:click="clickOnButton(2, daysSelected.monday)"
-                    >
-                      L
-                    </button>
-
-                    <button
-                      id="3"
-                      class="button is-rounded day-button"
-                      :class="daysSelected.tuesday ? 'is-success' : ''"
-                      v-on:click="clickOnButton(3, daysSelected.tuesday)"
-                    >
-                      M
-                    </button>
-
-                    <button
-                      id="4"
-                      class="button is-rounded day-button"
-                      :class="daysSelected.wednesday ? 'is-success' : ''"
-                      v-on:click="clickOnButton(4, daysSelected.wednesday)"
-                    >
-                      M
-                    </button>
-
-                    <button
-                      id="5"
-                      class="button is-rounded day-button"
-                      :class="daysSelected.thursday ? 'is-success' : ''"
-                      v-on:click="clickOnButton(5, daysSelected.thursday)"
-                    >
-                      J
-                    </button>
-
-                    <button
-                      id="6"
-                      class="button is-rounded day-button"
-                      :class="daysSelected.friday ? 'is-success' : ''"
-                      v-on:click="clickOnButton(6), daysSelected.friday"
-                    >
-                      V
-                    </button>
-
-                    <button
-                      id="7"
-                      class="button is-rounded day-button"
-                      :class="daysSelected.saturday ? 'is-success' : ''"
-                      v-on:click="clickOnButton(7, daysSelected.saturday)"
-                    >
-                      S
-                    </button>
-                    <button
-                      id="1"
-                      class="button is-rounded day-button"
-                      :class="daysSelected.sunday ? 'is-success' : ''"
-                      v-on:click="clickOnButton(1, daysSelected.sunday)"
-                    >
-                      D
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <label @click="resetDatepicker()" class="checkbox mb-4">
-                <input type="checkbox" v-model="isDatePickerPresent" />
-                Préciser une date ou une sélection de jours
-              </label>
-              <div
-                :class="[isDatePickerPresent ? '' : 'hidden']"
-                id="datepicker"
-              >
-                <label class="label">Sélectionner un ou plusieurs jours
-					<span class="icon is-info tooltip">
-						<i class="fas fa-info-circle"></i>
-						<span class="tooltiptext has-background-primary">
-							Cliquez une fois pour choisir la date de début<br/>
-							Cliquez une deuxième fois pour choisir la date de fin
-						</span>
-					</span>
-				</label>
-				
-                <DatePicker
-                  v-model="range"
-                  mode="date"
-                  :masks="masks"
-                  is-range
-                  :min-date="minDate"
-                  :attributes="attributes"
-                  :drag-attribute="dragAttribute"
-                  :select-attribute="selectAttribute"
-                  :key="componentKey"
-                  is-expanded
-				  locale="fr"
-                />
-              </div>
-              <div
-                class="notification is-danger mt-4"
-                v-if="datePickerError.length > 0"
-              >
-                <p v-for="error in datePickerError" v-bind:key="error">
-                  {{ error }}
-                </p>
-              </div>
-            </section>
+						</section>
 
 						<footer
 							class="modal-card-foot is-flex is-justify-content-center"
@@ -526,6 +541,8 @@ export default {
 			creationModalIsActive: false,
 
 			/***Datepicker Début**/
+			isAlwaysDispo:true,
+			isShownDispoSection:false,
 			isDatePickerPresent: false,
 			startDate: "",
 			endDate: "",
@@ -595,7 +612,7 @@ export default {
 					this.activeOffers = response.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getTerminatedOffersForUser(userId) {
@@ -605,7 +622,7 @@ export default {
 					this.terminatedOffersForUser = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getReservedOffersForUser(userId) {
@@ -615,7 +632,7 @@ export default {
 					this.reservedOffersForUser = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getTerminatedOffersForRecruiter(recruiterId) {
@@ -625,7 +642,7 @@ export default {
 					this.terminatedOffersForRecruiter = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getReservedOffersForRecruiter(recruiterId) {
@@ -635,7 +652,7 @@ export default {
 					this.reservedOffersForRecruiter = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		async getServiceTypes() {
@@ -645,7 +662,7 @@ export default {
 					this.serviceTypes = res.data;
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		openCreationModal() {
@@ -683,6 +700,28 @@ export default {
 				);
 			}
 
+			
+			if (!this.isAlwaysDispo){
+				if (!this.isDatePickerPresent){
+					//Utilisateur veut préciser récurrence seulement.
+					if (!this.validateAtLeastOneDisponibilityInWeek()){
+						this.errors.push(
+						"Indiquez une récurrence."
+						);
+					}
+				}
+				else{
+					//Le datepicker est ouvert.
+					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range==null){
+						this.errors.push(
+						"Indiquez une récurrence ou une journée de disponibilité."
+						);
+					}
+				}
+			}
+
+			console.log("passe validation");
+
 			if (!this.errors.length) {
 				this.modalCreateisActive = true;
 
@@ -706,6 +745,19 @@ export default {
 		},
 		async addNewOffer() {
 			this.isLoading = true;
+
+
+			if (this.isAlwaysDispo){
+				this.toggleAllDayButtonsToTrue();
+			}
+			else{
+				if (this.isDatePickerPresent){
+					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
+						this.toggleAllDayThatAreInDatepicker();
+					}
+				}
+			}
+
 			const newOffer = {
 				user: this.userInfo.user_id,
 				type_service: this.serviceType,
@@ -724,6 +776,8 @@ export default {
 			let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
 			newOffer.start_date = startDate;
 			newOffer.end_date = endDate;
+
+
 			//alert(JSON.stringify(newOffer)); //pour validation.
 			await axios
 			.post("/api/v1/offers/", newOffer)
@@ -803,7 +857,7 @@ export default {
 					this.getReservedOffersForRecruiter(this.userInfo.user_id);
 				})
 				.catch((error) => {
-					//console.log(error);
+					console.log(error);
 				});
 		},
 		/***Méthodes Datepicker Début**/
@@ -1049,16 +1103,83 @@ export default {
 		//console.log("entré dan fct." + indexToCheck);
 		//Corriger décalage de VCalendar, dont les indices
 		//commencent à 1 à partir du dimanche.
-		indexToCheck = indexToCheck - 1;
-		if (indexToCheck !== day.getDay()) {
-			return false;
-		}
+			indexToCheck = indexToCheck - 1;
+			if (indexToCheck !== day.getDay()) {
+				return false;
+			}
 		},
 		resetInputs(){
 			this.description = "";
 			this.hourlyRate = "";
 			this.serviceType = "";
-		}
+		},
+		validateAtLeastOneDisponibilityInWeek(){
+		let minimumRecurrence = 1
+		let countofTrue=0;
+		
+		this.daysSelected.monday ? countofTrue++: countofTrue;
+		this.daysSelected.tuesday ? countofTrue++: countofTrue;
+		this.daysSelected.wednesday ? countofTrue++: countofTrue;
+		this.daysSelected.thursday ? countofTrue++: countofTrue;
+		this.daysSelected.friday ? countofTrue++: countofTrue;
+		this.daysSelected.saturday ? countofTrue++: countofTrue;
+		this.daysSelected.sunday ? countofTrue++: countofTrue;
+
+		return countofTrue>=minimumRecurrence;
+	},
+	closeAllDispoChoices(){
+		this.resetDatepicker();
+		this.toggleAllDayButtonsToTrue();
+	},
+	toggleAllDayButtonsToTrue(){
+		this.daysSelected.monday=true;
+		this.daysSelected.tuesday=true;
+		this.daysSelected.wednesday=true;
+		this.daysSelected.thursday=true;
+		this.daysSelected.friday =true;
+		this.daysSelected.saturday =true;
+		this.daysSelected.sunday=true;
+	},
+	toggleAllDayThatAreInDatepicker(){
+		var daysArray = this.getDaysArray(this.range.start, this.range.end);
+      let indexDayOfRangeSelected = [];
+      daysArray.forEach((day) => {
+        console.log(day + " est un " + day.getDay());
+		switch (day.getDay()) {
+        case 1:
+          this.daysSelected.monday = true;
+          break;
+        case 2:
+          this.daysSelected.tuesday = true;
+          break;
+        case 3:
+          this.daysSelected.wednesday = true;
+          break;
+        case 4:
+          this.daysSelected.thursday = true;
+          break;
+        case 5:
+          this.daysSelected.friday = true;
+          break;
+        case 6:
+          this.daysSelected.saturday = true;
+          break;
+        case 0:
+          this.daysSelected.sunday = true;
+          break;
+        default:
+			break;
+      }
+    //     indexDayOfRangeSelected.push(day.getDay());
+	// 	indexDayOfRangeSelected.foreach((index)=>{
+	// 	  console.log("entre");
+	// 	  //0=dimanche, 1=lundi,etc.
+		   
+	//   });
+      });
+
+	  
+	}
 	},
 };
 </script>
