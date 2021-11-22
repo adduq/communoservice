@@ -37,7 +37,10 @@ def sort_offers_by_distance(user_id, offers):
 
     def check_distance(offer):
         employe = UserInfo.objects.get(user_id=offer['user'])
+        if employe.location_lat == '' or employe.location_lon == None or employe.location_lat == '' or employe.location_lon == None:
+            return False
         dist = haversine(float(me.location_lat), float(me.location_lon), float(employe.location_lat), float(employe.location_lon))        
+        print(offer['max_distance'])
         if dist < float(offer['max_distance']):
             return driving_distance(employe.location_lon, employe.location_lat, offer['max_distance'])
         else:
@@ -54,8 +57,8 @@ def sort_offers_by_distance(user_id, offers):
         else:
             print(data['routes'][0]['distance'])
             return float(data['routes'][0]['distance'])/1000 < float(max_distance)
-
-    if me.location_lat != '' and me.location_lon != '':
+    
+    if me.location_lat != '' and me.location_lat != None and me.location_lon != '' and me.location_lon != None:
         print('Sorting offers for user ' + str(user_id))
         potential_offers = map(check_distance, offers)
         return [d for (d, keep) in zip(offers, potential_offers) if keep]

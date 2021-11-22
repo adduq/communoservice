@@ -7,7 +7,8 @@
 						<figure class="image is-64x64">
 							<img
 								class="is-rounded"
-								src="https://axim-auto.fr/wp-content/uploads/2019/09/0_200.png"
+								:src="'/media/pfp_'+offer.user+'.jpg'" 
+								@error="replaceByDefault"
 							/>
 						</figure>
 					</div>
@@ -87,5 +88,10 @@ export default {
 	props: {
 		offer: Object,
 	},
+	methods:{
+		replaceByDefault(e){
+			e.target.src = "/media/pfp_default.jpg"
+		}
+	}
 };
 </script>

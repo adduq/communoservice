@@ -10,7 +10,8 @@
 							>
 								<img
 									class="is-rounded"
-									src="https://owcdn.net/img/5bda50b474984.jpg"
+									:src="'/media/pfp_'+userInfo.user_id+'.jpg'" 
+									@error="replaceByDefault"
 								/>
 								<span
 									class="badge is-bottom-right"
@@ -1114,72 +1115,75 @@ export default {
 			this.serviceType = "";
 		},
 		validateAtLeastOneDisponibilityInWeek(){
-		let minimumRecurrence = 1
-		let countofTrue=0;
+			let minimumRecurrence = 1
+			let countofTrue=0;
+			
+			this.daysSelected.monday ? countofTrue++: countofTrue;
+			this.daysSelected.tuesday ? countofTrue++: countofTrue;
+			this.daysSelected.wednesday ? countofTrue++: countofTrue;
+			this.daysSelected.thursday ? countofTrue++: countofTrue;
+			this.daysSelected.friday ? countofTrue++: countofTrue;
+			this.daysSelected.saturday ? countofTrue++: countofTrue;
+			this.daysSelected.sunday ? countofTrue++: countofTrue;
+
+			return countofTrue>=minimumRecurrence;
+		},
+		closeAllDispoChoices(){
+			this.resetDatepicker();
+			this.toggleAllDayButtonsToTrue();
+		},
+		toggleAllDayButtonsToTrue(){
+			this.daysSelected.monday=true;
+			this.daysSelected.tuesday=true;
+			this.daysSelected.wednesday=true;
+			this.daysSelected.thursday=true;
+			this.daysSelected.friday =true;
+			this.daysSelected.saturday =true;
+			this.daysSelected.sunday=true;
+		},
+		toggleAllDayThatAreInDatepicker(){
+			var daysArray = this.getDaysArray(this.range.start, this.range.end);
+			let indexDayOfRangeSelected = [];
+			daysArray.forEach((day) => {
+				console.log(day + " est un " + day.getDay());
+				switch (day.getDay()) {
+				case 1:
+				this.daysSelected.monday = true;
+				break;
+				case 2:
+				this.daysSelected.tuesday = true;
+				break;
+				case 3:
+				this.daysSelected.wednesday = true;
+				break;
+				case 4:
+				this.daysSelected.thursday = true;
+				break;
+				case 5:
+				this.daysSelected.friday = true;
+				break;
+				case 6:
+				this.daysSelected.saturday = true;
+				break;
+				case 0:
+				this.daysSelected.sunday = true;
+				break;
+				default:
+					break;
+			}
+			//     indexDayOfRangeSelected.push(day.getDay());
+			// 	indexDayOfRangeSelected.foreach((index)=>{
+			// 	  console.log("entre");
+			// 	  //0=dimanche, 1=lundi,etc.
+				
+			//   });
+			});
+
 		
-		this.daysSelected.monday ? countofTrue++: countofTrue;
-		this.daysSelected.tuesday ? countofTrue++: countofTrue;
-		this.daysSelected.wednesday ? countofTrue++: countofTrue;
-		this.daysSelected.thursday ? countofTrue++: countofTrue;
-		this.daysSelected.friday ? countofTrue++: countofTrue;
-		this.daysSelected.saturday ? countofTrue++: countofTrue;
-		this.daysSelected.sunday ? countofTrue++: countofTrue;
-
-		return countofTrue>=minimumRecurrence;
-	},
-	closeAllDispoChoices(){
-		this.resetDatepicker();
-		this.toggleAllDayButtonsToTrue();
-	},
-	toggleAllDayButtonsToTrue(){
-		this.daysSelected.monday=true;
-		this.daysSelected.tuesday=true;
-		this.daysSelected.wednesday=true;
-		this.daysSelected.thursday=true;
-		this.daysSelected.friday =true;
-		this.daysSelected.saturday =true;
-		this.daysSelected.sunday=true;
-	},
-	toggleAllDayThatAreInDatepicker(){
-		var daysArray = this.getDaysArray(this.range.start, this.range.end);
-      let indexDayOfRangeSelected = [];
-      daysArray.forEach((day) => {
-        console.log(day + " est un " + day.getDay());
-		switch (day.getDay()) {
-        case 1:
-          this.daysSelected.monday = true;
-          break;
-        case 2:
-          this.daysSelected.tuesday = true;
-          break;
-        case 3:
-          this.daysSelected.wednesday = true;
-          break;
-        case 4:
-          this.daysSelected.thursday = true;
-          break;
-        case 5:
-          this.daysSelected.friday = true;
-          break;
-        case 6:
-          this.daysSelected.saturday = true;
-          break;
-        case 0:
-          this.daysSelected.sunday = true;
-          break;
-        default:
-			break;
-      }
-    //     indexDayOfRangeSelected.push(day.getDay());
-	// 	indexDayOfRangeSelected.foreach((index)=>{
-	// 	  console.log("entre");
-	// 	  //0=dimanche, 1=lundi,etc.
-		   
-	//   });
-      });
-
-	  
-	}
+		},
+		replaceByDefault(e){
+			e.target.src = "/media/pfp_default.jpg"
+		}
 	},
 };
 </script>
