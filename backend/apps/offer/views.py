@@ -253,6 +253,7 @@ class ActiveOffersByUser(APIView):
         remove_user_infos(serializer)
 
         for elem in serializer.data:
+            elem['id_offer']['id_active_offer'] = elem['id']
             offers.append(elem['id_offer'])
 
         return Response(offers)
@@ -275,7 +276,7 @@ class ActiveOfferDetail(APIView):
     def get_object(self, id_active_offer):
         try:
             return ActiveOffer.objects.get(id=id_active_offer)
-        except User.DoesNotExist:
+        except:
             raise Http404
 
     def get(self, request, id_active_offer, format=None):
@@ -287,12 +288,11 @@ class ActiveOfferDetail(APIView):
         if request.user.is_anonymous:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        # pprint(request.data)
-        # ? Note: Comment valider ici ?
-        # if request.data['id_user'] is not None and request.user.id != request.data['id_user']:
-        #     return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
-
         active_offer = self.get_object(id_active_offer)
+
+        if active_offer.id_user != request.user:
+            return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+
         active_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -367,19 +367,33 @@ class ReservedOfferDetail(APIView):
     def get_object(self, id_reserved_offer):
         try:
             return ReservedOffer.objects.get(id=id_reserved_offer)
-        except User.DoesNotExist:
+        except:
             raise Http404
 
-    # def get(self, request, id_reserved_offer, format=None):
-    #     reserved_offer = self.get_object(id_reserved_offer)
-    #     serializer = ReservedOfferSerializer(reserved_offer)
-    #     return Response(serializer.data)
+    def get(self, request, id_reserved_offer, format=None):
+        res = []
+        try:            
+            reserved_offers = ReservedOffer.objects.filter(
+                id_offer=id_reserved_offer)
+            # serializer = ReservedOfferSerializer(reserved_offers, many=True)
+            # remove_user_infos(serializer)
+            serializer = ReservedOfferCreationSerializer(
+                reserved_offers, many=True)
+            res = serializer.data
+        except:
+            res = []
+
+        return Response(res)
 
     def delete(self, request, id_reserved_offer, format=None):
         if request.user.is_anonymous:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
         reserved_offer = self.get_object(id_reserved_offer)
+
+        if reserved_offer.id_user != request.user:
+            return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+
         reserved_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -468,7 +482,7 @@ class TerminatedOfferDetail(APIView):
     def get_object(self, id_terminated_offer):
         try:
             return TerminatedOffer.objects.get(id=id_terminated_offer)
-        except User.DoesNotExist:
+        except:
             raise Http404
 
     # def get(self, request, id_terminated_offer, format=None):
@@ -481,6 +495,10 @@ class TerminatedOfferDetail(APIView):
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
         terminated_offer = self.get_object(id_terminated_offer)
+
+        if terminated_offer.id_user != request.user:
+            return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+
         terminated_offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

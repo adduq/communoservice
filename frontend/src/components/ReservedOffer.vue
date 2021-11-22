@@ -46,7 +46,7 @@
 				>
 					Terminer
 				</button>
-				<button class="button is-danger w-100" v-on:click="cancelOffer">
+				<button class="button is-danger w-100 mr-2" v-on:click="cancelOffer">
 					Annuler
 				</button>
 			</div>
@@ -209,45 +209,18 @@ export default {
 						);
 
 						this.refreshEmployeeInfos(this.reservedOffer["id_user"], this.reservedOffer["id_recruiter"]);
-
-						// let new_avg = this.averageWithIncrements(this.userInfo["avg_rating_as_employer"],
-						// this.userInfo["nb_rating_as_employer"], this.reservedOffer["rating"]);
-
-						// console.log(this.userInfo);
-						// console.log(new_avg);
-
-						// this.userInfo["nb_services_received"] += 1;
-						// this.userInfo["nb_rating_as_employer"] += 1;
-						// this.userInfo["avg_rating_as_employer"] = new_avg;
-
-						// console.log(this.userInfo);
 					} else {
 						this.$parent.getTerminatedOffersForUser(
 							this.reservedOffer["id_user"]
 						);
 
 						this.refreshRecruiterInfos(this.reservedOffer["id_recruiter"], this.reservedOffer["id_user"]);
-
-						// let new_avg = this.averageWithIncrements(this.userInfo["avg_rating_as_employee"],
-						// this.userInfo["nb_rating_as_employe"], this.reservedOffer["rating"]);
-
-						// console.log(this.userInfo);
-						// console.log(new_avg);
-
-						// this.userInfo["nb_services_given"] += 1;
-						// this.userInfo["nb_rating_as_employe"] += 1;
-						// this.userInfo["avg_rating_as_employee"] = new_avg;
-						
-						// console.log(this.userInfo);
 					}					
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
-		// averageWithIncrements(old_avg, old_total, new_value) {
-		// 	return ((old_avg * old_total) + new_value) / (old_total + 1);
-		// }
 		async refreshEmployeeInfos(user_id, recruiter_id) {
 			await axios
 				.put(

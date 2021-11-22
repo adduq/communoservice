@@ -352,8 +352,9 @@
 						<div class="offers-container">
 							<DetailedOffer
 								v-for="offer in activeOffers"
-								v-bind:key="offer.id"
-								v-bind:offer="offer"
+								:key="offer.id"
+								:offer="offer"
+								:accountPage="true"
 							/>
 						</div>
 						<div class="is-flex is-justify-content-center">
@@ -1058,6 +1059,8 @@ export default {
 			this.description = "";
 			this.hourlyRate = "";
 			this.serviceType = "";
+			this.maxDistance = "";
+			this.isDatePickerPresent = false;
 		}
 	},
 };

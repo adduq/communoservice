@@ -185,14 +185,14 @@
 						</span>
 						<span
 							class="tag is-rounded ch-5 is-size-5"
-							:class="offerToShow.thursday == true ? 'is-info' : 'is-dark'"
+							:class="offerToShow.wednesday == true ? 'is-info' : 'is-dark'"
 							title="Mercredi"
 						>
 							M
 						</span>
 						<span
 							class="tag is-rounded ch-5 is-size-5"
-							:class="offerToShow.wednesday == true ? 'is-info' : 'is-dark'"
+							:class="offerToShow.thursday == true ? 'is-info' : 'is-dark'"
 							title="Jeudi"
 						>
 							J
@@ -297,10 +297,10 @@
 							</div>
 						</div>
 					</div>
-					<label class="label has-text-centered mt-6 pt-2 is-size-5"
-						>Veuillez choisir une de mes disponibilités.</label
-					>
-					<div
+					<label class="label has-text-centered mt-6 pt-2 is-size-5">
+						Veuillez choisir une de mes disponibilités.
+					</label>
+					<!-- <div
 						class="is-flex has-text-centered is-flex-wrap-wrap mt-2 mb-6 is-justify-content-space-evenly is-family-monospace"
 					>
 						<button
@@ -330,24 +330,24 @@
 						<button
 							class="button is-rounded ch-5 is-size-6"
 							:class="[
-								selectedWeekdays.thursday ? 'is-info' : '',
-								!offerToShow.thursday ? 'is-dark' : '',
+								selectedWeekdays.wednesday ? 'is-info' : '',
+								!offerToShow.wednesday ? 'is-dark' : '',
 							]"
-							:disabled="!offerToShow.thursday"
+							:disabled="!offerToShow.wednesday"
 							title="Mercredi"
-							@click="selectedWeekdays.thursday = !selectedWeekdays.thursday"
+							@click="selectedWeekdays.wednesday = !selectedWeekdays.wednesday"
 						>
 							M
 						</button>
 						<button
 							class="button is-rounded ch-5 is-size-6"
 							:class="[
-								selectedWeekdays.wednesday ? 'is-info' : '',
-								!offerToShow.wednesday ? 'is-dark' : '',
+								selectedWeekdays.thursday ? 'is-info' : '',
+								!offerToShow.thursday ? 'is-dark' : '',
 							]"
-							:disabled="!offerToShow.wednesday"
+							:disabled="!offerToShow.thursday"
 							title="Jeudi"
-							@click="selectedWeekdays.wednesday = !selectedWeekdays.wednesday"
+							@click="selectedWeekdays.thursday = !selectedWeekdays.thursday"
 						>
 							J
 						</button>
@@ -387,7 +387,18 @@
 						>
 							D
 						</button>
-					</div>
+					</div> -->
+
+					<!-- <DatePicker
+        				:disabled-dates="disableDates" v-model="dates" mode="date"
+        				:masks="masks" :min-date="minDate" :max-date="maxDate" is-expanded
+        			/> -->
+
+					<DatePicker
+        				:disabled-dates="disableDates" v-model="dates" mode="date"
+        				:min-date="minDate" :max-date="maxDate" is-expanded
+        			/>
+
 				</div>
 				<div v-if="currentStep == 3">
 					<div v-if="$store.state.isAuthenticated">
@@ -454,6 +465,17 @@
 				<button
 					class="button is-primary is-rounded w-100"
 					v-if="currentStep < 3 && !step3Completed"
+					:disabled="currentStep == 2 && this.dates == null"
+					:title="currentStep == 2 && this.dates == null
+							? 'Vous devez choisir une journée' : ''"
+					@click="
+						currentStep == 2 ? (step2Completed = true) : '';
+						currentStep++;
+					"
+				>
+				<!-- <button
+					class="button is-primary is-rounded w-100"
+					v-if="currentStep < 3 && !step3Completed"
 					:disabled="
 						currentStep == 2 &&
 							Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
@@ -468,7 +490,7 @@
 						currentStep == 2 ? (step2Completed = true) : '';
 						currentStep++;
 					"
-				>
+				> -->
 					<span class="icon">
 						Suivant
 						<i class="fa fa-arrow-right ml-2"></i>
@@ -515,15 +537,15 @@ export default {
 			offerToShow: Object,
 			offerUserInfo: Object,
 			offerModalActive: false,
-			selectedWeekdays: {
-				monday: false,
-				tuesday: false,
-				wednesday: false,
-				thursday: false,
-				friday: false,
-				saturday: false,
-				sunday: false,
-			},
+			// selectedWeekdays: {
+			// 	monday: false,
+			// 	tuesday: false,
+			// 	wednesday: false,
+			// 	thursday: false,
+			// 	friday: false,
+			// 	saturday: false,
+			// 	sunday: false,
+			// },
 			confirmationCheckbox: false,
 			clickedSend: false,
 
@@ -552,6 +574,12 @@ export default {
 				5: "saturday",
 				6: "sunday",
 			},
+
+			// masks: [],
+			disableDates: [],
+			dates: null,
+			minDate: null,
+			maxDate: null,
 		};
 	},
 	components: {
@@ -564,6 +592,14 @@ export default {
 		StepsWizard.attach(this.$refs.stepsSection.el);
 		this.getServiceTypes();
 	},
+	watch: {
+    	dates(val) {
+      	if (val) {
+        	console.log(val);
+        	this.dates = val;
+      	}
+    	},
+  	},
 	methods: {
 		async getAllOffers() {
 			this.isFetchingOffers = true;
@@ -592,6 +628,7 @@ export default {
 
 			this.offerToReserve.id_offer = offer.id;
 			this.offerToReserve.id_user = offer.user;
+			this.offerToReserve.reservation_date = this.dates.toISOString().split('T')[0];
 
 			await this.getActiveOfferId(offer);
 			await this.getRecruiterId();
@@ -702,6 +739,7 @@ export default {
 			if (this.offerUserInfo.user != offer.user) {
 				this.getOfferUserInfo(offer.user);
 			}
+			this.getReservedDates(offer);
 		},
 		closeOfferModal() {
 			this.resetOfferModal();
@@ -715,15 +753,62 @@ export default {
 			this.offerUserInfo = {};
 			this.confirmationCheckbox = false;
 			this.clickedSend = false;
-			Object.keys(this.selectedWeekdays).forEach(
-				(value) => (this.selectedWeekdays[value] = false)
-			);
+			this.dates = null;
+			// Object.keys(this.selectedWeekdays).forEach(
+			// 	(value) => (this.selectedWeekdays[value] = false)
+			// );
+		},
+		async getReservedDates(offer) {
+			await axios
+				.get(`/api/v1/reserved-offers/${offer.id}/`)
+				.then((res) => {
+					this.disableDates = [];
+					for (let i = 0; i < res.data.length; i++) {
+						let dayToDisable = {
+							start: this.convertDaysForCalendar(res.data[i].reservation_date),
+							end: this.convertDaysForCalendar(res.data[i].reservation_date)
+						};
+
+						this.disableDates.push(dayToDisable);
+					}
+
+					let daysOfWeek = [];
+					this.daysOfWeekToDisable(daysOfWeek, offer);
+					this.disableDates.push({weekdays: daysOfWeek});
+
+					this.minDate = this.convertDaysForCalendar(offer.start_date);
+					this.maxDate = this.convertDaysForCalendar(offer.end_date);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		convertDaysForCalendar(day) {
+			let dayTmp = day.toString().split('-');
+			return new Date(dayTmp[0], dayTmp[1] - 1, dayTmp[2]);
+		},
+		daysOfWeekToDisable(weekdays, offer) {
+			if (!offer.sunday)
+				weekdays.push(1);
+			if (!offer.monday)
+				weekdays.push(2);
+			if (!offer.tuesday)
+				weekdays.push(3);
+			if (!offer.wednesday)
+				weekdays.push(4);
+			if (!offer.thursday)
+				weekdays.push(5);
+			if (!offer.friday)
+				weekdays.push(6);
+			if (!offer.saturday)
+				weekdays.push(7);
 		},
 	},
 };
 </script>
 <style lang="scss" scoped>
 	@import "../../node_modules/bulma-steps";
+
 	.ch-5 {
 		width: 5ch;
 	}
