@@ -260,7 +260,8 @@
 									>
 										<img
 											class="is-rounded"
-											src="https://owcdn.net/img/5bda50b474984.jpg"
+											:src="'/media/pfp_'+offerUserInfo.user_id+'.jpg'" 
+											@error="replaceByDefault"
 										/>
 										<span
 											class="badge is-bottom-right"
@@ -719,6 +720,9 @@ export default {
 				(value) => (this.selectedWeekdays[value] = false)
 			);
 		},
+		replaceByDefault(e){
+			e.target.src = "/media/pfp_default.jpg"
+		}
 	},
 };
 </script>

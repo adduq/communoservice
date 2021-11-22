@@ -5,7 +5,9 @@
         <div class="media-left">
           <figure class="image is-48x48">
             <img
-              src="https://bulma.io/images/placeholders/96x96.png"
+              v-bind:src="user_pfp_url"
+              @error="user_pfp_url='/media/pfp_default.jpg'"
+              onerror='this.src="test"'
               alt="Placeholder image"
             />
           </figure>
@@ -29,7 +31,10 @@
 export default {
   name: "ActiveOffer",
   props: {
-        offer: Object
-    }
+    offer: Object
+  },
+  data:{
+    user_pfp_url: "/media/pfp_" + this.offer.user_id + ".jpg"
+  }
 };
 </script>

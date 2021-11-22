@@ -1,6 +1,8 @@
 FROM python:3.9
 
 RUN adduser communoservice
+RUN echo ls
+RUN chown -R communoservice:communoservice /media
 USER communoservice
 
 # python envs

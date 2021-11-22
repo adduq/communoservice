@@ -1,7 +1,7 @@
-from django.db.models import Q
+import os
 from django.http import Http404, HttpResponse, JsonResponse
-from django.forms.models import model_to_dict
-
+from django.conf import settings
+from PIL import Image, ImageOps
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view  # Pour utilser annotations
@@ -199,3 +199,21 @@ class updateAvgDataRecruiter(APIView):
         serializer = UserInfoSerializer(userinfo)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UpdateUserProfileImage(APIView):
+    def post(self, request):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            if request.FILES['image']:
+                im = Image.open(request.FILES['image'])
+                rgb_im = im.convert('RGB')
+
+                size_300 = (300, 300)
+
+                thumb_300 = ImageOps.fit(rgb_im, size_300, Image.ANTIALIAS)
+
+                thumb_300.save(str(settings.MEDIA_ROOT)+ '/' + 'pfp_' + str(request.user.id) + '.jpg')
+                return Response({"status": "Added successfully"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"status": "No files in request"}, status=status.HTTP_400_BAD_REQUEST)

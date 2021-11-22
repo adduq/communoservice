@@ -19,18 +19,6 @@
                       </li>
                       <li :class="currentTab == 1 ? 'is-active' : ''" @click="currentTab = 1">
                         <a>
-                          <span class="icon is-small"><i class="fas fa-portrait" aria-hidden="true"></i></span>
-                          <span>Photo de profil</span>
-                        </a>
-                      </li>
-                      <li :class="currentTab == 2 ? 'is-active' : ''" @click="currentTab = 2">
-                        <a>
-                          <span class="icon is-small"><i class="fas fas fa-quote-right" aria-hidden="true"></i></span>
-                          <span>Biographie</span>
-                        </a>
-                      </li>
-                      <li :class="currentTab == 3 ? 'is-active' : ''" @click="currentTab = 3">
-                        <a>
                           <span class="icon is-small"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
                           <span>Localisation</span>
                         </a>
@@ -38,46 +26,73 @@
                     </ul>
                   </div>
                   <div class="tab-content" :class="currentTab == 0 ? 'is-active' : ''">
-                    <div class="field">
-                        <label class="label">Prénom</label>
-                        <div class="control">
-                            <input class="input" type="text" :placeholder="this.userInfo.first_name"
-                                v-model="this.updatedUserInfo.first_name">
+                    <div class="columns">
+                      <div class="column is-one-third">
+                        <label class="label">Photo de profil</label>
+                        <figure class="image round-shadow has-image-centered is-128x128 mt-4">
+                          <img
+                            id="profile-image"
+                            class="is-rounded"
+                            :src="'/media/pfp_' + userInfo.user_id + '.jpg'" 
+							              @error="replaceByDefault"
+                          />
+                        </figure>
+                        <div class="file is-centered mt-5">
+                          <label class="file-label">
+                            <input class="file-input" type="file" name="profile_picture" @change="onImageSelected" accept=".jpg, .jpeg, .png">
+                            <span class="file-cta">
+                              <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                              </span>
+                              <span class="file-label">
+                                Choisir une photo
+                              </span>
+                            </span>
+                          </label>
                         </div>
-                    </div>
+                      </div>
+                      <div class="column">
+                        <div class="columns">
+                          <div class="column">
+                            <div class="field">
+                                <label class="label">Prénom</label>
+                                <div class="control">
+                                    <input class="input" type="text" :placeholder="this.userInfo.first_name"
+                                        v-model="this.updatedUserInfo.first_name">
+                                </div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="field">
+                                <label class="label">Nom</label>
+                                <div class="control">
+                                    <input class="input" type="text" :placeholder="this.userInfo.last_name"
+                                        v-model="this.updatedUserInfo.last_name">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
 
-                    <div class="field">
-                        <label class="label">Nom</label>
-                        <div class="control">
-                            <input class="input" type="text" :placeholder="this.userInfo.last_name"
-                                v-model="this.updatedUserInfo.last_name">
+                        <div class="field">
+                            <label class="label">Courriel</label>
+                            <div class="control">
+                                <input class="input" type="email" :placeholder="this.userInfo.email"
+                                    v-model="this.updatedUserInfo.email">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="field">
-                        <label class="label">Courriel</label>
-                        <div class="control">
-                            <input class="input" type="email" :placeholder="this.userInfo.email"
-                                v-model="this.updatedUserInfo.email">
+                        <div class="field">
+                          <label class="label">Biographie</label>
+                          <div class="control">
+                              <textarea class="textarea" :placeholder="this.userInfo.user_bio" v-model="this.updatedUserInfo.user_bio"></textarea>
+                          </div>
                         </div>
+                      </div>
                     </div>
 
                   </div>
                   <div class="tab-content" :class="currentTab == 1 ? 'is-active' : ''">
                     <div class="field">
-                        <label class="label">Photo de profil</label>
-                    </div>
-                  </div>
-                  <div class="tab-content" :class="currentTab == 2 ? 'is-active' : ''">
-                    <div class="field">
-                        <label class="label">Biographie</label>
-                        <div class="control">
-                            <textarea class="textarea" :placeholder="this.userInfo.user_bio" v-model="this.updatedUserInfo.user_bio"></textarea>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="tab-content" :class="currentTab == 3 ? 'is-active' : ''">
-                      <div class="field">
                         <label class="label">Localisation</label>
                         <div id="map"></div>
                     </div>
@@ -111,6 +126,8 @@
           user_bio:''
         },
         currentTab: 0,
+        selectedImageFile: null,
+        fileErrors : []
       };
     },
     beforeCreate() {
@@ -274,12 +291,77 @@
             },
           });
         }
+        if(this.selectedImageFile){
+          this.uploadProfileImage();
+        }
       },
       updateUserLocation(result){
         this.updatedUserInfo.address = result.place_name;
         this.updatedUserInfo.location_lon = result.center[0].toFixed(6);
         this.updatedUserInfo.location_lat = result.center[1].toFixed(6);
-      }
+      },
+      onImageSelected(event){
+        this.selectedImageFile = event.target.files[0];
+        var img = document.getElementById('profile-image');
+        const reader = new FileReader();
+        reader.addEventListener('load', (event) => {
+          img.src = event.target.result;
+        });
+        reader.readAsDataURL(this.selectedImageFile);
+      },
+      async uploadProfileImage(){        
+        if (this.validateImage(this.selectedImageFile)) {
+          const fd = new FormData();
+          fd.append('image', this.selectedImageFile);
+          let config = {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+            }
+          }
+          await axios
+          .post("api/v1/userinfo/me/profile-image/",fd , config)
+          .then((response)=>{
+            // Set new image 
+          })
+          .catch((error) =>{
+            console.log(error);
+            toast({
+              message: "Une erreur est survenue...",
+              type: "is-danger",
+              dismissible: false,
+              pauseOnHover: false,
+              duration: 3000,
+              position: "bottom-right",
+              animate: {
+                in: "fadeInRightBig",
+                out: "fadeOutRightBig",
+              },
+            });
+          });
+        }else{
+          toast({
+            message: "Type de fichier invalide. Formats acceptés: .jpg, .jpeg, .png",
+            type: "is-danger",
+            dismissible: false,
+            pauseOnHover: false,
+            duration: 3000,
+            position: "bottom-right",
+            animate: {
+              in: "fadeInRightBig",
+              out: "fadeOutRightBig",
+            },
+          });
+          this.fileErrors.push("Type de fichier invalide. Formats acceptés: .jpg, .jpeg, .png");
+        }
+      },
+      validateImage(file){
+        const fileType = file['type'];
+        const validImageTypes = ['image/jpeg', 'image/png'];
+        return validImageTypes.includes(fileType) && file.size<1048576;
+      },
+      replaceByDefault(e){
+			  e.target.src = "/media/pfp_default.jpg"
+		  }
     },
   };
 </script>
@@ -294,5 +376,8 @@
   }
   .tab-content.is-active {
     display: block;
+  }
+  .modal-card-body{
+    min-height: 434px!important;
   }
 </style>

@@ -55,7 +55,7 @@ def sort_offers_by_distance(user_id, offers):
             print(data['routes'][0]['distance'])
             return float(data['routes'][0]['distance'])/1000 < float(max_distance)
 
-    if me.location_lat != '' and me.location_lon != '':
+    if me.location_lat != '' and me.location_lat != None and me.location_lon != '' and me.location_lon != None:
         print('Sorting offers for user ' + str(user_id))
         potential_offers = map(check_distance, offers)
         return [d for (d, keep) in zip(offers, potential_offers) if keep]
