@@ -6,7 +6,7 @@
 					<figure class="image is-64x64">
 						<img
 							class="is-rounded"
-							:src="'/media/pfp_'+reservedOffer.id_user.id+'.jpg'" 
+							:src="this.$parent.profileSwitch ? '/media/pfp_'+reservedOffer.id_user.id+'.jpg' : '/media/pfp_'+reservedOffer.id_recruiter.id+'.jpg'" 
 							@error="replaceByDefault"
 							alt="Placeholder image"
 						/>

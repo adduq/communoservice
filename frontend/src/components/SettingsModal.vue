@@ -9,7 +9,7 @@
                         v-on:click="$emit('exitSettingsModal', true)" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                  <div class="tabs is-centered is-boxed">
+                  <div class="tabs">
                     <ul>
                       <li :class="currentTab == 0 ? 'is-active' : ''" @click="currentTab = 0">
                         <a>
@@ -182,6 +182,8 @@
           this.updatedUserInfo.email = response.data['email'];
           this.updatedUserInfo.address = response.data['address'];
           this.updatedUserInfo.user_bio = response.data['user_bio'];
+          this.updatedUserInfo.location_lat = response.data['location_lat'];
+          this.updatedUserInfo.location_lon = response.data['location_lon'];
           if(response.data['location_lat'] && response.data['location_lon']){
             this.homeMarker = new mapboxgl.Marker()
                   .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])
@@ -370,6 +372,11 @@
     height: 300px;
     width: 100%;
     border-radius: 5px;
+  }
+  #profile-image{
+    height: 128px;
+    width: 128px;
+    object-fit: cover;
   }
   .tab-content{
     display: none;
