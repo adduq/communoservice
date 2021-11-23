@@ -3,9 +3,11 @@
 		<div class="card-content">
 			<div class="media">
 				<div class="media-left">
-					<figure class="image is-48x48">
+					<figure class="image is-64x64">
 						<img
-							src="https://bulma.io/images/placeholders/96x96.png"
+							class="is-rounded"
+							:src="this.$parent.profileSwitch ? '/media/pfp_'+reservedOffer.id_user.id+'.jpg' : '/media/pfp_'+reservedOffer.id_recruiter.id+'.jpg'" 
+							@error="replaceByDefault"
 							alt="Placeholder image"
 						/>
 					</figure>
@@ -35,7 +37,7 @@
 				{{ reservedOffer.id_user.last_name }}
 			</p>
 			<p v-else>
-				Recruteur : {{ reservedOffer.id_recruiter.first_name }}
+				Employeur : {{ reservedOffer.id_recruiter.first_name }}
 				{{ reservedOffer.id_recruiter.last_name }}
 			</p>
 
@@ -122,7 +124,6 @@ export default {
 	props: {
 		reservedOffer: null,
 		isRecruiterCard: false,
-		// userInfo: Object,
 	},
 	components: {
 		StarRating
@@ -165,9 +166,7 @@ export default {
 			await this.finishOffer();
 		},
 		async finishOffer() {
-			this.reservedOffer["completed_date"] = new Date()
-				.toISOString()
-				.split("T")[0];
+			this.reservedOffer["completed_date"] = new Date().toLocaleDateString("fr-CA");
 
 			await this.deleteFromReservedOffer();
 		},
@@ -247,6 +246,9 @@ export default {
 					console.log(err);
 				});
 		},
+		replaceByDefault(e){
+			e.target.src = "/media/pfp_default.jpg"
+		}
 	},
 };
 </script>

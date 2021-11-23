@@ -3,9 +3,11 @@
 		<div class="card-content">
 			<div class="media">
 				<div class="media-left">
-					<figure class="image is-48x48">
+					<figure class="image is-64x64">
 						<img
-							src="https://bulma.io/images/placeholders/96x96.png"
+							class="is-rounded"
+							:src="this.$parent.profileSwitch ? '/media/pfp_'+terminatedOffer.id_user.id+'.jpg' : '/media/pfp_'+terminatedOffer.id_recruiter.id+'.jpg'" 
+							@error="replaceByDefault"
 							alt="Placeholder image"
 						/>
 					</figure>
@@ -37,7 +39,7 @@
 						{{ terminatedOffer.id_user.last_name }}
 					</p>
 					<p v-else>
-						Recruteur : {{ terminatedOffer.id_recruiter.first_name }}
+						Employeur : {{ terminatedOffer.id_recruiter.first_name }}
 						{{ terminatedOffer.id_recruiter.last_name }}
 					</p>
 				</div>
@@ -90,5 +92,10 @@ export default {
 			},
 		};
 	},
+	methods:{
+		replaceByDefault(e){
+			e.target.src = "/media/pfp_default.jpg"
+		}
+	}
 };
 </script>

@@ -260,7 +260,8 @@
 									>
 										<img
 											class="is-rounded"
-											src="https://owcdn.net/img/5bda50b474984.jpg"
+											:src="'/media/pfp_'+offerUserInfo.user_id+'.jpg'" 
+											@error="replaceByDefault"
 										/>
 										<span
 											class="badge is-bottom-right"
@@ -628,7 +629,8 @@ export default {
 
 			this.offerToReserve.id_offer = offer.id;
 			this.offerToReserve.id_user = offer.user;
-			this.offerToReserve.reservation_date = this.dates.toISOString().split('T')[0];
+			this.offerToReserve.reservation_date = this.dates.toLocaleDateString("fr-CA");
+			// this.offerToReserve.reservation_date = this.dates.toISOString().split('T')[0];
 
 			await this.getActiveOfferId(offer);
 			await this.getRecruiterId();
@@ -803,6 +805,9 @@ export default {
 			if (!offer.saturday)
 				weekdays.push(7);
 		},
+		replaceByDefault(e){
+			e.target.src = "/media/pfp_default.jpg"
+		}
 	},
 };
 </script>
