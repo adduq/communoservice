@@ -33,7 +33,7 @@
                           <img
                             id="profile-image"
                             class="is-rounded"
-                            :src="'/media/pfp_' + userInfo.user_id + '.jpg'" 
+                            :src="userImageURL" 
 							              @error="replaceByDefault"
                           />
                         </figure>
@@ -127,19 +127,11 @@
         },
         currentTab: 0,
         selectedImageFile: null,
-        fileErrors : []
+        fileErrors : [],
+        userImageURL : ''
       };
     },
-    beforeCreate() {
-      this.$store.commit("initializeStore");
-      const token = this.$store.state.token;
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = "Token " + token;
-      } else {
-        axios.defaults.headers.common["Authorization"] = "";
-      }
-      console.log(token);
-    },
+    beforeCreate() {},
     mounted() {
       this.getUserInfo();
       mapboxgl.accessToken = this.MAPBOX_API_KEY;
@@ -184,6 +176,7 @@
           this.updatedUserInfo.user_bio = response.data['user_bio'];
           this.updatedUserInfo.location_lat = response.data['location_lat'];
           this.updatedUserInfo.location_lon = response.data['location_lon'];
+          this.userImageURL = '/media/pfp_' + this.userInfo.user_id + '.jpg'
           if(response.data['location_lat'] && response.data['location_lon']){
             this.homeMarker = new mapboxgl.Marker()
                   .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])

@@ -291,7 +291,7 @@
 								</div>
 								<div class="column has-text-centered">
 									<p class="has-text-weight-bold is-size-3">
-										{{ offerUserInfo.avg_rating_as_employee }}/10
+										{{ offerUserInfo.avg_rating_as_employee }}/5
 									</p>
 									<p>score</p>
 								</div>

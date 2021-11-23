@@ -123,7 +123,6 @@
       SettingsModal,
     },
     beforeCreate() {
-      this.$store.commit("initializeStore");
       const token = this.$store.state.token;
       if (token) {
         axios.defaults.headers.common["Authorization"] = "Token " + token;
@@ -132,36 +131,38 @@
       }
     //   console.log(token);
     },
+	created(){
+		if(this.$store.state.token){
+			this.checkTokenStatus();
+		}
+	},
     mounted() {
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
     },
     computed: {},
     methods: {
-      async logout() {
-        await axios
-				.post("/api/v1/token/logout/")
-				.then((response) => {
-					axios.defaults.headers.common["Authorization"] = "";
-					localStorage.removeItem("token");
-					localStorage.removeItem("username");
-					localStorage.removeItem("userid");
-					this.$store.commit("removeToken");
-					this.$router.push("/");
-					toast({
-						message: "Déconnecté avec succès!",
-						type: "is-success",
-						dismissible: false,
-						pauseOnHover: false,
-						duration: 3000,
-						position: "center",
-						animate: {
-							in: "fadeInRightBig",
-							out: "fadeOutLeftBig",
-						},
-					});
-				})
-				.catch((error) => {
+      	async logout() {
+			await axios
+			.post("/api/v1/token/logout/")
+			.then((response) => {
+				axios.defaults.headers.common["Authorization"] = "";
+				this.$store.commit("removeToken");
+				this.$router.push("/");
+				toast({
+					message: "Déconnecté avec succès!",
+					type: "is-success",
+					dismissible: false,
+					pauseOnHover: false,
+					duration: 3000,
+					position: "center",
+					animate: {
+						in: "fadeInRightBig",
+						out: "fadeOutLeftBig",
+					},
+				});
+			})
+			.catch((error) => {
 					toast({
 						message: "Une erreur est survenue...",
 						type: "is-danger",
@@ -190,6 +191,14 @@
 				this.dropdownRight = false;
 			}
 		},
+		async checkTokenStatus(){
+			await axios
+			.get('api/v1/userinfo/me/status/')
+			.catch((error) => {
+				this.$store.commit("removeToken");
+				this.$router.push("/connexion");
+			})
+		}
 	},
 };
 </script>
