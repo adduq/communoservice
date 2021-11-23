@@ -147,7 +147,19 @@ class UpdateUserInfo(APIView):
         except UserInfo.DoesNotExist:
             raise Http404
 
-class updateAvgDataEmployee(APIView):
+class UserStatus(APIView):
+    """
+    Permet de valider l'état du token de l'utilisateur.
+    """
+
+    def get(self, request, format=None):
+        if request.user.is_anonymous:
+            return Response({"status":"invalid"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"status":"valid"}, status=status.HTTP_200_OK)
+        
+
+class UpdateEmployeeRating(APIView):
 
     def put(self, request, user_id, recruiter_id, format=None):
         if request.user.is_anonymous:
@@ -161,7 +173,7 @@ class updateAvgDataEmployee(APIView):
 
         userinfo = UserInfo.objects.get(user_id=user_id)
 
-        if 'rating' in request.data and request.data['rating'] is not None:
+        if 'rating' in request.data and request.data['rating'] is not None and float(request.data['rating']) >= 0 and float(request.data['rating']) <= 5:
             userinfo.avg_rating_as_employee = (((float(userinfo.avg_rating_as_employee) * userinfo.nb_rating_as_employe)
                                                 + float(request.data['rating'])) / (userinfo.nb_rating_as_employe + 1))
             userinfo.nb_rating_as_employe += 1
@@ -174,7 +186,7 @@ class updateAvgDataEmployee(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class updateAvgDataRecruiter(APIView):
+class UpdateRecruiterRating(APIView):
 
     def put(self, request, user_id, recruiter_id, format=None):
         if request.user.is_anonymous:
@@ -188,7 +200,7 @@ class updateAvgDataRecruiter(APIView):
 
         userinfo = UserInfo.objects.get(user_id=recruiter_id)
 
-        if 'rating' in request.data and request.data['rating'] is not None:
+        if 'rating' in request.data and request.data['rating'] is not None and float(request.data['rating']) >= 0 and float(request.data['rating']) <= 5:
             userinfo.avg_rating_as_employer = (((float(userinfo.avg_rating_as_employer) * userinfo.nb_rating_as_employer)
                                                 + float(request.data['rating'])) / (userinfo.nb_rating_as_employer + 1))
             userinfo.nb_rating_as_employer += 1

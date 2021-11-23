@@ -7,8 +7,9 @@ urlpatterns = [
     path('userinfo/me/', views.MyUserInfo.as_view()),
     path('userinfo/me/update/', views.UpdateUserInfo.as_view()),
     path('userinfo/me/profile-image/', views.UpdateUserProfileImage.as_view()),
+    path('userinfo/me/status/', views.UserStatus.as_view()),
     path('userinfo/<int:user_id>/update-employee/<int:recruiter_id>/',
-         views.updateAvgDataEmployee.as_view()),
+         views.UpdateEmployeeRating.as_view()),
     path('userinfo/<int:recruiter_id>/update-recruiter/<int:user_id>/',
-         views.updateAvgDataRecruiter.as_view()),
+         views.UpdateRecruiterRating.as_view()),
 ]

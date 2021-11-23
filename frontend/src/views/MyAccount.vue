@@ -10,7 +10,7 @@
 							>
 								<img
 									class="is-rounded"
-									:src="'/media/pfp_'+userInfo.user_id+'.jpg'" 
+									:src="userImageURL" 
 									@error="replaceByDefault"
 								/>
 								<span
@@ -79,7 +79,7 @@
 						</div>
 						<div class="has-text-centered">
 							<p class="has-text-weight-bold is-size-3">
-								{{ userInfo.avg_rating_as_employee }}/10
+								{{ userInfo.avg_rating_as_employee }}/5
 							</p>
 							<p>score</p>
 						</div>
@@ -102,7 +102,7 @@
 						</div>
 						<div class="has-text-centered">
 							<p class="has-text-weight-bold is-size-3">
-								{{ userInfo.avg_rating_as_employer }}/10
+								{{ userInfo.avg_rating_as_employer }}/5
 							</p>
 							<p>score</p>
 						</div>
@@ -536,6 +536,7 @@ export default {
 			},
 			profileSwitch: false,
 			userIsActive: true,
+			userImageURL: '',
 			userInfo: {},
 			errors: [],
 			tomorrow: "",
@@ -856,6 +857,7 @@ export default {
 					this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
 					this.getReservedOffersForUser(this.userInfo.user_id);
 					this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					this.userImageURL = '/media/pfp_'+this.userInfo.user_id+'.jpg';
 				})
 				.catch((error) => {
 					console.log(error);

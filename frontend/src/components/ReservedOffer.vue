@@ -87,11 +87,12 @@
 					<div class="field">
 						<label class="label">Mettre une note</label>
 						<div class="control">
-							<div class="rating">
-								<star-rating :increment="0.05" :rating="noteService"
-									:border-width="1" :max-rating="10" @update:rating ="setRating"
-									:glow="5" glow-color="#ffd055" :star-size="30" text-class="affiche-note">									
+							<div class="rating has-text-centered">
+								<star-rating :increment="0.5" :rating="noteService"
+									:border-width="1" :max-rating="5" @update:rating ="setRating" :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
+									:glow="5" glow-color="#ffd055" :star-size="50" :show-rating="false" :clearable="true" class="is-flex is-justify-content-center">									
 								</star-rating>
+								<span class="affiche-note">{{ noteService }}/5</span>
 							</div>
 						</div>
 					</div>
@@ -285,7 +286,6 @@ export default {
 
 <style>
 .affiche-note {
-	font-size: 3vh;
-	padding-left: 1vh;
+	font-size: 3rem;
 }
 </style>

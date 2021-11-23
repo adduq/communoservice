@@ -40,7 +40,6 @@ def sort_offers_by_distance(user_id, offers):
         if employe.location_lat == '' or employe.location_lon == None or employe.location_lat == '' or employe.location_lon == None:
             return False
         dist = haversine(float(me.location_lat), float(me.location_lon), float(employe.location_lat), float(employe.location_lon))        
-        print(offer['max_distance'])
         if dist < float(offer['max_distance']):
             return driving_distance(employe.location_lon, employe.location_lat, offer['max_distance'])
         else:
