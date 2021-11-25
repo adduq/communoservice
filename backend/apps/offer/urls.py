@@ -7,9 +7,9 @@ urlpatterns = [
 
     path('active-offers/', views.ActiveOffers.as_view(), name="active-offers"),
     path('active-offers/<int:id_offer>/<int:no_user>/',
-         views.ActiveOfferWithId.as_view()),
+         views.ActiveOfferWithId.as_view(), name="active-offers"),
     path('active-offers/<int:id_active_offer>/',
-         views.ActiveOfferDetail.as_view()),
+         views.ActiveOfferDetail.as_view(), name="active-offers"),
     path('active-offers/user/<int:no_user>/',
          views.ActiveOffersByUser.as_view()),
 
