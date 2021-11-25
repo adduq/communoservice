@@ -691,6 +691,22 @@ export default {
 					"Le taux horaire doit être un nombre positif."
 				);
 			}
+			else{
+				let caractersHourlyRate = this.hourlyRate.toString();
+				console.log("|"+caractersHourlyRate+"|");
+				let regexDotOnly = new RegExp('^\ *\.\ *$');
+				if (regexDotOnly.test(caractersHourlyRate)){
+				this.errors.push(
+					"Le taux horaire doit être un nombre positif."
+				);
+				}
+				let regex = new RegExp(/^\d{0,4}(\.\d{0,2}){0,1}$/);
+				if (!regex.test(caractersHourlyRate)){
+				this.errors.push(
+					"Le taux horaire doit avoir une valeur entre 0,01 et 9999,99."
+				);
+				}
+			}
 			if (this.maxDistance < 0) {
 				this.errors.push("La distance maximal doit être positive.");
 			}
@@ -778,7 +794,6 @@ export default {
 			let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
 			newOffer.start_date = startDate;
 			newOffer.end_date = endDate;
-
 
 			//alert(JSON.stringify(newOffer)); //pour validation.
 			await axios
