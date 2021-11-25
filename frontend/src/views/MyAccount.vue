@@ -172,7 +172,7 @@
 									</div>
 									</div>
 
-									<label class="label">Distance maximale</label>
+									<label class="label">Distance maximale (Km)</label>
 									<div class="field has-addons">
 									<p class="control">
 										<input
@@ -185,7 +185,7 @@
 									</p>
 									</div>
 
-									<label class="label">Taux horaire</label>
+									<label class="label">Taux horaire ($)</label>
 									<div class="field has-addons">
 										<p class="control">
 										<input
