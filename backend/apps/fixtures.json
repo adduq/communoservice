@@ -176,10 +176,6 @@
             "is_active": "True"
         }
     },
-
-
-
-
     {
         "model": "offer.offer",
         "pk": 1,
@@ -268,7 +264,7 @@
         "fields": {
             "user": 2,
             "type_service": "Déneigement",
-            "description": "",
+            "description": "Cimonaque d'esprit d'calvince d'astie de verrat de crucifix de saint-cimonaque.",
             "hourly_rate": "15.75",
             "max_distance": 4,
             "date_added": "2020-12-20",
@@ -332,8 +328,8 @@
         "fields": {
             "user": 2,
             "type_service": "Gardiennage",
-            "description": "",
-            "hourly_rate": "11",
+            "description": "Mautadine de calvaire de sacrament de mangeux d'marde. C cheap.",
+            "hourly_rate": "5",
             "max_distance": 7,
             "date_added": "2020-12-20",
             "monday": true,
