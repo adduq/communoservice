@@ -87,78 +87,6 @@
         "fields": { "name": "Tonte de pelouse" }
     },
     {
-        "model": "offer.offer",
-        "pk": 1,
-        "fields": {
-            "user": 1,
-            "type_service": "Tonte de pelouse",
-            "description": "Service rapide et professionnel.",
-            "hourly_rate": "12.50",
-            "max_distance": 2,
-            "date_added": "2020-09-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 2,
-        "fields": {
-            "user": 1,
-            "type_service": "Tonte de pelouse",
-            "description": "Rapide et efficace.",
-            "hourly_rate": "50",
-            "max_distance": 2,
-            "date_added": "2020-05-05"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 3,
-        "fields": {
-            "user": 1,
-            "type_service": "Gardiennage",
-            "description": "Maximum 3 enfants.",
-            "hourly_rate": "12.50",
-            "max_distance": 4,
-            "date_added": "2020-09-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 4,
-        "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "Les escaliers extérieurs peuvent être inclus.",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 5,
-        "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "La pelle doit être fournie par le client.",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 6,
-        "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20"
-        }
-    },
-    {
         "model": "userinfo.userinfo",
         "pk": 1,
         "fields": {
@@ -174,10 +102,10 @@
             "nb_rating_as_employe": 34,
             "avg_rating_as_employer": 3.98,
             "nb_rating_as_employer": 23,
-            "user_bio": "Blablablabla1",
-            "location_lat": "79.467565",
-            "location_lon": "70.463679",
-            "address": "2460 Chem. Royal, Sainte-Famille"
+            "user_bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+            "location_lat": "46.856773",
+            "location_lon": "-71.122421",
+            "address": "17 Rue d'Orléans, Sainte-Pétronille, QC"
         }
     },
     {
@@ -196,10 +124,10 @@
             "nb_rating_as_employe": 34,
             "avg_rating_as_employer": 3.98,
             "nb_rating_as_employer": 23,
-            "user_bio": "Blablablabla1",
-            "location_lat": "79.467565",
-            "location_lon": "70.463679",
-            "address": "2325 Rue de l'Université, Québec"
+            "user_bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "location_lat": "46.871947",
+            "location_lon": "-71.093098",
+            "address": "933 Rte Prévost, Saint-Pierre, QC"
         }
     },
     {
@@ -218,10 +146,10 @@
             "nb_rating_as_employe": 35,
             "avg_rating_as_employer": 4.98,
             "nb_rating_as_employer": 7,
-            "user_bio": "Blablablabla1",
-            "location_lat": "79.467565",
-            "location_lon": "70.463679",
-            "address": "1660 Bd de l'Entente, Québec"
+            "user_bio": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+            "location_lat": "46.885554",
+            "location_lon": "-71.066911",
+            "address": "576 Rte des Prêtres, Saint-Pierre, QC"
         }
     },
     {
@@ -248,6 +176,10 @@
             "is_active": "True"
         }
     },
+
+
+
+
     {
         "model": "offer.offer",
         "pk": 1,
@@ -280,7 +212,9 @@
             "max_distance": 2,
             "date_added": "2020-05-05",
             "friday": true,
-            "saturday": true
+            "saturday": true,
+            "start_date": "2021-12-01",
+            "end_date": "2021-12-31"
         }
     },
     {
@@ -293,7 +227,6 @@
             "hourly_rate": "12.50",
             "max_distance": 4,
             "date_added": "2020-09-20",
-            "wednesday": true,
             "start_date": "2021-12-20",
             "end_date": "2021-12-20"
         }
