@@ -6,7 +6,7 @@
 						<figure class="image is-64x64">
 							<img
 								class="is-rounded"
-								:src="'/media/pfp_'+ offer.user +'.jpg'" 
+								:src="this.MEDIA_URL + 'pfp_' + offer.user + '.jpg'" 
 								@error="replaceByDefault"
 							/>
 						</figure>
@@ -149,8 +149,8 @@ export default {
 				});
 		},
 		replaceByDefault(e){
-			e.target.src = "/media/pfp_default.jpg"
-		},
+			e.target.src = this.MEDIA_URL + "pfp_default.jpg"
+		}
 	}
 };
 </script>

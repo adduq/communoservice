@@ -6,7 +6,7 @@
 					<figure class="image is-64x64">
 						<img
 							class="is-rounded"
-							:src="this.$parent.profileSwitch ? '/media/pfp_'+terminatedOffer.id_user.id+'.jpg' : '/media/pfp_'+terminatedOffer.id_recruiter.id+'.jpg'" 
+							:src="this.$parent.profileSwitch ? this.MEDIA_URL + 'pfp_'+terminatedOffer.id_user.id+'.jpg' : this.MEDIA_URL + 'pfp_'+terminatedOffer.id_recruiter.id+'.jpg'" 
 							@error="replaceByDefault"
 							alt="Placeholder image"
 						/>
@@ -94,7 +94,7 @@ export default {
 	},
 	methods:{
 		replaceByDefault(e){
-			e.target.src = "/media/pfp_default.jpg"
+			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		}
 	}
 };

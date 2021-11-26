@@ -6,7 +6,7 @@
           <figure class="image is-48x48">
             <img
               v-bind:src="user_pfp_url"
-              @error="user_pfp_url='/media/pfp_default.jpg'"
+              @error="this.user_pfp_url = this.MEDIA_URL + 'pfp_default.jpg'"
               onerror='this.src="test"'
               alt="Placeholder image"
             />
@@ -34,7 +34,7 @@ export default {
     offer: Object
   },
   data:{
-    user_pfp_url: "/media/pfp_" + this.offer.user_id + ".jpg"
+    user_pfp_url: this.MEDIA_URL +"pfp_" + this.offer.user_id + ".jpg"
   }
 };
 </script>
