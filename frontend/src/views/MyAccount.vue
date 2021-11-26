@@ -238,7 +238,7 @@
 								id="2"
 								class="button is-rounded day-button"
 								:class="daysSelected.monday ? 'is-success' : ''"
-								v-on:click="clickOnButton(2, daysSelected.monday)"
+								v-on:click="clickOnDayButton(2, daysSelected.monday)"
 								>
 								L
 								</button>
@@ -247,7 +247,7 @@
 								id="3"
 								class="button is-rounded day-button"
 								:class="daysSelected.tuesday ? 'is-success' : ''"
-								v-on:click="clickOnButton(3, daysSelected.tuesday)"
+								v-on:click="clickOnDayButton(3, daysSelected.tuesday)"
 								>
 								M
 								</button>
@@ -256,7 +256,7 @@
 								id="4"
 								class="button is-rounded day-button"
 								:class="daysSelected.wednesday ? 'is-success' : ''"
-								v-on:click="clickOnButton(4, daysSelected.wednesday)"
+								v-on:click="clickOnDayButton(4, daysSelected.wednesday)"
 								>
 								M
 								</button>
@@ -265,7 +265,7 @@
 								id="5"
 								class="button is-rounded day-button"
 								:class="daysSelected.thursday ? 'is-success' : ''"
-								v-on:click="clickOnButton(5, daysSelected.thursday)"
+								v-on:click="clickOnDayButton(5, daysSelected.thursday)"
 								>
 								J
 								</button>
@@ -274,7 +274,7 @@
 								id="6"
 								class="button is-rounded day-button"
 								:class="daysSelected.friday ? 'is-success' : ''"
-								v-on:click="clickOnButton(6), daysSelected.friday"
+								v-on:click="clickOnDayButton(6), daysSelected.friday"
 								>
 								V
 								</button>
@@ -283,7 +283,7 @@
 								id="7"
 								class="button is-rounded day-button"
 								:class="daysSelected.saturday ? 'is-success' : ''"
-								v-on:click="clickOnButton(7, daysSelected.saturday)"
+								v-on:click="clickOnDayButton(7, daysSelected.saturday)"
 								>
 								S
 								</button>
@@ -291,7 +291,7 @@
 								id="1"
 								class="button is-rounded day-button"
 								:class="daysSelected.sunday ? 'is-success' : ''"
-								v-on:click="clickOnButton(1, daysSelected.sunday)"
+								v-on:click="clickOnDayButton(1, daysSelected.sunday)"
 								>
 								D
 								</button>
@@ -581,10 +581,16 @@ export default {
 			/***Datepicker Fin**/
 		};
 	},
+	/**
+	 * Watch permet de surveiller le changement
+	 *  de valeur d'une variable de notre modèle.
+	 * Ici, nous surveiller le range, qui représente
+	 * le jour de début et le jour de fin d'une sélection
+	 * de dates.
+	 */
 	watch: {
     range(val) {
       if (val) {
-        //console.log("watch reset pattern");
         this.resetPattern();
         this.resetDaysButtons();
         this.datePickerError = [];
@@ -675,6 +681,9 @@ export default {
 			this.errors = [];
 			this.modalCreateisActive = false;
 		},
+		/**
+		 * Validation du formulaire
+		 */
 		validateForm() {
 			this.errors = [];
 			if (this.serviceType === "") {
@@ -692,16 +701,15 @@ export default {
 				);
 			}
 			else{
-				let caractersHourlyRate = this.hourlyRate.toString();
-				console.log("|"+caractersHourlyRate+"|");
+				let charactersHourlyRate = this.hourlyRate.toString();
 				let regexDotOnly = new RegExp('^\ *\.\ *$');
-				if (regexDotOnly.test(caractersHourlyRate)){
+				if (regexDotOnly.test(charactersHourlyRate)){
 				this.errors.push(
 					"Le taux horaire doit être un nombre positif."
 				);
 				}
 				let regex = new RegExp(/^\d{0,4}(\.\d{0,2}){0,1}$/);
-				if (!regex.test(caractersHourlyRate)){
+				if (!regex.test(charactersHourlyRate)){
 				this.errors.push(
 					"Le taux horaire doit avoir une valeur entre 0,01 et 9999,99."
 				);
@@ -738,8 +746,6 @@ export default {
 				}
 			}
 
-			console.log("passe validation");
-
 			if (!this.errors.length) {
 				this.modalCreateisActive = true;
 
@@ -761,17 +767,21 @@ export default {
 				}
 			}
 		},
+		/**
+		 * Envoi de la nouvelle offre.
+		 */
 		async addNewOffer() {
 			this.isLoading = true;
 
-
+			//Même si l'utilisateur n'a pas cliqué sur un jour de semaine,
+			//on met à true les jours de semaine qui ont une correspondance avec ses disponibilitésé
 			if (this.isAlwaysDispo){
 				this.toggleAllDayButtonsToTrue();
 			}
 			else{
 				if (this.isDatePickerPresent){
 					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
-						this.toggleAllDayThatAreInDatepicker();
+						this.toggleAllDaysThatAreInDatepicker();
 					}
 				}
 			}
@@ -795,7 +805,8 @@ export default {
 			newOffer.start_date = startDate;
 			newOffer.end_date = endDate;
 
-			//alert(JSON.stringify(newOffer)); //pour validation.
+			alert(JSON.stringify(newOffer)); //pour validation.
+
 			await axios
 			.post("/api/v1/offers/", newOffer)
 			.then((response) => {
@@ -827,9 +838,7 @@ export default {
 							out: "fadeOutRightBig",
 						},
 					});
-					// this.errors.push(
-					// 	"Profil incomplet. Veuillez completer votre profil dans les paramètres."
-					// );
+
 				} else {
 					// this.errors.push("Une erreur est survenue. Essayez à nouveau.");
 					toast({
@@ -845,7 +854,6 @@ export default {
 						},
 					});
 				}
-				// console.log(error);
 			});
 		},
 		toSelectDate(payload) {
@@ -879,18 +887,11 @@ export default {
 				});
 		},
 		/***Méthodes Datepicker Début**/
-		datepickerChanged() {
-		//console.log("day clicked");
-		this.resetPattern();
-		},
-		confirm() {
-		//console.log("Choix : " + JSON.stringify(this.range));
-		//console.log("Valeurs du range : " + JSON.stringify(this.range.value));
-		//console.log("Pattern choisi : " + JSON.stringify(this.attributes));
-		},
-		clickOnButton(weekDayIndex, isWeekdaySelected) {
-		//console.log("attributes : " + JSON.stringify(this.attributes));
-
+		/**
+		 * Permet de gérer le clic sur un jour de semaine selon le cas où le
+		 * datepicker es ouver ou non.
+		 */
+		clickOnDayButton(weekDayIndex, isWeekdaySelected) {
 		this.datePickerError = [];
 		if (document.getElementById("datepicker").className.includes("hidden")) {
 			this.manageButtonWithoutRangeRestriction(
@@ -904,122 +905,62 @@ export default {
 			);
 		}
 		},
+		/**
+		 * Gestion des jours de semaine quand des dates sont sélectionnées dans le datepicker.
+		 */
 		manageButtonClickWithRangeRestriction(weekDayIndex, isWeekdaySelected) {
-		//console.log("With range limits");
 		let errorMessage =
 			"Pour préciser un jour de la semaine, vous devez sélectionner une plage de jours.";
 		let errorMessage2 =
 			"Ce jour de semaine n'apparaît pas votre sélection du calendrier.";
 
-		//console.log("range is " + JSON.stringify(this.range));
-
+		//Cas où l'utilisateur veut spécifier une récurrence mais n'a pas indiquer
+		//une plage de dates dans le datepicker.
 		if (this.range == null) {
 			this.datePickerError.push(errorMessage);
 			document.getElementById(weekDayIndex.toString()).blur();
 			return;
 		}
+
 		let debut = this.range.start;
 		let fin = this.range.end;
 		let span = this.range.end - this.range.start;
-		//console.log("span is " + span);
 		if (span == 0) {
 			this.datePickerError.push(errorMessage);
 			return;
 		}
 		
 		var daysArray = this.getDaysArray(debut, fin);
-		//console.log("dates de la sélection : " + JSON.stringify(daysArray));
 		let indexDayOfRangeSelected = [];
 		daysArray.forEach((day) => {
-			//console.log(day + " est un " + day.getDay());
 			indexDayOfRangeSelected.push(day.getDay());
 		});
 		//Ajustement de l'indice par rapport à V-Calendar
 		let indexToCheck = weekDayIndex - 1;
 		if (indexDayOfRangeSelected.includes(indexToCheck)) {
-			//console.log("L'index " + weekDayIndex + "est valide");
 		} else {
 			this.datePickerError.push(errorMessage2);
 			document.getElementById(weekDayIndex.toString()).blur();
 			return;
 		}
-		//console.log("Selected index : " + weekDayIndex);
+
+		//On veut retirer le "highlight" mis sur la journée dans le datepicker.
+		//Ce highlight est un objet de VCalendar.
 		let notFound = true;
 		let i = 0;
 		let indexToDelete = -1;
-		//console.log("attr : " + JSON.stringify(this.attributes.length));
 		while (notFound && i < this.attributes.length) {
 			if (this.attributes[i].hasOwnProperty("key")) {
-			//console.log("Has property Key!!!");
 			if (this.attributes[i].key == weekDayIndex) {
-				//console.log("Has the right value : " + this.attributes[i].key);
 				indexToDelete = i;
-				//console.log("Element to delete in Attributes : " + i);
 				notFound = false;
 			} else i++;
 			}
 		}
-		//console.log(indexToDelete);
 		if (indexToDelete != -1 && this.attributes.length != 0) {
-			//console.log("est présent");
-			//Est présent
+			//Suppression du jour surlginé dans le datepicker.
 			this.attributes.splice(indexToDelete, 1);
-					switch (weekDayIndex) {
-			case 2:
-				this.daysSelected.monday = !this.daysSelected.monday;
-				break;
-			case 3:
-				this.daysSelected.tuesday = !this.daysSelected.tuesday;
-				break;
-			case 4:
-				this.daysSelected.wednesday = !this.daysSelected.wednesday;
-				break;
-			case 5:
-				this.daysSelected.thursday = !this.daysSelected.thursday;
-				break;
-			case 6:
-				this.daysSelected.friday = !this.daysSelected.friday;
-				break;
-			case 7:
-				this.daysSelected.saturday = !this.daysSelected.saturday;
-				break;
-			case 1:
-				this.daysSelected.sunday = !this.daysSelected.sunday;
-				break;
-			case 3:
-				break;
-			default:
-			}
 		} else {
-			//console.log("est pas présent encore");
-			switch (weekDayIndex) {
-			case 2:
-				this.daysSelected.monday = !this.daysSelected.monday;
-				break;
-			case 3:
-				this.daysSelected.tuesday = !this.daysSelected.tuesday;
-				break;
-			case 4:
-				this.daysSelected.wednesday = !this.daysSelected.wednesday;
-				break;
-			case 5:
-				this.daysSelected.thursday = !this.daysSelected.thursday;
-				break;
-			case 6:
-				this.daysSelected.friday = !this.daysSelected.friday;
-				break;
-			case 7:
-				this.daysSelected.saturday = !this.daysSelected.saturday;
-				break;
-			case 1:
-				this.daysSelected.sunday = !this.daysSelected.sunday;
-				break;
-			case 3:
-				break;
-			default:
-			}
-			
-			//console.log("a passé le toggle selected day");
 			this.attributes.push({
 			key: weekDayIndex,
 			highlight: {
@@ -1034,21 +975,36 @@ export default {
 			order: 1,
 			});
 		}
-		//console.log("Ajout dans le pattern réussi");
-		
+
+		switch (weekDayIndex) {
+			case 2:
+				this.daysSelected.monday = !this.daysSelected.monday;
+				break;
+			case 3:
+				this.daysSelected.tuesday = !this.daysSelected.tuesday;
+				break;
+			case 4:
+				this.daysSelected.wednesday = !this.daysSelected.wednesday;
+				break;
+			case 5:
+				this.daysSelected.thursday = !this.daysSelected.thursday;
+				break;
+			case 6:
+				this.daysSelected.friday = !this.daysSelected.friday;
+				break;
+			case 7:
+				this.daysSelected.saturday = !this.daysSelected.saturday;
+				break;
+			case 1:
+				this.daysSelected.sunday = !this.daysSelected.sunday;
+				break;
+			default:
+				break;
+			}
 		this.datePickerError = [];
 		},
 		manageButtonWithoutRangeRestriction(weekDayIndex, isWeekdaySelected) {
-		//console.log("no range restriction");
 		this.toggleSelectedDay(weekDayIndex, isWeekdaySelected);
-		},
-		toEnableDaysButtons() {
-		let buttons = document.getElementsByClassName("day-button");
-		buttons.forEach((b) => (b.disabled = true));
-		},
-		toDisableDaysButtons() {
-		let buttons = document.getElementsByClassName("day-button");
-		buttons.forEach((b) => (b.disabled = false));
 		},
 		resetDaysButtons() {
 		for (const property in this.daysSelected) {
@@ -1056,10 +1012,7 @@ export default {
 		}
 		},
 		resetPattern() {
-		//console.log(JSON.stringify(this.range));
-		//console.log("Suppression du pattern.");
 		while (this.attributes.length > 0) {
-			//console.log("Remove one attribute.");
 			this.attributes.pop();
 		} //note: ne pas remplacer par this.attributes=[] -->ne marche pas.
 		},
@@ -1069,16 +1022,24 @@ export default {
 		this.resetDaysButtons();
 		this.datePickerError = [];
 		},
+		/**
+		 * Permet de réinitialiser la sélection du datepicker,
+		 * c'est-à-dire les dates recueillies lors du drag.
+		 */
 		resetRange() {
 		if (this.resetNextDayClick) {
 			this.resetNextDayClick = false;
 			this.$nextTick(() => (this.range = null));
 		}
 		},
+		/**
+		 * Permet de changer la valeur du jour de semaine
+		 * associé à un certain indice.
+		 * Le weekDayIndex est un indice donné par VCalendar
+		 * pour représenter un jour de semaine.
+		 */
 		toggleSelectedDay(weekDayIndex, isWeekdaySelected) {
-		//console.log("dans fonction toggle");
-		//console.log("weekdayindex vaut : " + weekDayIndex);
-		//console.log("isWeekdaySelected vaut : " + isWeekdaySelected);
+	
 		switch (weekDayIndex) {
 			case 2:
 			this.daysSelected.monday = !this.daysSelected.monday;
@@ -1101,12 +1062,16 @@ export default {
 			case 1:
 			this.daysSelected.sunday = !this.daysSelected.sunday;
 			break;
-			case 3:
-			break;
 			default:
+				break;
 		}
 		isWeekdaySelected = !isWeekdaySelected;
 		},
+		/**
+		 * Permet de récupérer un tableau contenant
+		 * les dates comprises entre 2 dates (incluant
+		 * les dates limites).
+		 */
 		getDaysArray(start, end) {
 		for (
 			var arr = [], dt = new Date(start);
@@ -1117,8 +1082,12 @@ export default {
 		}
 		return arr;
 		},
+		/**
+		 * Permet de vérifier que la date entrée en
+		 * paramètre a un jour de semaine dont l'indice
+		 * correspond à l'indice entré en paramètre.
+		 */
 		validateDateIsADayOfWeek(day, indexToCheck) {
-		//console.log("entré dan fct." + indexToCheck);
 		//Corriger décalage de VCalendar, dont les indices
 		//commencent à 1 à partir du dimanche.
 			indexToCheck = indexToCheck - 1;
@@ -1126,11 +1095,18 @@ export default {
 				return false;
 			}
 		},
+		/**
+		 * Permet de réinitialiser les inputs de base.
+		 */
 		resetInputs(){
 			this.description = "";
 			this.hourlyRate = "";
 			this.serviceType = "";
 		},
+		/**
+		 * Retourne vrai si l'utilisateur a précisé au moins
+		 * 1 récurrence dans les jours de semaine.
+		 */
 		validateAtLeastOneDisponibilityInWeek(){
 			let minimumRecurrence = 1
 			let countofTrue=0;
@@ -1145,10 +1121,19 @@ export default {
 
 			return countofTrue>=minimumRecurrence;
 		},
+		/**
+		 * Utiliser cette méthode quand l'utilisateur est disponible
+		 * en tout temps.
+		 * Permet de réinitialiser le datepicker et met les boutons
+		 * des jours de semaine à true.
+		 */
 		closeAllDispoChoices(){
 			this.resetDatepicker();
 			this.toggleAllDayButtonsToTrue();
 		},
+		/**
+		 * Permet de mettre tous les jours de la semaine à true.
+		 */
 		toggleAllDayButtonsToTrue(){
 			this.daysSelected.monday=true;
 			this.daysSelected.tuesday=true;
@@ -1158,11 +1143,13 @@ export default {
 			this.daysSelected.saturday =true;
 			this.daysSelected.sunday=true;
 		},
-		toggleAllDayThatAreInDatepicker(){
+		/**
+		 * Permet de mettre à true les jours de semaine se trouvant
+		 * dans la sélection de dates du datepicker.
+		 */
+		toggleAllDaysThatAreInDatepicker(){
 			var daysArray = this.getDaysArray(this.range.start, this.range.end);
-			let indexDayOfRangeSelected = [];
 			daysArray.forEach((day) => {
-				console.log(day + " est un " + day.getDay());
 				switch (day.getDay()) {
 				case 1:
 				this.daysSelected.monday = true;
@@ -1188,15 +1175,7 @@ export default {
 				default:
 					break;
 			}
-			//     indexDayOfRangeSelected.push(day.getDay());
-			// 	indexDayOfRangeSelected.foreach((index)=>{
-			// 	  console.log("entre");
-			// 	  //0=dimanche, 1=lundi,etc.
-				
-			//   });
 			});
-
-		
 		},
 		replaceByDefault(e){
 			e.target.src = "/media/pfp_default.jpg"
