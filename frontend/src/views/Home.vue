@@ -260,7 +260,7 @@
 									>
 										<img
 											class="is-rounded"
-											:src="'/media/pfp_'+offerUserInfo.user_id+'.jpg'" 
+											:src="this.MEDIA_URL + 'pfp_' + offerUserInfo.user_id + '.jpg'" 
 											@error="replaceByDefault"
 										/>
 										<span
@@ -721,7 +721,7 @@ export default {
 			);
 		},
 		replaceByDefault(e){
-			e.target.src = "/media/pfp_default.jpg"
+			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		}
 	},
 };

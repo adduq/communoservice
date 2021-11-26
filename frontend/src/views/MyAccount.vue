@@ -880,7 +880,7 @@ export default {
 					this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
 					this.getReservedOffersForUser(this.userInfo.user_id);
 					this.getReservedOffersForRecruiter(this.userInfo.user_id);
-					this.userImageURL = '/media/pfp_'+this.userInfo.user_id+'.jpg';
+					this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
 				})
 				.catch((error) => {
 					console.log(error);
@@ -1178,7 +1178,7 @@ export default {
 			});
 		},
 		replaceByDefault(e){
-			e.target.src = "/media/pfp_default.jpg"
+			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		}
 	},
 };

@@ -176,7 +176,7 @@
           this.updatedUserInfo.user_bio = response.data['user_bio'];
           this.updatedUserInfo.location_lat = response.data['location_lat'];
           this.updatedUserInfo.location_lon = response.data['location_lon'];
-          this.userImageURL = '/media/pfp_' + this.userInfo.user_id + '.jpg'
+          this.userImageURL = this.MEDIA_URL + 'pfp_' + this.userInfo.user_id + '.jpg'
           if(response.data['location_lat'] && response.data['location_lon']){
             this.homeMarker = new mapboxgl.Marker()
                   .setLngLat([parseFloat(response.data.location_lon), parseFloat(response.data.location_lat)])
@@ -355,7 +355,7 @@
         return validImageTypes.includes(fileType) && file.size<1048576;
       },
       replaceByDefault(e){
-			  e.target.src = "/media/pfp_default.jpg"
+			  e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		  }
     },
   };
