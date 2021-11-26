@@ -8,11 +8,7 @@
 							<figure
 								class="image is-128x128 round-shadow has-image-centered"
 							>
-								<img
-									class="is-rounded"
-									:src="userImageURL" 
-									@error="replaceByDefault"
-								/>
+								<img class="is-rounded" :src="imgPath" />
 								<span
 									class="badge is-bottom-right"
 									:class="
@@ -374,13 +370,13 @@
 						<p class="title has-text-centered">
 							Mes services actifs
 						</p>
-						<div class="offers-container">
+						<div class="offers-container" :data-list="'detailsOffers'" @scroll="scrollAction">
 							<DetailedOffer
 								v-for="offer in activeOffers"
 								:key="offer.id"
 								:offer="offer"
 								:accountPage="true"
-								@click="modifiedService(offer)"
+								@click="forModifiedOffer(offer)"
 							/>
 						</div>
 						<div class="is-flex is-justify-content-center">
@@ -406,7 +402,7 @@
 						<p class="title has-text-centered">
 							Mes services réservés
 						</p>
-						<div class="offers-container">
+						<div class="offers-container" :data-list="'reservedEmployee'" @scroll="scrollAction">
 							<ReservedOffer
 								v-for="offer in reservedOffersForUser"
 								v-bind:key="offer.id"
@@ -419,7 +415,7 @@
 				<div class="column">
 					<div class="box">
 						<p class="title has-text-centered">Historique</p>
-						<div class="offers-container">
+						<div class="offers-container" :data-list="'terminatedEmployee'" @scroll="scrollAction">
 							<TerminatedOffer
 								v-for="offer in terminatedOffersForUser"
 								v-bind:key="offer.id"
@@ -435,7 +431,7 @@
 						<p class="title has-text-centered">
 							Mes services prévus
 						</p>
-						<div class="offers-container">
+						<div class="offers-container" :data-list="'reservedRecruiter'" @scroll="scrollAction">
 							<ReservedOffer
 								v-for="offer in reservedOffersForRecruiter"
 								v-bind:key="offer.id"
@@ -449,12 +445,12 @@
 				<div class="column">
 					<div class="box">
 						<p class="title has-text-centered">Historique</p>
-						<div class="offers-container">
+						<div class="offers-container" :data-list="'terminatedRecruiter'" @scroll="scrollAction">
 							<TerminatedOffer
 								v-for="offer in terminatedOffersForRecruiter"
 								v-bind:key="offer.id"
 								v-bind:terminatedOffer="offer"
-								v-bind:isRecruiterCard="true"
+								v-bind:isRecruiterCard="true"								
 							/>
 						</div>
 					</div>
@@ -494,7 +490,7 @@
 					<button @click="addNewOffer" class="button is-success w-100" v-if="!toModifiedOffer">
 						Oui
 					</button>
-					<button @click="modifiedOffer" class="button is-success w-100" v-else>
+					<button @click="sendModifiedOffer" class="button is-success w-100" v-else>
 						Oui
 					</button>
 				</footer>
@@ -547,7 +543,7 @@ export default {
 			},
 			profileSwitch: false,
 			userIsActive: true,
-			userImageURL: '',
+			imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			userInfo: {},
 			errors: [],
 			tomorrow: "",
@@ -614,70 +610,69 @@ export default {
 	mounted() {
 		document.title = "Mon compte | Communoservice";
 		this.getUserInfo();
-		this.minDate = this.tomorrow = this.getTomorrow();
+		this.tomorrow = this.getTomorrow();
 		this.getServiceTypes();
 	},
 	methods: {
 		getTomorrow() {
 			var tomorrow = new Date();
-			var dd = String(tomorrow.getDate() + 2).padStart(2, "0");
-			// var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
+			var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
 			var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
 			var yyyy = tomorrow.getFullYear();
 
 			tomorrow = yyyy + "-" + mm + "-" + dd;
 			return tomorrow;
 		},
-		async getAllOffers(userId) {
-			await axios
-				.get(`/api/v1/active-offers/user/${userId}/`)
-				.then((response) => {
-					this.activeOffers = response.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		async getTerminatedOffersForUser(userId) {
-			await axios
-				.get(`/api/v1/terminated-offers/user/${userId}/`)
-				.then((res) => {
-					this.terminatedOffersForUser = res.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		async getReservedOffersForUser(userId) {
-			await axios
-				.get(`/api/v1/reserved-offers/user/${userId}/`)
-				.then((res) => {
-					this.reservedOffersForUser = res.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		async getTerminatedOffersForRecruiter(recruiterId) {
-			await axios
-				.get(`/api/v1/terminated-offers/recruiter/${recruiterId}/`)
-				.then((res) => {
-					this.terminatedOffersForRecruiter = res.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		async getReservedOffersForRecruiter(recruiterId) {
-			await axios
-				.get(`/api/v1/reserved-offers/recruiter/${recruiterId}/`)
-				.then((res) => {
-					this.reservedOffersForRecruiter = res.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
+		// async getAllOffers(userId) {
+		// 	await axios
+		// 		.get(`/api/v1/active-offers/user/${userId}/`)
+		// 		.then((response) => {
+		// 			this.activeOffers = response.data;
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log(error);
+		// 		});
+		// },
+		// async getTerminatedOffersForUser(userId) {
+		// 	await axios
+		// 		.get(`/api/v1/terminated-offers/user/${userId}/`)
+		// 		.then((res) => {
+		// 			this.terminatedOffersForUser = res.data;
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log(error);
+		// 		});
+		// },
+		// async getReservedOffersForUser(userId) {
+		// 	await axios
+		// 		.get(`/api/v1/reserved-offers/user/${userId}/`)
+		// 		.then((res) => {
+		// 			this.reservedOffersForUser = res.data;
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log(error);
+		// 		});
+		// },
+		// async getTerminatedOffersForRecruiter(recruiterId) {
+		// 	await axios
+		// 		.get(`/api/v1/terminated-offers/recruiter/${recruiterId}/`)
+		// 		.then((res) => {
+		// 			this.terminatedOffersForRecruiter = res.data;
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log(error);
+		// 		});
+		// },
+		// async getReservedOffersForRecruiter(recruiterId) {
+		// 	await axios
+		// 		.get(`/api/v1/reserved-offers/recruiter/${recruiterId}/`)
+		// 		.then((res) => {
+		// 			this.reservedOffersForRecruiter = res.data;
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log(error);
+		// 		});
+		// },
 		async getServiceTypes() {
 			await axios
 				.get("/api/v1/service-types/")
@@ -690,6 +685,7 @@ export default {
 		},
 		openCreationModal() {
 			this.creationModalIsActive = !this.creationModalIsActive;
+			this.minDate = this.convertDaysForCalendar(this.tomorrow);
 		},
 		closeOfferModal() {
 			this.creationModalIsActive = false;
@@ -769,11 +765,6 @@ export default {
 				}
 			}
 
-<<<<<<< HEAD
-			// console.log("passe validation");
-
-=======
->>>>>>> 63ecdc5ca4f768ceadd27b2f23218996d237817c
 			if (!this.errors.length) {
 				this.modalCreateisActive = true;
 
@@ -836,7 +827,7 @@ export default {
 			newOffer.start_date = startDate;
 			newOffer.end_date = endDate;
 
-			alert(JSON.stringify(newOffer)); //pour validation.
+			// alert(JSON.stringify(newOffer)); //pour validation.
 
 			await axios
 			.post("/api/v1/offers/", newOffer)
@@ -888,13 +879,14 @@ export default {
 			});
 		},
 		toSelectDate(payload) {
-			alert(payload);
+			// alert(payload);
 		},
 		async addActiveOffers(activeOffer) {
 			await axios
 				.post("/api/v1/active-offers/", activeOffer)
 				.then((response, userId) => {
-					this.getAllOffers(activeOffer.id_user);
+					// this.getAllOffers(activeOffer.id_user);
+					this.getAllOffersWithOffset(activeOffer.id_user);
 				})
 				.catch((error) => {
 					console.log(error);
@@ -906,12 +898,17 @@ export default {
 				.then((response) => {
 					this.userInfo = response.data;
 					this.userIsActive = this.userInfo["is_online"];
-					this.getAllOffers(this.userInfo.user_id);
-					this.getTerminatedOffersForUser(this.userInfo.user_id);
-					this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
-					this.getReservedOffersForUser(this.userInfo.user_id);
-					this.getReservedOffersForRecruiter(this.userInfo.user_id);
-					this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
+					this.getAllOffersWithOffset(this.userInfo.user_id);
+					this.getTerminatedOffersForUserWithOffset(this.userInfo.user_id);
+					this.getTerminatedOffersForRecruiterWithOffset(this.userInfo.user_id);
+					this.getReservedOffersForUserWithOffset(this.userInfo.user_id);
+					this.getReservedOffersForRecruiterWithOffset(this.userInfo.user_id);
+					// this.getAllOffers(this.userInfo.user_id);
+					// this.getTerminatedOffersForUser(this.userInfo.user_id);
+					// this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
+					// this.getReservedOffersForUser(this.userInfo.user_id);
+					// this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					this.getImgUrl(this.userInfo.user_id);
 				})
 				.catch((error) => {
 					console.log(error);
@@ -1211,10 +1208,19 @@ export default {
 			}
 			});
 		},
-		replaceByDefault(e){
-			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+		async getImgUrl(user_id) {
+			await axios
+				.get(
+					`/api/v1/userinfo/${user_id}/profile-image/`
+				)
+				.then((res) => {
+					this.imgPath = this.MEDIA_URL + res.data.imgName
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		},
-		async modifiedService(offer) {
+		async forModifiedOffer(offer) {
 			this.toModifiedOffer = true;
 
 			this.openCreationModal();
@@ -1225,7 +1231,8 @@ export default {
 			this.maxDistance = offer.max_distance;
 			this.isAlwaysDispo = false;
 			this.isDatePickerPresent = true;
-			this.minDate = this.convertDaysForCalendar(offer.start_date);
+			// this.minDate = this.convertDaysForCalendar(offer.start_date);
+			// this.minDate = this.convertDaysForCalendar(this.tomorrow);
 			this.range = {
 				start: this.convertDaysForCalendar(offer.start_date),
 				end: this.convertDaysForCalendar(offer.end_date)
@@ -1236,7 +1243,7 @@ export default {
 				let dayIndex = parseInt(index) + 2 == 8 ? 1 : parseInt(index) + 2;
 
 				if (offer[key] && this.range.start && this.range.end)
-					this.clickOnButton(dayIndex, offer[key]);
+					this.clickOnDayButton(dayIndex, offer[key]);
 				else if (offer[key])
 					this.daysSelected[key] = offer[key];
 			}
@@ -1249,9 +1256,8 @@ export default {
 				return new Date(dayTmp[0], dayTmp[1] - 1, dayTmp[2]);
 			}
 		},
-		async modifiedOffer() {
+		async sendModifiedOffer() {
 			this.isLoading = true;
-			console.log(this.offerToModified);
 
 			if (this.isAlwaysDispo){
 				this.toggleAllDayButtonsToTrue();
@@ -1280,10 +1286,120 @@ export default {
 			this.offerToModified.start_date = startDate;
 			this.offerToModified.end_date = endDate;
 
-			console.log(this.offerToModified);
-			// TODO: Faire le put pour modifier !
-			this.isLoading = false;
-		}
+			await axios
+				.put(
+					`/api/v1/offers/${this.offerToModified.id}/`,
+					this.offerToModified
+				)
+				.then((res) => {
+					// console.log(res.data);
+					this.closeOfferModal();
+					this.isLoading = false;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		scrollAction(e) {
+			let elem = e.target;
+
+			if(elem.scrollTop + elem.clientHeight >= elem.scrollHeight)
+				switch (elem.dataset.list) {
+					case 'detailsOffers':
+						// console.log("Toutes les offres.");
+						this.getAllOffersWithOffset(this.userInfo.user_id);
+						break;
+					case 'reservedEmployee':
+						// console.log("Réservé comme EMPLOYÉ");
+						this.getReservedOffersForUserWithOffset(this.userInfo.user_id);
+						break;
+					case 'terminatedEmployee':
+						// console.log("Terminé comme EMPLOYÉ");
+						this.getTerminatedOffersForUserWithOffset(this.userInfo.user_id);
+						break;
+					case 'reservedRecruiter':
+						// console.log("Réservé comme RECRUTEUR");
+						this.getReservedOffersForRecruiterWithOffset(this.userInfo.user_id);
+						break;
+					case 'terminatedRecruiter':
+						// console.log("Terminé comme RECRUTEUR");
+						this.getTerminatedOffersForRecruiterWithOffset(this.userInfo.user_id);
+						break;
+				}
+		},
+
+
+
+		async getAllOffersWithOffset(userId) {
+			await axios
+				.get(`/api/v1/active-offers/user/${userId}/`, {
+						params: {
+							offset: this.activeOffers.length
+						}
+					})
+				.then((res) => {
+					this.activeOffers = this.activeOffers.concat(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async getTerminatedOffersForUserWithOffset(userId) {
+			await axios
+				.get(`/api/v1/terminated-offers/user/${userId}/`, {
+						params: {
+							offset: this.terminatedOffersForUser.length
+						}
+					})
+				.then((res) => {
+					this.terminatedOffersForUser = this.terminatedOffersForUser.concat(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async getReservedOffersForUserWithOffset(userId) {
+			await axios
+				.get(`/api/v1/reserved-offers/user/${userId}/`, {
+						params: {
+							offset: this.reservedOffersForUser.length
+						}
+					})
+				.then((res) => {
+					this.reservedOffersForUser = this.reservedOffersForUser.concat(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async getTerminatedOffersForRecruiterWithOffset(recruiterId) {
+			await axios
+				.get(`/api/v1/terminated-offers/recruiter/${recruiterId}/`, {
+						params: {
+							offset: this.terminatedOffersForRecruiter.length
+						}
+					})
+				.then((res) => {
+					this.terminatedOffersForRecruiter = this.terminatedOffersForRecruiter.concat(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		async getReservedOffersForRecruiterWithOffset(recruiterId) {
+			await axios
+				.get(`/api/v1/reserved-offers/recruiter/${recruiterId}/`, {
+						params: {
+							offset: this.reservedOffersForRecruiter.length
+						}
+					})
+				.then((res) => {
+					this.reservedOffersForRecruiter = this.reservedOffersForRecruiter.concat(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
 	},
 };
 </script>
@@ -1300,17 +1416,22 @@ option[value=""][disabled] {
 	max-height: 500px;
 	overflow: hidden;
 	overflow-y: scroll;
-}
-.offers-container::-webkit-scrollbar {
-	width: 14px;
+	// Pour Firefox
+	scrollbar-width: thin;
+	scrollbar-color: #aaaaaa rgba(0, 0, 0, 0);
+
+	&::-webkit-scrollbar {
+		width: 14px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border: 4px solid rgba(0, 0, 0, 0);
+		background-clip: padding-box;
+		border-radius: 9999px;
+		background-color: #aaaaaa;
+	}
 }
 
-.offers-container::-webkit-scrollbar-thumb {
-	border: 4px solid rgba(0, 0, 0, 0);
-	background-clip: padding-box;
-	border-radius: 9999px;
-	background-color: #aaaaaa;
-}
 .user-bio{
 	margin:auto;
 	max-width: 500px;

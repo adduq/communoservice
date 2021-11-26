@@ -3,7 +3,7 @@ from apps.offer import views
 
 urlpatterns = [
     path('offers/', views.Offers.as_view(), name="offers"),
-#     path('offers/<int:no_offer>/', views.OfferDetail.as_view(), name="offers"),
+    path('offers/<int:id_offer>/', views.OfferDetail.as_view(), name="offers"),
 
     path('active-offers/', views.ActiveOffers.as_view(), name="active-offers"),
     path('active-offers/<int:id_offer>/<int:no_user>/',

@@ -126,30 +126,38 @@ class Offers(APIView):
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-            pprint(serializer.data)
-            pprint(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             data = {'error': 'profile_incomplete'}
             return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# class OfferDetail(APIView):
+class OfferDetail(APIView):
 
-#     """
-#     Récupérer une offre selon l'id de l'offre.
-#     """
+    """
+    Récupérer une offre selon l'id de l'offre.
+    """
 
-#     def get_object(self, no_offer):
-#         try:
-#             return Offer.objects.get(id=no_offer)
-#         except Offer.DoesNotExist:
-#             raise Http404
+    def get_object(self, id_offer):
+        try:
+            return Offer.objects.get(id=id_offer)
+        except Offer.DoesNotExist:
+            raise Http404
 
-#     def get(self, request, no_offer, format=None):
-#         offer = self.get_object(no_offer)
-#         serializer = OfferSerializer(offer)
-#         return Response(serializer.data)
+    def put(self, request, id_offer, format=None):
+        if request.user.is_anonymous:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+
+        if request.data['user'] is not None and request.user.id != request.data['user']:
+            return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
+
+        offer = self.get_object(id_offer)
+        serializer = OfferSerializer(offer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        pprint(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ServiceTypes(APIView):
@@ -192,12 +200,28 @@ class ActiveOffers(APIView):
     def get(self, request, format=None):
         # active_offers = self.get_offers()
         # serializer = OfferSerializer(active_offers, many=True)
+        # ! Note: TEST OFFSET et LIMIT !
+        offset = request.GET.get('offset')
+        if offset is None:
+            offset = 0
+        else:
+            offset = int(offset)
+
+        pprint(offset)
 
         if not request.user.is_anonymous:
             active_offers = ActiveOffer.objects.exclude(
-                id_user=request.user.id)
+                id_user=request.user.id)[offset:offset+5]
         else:
-            active_offers = ActiveOffer.objects.all()
+            active_offers = ActiveOffer.objects.all()[offset:offset+5]
+
+        pprint(active_offers)
+        # ! Note: Si pas plus dans les 5 débuts => arrive pas à prendre plus ????
+        # if not request.user.is_anonymous:
+        #     active_offers = ActiveOffer.objects.exclude(
+        #         id_user=request.user.id)
+        # else:
+        #     active_offers = ActiveOffer.objects.all()
 
         serializer = ActiveOfferSerializer(active_offers, many=True)
 
@@ -250,7 +274,15 @@ class ActiveOffersByUser(APIView):
         # active_offers = self.get_offers(no_user)
         # serializer = OfferSerializer(active_offers, many=True)
 
-        active_offers = ActiveOffer.objects.filter(id_user=no_user)
+        # active_offers = ActiveOffer.objects.filter(id_user=no_user)
+        # ! Note: TEST OFFSET et LIMIT !
+        offset = request.GET.get('offset')
+        if offset is None:
+            offset = 0
+        else:
+            offset = int(offset)
+
+        active_offers = ActiveOffer.objects.filter(id_user=no_user)[offset:offset+5]
         serializer = ActiveOfferSerializer(active_offers, many=True)
 
         offers = []
@@ -341,7 +373,15 @@ class ReservedOffersByUser(APIView):
         if request.user.is_anonymous or request.user.id != no_user:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        reserved_offers = ReservedOffer.objects.filter(id_user=no_user)
+        # reserved_offers = ReservedOffer.objects.filter(id_user=no_user)
+        # ! Note: TEST OFFSET et LIMIT !
+        offset = request.GET.get('offset')
+        if offset is None:
+            offset = 0
+        else:
+            offset = int(offset)
+
+        reserved_offers = ReservedOffer.objects.filter(id_user=no_user)[offset:offset+5]
         serializer = ReservedOfferSerializer(reserved_offers, many=True)
         remove_user_infos(serializer)
         return Response(serializer.data)
@@ -356,8 +396,17 @@ class ReservedOffersByRecruiter(APIView):
         if request.user.is_anonymous or request.user.id != no_recruiter:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
+        # reserved_offers = ReservedOffer.objects.filter(
+        #     id_recruiter=no_recruiter)
+        # ! Note: TEST OFFSET et LIMIT !
+        offset = request.GET.get('offset')
+        if offset is None:
+            offset = 0
+        else:
+            offset = int(offset)
+
         reserved_offers = ReservedOffer.objects.filter(
-            id_recruiter=no_recruiter)
+            id_recruiter=no_recruiter)[offset:offset+5]
         serializer = ReservedOfferSerializer(reserved_offers, many=True)
         remove_user_infos(serializer)
         return Response(serializer.data)
@@ -456,7 +505,16 @@ class TerminatedOffersByUser(APIView):
         if request.user.is_anonymous or request.user.id != no_user:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)
+        # terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)
+        # ! Note: TEST OFFSET et LIMIT !
+        offset = request.GET.get('offset')
+        if offset is None:
+            offset = 0
+        else:
+            offset = int(offset)
+
+        pprint(offset)
+        terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)[offset:offset+5]
         serializer = TerminatedOfferSerializer(terminated_offers, many=True)
         remove_user_infos(serializer)
         return Response(serializer.data)
@@ -471,8 +529,17 @@ class TerminatedOffersByRecruiter(APIView):
         if request.user.is_anonymous or request.user.id != no_recruiter:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
+        # terminated_offers = TerminatedOffer.objects.filter(
+        #     id_recruiter=no_recruiter)
+        # ! Note: TEST OFFSET et LIMIT !
+        offset = request.GET.get('offset')
+        if offset is None:
+            offset = 0
+        else:
+            offset = int(offset)
+
         terminated_offers = TerminatedOffer.objects.filter(
-            id_recruiter=no_recruiter)
+            id_recruiter=no_recruiter)[offset:offset+5]
         serializer = TerminatedOfferSerializer(terminated_offers, many=True)
         remove_user_infos(serializer)
         return Response(serializer.data)

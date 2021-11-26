@@ -75,12 +75,14 @@
 			<div class="column is-two-thirds">
 				<div class="box">
 					<!-- <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress> -->
-					<DetailedOffer
-						v-for="offer in offers"
-						v-bind:key="offer.id"
-						v-bind:offer="offer"
-						@click="showOfferModal(offer)"
-					/>
+					<div class="offers-container" @scroll="scrollAction">
+						<DetailedOffer
+							v-for="offer in offers"
+							v-bind:key="offer.id"
+							v-bind:offer="offer"
+							@click="showOfferModal(offer)"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -301,99 +303,6 @@
 					<label class="label has-text-centered mt-6 pt-2 is-size-5">
 						Veuillez choisir une de mes disponibilités.
 					</label>
-					<!-- <div
-						class="is-flex has-text-centered is-flex-wrap-wrap mt-2 mb-6 is-justify-content-space-evenly is-family-monospace"
-					>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.monday ? 'is-info' : '',
-								!offerToShow.monday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.monday"
-							title="Lundi"
-							@click="selectedWeekdays.monday = !selectedWeekdays.monday"
-						>
-							L
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.tuesday ? 'is-info' : '',
-								!offerToShow.tuesday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.tuesday"
-							title="Mardi"
-							@click="selectedWeekdays.tuesday = !selectedWeekdays.tuesday"
-						>
-							M
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.wednesday ? 'is-info' : '',
-								!offerToShow.wednesday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.wednesday"
-							title="Mercredi"
-							@click="selectedWeekdays.wednesday = !selectedWeekdays.wednesday"
-						>
-							M
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.thursday ? 'is-info' : '',
-								!offerToShow.thursday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.thursday"
-							title="Jeudi"
-							@click="selectedWeekdays.thursday = !selectedWeekdays.thursday"
-						>
-							J
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.friday ? 'is-info' : '',
-								!offerToShow.friday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.friday"
-							title="Vendredi"
-							@click="selectedWeekdays.friday = !selectedWeekdays.friday"
-						>
-							V
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.saturday ? 'is-info' : '',
-								!offerToShow.saturday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.saturday"
-							title="Samedi"
-							@click="selectedWeekdays.saturday = !selectedWeekdays.saturday"
-						>
-							S
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.sunday ? 'is-info' : '',
-								!offerToShow.sunday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.sunday"
-							title="Dimanche"
-							@click="selectedWeekdays.sunday = !selectedWeekdays.sunday"
-						>
-							D
-						</button>
-					</div> -->
-
-					<!-- <DatePicker
-        				:disabled-dates="disableDates" v-model="dates" mode="date"
-        				:masks="masks" :min-date="minDate" :max-date="maxDate" is-expanded
-        			/> -->
 
 					<DatePicker
         				:disabled-dates="disableDates" v-model="dates" mode="date"
@@ -474,24 +383,6 @@
 						currentStep++;
 					"
 				>
-				<!-- <button
-					class="button is-primary is-rounded w-100"
-					v-if="currentStep < 3 && !step3Completed"
-					:disabled="
-						currentStep == 2 &&
-							Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
-					"
-					:title="
-						currentStep == 2 &&
-						Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
-							? 'Vous devez choisir au moins une journée'
-							: ''
-					"
-					@click="
-						currentStep == 2 ? (step2Completed = true) : '';
-						currentStep++;
-					"
-				> -->
 					<span class="icon">
 						Suivant
 						<i class="fa fa-arrow-right ml-2"></i>
@@ -538,15 +429,6 @@ export default {
 			offerToShow: Object,
 			offerUserInfo: Object,
 			offerModalActive: false,
-			// selectedWeekdays: {
-			// 	monday: false,
-			// 	tuesday: false,
-			// 	wednesday: false,
-			// 	thursday: false,
-			// 	friday: false,
-			// 	saturday: false,
-			// 	sunday: false,
-			// },
 			confirmationCheckbox: false,
 			clickedSend: false,
 
@@ -588,7 +470,9 @@ export default {
 	},
 	mounted() {
 		document.title = "Accueil | Communoservice";
-		this.getAllOffers();
+		// this.getAllOffers();
+		this.getAllOffersWithOffset();
+
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
 		this.getServiceTypes();
@@ -602,18 +486,18 @@ export default {
     	},
   	},
 	methods: {
-		async getAllOffers() {
-			this.isFetchingOffers = true;
-			await axios
-				.get("/api/v1/active-offers/")
-				.then((response) => {
-					this.offers = response.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-			this.isFetchingOffers = false;
-		},
+		// async getAllOffers() {
+		// 	this.isFetchingOffers = true;
+		// 	await axios
+		// 		.get("/api/v1/active-offers/")
+		// 		.then((response) => {
+		// 			this.offers = response.data;
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log(error);
+		// 		});
+		// 	this.isFetchingOffers = false;
+		// },
 		async getServiceTypes() {
 			await axios
 				.get("/api/v1/service-types/")
@@ -780,14 +664,27 @@ export default {
 
 					this.minDate = this.convertDaysForCalendar(offer.start_date);
 					this.maxDate = this.convertDaysForCalendar(offer.end_date);
+
+					// ! Note: À revoir
+					if (!this.minDate) {
+						var tomorrow = new Date();
+						var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
+						var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
+						var yyyy = tomorrow.getFullYear();
+
+						tomorrow = yyyy + "-" + mm + "-" + dd;
+						this.minDate = this.convertDaysForCalendar(tomorrow);
+					}
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
 		convertDaysForCalendar(day) {
-			let dayTmp = day.toString().split('-');
-			return new Date(dayTmp[0], dayTmp[1] - 1, dayTmp[2]);
+			if (day) {
+				let dayTmp = day.toString().split('-');
+				return new Date(dayTmp[0], dayTmp[1] - 1, dayTmp[2]);
+			}
 		},
 		daysOfWeekToDisable(weekdays, offer) {
 			if (!offer.sunday)
@@ -807,12 +704,55 @@ export default {
 		},
 		replaceByDefault(e){
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
-		}
+		},
+		scrollAction(e) {
+			let elem = e.target;
+
+			if(elem.scrollTop + elem.clientHeight >= elem.scrollHeight)
+				this.getAllOffersWithOffset();
+		},
+		async getAllOffersWithOffset() {
+			this.isFetchingOffers = true;
+			await axios
+				.get('/api/v1/active-offers/', {
+					params: {
+						offset: this.offers.length
+						}
+					})
+				.then((res) => {
+					this.offers = this.offers.concat(res.data);
+					console.log(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+			this.isFetchingOffers = false;
+		},
 	},
 };
 </script>
 <style lang="scss" scoped>
 	@import "../../node_modules/bulma-steps";
+
+	.offers-container {
+	max-height: 600px;
+	overflow: hidden;
+	overflow-y: scroll;
+	// Pour Firefox
+	scrollbar-width: thin;
+	scrollbar-color: #aaaaaa rgba(0, 0, 0, 0);
+
+	&::-webkit-scrollbar {
+		width: 14px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border: 4px solid rgba(0, 0, 0, 0);
+		background-clip: padding-box;
+		border-radius: 9999px;
+		background-color: #aaaaaa;
+	}
+}
 
 	.ch-5 {
 		width: 5ch;

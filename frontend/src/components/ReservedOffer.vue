@@ -4,12 +4,7 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-64x64">
-						<img
-							class="is-rounded"
-							:src="this.$parent.profileSwitch ? this.MEDIA_URL + 'pfp_'+reservedOffer.id_user.id+'.jpg' : this.MEDIA_URL + 'pfp_'+reservedOffer.id_recruiter.id+'.jpg'" 
-							@error="replaceByDefault"
-							alt="Placeholder image"
-						/>
+						<img class="is-rounded" :src="imgPath" />
 					</figure>
 				</div>
 				<div class="media-content">
@@ -146,7 +141,12 @@ export default {
 			statusAttribue: 0,
 			noteService: 0,
 			terminateOfferIsActive: false,
+			imgPath: this.MEDIA_URL + "pfp_default.jpg",
 		};
+	},
+	mounted() {
+		let user_id = this.$parent.profileSwitch ? this.reservedOffer.id_user.id : this.reservedOffer.id_recruiter.id;
+		this.getImgUrl(user_id);
 	},
 	methods: {
 		setRating(note) {
@@ -165,6 +165,8 @@ export default {
 			this.reservedOffer["rating"] = this.noteService;
 
 			await this.finishOffer();
+
+			this.terminateOfferIsActive = !this.terminateOfferIsActive
 		},
 		async finishOffer() {
 			this.reservedOffer["completed_date"] = new Date().toLocaleDateString("fr-CA");
@@ -179,13 +181,25 @@ export default {
 				)
 				.then((res) => {
 					if (this.isRecruiterCard) {
-						this.$parent.getReservedOffersForRecruiter(
-							this.reservedOffer.id_recruiter.id
-						);
+						this.$parent.reservedOffersForRecruiter = this.$parent.reservedOffersForRecruiter
+						.filter(el => el.id !== this.reservedOffer.id );
+
+						// this.$parent.getReservedOffersForRecruiterWithOffset(
+						// 	this.reservedOffer.id_recruiter.id
+						// );
+						// this.$parent.getReservedOffersForRecruiter(
+						// 	this.reservedOffer.id_recruiter.id
+						// );
 					} else {
-						this.$parent.getReservedOffersForUser(
-							this.reservedOffer.id_user.id
-						);
+						this.$parent.reservedOffersForUser = this.$parent.reservedOffersForUser
+						.filter(el => el.id !== this.reservedOffer.id );
+
+						// this.$parent.getReservedOffersForUserWithOffset(
+						// 	this.reservedOffer.id_user.id
+						// );
+						// this.$parent.getReservedOffersForUser(
+						// 	this.reservedOffer.id_user.id
+						// );
 					}
 
 					this.addToTerminatedOffer();
@@ -204,15 +218,21 @@ export default {
 				.post("/api/v1/terminated-offers/", this.reservedOffer)
 				.then((res) => {
 					if (this.isRecruiterCard) {
-						this.$parent.getTerminatedOffersForRecruiter(
+						this.$parent.getTerminatedOffersForRecruiterWithOffset(
 							this.reservedOffer["id_recruiter"]
 						);
+						// this.$parent.getTerminatedOffersForRecruiter(
+						// 	this.reservedOffer["id_recruiter"]
+						// );
 
 						this.refreshEmployeeInfos(this.reservedOffer["id_user"], this.reservedOffer["id_recruiter"]);
 					} else {
-						this.$parent.getTerminatedOffersForUser(
+						this.$parent.getTerminatedOffersForUserWithOffset(
 							this.reservedOffer["id_user"]
 						);
+						// this.$parent.getTerminatedOffersForUser(
+						// 	this.reservedOffer["id_user"]
+						// );
 
 						this.refreshRecruiterInfos(this.reservedOffer["id_recruiter"], this.reservedOffer["id_user"]);
 					}					
@@ -247,8 +267,17 @@ export default {
 					console.log(err);
 				});
 		},
-		replaceByDefault(e){
-			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+		async getImgUrl(user_id) {			
+			await axios
+				.get(
+					`/api/v1/userinfo/${user_id}/profile-image/`
+				)
+				.then((res) => {
+					this.imgPath = this.MEDIA_URL + res.data.imgName
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		}
 	},
 };

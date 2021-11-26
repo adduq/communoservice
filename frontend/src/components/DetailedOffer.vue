@@ -1,14 +1,12 @@
 <template>
-		<div class="card mb-3 h-140" :class="accountPage ? '' : 'is-pointer-cursor'" @click="$emit('click', this.offer)">
-			<div class="card-content">
+		<div class="card mb-3 h-140">
+			<div class="card-content is-pointer-cursor" 
+				:class="accountPage ? 'pb-0 mb-4' : ''"
+				@click="$emit('click', this.offer)">
 				<div class="media">
 					<div class="media-left">
 						<figure class="image is-64x64">
-							<img
-								class="is-rounded"
-								:src="this.MEDIA_URL + 'pfp_' + offer.user + '.jpg'" 
-								@error="replaceByDefault"
-							/>
+							<img class="is-rounded" :src="imgPath" />
 						</figure>
 					</div>
 					<div class="media-content is-clipped">
@@ -75,12 +73,12 @@
 						D
 					</span>
 				</div>
+			</div>
 
-				<div v-if="accountPage" class="is-flex is-justify-content-center mt-4">
-					<button class="button is-danger w-200" @click="deleteConfirmationModal = true">
-						Supprimer
-					</button>
-				</div>
+			<div v-if="accountPage" class="is-flex is-justify-content-center mb-4">
+				<button class="button is-danger w-200" @click="deleteConfirmationModal = true">
+					Supprimer
+				</button>
 			</div>
 		</div>
 
@@ -127,12 +125,16 @@ export default {
 	emits: ["click"],
 	props: {
 		offer: Object,
-		accountPage: false,
+		accountPage: false,		
 	},
 	data() {
 		return {
 			deleteConfirmationModal: false,
+			imgPath: this.MEDIA_URL + "pfp_default.jpg",
 		}
+	},
+	mounted() {
+		this.getImgUrl();
 	},
 	methods: {
 		async deleteOffer() {
@@ -141,15 +143,31 @@ export default {
 					`/api/v1/active-offers/${this.offer.id_active_offer}/`
 				)
 				.then((res) => {
-					this.$parent.getAllOffers(this.offer.user);
-					this.$parent.getReservedOffersForUser(this.offer.user);
+					this.$parent.activeOffers = this.$parent.activeOffers
+						.filter(el => el.id !== this.offer.id );
+
+					// this.$parent.getAllOffersWithOffset(this.offer.user);
+					this.$parent.getReservedOffersForUserWithOffset(this.offer.user);
+
+					this.deleteConfirmationModal = !this.deleteConfirmationModal;
+					// this.$parent.getAllOffers(this.offer.user);
+					// this.$parent.getReservedOffersForUser(this.offer.user);
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
-		replaceByDefault(e){
-			e.target.src = this.MEDIA_URL + "pfp_default.jpg"
+		async getImgUrl() {
+			await axios
+				.get(
+					`/api/v1/userinfo/${this.offer.user}/profile-image/`
+				)
+				.then((res) => {
+					this.imgPath = this.MEDIA_URL + res.data.imgName;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		}
 	}
 };
