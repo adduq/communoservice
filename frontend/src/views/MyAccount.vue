@@ -172,7 +172,7 @@
 									</div>
 									</div>
 
-									<label class="label">Distance maximale (Km)</label>
+									<label class="label">Distance maximale (km)</label>
 									<div class="field has-addons">
 									<p class="control">
 										<input
