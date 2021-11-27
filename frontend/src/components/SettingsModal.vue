@@ -230,9 +230,8 @@
           .then((response)=>{
             this.userInfo = response.data;
 
-            //this.$store.commit("changeUserInfo",  this.updatedUserInfo);
+            //Mise à jour du userInfo dans le store.
             this.$store.dispatch("changeUserInfo", this.userInfo);
-            console.log("SettingModal : userInfo is now:"+JSON.stringify(this.userInfo));
 
             toast({
               message: "Informations sauvegardées avec succès!",

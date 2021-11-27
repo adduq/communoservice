@@ -37,20 +37,12 @@
 					<button class="button is-rounded has-text-centered is-relative" aria-haspopup="true"
 						aria-controls="dropdown-menu3">
 						<span class="icon is-small">
-						<span class="badge is-danger notification-badge">8</span>
 						<i class="fas fa-angle-down" aria-hidden="true"></i>
 						</span>
 					</button>
 					</div>
 					<div class="dropdown-menu pu-2" id="dropdown-menu3" role="menu">
 					<div class="dropdown-content has-text-left">
-						<a href="#" class="dropdown-item">
-							<span class="icon is-small mr-3">
-								<i class="fas fa-bell"></i>
-							</span>
-							<span>Notifications</span>
-						</a>
-						<hr class="dropdown-divider" />
 						<a href="#" class="dropdown-item" v-on:click="this.modalSettingsisActive = !this.modalSettingsisActive; this.showNav = !this.showNav">
 						<span class="icon is-small mr-3">
 							<i class="fas fa-cog"></i>
@@ -244,7 +236,6 @@
 	padding-right: calc(0.75em - 1px);
 	padding-top: calc(0.5em - 1px);
 }
-
 .active-icon {
 	height: 20px!important;
 	min-width: 20px!important;
@@ -253,11 +244,6 @@
 	background-color: lime!important;
 	box-shadow: 0px 0px 8px 0px lime!important;
 }
-
-.notification-badge{
-	box-shadow: 0 0 6px 3px red!important;
-}
-
 .not-active-icon {
 	height: 20px!important;
 	min-width: 20px!important;
