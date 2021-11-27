@@ -82,7 +82,8 @@
       </div>
     </nav>
     <section class="section">
-      <router-view />
+      <router-view
+	  @controlModalFromChild="controlModalFromChild($event)" />
     </section>
 
     <SettingsModal 
@@ -198,6 +199,9 @@
 				this.$store.commit("removeToken");
 				this.$router.push("/connexion");
 			})
+		},
+		controlModalFromChild(modalSettingsisActive){
+		this.modalSettingsisActive = modalSettingsisActive;
 		}
 	},
 };

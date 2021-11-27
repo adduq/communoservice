@@ -269,11 +269,32 @@
 											:title="offerUserInfo.is_online ? 'Actif' : 'Inactif'"
 										></span>
 									</figure>
-									<p>
+									<!-- <p>
 										<span class="title is-4 is-bold">
 											{{
 												offerUserInfo.first_name + " " + offerUserInfo.last_name
 											}}
+										</span>
+									</p> -->
+									<p class="mt-2">
+										<span
+											class="title is-bold has-text-white"
+											v-if="
+												offerUserInfo.first_name &&
+													offerUserInfo.last_name
+											"
+										>
+											{{
+												offerUserInfo.first_name +
+													" " +
+													offerUserInfo.last_name
+											}}
+										</span>
+										<span
+											class="title is-bold has-text-white"
+											v-else
+										>
+											{{ offerUserInfo.username }}
 										</span>
 									</p>
 								</div>

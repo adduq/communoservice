@@ -1,5 +1,6 @@
 <template>
-	<div class="page-my-account">
+	<div 
+	class="page-my-account">
 		<div class="box has-background-dark has-text-white">
 			<div class="container profile">
 				<div class="section profile-heading">
@@ -29,14 +30,14 @@
 								<span
 									class="title is-bold has-text-white"
 									v-if="
-										userInfo.first_name &&
-											userInfo.last_name
+										$store.state.userInfo.first_name &&
+											$store.state.userInfo.last_name
 									"
 								>
 									{{
-										userInfo.first_name +
+										$store.state.userInfo.first_name +
 											" " +
-											userInfo.last_name
+											$store.state.userInfo.last_name
 									}}
 								</span>
 								<span
@@ -374,8 +375,9 @@
 						</div>
 						<div class="is-flex is-justify-content-center">
 							<a
+								v-if="$store.state.userInfo.profile_is_completed"
 								href="#"
-								class="button is-info mt-5"
+								class="button  button-service is-info mt-5"
 								v-on:click="openCreationModal()"
 							>
 								<span class="icon is-small mr-3">
@@ -385,6 +387,21 @@
 									></i>
 								</span>
 								<span> Créer un service </span>
+							</a>
+
+							<a
+								v-else
+								href="#"
+								class="button  button-service is-info mt-5"
+								v-on:click="openParentSettingModal()"
+							>
+								<span class="icon is-small mr-3">
+									<i
+										class="fa fa-plus-circle"
+										aria-hidden="true"
+									></i>
+								</span>
+								<span> Compléter votre profil pour créer des offres! </span>
 							</a>
 						</div>
 					</div>
@@ -509,6 +526,11 @@ export default {
 		TerminatedOffer,
 		ReservedOffer,
 	},
+	// computed: {
+    // 	userInfo () {
+    //   	return this.$store.getters.getUserInfo;
+    // 	}
+	// },
 	data() {
 		return {
 			activeOffers: [],
@@ -598,6 +620,9 @@ export default {
     },
   },
 	mounted() {
+		//console.log("firsname:"+this.$store.getUserInfo.first_name);
+		//this.userInfo=this.$store.getters.getUserInfo;
+		console.log("MyAccount:userInfo is now:"+JSON.stringify(this.userInfo));
 		document.title = "Mon compte | Communoservice";
 		this.getUserInfo();
 		this.tomorrow = this.getTomorrow();
@@ -875,16 +900,26 @@ export default {
 				.then((response) => {
 					this.userInfo = response.data;
 					this.userIsActive = this.userInfo["is_online"];
-					this.getAllOffers(this.userInfo.user_id);
-					this.getTerminatedOffersForUser(this.userInfo.user_id);
-					this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
-					this.getReservedOffersForUser(this.userInfo.user_id);
-					this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					if (this.userInfo.profile_is_completed){
+						
+						this.getAllOffers(this.userInfo.user_id);
+						this.getTerminatedOffersForUser(this.userInfo.user_id);
+						this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
+						this.getReservedOffersForUser(this.userInfo.user_id);
+						this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					}
+					
+					
 					this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
+
+					this.$store.dispatch("changeUserInfo", this.userInfo);
 				})
 				.catch((error) => {
 					console.log(error);
 				});
+		},
+		openParentSettingModal(){
+			this.$emit('controlModalFromChild', true);
 		},
 		/***Méthodes Datepicker Début**/
 		/**
@@ -1185,6 +1220,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../node_modules/bulmaswatch/flatly/variables';
+
 .profile-toggle {
 	width: 8em !important;
 }
@@ -1235,5 +1272,8 @@ option[value=""][disabled] {
 
 .tooltip:hover .tooltiptext {
   	visibility: visible;
+}
+.button-service:hover{
+	background-color: darken($color:$primary, $amount: 0.5);
 }
 </style>
