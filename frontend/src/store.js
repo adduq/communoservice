@@ -34,12 +34,14 @@ export default createStore({
           }
     },
     actions:{
-        changeUserInfo (context, payload) {
-          // setTimeout(() => {
-          //   context.commit("changeUserInfo", payload);
-          // }, 3000);
-          context.commit("changeUserInfo", payload);
-          console.log("STORE, Action: userInfo is now:"+JSON.stringify(this.userInfo));
+      /**
+       * Méthode à utiliser dans les composants enfants pour
+       * changer le userInfo.
+       * @param {*} context  Le contexte
+       * @param {*} newUserInfo Le nouveau userInfo
+       */
+        changeUserInfo (context, newUserInfo) {
+          context.commit("changeUserInfo", newUserInfo);
         }
      },
      getters: {

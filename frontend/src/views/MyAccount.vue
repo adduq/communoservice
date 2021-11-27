@@ -395,12 +395,6 @@
 								class="button  button-service is-info mt-5"
 								v-on:click="openParentSettingModal()"
 							>
-								<span class="icon is-small mr-3">
-									<i
-										class="fa fa-plus-circle"
-										aria-hidden="true"
-									></i>
-								</span>
 								<span> Compléter votre profil pour créer des offres! </span>
 							</a>
 						</div>
@@ -526,11 +520,6 @@ export default {
 		TerminatedOffer,
 		ReservedOffer,
 	},
-	// computed: {
-    // 	userInfo () {
-    //   	return this.$store.getters.getUserInfo;
-    // 	}
-	// },
 	data() {
 		return {
 			activeOffers: [],
@@ -620,9 +609,6 @@ export default {
     },
   },
 	mounted() {
-		//console.log("firsname:"+this.$store.getUserInfo.first_name);
-		//this.userInfo=this.$store.getters.getUserInfo;
-		console.log("MyAccount:userInfo is now:"+JSON.stringify(this.userInfo));
 		document.title = "Mon compte | Communoservice";
 		this.getUserInfo();
 		this.tomorrow = this.getTomorrow();
@@ -899,6 +885,7 @@ export default {
 				.get("/api/v1/userinfo/me/")
 				.then((response) => {
 					this.userInfo = response.data;
+					console.log(JSON.stringify(this.userInfo));
 					this.userIsActive = this.userInfo["is_online"];
 					if (this.userInfo.profile_is_completed){
 						
@@ -912,12 +899,18 @@ export default {
 					
 					this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
 
+					//Mise à jour du userInfo dans le store.
+					//(important si plusieurs utilisateurs sur le même poste)
 					this.$store.dispatch("changeUserInfo", this.userInfo);
 				})
 				.catch((error) => {
 					console.log(error);
 				});
 		},
+		/**
+		 * Pour forcer l'ouverture de la modale des paramètres,
+		 * qui se trouve dans une view parent.
+		 */
 		openParentSettingModal(){
 			this.$emit('controlModalFromChild', true);
 		},
@@ -1273,7 +1266,10 @@ option[value=""][disabled] {
 .tooltip:hover .tooltiptext {
   	visibility: visible;
 }
+/**
+Style uniquement appliqué sur le bouton de Création d'un service/Compléter le profil.
+ */
 .button-service:hover{
-	background-color: darken($color:$primary, $amount: 0.5);
+	background-color: darken(#3488ce, 5%);
 }
 </style>
