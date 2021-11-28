@@ -520,6 +520,8 @@ export default {
 		TerminatedOffer,
 		ReservedOffer,
 	},
+	emits: ['controlModalFromChild']
+	,
 	data() {
 		return {
 			activeOffers: [],

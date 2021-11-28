@@ -542,6 +542,8 @@ export default {
 		components: {
 		DetailedOffer,
 	},
+	emits: ['controlModalFromChild']
+	,
 	data() {
 		return {
 			// Offer modal
