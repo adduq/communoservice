@@ -73,7 +73,7 @@
 				</nav>
 			</div>
 			<div class="column is-two-thirds">
-				<div class="box">
+				<div v-if="offers.length > 0" class="box">
 					<!-- <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress> -->
 					<DetailedOffer
 						v-for="offer in offers"
@@ -81,6 +81,17 @@
 						v-bind:offer="offer"
 						@click="showOfferModal(offer)"
 					/>
+				</div>
+				<div v-else  class="box has-text-centered">
+				Aucune offre disponible à proximité.
+				<div>
+						<a
+							href="#"
+							class="button  button-service is-info mt-5"
+							v-on:click="openParentSettingModal()"
+							>
+							<span> Modifier votre profil pour accéder à plus d'offres </span>
+					</a></div>
 				</div>
 			</div>
 		</div>
@@ -528,6 +539,9 @@ import DetailedOffer from "@/components/DetailedOffer";
 import StepsWizard from "bulma-steps/dist/js/bulma-steps.js";
 export default {
 	name: "Home",
+		components: {
+		DetailedOffer,
+	},
 	data() {
 		return {
 			// Offer modal
@@ -576,15 +590,30 @@ export default {
 			},
 		};
 	},
-	components: {
-		DetailedOffer,
-	},
 	mounted() {
 		document.title = "Accueil | Communoservice";
 		this.getAllOffers();
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
 		this.getServiceTypes();
+		/*Un "observer" qui surveille tout
+		changement dans le state concernant le userInfo.*/
+		this.$store.watch(
+      (state)=>{
+        return this.$store.getters.getUserInfo;
+      },
+	  /**
+	   * Lorsque la valeur du userInfo change, on récupère
+	   * à nouveau les offres actives.
+	   */
+      (val)=>{
+	   this.getAllOffers();
+      },
+      {
+		  //À spécifier si on observe les propriétés "nested" d'un objet.
+        deep:true
+      }
+      );
 	},
 	methods: {
 		async getAllOffers() {
@@ -743,7 +772,14 @@ export default {
 		},
 		replaceByDefault(e){
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
-		}
+		},
+				/**
+		 * Pour forcer l'ouverture de la modale des paramètres,
+		 * qui se trouve dans une view parent.
+		 */
+		openParentSettingModal(){
+			this.$emit('controlModalFromChild', true);
+		},
 	},
 };
 </script>
@@ -810,5 +846,11 @@ export default {
 
 	.step-item {
 		flex-basis: 0 !important;
+	}
+	/**
+	Style uniquement appliqué sur le bouton des paramètres.
+	*/
+	.button-service:hover{
+		background-color: darken(#3488ce, 5%);
 	}
 </style>
