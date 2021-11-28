@@ -113,6 +113,9 @@
   } from "bulma-toast";
   export default {
     name: "SettingsModal",
+    props:{
+  userInfo: {}
+    },
     data() {
       return {
         userInfo: {},
@@ -226,6 +229,10 @@
           .put('api/v1/userinfo/me/update/', data)
           .then((response)=>{
             this.userInfo = response.data;
+
+            //Mise à jour du userInfo dans le store.
+            this.$store.dispatch("changeUserInfo", this.userInfo);
+
             toast({
               message: "Informations sauvegardées avec succès!",
               type: "is-success",

@@ -1,5 +1,6 @@
 <template>
-	<div class="page-my-account">
+	<div 
+	class="page-my-account">
 		<div class="box has-background-dark has-text-white">
 			<div class="container profile">
 				<div class="section profile-heading">
@@ -29,14 +30,14 @@
 								<span
 									class="title is-bold has-text-white"
 									v-if="
-										userInfo.first_name &&
-											userInfo.last_name
+										$store.state.userInfo.first_name &&
+											$store.state.userInfo.last_name
 									"
 								>
 									{{
-										userInfo.first_name +
+										$store.state.userInfo.first_name +
 											" " +
-											userInfo.last_name
+											$store.state.userInfo.last_name
 									}}
 								</span>
 								<span
@@ -374,8 +375,9 @@
 						</div>
 						<div class="is-flex is-justify-content-center">
 							<a
+								v-if="$store.state.userInfo.profile_is_completed"
 								href="#"
-								class="button is-info mt-5"
+								class="button  button-service is-info mt-5"
 								v-on:click="openCreationModal()"
 							>
 								<span class="icon is-small mr-3">
@@ -385,6 +387,15 @@
 									></i>
 								</span>
 								<span> Créer un service </span>
+							</a>
+
+							<a
+								v-else
+								href="#"
+								class="button  button-service is-info mt-5"
+								v-on:click="openParentSettingModal()"
+							>
+								<span> Compléter votre profil pour créer des offres! </span>
 							</a>
 						</div>
 					</div>
@@ -874,17 +885,34 @@ export default {
 				.get("/api/v1/userinfo/me/")
 				.then((response) => {
 					this.userInfo = response.data;
+					console.log(JSON.stringify(this.userInfo));
 					this.userIsActive = this.userInfo["is_online"];
-					this.getAllOffers(this.userInfo.user_id);
-					this.getTerminatedOffersForUser(this.userInfo.user_id);
-					this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
-					this.getReservedOffersForUser(this.userInfo.user_id);
-					this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					if (this.userInfo.profile_is_completed){
+						
+						this.getAllOffers(this.userInfo.user_id);
+						this.getTerminatedOffersForUser(this.userInfo.user_id);
+						this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
+						this.getReservedOffersForUser(this.userInfo.user_id);
+						this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					}
+					
+					
 					this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
+
+					//Mise à jour du userInfo dans le store.
+					//(important si plusieurs utilisateurs sur le même poste)
+					this.$store.dispatch("changeUserInfo", this.userInfo);
 				})
 				.catch((error) => {
 					console.log(error);
 				});
+		},
+		/**
+		 * Pour forcer l'ouverture de la modale des paramètres,
+		 * qui se trouve dans une view parent.
+		 */
+		openParentSettingModal(){
+			this.$emit('controlModalFromChild', true);
 		},
 		/***Méthodes Datepicker Début**/
 		/**
@@ -1185,6 +1213,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../node_modules/bulmaswatch/flatly/variables';
+
 .profile-toggle {
 	width: 8em !important;
 }
@@ -1235,5 +1265,11 @@ option[value=""][disabled] {
 
 .tooltip:hover .tooltiptext {
   	visibility: visible;
+}
+/**
+Style uniquement appliqué sur le bouton de Création d'un service/Compléter le profil.
+ */
+.button-service:hover{
+	background-color: darken(#3488ce, 5%);
 }
 </style>
