@@ -22,6 +22,12 @@
               <i class="fab fa-github"></i>
             </span>
           </a>
+		  <a class="navbar-item" href="http://tiny.cc/communoservice" @click="showNav = !showNav">
+            <span class="mr-2">Démo</span>
+            <span class="icon is-small">
+              <i class="fas fa-video"></i>
+            </span>
+          </a>
         </div>
         <div class="navbar-end">
             <template v-if="$store.state.isAuthenticated">
