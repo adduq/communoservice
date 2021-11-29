@@ -81,6 +81,7 @@ export default {
 						// console.log(axios.defaults.headers.common["Authorization"]);
 						const toPath = this.$route.query.to || "/";
 						this.$router.push(toPath);
+						this.loadUserInfo();
 					})
 					.catch((error) => {
 						if (error.response.status === 400) {
@@ -98,6 +99,16 @@ export default {
 					});
 			}
 			this.isLoading = false;
+		},
+		async loadUserInfo(){
+			await axios
+				.get('/api/v1/userinfo/me/')
+				.then((response) =>{
+					this.$store.dispatch("changeUserInfo", response.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 		validateFormData(formData){
 			this.errors.splice(0);
