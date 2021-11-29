@@ -272,26 +272,12 @@
 											:title="offerUserInfo.is_online ? 'Actif' : 'Inactif'"
 										></span>
 									</figure>
-									<!-- <p>
-										<span class="title is-4 is-bold">
-											{{
-												offerUserInfo.first_name + " " + offerUserInfo.last_name
-											}}
-										</span>
-									</p> -->
 									<p class="mt-2">
 										<span
-											class="title is-bold has-text-white"
-											v-if="
-												offerUserInfo.first_name &&
-													offerUserInfo.last_name
-											"
+											class="title is-bold"
+											v-if="offerUserInfo.first_name && offerUserInfo.last_name"
 										>
-											{{
-												offerUserInfo.first_name +
-													" " +
-													offerUserInfo.last_name
-											}}
+											{{ offerUserInfo.first_name + " " + offerUserInfo.last_name }}
 										</span>
 										<span
 											class="title is-bold has-text-white"
@@ -308,10 +294,6 @@
 										{{ offerUserInfo.nb_services_given }}
 									</p>
 									<p>services rendus</p>
-								</div>
-								<div class="column has-text-centered">
-									<p class="has-text-weight-bold is-size-3">---</p>
-									<p>services actifs</p>
 								</div>
 								<div class="column has-text-centered">
 									<p class="has-text-weight-bold is-size-3">
@@ -416,40 +398,51 @@
 				</div>
 				<div v-if="currentStep == 3">
 					<div v-if="$store.state.isAuthenticated">
-						<div class="has-text-centered" v-if="!clickedSend">
-							<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
-							<label class="checkbox mb-5">
-								<input type="checkbox" v-model="confirmationCheckbox" />
-								Je confirme avoir validé ma demande
-							</label>
+						<div v-if="$store.state.userInfo.profile_is_completed">
+							<div class="has-text-centered" v-if="!clickedSend">
+								<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
+								<label class="checkbox mb-5">
+									<input type="checkbox" v-model="confirmationCheckbox" />
+									Je confirme avoir validé ma demande
+								</label>
+							</div>
+							<div
+								v-if="clickedSend"
+								:class="isFetchingOffers ? 'is-loading' : ''"
+							>
+								<h2 class="title has-text-centered mb-5">
+									Demande envoyée avec succès
+								</h2>
+								<div class="animate__animated animate__zoomInDown">
+									<svg
+										class="checkmark"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 52 52"
+									>
+										<circle
+											class="checkmark__circle"
+											cx="26"
+											cy="26"
+											r="25"
+											fill="none"
+										/>
+										<path
+											class="checkmark__check"
+											fill="none"
+											d="M14.1 27.2l7.1 7.2 16.7-16.8"
+										/>
+									</svg>
+								</div>
+							</div>
 						</div>
 						<div
-							v-if="clickedSend"
-							:class="isFetchingOffers ? 'is-loading' : ''"
+							v-else
+							class="icon-text has-text-warning is-justify-content-center subtitle"
 						>
-							<h2 class="title has-text-centered mb-5">
-								Demande envoyée avec succès
-							</h2>
-							<div class="animate__animated animate__zoomInDown">
-								<svg
-									class="checkmark"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 52 52"
-								>
-									<circle
-										class="checkmark__circle"
-										cx="26"
-										cy="26"
-										r="25"
-										fill="none"
-									/>
-									<path
-										class="checkmark__check"
-										fill="none"
-										d="M14.1 27.2l7.1 7.2 16.7-16.8"
-									/>
-								</svg>
-							</div>
+							<span class="icon">
+								<i class="fas fa-exclamation-triangle"></i>
+							</span>
+							<span class="has-text-black">Vous devez <a href="#" v-on:click="this.openParentSettingModal()">compléter votre profil</a> avant de pouvoir réserver!</span>
 						</div>
 					</div>
 					<div
@@ -459,9 +452,7 @@
 						<span class="icon">
 							<i class="fas fa-exclamation-triangle"></i>
 						</span>
-						<span class="has-text-black"
-							>Vous devez être connecté pour pouvoir réserver !</span
-						>
+						<span class="has-text-black">Vous devez être connecté pour pouvoir réserver!</span>
 					</div>
 				</div>
 			</section>
@@ -503,13 +494,12 @@
 					class="button is-primary is-rounded w-100"
 					v-if="currentStep == 3 && !step3Completed"
 					:disabled="
-						currentStep == 3 &&
-							(!confirmationCheckbox || !$store.state.isAuthenticated)
-					"
+						currentStep == 3 && (!confirmationCheckbox || !$store.state.isAuthenticated || !$store.state.userInfo.profile_is_completed)"
 					:title="
 						currentStep == 3 &&
 						!confirmationCheckbox &&
-						$store.state.isAuthenticated
+						$store.state.isAuthenticated &&
+						$store.state.userInfo.profile_is_completed
 							? 'Vous devez confirmer votre demande'
 							: ''
 					"
@@ -531,9 +521,10 @@ import DetailedOffer from "@/components/DetailedOffer";
 import StepsWizard from "bulma-steps/dist/js/bulma-steps.js";
 export default {
 	name: "Home",
-		components: {
+	components: {
 		DetailedOffer,
 	},
+	emits: ['controlModalFromChild'],
 	data() {
 		return {
 			// Offer modal
@@ -764,6 +755,9 @@ export default {
 		},
 		replaceByDefault(e){
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+		},
+		openParentSettingModal(){
+			this.$emit('controlModalFromChild', true);
 		},
 	},
 };
