@@ -84,14 +84,6 @@
 				</div>
 				<div v-else  class="box has-text-centered">
 				Aucune offre disponible à proximité.
-				<div>
-						<a
-							href="#"
-							class="button  button-service is-info mt-5"
-							v-on:click="openParentSettingModal()"
-							>
-							<span> Modifier votre profil pour accéder à plus d'offres </span>
-					</a></div>
 				</div>
 			</div>
 		</div>
@@ -542,8 +534,6 @@ export default {
 		components: {
 		DetailedOffer,
 	},
-	emits: ['controlModalFromChild']
-	,
 	data() {
 		return {
 			// Offer modal
@@ -774,13 +764,6 @@ export default {
 		},
 		replaceByDefault(e){
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
-		},
-				/**
-		 * Pour forcer l'ouverture de la modale des paramètres,
-		 * qui se trouve dans une view parent.
-		 */
-		openParentSettingModal(){
-			this.$emit('controlModalFromChild', true);
 		},
 	},
 };
