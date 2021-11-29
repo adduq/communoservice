@@ -113,9 +113,6 @@
   } from "bulma-toast";
   export default {
     name: "SettingsModal",
-    props:{
-  userInfo: {}
-    },
     data() {
       return {
         userInfo: {},

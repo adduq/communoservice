@@ -98,7 +98,6 @@ class UpdateUserInfo(APIView):
 
             if 'first_name' in body:
                 body['first_name'].strip()
-                body['last_name'].strip()
 
                 if body['first_name'] == '' or re.match(r"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$", body['first_name']):
                     user.first_name = body['first_name']
@@ -106,6 +105,8 @@ class UpdateUserInfo(APIView):
                     return Response('Le prénom est invalide.', status=status.HTTP_400_BAD_REQUEST)
 
             if 'last_name' in body:
+                body['last_name'].strip()
+                
                 if body['last_name'] == '' or re.match(r"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$", body['last_name']):
                     user.last_name = body['last_name']
                 else:
