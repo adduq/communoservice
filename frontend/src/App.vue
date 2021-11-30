@@ -293,4 +293,7 @@ p.title.is-bold {
 .w-100 {
 	width: 100px;
 }
+html {
+	scroll-behavior: smooth!important;
+}
 </style>

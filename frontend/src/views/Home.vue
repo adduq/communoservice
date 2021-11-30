@@ -1,17 +1,21 @@
 <template>
 	<div class="home">
-		<section class="hero is-medium is-dark mb-6">
+		<section class="hero is-large" :class="this.heroCollapsed ? 'collapse' : ''">
 			<div class="hero-body has-text-centered">
-				<p class="title mb-6">Bienvenue sur Communoservice</p>
-				<p class="subtitle">
+				<p class="title mb-6 is-size-1 has-text-weight-bold">Bienvenue sur Communoservice</p>
+				<p class="subtitle animate__animated animate__fadeInLeftBig">
 					Le meilleur site pour les services communautaires
 				</p>
+
+				<a href="#search" class="animate__animated animate__fadeInUp button is-primary is-rounded animate__delay-1s mt-4">
+					Rechercher
+				 <i class="fas fa-chevron-down ml-2" aria-hidden="true"></i>
+				</a>
 			</div>
 		</section>
-
 		<div class="columns is-multiline is-12">
 			<div class="column is-12">
-				<h2 class="is-size-2 has-text-centered">
+				<h2 id="search" class="is-size-2 has-text-centered">
 					Liste des services
 				</h2>
 			</div>
@@ -531,6 +535,7 @@ export default {
 			currentStep: 1,
 			step2Completed: false,
 			step3Completed: false,
+			heroCollapsed: false,
 			offerToShow: Object,
 			offerUserInfo: Object,
 			offerModalActive: false,
@@ -831,5 +836,15 @@ export default {
 	*/
 	.button-service:hover{
 		background-color: darken(#3488ce, 5%);
+	}
+
+	.hero{
+		height: 100vh;
+		overflow: hidden;
+	}
+	
+	.collapse{
+		height: 0px;
+		transition: height 1s ease-in-out;
 	}
 </style>
