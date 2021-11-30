@@ -7,9 +7,9 @@ export default createStore({
         token: "",
         // TODO: Centraliser le userInfo afin de diminuer la rendondance
         userInfo: {
-            first_name: '---',
-            last_name: '---',
-            user_bio:'---',
+            first_name: '',
+            last_name: '',
+            user_bio:'',
             location_lat:'',
             location_lon:'',
             profile_is_completed:false,

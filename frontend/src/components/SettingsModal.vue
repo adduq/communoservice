@@ -128,7 +128,8 @@
         currentTab: 0,
         selectedImageFile: null,
         fileErrors : [],
-        userImageURL : ''
+        userImageURL : '',
+        errors: new Set(),
       };
     },
     beforeCreate() {},
@@ -198,7 +199,87 @@
           console.log(error);
         });
       },
+      validateForm(){
+       let regexName = new RegExp(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$/);
+       let regexEmail = RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/);
+        //this.errors = new Set();
+
+        if (!regexName.test(this.updatedUserInfo.first_name)){
+          this.errors.add(
+					"Le prénom peut être composé de lettres, d'espaces ou du caractère '-'."
+				);
+        }
+        else{
+          this.errors.delete(	"Le prénom peut être composé de lettres, d'espaces ou du caractère '-'.");
+        }
+
+        if (!regexName.test(this.updatedUserInfo.first_name)){
+          this.errors.add(
+					"Le nom de famille peut être composé de lettres, d'espaces ou du caractère '-'."
+				);
+        }
+        else{
+          this.errors.delete(	"Le nom de famille peut être composé de lettres, d'espaces ou du caractère '-'.");
+        }
+
+         if (!regexEmail.test(this.updatedUserInfo.email)){
+          this.errors.add(
+					"Le format de l'addresse n'est pas valide."
+				);
+        }
+        else{
+          this.errors.delete(	"Le format de l'addresse n'est pas valide.");
+        }
+      }
+      ,
       async validateUserInfo(){
+
+      let regexName = new RegExp(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$/);
+       let regexEmail = RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/);
+        //this.errors = new Set();
+
+        if (!regexName.test(this.updatedUserInfo.first_name)){
+          this.errors.add(
+					"Le prénom peut être composé de lettres, d'espaces ou du caractère '-'."
+				);
+        }
+        else{
+          this.errors.delete(	"Le prénom peut être composé de lettres, d'espaces ou du caractère '-'.");
+        }
+
+        if (!regexName.test(this.updatedUserInfo.first_name)){
+          this.errors.add(
+					"Le nom de famille peut être composé de lettres, d'espaces ou du caractère '-'."
+				);
+        }
+        else{
+          this.errors.delete(	"Le nom de famille peut être composé de lettres, d'espaces ou du caractère '-'.");
+        }
+
+         if (!regexEmail.test(this.updatedUserInfo.email)){
+          this.errors.add(
+					"Le format de l'addresse n'est pas valide."
+				);
+        }
+        else{
+          this.errors.delete(	"Le format de l'addresse n'est pas valide.");
+        }
+      if (this.errors.size>0){
+      this.errors.forEach(err =>{
+                  toast({
+            message: err,
+            type: "is-danger",
+            dismissible: true,
+            pauseOnHover: true,
+            position: "bottom-right",
+            animate: {
+              in: "fadeInRightBig",
+              out: "fadeOutRightBig",
+            },
+          });
+      })
+        return;
+        }
         let data = {}
         if(this.updatedUserInfo.first_name != this.userInfo.first_name){
           data.first_name = this.updatedUserInfo.first_name;
