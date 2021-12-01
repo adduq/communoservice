@@ -69,7 +69,8 @@
 						</div>
 						<div class="has-text-centered">
 							<p class="has-text-weight-bold is-size-3">
-								{{ activeOffers.length }}
+								<!-- {{ activeOffers.length }} -->
+								{{ totalOffer }}
 							</p>
 							<p>services actifs</p>
 						</div>
@@ -92,7 +93,8 @@
 						</div>
 						<div class="has-text-centered">
 							<p class="has-text-weight-bold is-size-3">
-								{{ reservedOffersForRecruiter.length }}
+								<!-- {{ reservedOffersForRecruiter.length }} -->
+								{{ totalReservedOfferRecruiter }}
 							</p>
 							<p>services en attente</p>
 						</div>
@@ -425,6 +427,11 @@
 					</div>
 				</div>
 			</template>
+
+			<div class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
+    			<div class="is-loading" :class="isFetchingOffersOnScroll ? 'loader' : ''"></div>
+			</div>
+
 			<template v-if="profileSwitch">
 				<div class="column">
 					<div class="box">
@@ -526,6 +533,12 @@ export default {
 			serviceTypes: [],
 
 			modalCreateisActive: false,
+			isFetchingOffersOnScroll: false,
+			totalOffer: 0,
+			totalReservedOfferRecruiter: 0,
+			totalReservedOfferUser: 0,
+			totalTerminatedOfferRecruiter: 0,
+			totalTerminatedOfferUser: 0,
 
 			serviceType: "",
 			description: "",
@@ -610,8 +623,11 @@ export default {
 	mounted() {
 		document.title = "Mon compte | Communoservice";
 		this.getUserInfo();
+
 		this.tomorrow = this.getTomorrow();
 		this.getServiceTypes();
+
+		this.getTotalOffers();
 	},
 	methods: {
 		getTomorrow() {
@@ -887,6 +903,8 @@ export default {
 				.then((response, userId) => {
 					// this.getAllOffers(activeOffer.id_user);
 					this.getAllOffersWithOffset(activeOffer.id_user);
+
+					this.getTotalOffers();
 				})
 				.catch((error) => {
 					console.log(error);
@@ -898,11 +916,13 @@ export default {
 				.then((response) => {
 					this.userInfo = response.data;
 					this.userIsActive = this.userInfo["is_online"];
+
 					this.getAllOffersWithOffset(this.userInfo.user_id);
 					this.getTerminatedOffersForUserWithOffset(this.userInfo.user_id);
 					this.getTerminatedOffersForRecruiterWithOffset(this.userInfo.user_id);
 					this.getReservedOffersForUserWithOffset(this.userInfo.user_id);
 					this.getReservedOffersForRecruiterWithOffset(this.userInfo.user_id);
+					
 					// this.getAllOffers(this.userInfo.user_id);
 					// this.getTerminatedOffersForUser(this.userInfo.user_id);
 					// this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
@@ -1300,106 +1320,143 @@ export default {
 					console.log(err);
 				});
 		},
-		scrollAction(e) {
-			let elem = e.target;
+		async scrollAction(e) {
+			let list = e.target;
 
-			if(elem.scrollTop + elem.clientHeight >= elem.scrollHeight)
-				switch (elem.dataset.list) {
+			if(Math.round(list.scrollTop + list.clientHeight) >= list.scrollHeight) {
+				switch (list.dataset.list) {
 					case 'detailsOffers':
-						// console.log("Toutes les offres.");
 						this.getAllOffersWithOffset(this.userInfo.user_id);
 						break;
 					case 'reservedEmployee':
-						// console.log("Réservé comme EMPLOYÉ");
 						this.getReservedOffersForUserWithOffset(this.userInfo.user_id);
 						break;
 					case 'terminatedEmployee':
-						// console.log("Terminé comme EMPLOYÉ");
 						this.getTerminatedOffersForUserWithOffset(this.userInfo.user_id);
 						break;
 					case 'reservedRecruiter':
-						// console.log("Réservé comme RECRUTEUR");
 						this.getReservedOffersForRecruiterWithOffset(this.userInfo.user_id);
 						break;
 					case 'terminatedRecruiter':
-						// console.log("Terminé comme RECRUTEUR");
 						this.getTerminatedOffersForRecruiterWithOffset(this.userInfo.user_id);
 						break;
 				}
+				this.getTotalOffers();
+			}
 		},
-
-
-
 		async getAllOffersWithOffset(userId) {
-			await axios
-				.get(`/api/v1/active-offers/user/${userId}/`, {
-						params: {
-							offset: this.activeOffers.length
-						}
+			this.isFetchingOffersOnScroll = true;
+			
+			if (this.activeOffers.length < this.totalOffer || !this.totalOffer) {
+				await axios
+					.get(`/api/v1/active-offers/user/${userId}/`, {
+							params: {
+								offset: this.activeOffers.length
+							}
+						})
+					.then((res) => {
+						this.activeOffers = this.activeOffers.concat(res.data);
 					})
-				.then((res) => {
-					this.activeOffers = this.activeOffers.concat(res.data);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
 		},
 		async getTerminatedOffersForUserWithOffset(userId) {
-			await axios
-				.get(`/api/v1/terminated-offers/user/${userId}/`, {
-						params: {
-							offset: this.terminatedOffersForUser.length
-						}
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.terminatedOffersForUser.length < this.totalTerminatedOfferUser || !this.totalTerminatedOfferUser) {
+				await axios
+					.get(`/api/v1/terminated-offers/user/${userId}/`, {
+							params: {
+								offset: this.terminatedOffersForUser.length
+							}
+						})
+					.then((res) => {
+						this.terminatedOffersForUser = this.terminatedOffersForUser.concat(res.data);
 					})
-				.then((res) => {
-					this.terminatedOffersForUser = this.terminatedOffersForUser.concat(res.data);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
 		},
 		async getReservedOffersForUserWithOffset(userId) {
-			await axios
-				.get(`/api/v1/reserved-offers/user/${userId}/`, {
-						params: {
-							offset: this.reservedOffersForUser.length
-						}
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.reservedOffersForUser.length < this.totalReservedOfferUser || !this.totalReservedOfferUser) {
+				await axios
+					.get(`/api/v1/reserved-offers/user/${userId}/`, {
+							params: {
+								offset: this.reservedOffersForUser.length
+							}
+						})
+					.then((res) => {
+						this.reservedOffersForUser = this.reservedOffersForUser.concat(res.data);
 					})
-				.then((res) => {
-					this.reservedOffersForUser = this.reservedOffersForUser.concat(res.data);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
 		},
 		async getTerminatedOffersForRecruiterWithOffset(recruiterId) {
-			await axios
-				.get(`/api/v1/terminated-offers/recruiter/${recruiterId}/`, {
-						params: {
-							offset: this.terminatedOffersForRecruiter.length
-						}
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.terminatedOffersForRecruiter.length < this.totalTerminatedOfferRecruiter || !this.totalTerminatedOfferRecruiter) {
+				await axios
+					.get(`/api/v1/terminated-offers/recruiter/${recruiterId}/`, {
+							params: {
+								offset: this.terminatedOffersForRecruiter.length
+							}
+						})
+					.then((res) => {
+						this.terminatedOffersForRecruiter = this.terminatedOffersForRecruiter.concat(res.data);
 					})
-				.then((res) => {
-					this.terminatedOffersForRecruiter = this.terminatedOffersForRecruiter.concat(res.data);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
 		},
 		async getReservedOffersForRecruiterWithOffset(recruiterId) {
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.reservedOffersForRecruiter.length < this.totalReservedOfferRecruiter || !this.totalReservedOfferRecruiter) {
+				await axios
+					.get(`/api/v1/reserved-offers/recruiter/${recruiterId}/`, {
+							params: {
+								offset: this.reservedOffersForRecruiter.length
+							}
+						})
+					.then((res) => {
+						this.reservedOffersForRecruiter = this.reservedOffersForRecruiter.concat(res.data);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
+		},
+		async getTotalOffers() {
 			await axios
-				.get(`/api/v1/reserved-offers/recruiter/${recruiterId}/`, {
-						params: {
-							offset: this.reservedOffersForRecruiter.length
+				.get('/api/v1/total-active-offers/', {
+					params: {
+							page: "account"
 						}
 					})
 				.then((res) => {
-					this.reservedOffersForRecruiter = this.reservedOffersForRecruiter.concat(res.data);
+					this.totalOffer = res.data.offerEmployee;
+					this.totalReservedOfferRecruiter = res.data.offerReserveRecruiter;
+					this.totalReservedOfferUser = res.data.nbReserveUser;
+					this.totalTerminatedOfferRecruiter = res.data.nbTerminateRecruiter;
+					this.totalTerminatedOfferUser = res.data.nbTerminateUser;
 				})
 				.catch((error) => {
 					console.log(error);
 				});
-		},
+		}
 	},
 };
 </script>
@@ -1460,5 +1517,34 @@ option[value=""][disabled] {
 
 .tooltip:hover .tooltiptext {
   	visibility: visible;
+}
+
+.loader-wrapper {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 1s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+	position: absolute;
+	top: 50;
+	left: 50;
+	background-color: rgba(255, 255, 255, 0.4);
+
+        .loader {
+            height: 80px;
+            width: 80px;
+			border: 4px solid darken($color: #dee2e5, $amount: 30);
+    		border-right-color: transparent;
+    		border-top-color: transparent;
+        }
+
+    &.is-active {
+        opacity: 1;
+        z-index: 1;
+    }
 }
 </style>

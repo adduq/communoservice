@@ -414,7 +414,8 @@
             "id_offer": 7,
             "id_active_offer": 7,
             "id_recruiter": 2,
-            "reservation_date": "2021-11-08"
+            "reservation_date": "2021-11-08",
+            "hourly_rate": "16.75"
         }
     },
     {
@@ -425,7 +426,8 @@
             "id_offer": 9,
             "id_active_offer": 8,
             "id_recruiter": 1,
-            "reservation_date": "2021-12-08"
+            "reservation_date": "2021-12-08",
+            "hourly_rate": "18.50"
         }
     },
     {

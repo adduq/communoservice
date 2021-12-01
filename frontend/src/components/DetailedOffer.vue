@@ -125,7 +125,7 @@ export default {
 	emits: ["click"],
 	props: {
 		offer: Object,
-		accountPage: false,		
+		accountPage: false,
 	},
 	data() {
 		return {
@@ -147,6 +147,8 @@ export default {
 						.filter(el => el.id !== this.offer.id );
 
 					// this.$parent.getAllOffersWithOffset(this.offer.user);
+					this.$parent.getTotalOffers();
+
 					this.$parent.getReservedOffersForUserWithOffset(this.offer.user);
 
 					this.deleteConfirmationModal = !this.deleteConfirmationModal;

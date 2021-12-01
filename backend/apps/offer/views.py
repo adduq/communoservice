@@ -1,4 +1,5 @@
 from typing import OrderedDict
+from django.db.models.aggregates import Count
 import requests
 from django.db.models import Q
 from django.http import Http404
@@ -21,7 +22,7 @@ from operator import and_
 from math import cos, asin, sqrt, pi
 
 
-from pprint import pprint
+from pprint import pp, pprint
 
 
 PUBLIC_MAPBOX_KEY = "pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA"
@@ -50,19 +51,19 @@ def sort_offers_by_distance(user_id, offers):
         formated_url = "https://api.mapbox.com/directions/v5/mapbox/driving/{0},{1};{2},{3}?access_token={4}".format(me.location_lon, me.location_lat, employe_lon, employe_lat, PUBLIC_MAPBOX_KEY)
         response = requests.get(formated_url)
         data = response.json()
-        print(data)
+        # print(data)
         if data['code'] == 'NoRoute':
             return False
         else:
-            print(data['routes'][0]['distance'])
+            # print(data['routes'][0]['distance'])
             return float(data['routes'][0]['distance'])/1000 < float(max_distance)
     
     if me.location_lat != '' and me.location_lat != None and me.location_lon != '' and me.location_lon != None:
-        print('Sorting offers for user ' + str(user_id))
+        # print('Sorting offers for user ' + str(user_id))
         potential_offers = map(check_distance, offers)
         return [d for (d, keep) in zip(offers, potential_offers) if keep]
     else:
-        print('User not compliant for sort_offers_by_distance')
+        # print('User not compliant for sort_offers_by_distance')
         return offers
 
 
@@ -156,7 +157,7 @@ class OfferDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        pprint(serializer.errors)
+        # pprint(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -207,30 +208,63 @@ class ActiveOffers(APIView):
         else:
             offset = int(offset)
 
-        pprint(offset)
+        if offset > 0:
+            offset = max(offset, 5)
+
+        active_offers = []
 
         if not request.user.is_anonymous:
-            active_offers = ActiveOffer.objects.exclude(
-                id_user=request.user.id)[offset:offset+5]
+            total_active_offers = ActiveOffer.objects.exclude(
+                id_user=request.user.id).count()
+
+            if offset + 5 < total_active_offers:
+                active_offers = ActiveOffer.objects.exclude(
+                    id_user=request.user.id)[offset:offset+5]
+            elif offset + 5 == total_active_offers:
+                active_offers = ActiveOffer.objects.exclude(
+                    id_user=request.user.id)[total_active_offers-1]
         else:
             active_offers = ActiveOffer.objects.all()[offset:offset+5]
 
-        pprint(active_offers)
         # ! Note: Si pas plus dans les 5 débuts => arrive pas à prendre plus ????
         # if not request.user.is_anonymous:
         #     active_offers = ActiveOffer.objects.exclude(
         #         id_user=request.user.id)
         # else:
         #     active_offers = ActiveOffer.objects.all()
-
-        serializer = ActiveOfferSerializer(active_offers, many=True)
+        # pprint(active_offers)
 
         offers = []
-        remove_user_infos(serializer)
-        # pprint(serializer.data)
+        temp = {}
 
-        for elem in serializer.data:
-            offers.append(elem['id_offer'])
+        if offset + 5 == total_active_offers:
+            serializer = ActiveOfferSerializer(active_offers)
+
+            if 'id_user' in serializer.data:
+                temp['id_user'] = {
+                    'id': serializer.data['id_user']['id'],
+                    'last_name': serializer.data['id_user']['last_name'],
+                    'first_name': serializer.data['id_user']['first_name'],
+                    'username': serializer.data['id_user']['username'],
+                }
+                temp['id_offer'] = serializer.data['id_offer']
+
+            serializer = temp
+            offers.append(temp['id_offer'])
+        else:
+            serializer = ActiveOfferSerializer(active_offers, many=True)
+            remove_user_infos(serializer)
+
+            for elem in serializer.data:
+                offers.append(elem['id_offer'])
+
+        # serializer = ActiveOfferSerializer(active_offers, many=True)
+        
+        # offers = []
+        # remove_user_infos(serializer)
+
+        # for elem in serializer.data:
+        #     offers.append(elem['id_offer'])
 
         if not request.user.is_anonymous:            
             offers = sort_offers_by_distance(
@@ -255,6 +289,40 @@ class ActiveOffers(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ActiveOffersTotal(APIView):
+    def get(self, request, format=None):
+        page = request.GET.get('page')
+
+        if not request.user.is_anonymous:
+            if page == 'home':
+                active_offers = ActiveOffer.objects.count()
+                # active_offers = ActiveOffer.objects.exclude(
+                #     id_user=request.user.id).count()
+            elif page == 'account':
+                nbOffer = ActiveOffer.objects.filter(
+                    id_user=request.user.id).count()
+                nbReserveUser = ReservedOffer.objects.filter(
+                    id_user=request.user.id).count()
+                nbReserveRecruiter = ReservedOffer.objects.filter(
+                    id_recruiter=request.user.id).count()
+                nbTerminateUser = TerminatedOffer.objects.filter(
+                    id_user=request.user.id).count()
+                nbTerminateRecruiter = TerminatedOffer.objects.filter(
+                    id_recruiter=request.user.id).count()
+
+                active_offers = {
+                    'offerEmployee': nbOffer,
+                    'offerReserveUser': nbReserveUser,
+                    'offerReserveRecruiter': nbReserveRecruiter,
+                    'offerTerminateUser': nbTerminateUser,
+                    'offerTerminateRecruiter': nbTerminateRecruiter,
+                }
+        else:
+            active_offers = ActiveOffer.objects.all().count()
+
+        return Response(active_offers)
 
 
 class ActiveOffersByUser(APIView):
@@ -282,7 +350,7 @@ class ActiveOffersByUser(APIView):
         else:
             offset = int(offset)
 
-        active_offers = ActiveOffer.objects.filter(id_user=no_user)[offset:offset+5]
+        active_offers = ActiveOffer.objects.filter(id_user=no_user)[offset:offset+5]        
         serializer = ActiveOfferSerializer(active_offers, many=True)
 
         offers = []
@@ -513,7 +581,7 @@ class TerminatedOffersByUser(APIView):
         else:
             offset = int(offset)
 
-        pprint(offset)
+        # pprint(offset)
         terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)[offset:offset+5]
         serializer = TerminatedOfferSerializer(terminated_offers, many=True)
         remove_user_infos(serializer)

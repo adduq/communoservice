@@ -32,5 +32,6 @@ urlpatterns = [
     # path('offers/user/<int:no_user>/', views.UserOffers.as_view()),
     path('active-offers/search', views.search),
 
-    path('service-types/', views.ServiceTypes.as_view())
+    path('service-types/', views.ServiceTypes.as_view()),
+    path('total-active-offers/', views.ActiveOffersTotal.as_view())
 ]

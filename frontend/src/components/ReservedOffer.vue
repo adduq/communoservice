@@ -217,6 +217,8 @@ export default {
 			await axios
 				.post("/api/v1/terminated-offers/", this.reservedOffer)
 				.then((res) => {
+					this.$parent.getTotalOffers();
+
 					if (this.isRecruiterCard) {
 						this.$parent.getTerminatedOffersForRecruiterWithOffset(
 							this.reservedOffer["id_recruiter"]

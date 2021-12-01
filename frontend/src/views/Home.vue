@@ -82,7 +82,13 @@
 							v-bind:offer="offer"
 							@click="showOfferModal(offer)"
 						/>
+						<!-- <div id="loader" class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
+    						<div class="loader is-loading"></div>
+						</div> -->
 					</div>
+						<div id="loader" class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
+    						<div class="loader is-loading"></div>
+						</div>
 				</div>
 			</div>
 		</div>
@@ -446,6 +452,8 @@ export default {
 			offers: [],
 			serviceTypes: [],
 			isFetchingOffers: false,
+			isFetchingOffersOnScroll: false,
+			totalOffers: 0,
 			select_serviceday: "",
 			dateToday: "",
 			weekdays: {
@@ -472,6 +480,7 @@ export default {
 		document.title = "Accueil | Communoservice";
 		// this.getAllOffers();
 		this.getAllOffersWithOffset();
+		this.getTotalOffers();
 
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
@@ -712,22 +721,46 @@ export default {
 				this.getAllOffersWithOffset();
 		},
 		async getAllOffersWithOffset() {
-			this.isFetchingOffers = true;
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.offers.length < this.totalOffers || !this.totalOffers) {
+				await axios
+					.get('/api/v1/active-offers/', {
+						params: {
+								offset: this.offers.length
+							}
+						})
+					.then((res) => {
+						this.offers = this.offers.concat(res.data);
+						
+						// console.log(res.data);
+	
+						// if (this.offers.length === this.totalOffers) {
+						// 	let removeLoader = document.getElementById('loader');
+						// 	removeLoader.remove();
+						// }
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
+		},
+		async getTotalOffers() {
 			await axios
-				.get('/api/v1/active-offers/', {
+				.get('/api/v1/total-active-offers/', {
 					params: {
-						offset: this.offers.length
+							page: "home"
 						}
 					})
 				.then((res) => {
-					this.offers = this.offers.concat(res.data);
-					console.log(res.data);
+					// console.log(res.data);
+					this.totalOffers = res.data;
 				})
 				.catch((error) => {
 					console.log(error);
 				});
-			this.isFetchingOffers = false;
-		},
+		}
 	},
 };
 </script>
@@ -735,7 +768,7 @@ export default {
 	@import "../../node_modules/bulma-steps";
 
 	.offers-container {
-	max-height: 600px;
+	max-height: 500px;
 	overflow: hidden;
 	overflow-y: scroll;
 	// Pour Firefox
@@ -816,4 +849,29 @@ export default {
 	.step-item {
 		flex-basis: 0 !important;
 	}
+
+	.loader-wrapper {
+    height: 50%;
+    width: 100%;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 1s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+
+        .loader {
+            height: 80px;
+            width: 80px;
+			border: 4px solid darken($color: #dee2e5, $amount: 10);
+    		border-right-color: transparent;
+    		border-top-color: transparent;
+        }
+
+    &.is-active {
+        opacity: 1;
+        z-index: 1;
+    }
+}
 </style>
