@@ -94,3 +94,5 @@ class TerminatedOffer(models.Model):
     status = models.IntegerField(
         default=StatusOffer.GIVEN, choices=StatusOffer.choices)
     rating = models.FloatField(null=True)
+    hourly_rate = models.DecimalField(
+        null=False, max_digits=6, decimal_places=2, default="13.50")

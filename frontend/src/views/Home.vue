@@ -63,11 +63,27 @@
 
 					<div class="panel-block">
 						<button
-							v-on:click="sendQuery"
+							@click="sendQuery"
+							class="button is-link is-outlined is-fullwidth"
+						>
+							Rechercher
+						</button>
+					</div>
+					<!-- <div class="panel-block">
+						<button
+							@click="sendQuery"
 							class="button is-link is-outlined is-fullwidth"
 							:class="isFetchingOffers ? 'is-loading' : ''"
 						>
 							Rechercher
+						</button>
+					</div> -->
+					<div class="panel-block" v-if="saveParams !== null">
+						<button
+							@click="resetSearchParams"
+							class="button is-danger is-outlined is-fullwidth"
+						>
+							Réinitialiser la recherche
 						</button>
 					</div>
 				</nav>
@@ -75,20 +91,18 @@
 			<div class="column is-two-thirds">
 				<div class="box">
 					<!-- <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress> -->
-					<div class="offers-container" @scroll="scrollAction">
+					<div id="list-services" class="offers-container" @scroll="scrollAction">
 						<DetailedOffer
 							v-for="offer in offers"
 							v-bind:key="offer.id"
 							v-bind:offer="offer"
 							@click="showOfferModal(offer)"
 						/>
-						<!-- <div id="loader" class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
-    						<div class="loader is-loading"></div>
-						</div> -->
 					</div>
-						<div id="loader" class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
-    						<div class="loader is-loading"></div>
-						</div>
+				</div>
+
+				<div class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
+    				<div class="is-loading" :class="isFetchingOffersOnScroll ? 'loader' : ''"></div>
 				</div>
 			</div>
 		</div>
@@ -286,18 +300,18 @@
 									</p>
 								</div>
 							</div>
-							<div class="columns is-mobile is-flex-wrap-wrap">
-								<div class="column has-text-centered">
+							<div class="columns is-mobile is-flex-wrap-wrap is-justify-content-center">
+								<div class="column has-text-centered is-4-desktop">
 									<p class="has-text-weight-bold is-size-3">
 										{{ offerUserInfo.nb_services_given }}
 									</p>
 									<p>services rendus</p>
 								</div>
-								<div class="column has-text-centered">
+								<!-- <div class="column has-text-centered">
 									<p class="has-text-weight-bold is-size-3">---</p>
 									<p>services actifs</p>
-								</div>
-								<div class="column has-text-centered">
+								</div> -->
+								<div class="column has-text-centered is-4-desktop">
 									<p class="has-text-weight-bold is-size-3">
 										{{ offerUserInfo.avg_rating_as_employee }}/5
 									</p>
@@ -320,6 +334,32 @@
 					<div v-if="$store.state.isAuthenticated">
 						<div class="has-text-centered" v-if="!clickedSend">
 							<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
+								<div class="columns is-mobile is-flex-wrap-wrap">
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Employé</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											{{ offerUserInfo.first_name + " " + offerUserInfo.last_name }}
+										</span>
+									</div>
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Taux horaire</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											${{ offerToShow.hourly_rate }}/h
+										</span>
+									</div>
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Type du service</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											{{ offerToShow.type_service }}
+										</span>
+									</div>
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Date de réservation</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											{{ dates.toLocaleDateString("fr-CA") }}
+										</span>
+									</div>
+								</div>
 							<label class="checkbox mb-5">
 								<input type="checkbox" v-model="confirmationCheckbox" />
 								Je confirme avoir validé ma demande
@@ -454,6 +494,10 @@ export default {
 			isFetchingOffers: false,
 			isFetchingOffersOnScroll: false,
 			totalOffers: 0,
+
+			offset: 0,
+			saveParams: null,
+
 			select_serviceday: "",
 			dateToday: "",
 			weekdays: {
@@ -489,7 +533,7 @@ export default {
 	watch: {
     	dates(val) {
       	if (val) {
-        	console.log(val);
+        	// console.log(val);
         	this.dates = val;
       	}
     	},
@@ -522,13 +566,12 @@ export default {
 
 			this.offerToReserve.id_offer = offer.id;
 			this.offerToReserve.id_user = offer.user;
+			this.offerToReserve.hourly_rate = offer.hourly_rate;
 			this.offerToReserve.reservation_date = this.dates.toLocaleDateString("fr-CA");
 			// this.offerToReserve.reservation_date = this.dates.toISOString().split('T')[0];
 
 			await this.getActiveOfferId(offer);
 			await this.getRecruiterId();
-
-			// console.log(this.offerToReserve);
 
 			await axios
 				.post("/api/v1/reserved-offers/", this.offerToReserve)
@@ -573,7 +616,7 @@ export default {
 			const params = new URLSearchParams();
 
 			params.append("type-service", this.query_typeservice);
-			
+
 			this.query_serviceday = new Date(this.select_serviceday);
 			if (
 				this.query_serviceday instanceof Date &&
@@ -601,16 +644,29 @@ export default {
 			}
 
 			if (Array.from(params).length > 0) {
-				this.isFetchingOffers = true;
-				await axios
-					.get("/api/v1/active-offers/search?" + params.toString())
-					.then((response) => {
-						this.offers = response.data;
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-				this.isFetchingOffers = false;
+				// this.isFetchingOffers = true;
+				// this.isFetchingOffersOnScroll = true;
+
+				// params.append("offset", this.offset);
+				this.saveParams = params.toString();
+
+				this.offers = [];
+				this.offset = 0;
+				var scrollSurface = document.getElementById('list-services');
+				scrollSurface.scrollTop = 0;
+
+				this.getSearchingOffersWithOffset();
+
+				// await axios
+				// 	.get("/api/v1/active-offers/search?" + params.toString())
+				// 	.then((response) => {
+				// 		this.offers = response.data;
+				// 	})
+				// 	.catch((error) => {
+				// 		console.log(error);
+				// 	});
+				// this.isFetchingOffers = false;
+				// this.isFetchingOffersOnScroll = false;
 			}
 		},
 		async getOfferUserInfo(user_id) {
@@ -717,28 +773,47 @@ export default {
 		scrollAction(e) {
 			let elem = e.target;
 
-			if(elem.scrollTop + elem.clientHeight >= elem.scrollHeight)
-				this.getAllOffersWithOffset();
+			if(Math.round(elem.scrollTop + elem.clientHeight) >= elem.scrollHeight && elem.scrollHeight > 0 && !this.isFetchingOffersOnScroll) {
+				if (this.saveParams === null)
+					this.getAllOffersWithOffset();
+				else
+					this.getSearchingOffersWithOffset();
+			}
 		},
 		async getAllOffersWithOffset() {
 			this.isFetchingOffersOnScroll = true;
 
-			if (this.offers.length < this.totalOffers || !this.totalOffers) {
+			if (this.offset < this.totalOffers || !this.totalOffers) {
 				await axios
 					.get('/api/v1/active-offers/', {
 						params: {
-								offset: this.offers.length
+								offset: this.offset
 							}
 						})
 					.then((res) => {
 						this.offers = this.offers.concat(res.data);
-						
-						// console.log(res.data);
-	
-						// if (this.offers.length === this.totalOffers) {
-						// 	let removeLoader = document.getElementById('loader');
-						// 	removeLoader.remove();
-						// }
+
+						this.offset = this.offset + 5;
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
+		},
+		async getSearchingOffersWithOffset() {
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.offset < this.totalOffers || !this.totalOffers) {
+				let params = new URLSearchParams(this.saveParams);
+				params.append("offset", this.offset);
+
+				await axios
+					.get("/api/v1/active-offers/search?" + params.toString())
+					.then((res) => {
+						this.offers = this.offers.concat(res.data);
+
+						this.offset = this.offset + 5;
 					})
 					.catch((error) => {
 						console.log(error);
@@ -760,10 +835,24 @@ export default {
 				.catch((error) => {
 					console.log(error);
 				});
+		},
+		resetSearchParams() {
+			var scrollSurface = document.getElementById('list-services');
+			scrollSurface.scrollTop = 0;
+
+			this.saveParams = null;
+			this.offers = [];
+			this.offset = 0;
+			this.query_mots_cles = "";
+			this.query_typeservice = "Tout";
+			this.select_serviceday = "";
+
+			this.getAllOffersWithOffset();
 		}
 	},
 };
 </script>
+
 <style lang="scss" scoped>
 	@import "../../node_modules/bulma-steps";
 
@@ -850,8 +939,8 @@ export default {
 		flex-basis: 0 !important;
 	}
 
-	.loader-wrapper {
-    height: 50%;
+.loader-wrapper {
+    height: 100%;
     width: 100%;
     opacity: 0;
     z-index: -1;
@@ -860,11 +949,15 @@ export default {
     justify-content: center;
     align-items: center;
     border-radius: 16px;
+	position: absolute;
+    top: 85%;
+    left: 0;
+	background-color: rgba(255, 255, 255, 0.4);
 
         .loader {
             height: 80px;
             width: 80px;
-			border: 4px solid darken($color: #dee2e5, $amount: 10);
+			border: 4px solid darken($color: #dee2e5, $amount: 30);
     		border-right-color: transparent;
     		border-top-color: transparent;
         }

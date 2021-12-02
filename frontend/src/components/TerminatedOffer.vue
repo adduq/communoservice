@@ -37,6 +37,10 @@
 						Employeur : {{ terminatedOffer.id_recruiter.first_name }}
 						{{ terminatedOffer.id_recruiter.last_name }}
 					</p>
+
+					<p v-if="terminatedOffer.hourly_rate">
+						Taux horaire : {{ terminatedOffer.hourly_rate }} $
+					</p>
 				</div>
 
 				<div class="is-align-self-center">

@@ -208,10 +208,8 @@ class ActiveOffers(APIView):
         else:
             offset = int(offset)
 
-        if offset > 0:
-            offset = max(offset, 5)
-
         active_offers = []
+        offers = []
 
         if not request.user.is_anonymous:
             total_active_offers = ActiveOffer.objects.exclude(
@@ -220,58 +218,25 @@ class ActiveOffers(APIView):
             if offset + 5 < total_active_offers:
                 active_offers = ActiveOffer.objects.exclude(
                     id_user=request.user.id)[offset:offset+5]
-            elif offset + 5 == total_active_offers:
+            else:
                 active_offers = ActiveOffer.objects.exclude(
-                    id_user=request.user.id)[total_active_offers-1]
-        else:
-            active_offers = ActiveOffer.objects.all()[offset:offset+5]
+                    id_user=request.user.id)[offset:total_active_offers]
 
-        # ! Note: Si pas plus dans les 5 débuts => arrive pas à prendre plus ????
-        # if not request.user.is_anonymous:
-        #     active_offers = ActiveOffer.objects.exclude(
-        #         id_user=request.user.id)
-        # else:
-        #     active_offers = ActiveOffer.objects.all()
-        # pprint(active_offers)
-
-        offers = []
-        temp = {}
-
-        if offset + 5 == total_active_offers:
-            serializer = ActiveOfferSerializer(active_offers)
-
-            if 'id_user' in serializer.data:
-                temp['id_user'] = {
-                    'id': serializer.data['id_user']['id'],
-                    'last_name': serializer.data['id_user']['last_name'],
-                    'first_name': serializer.data['id_user']['first_name'],
-                    'username': serializer.data['id_user']['username'],
-                }
-                temp['id_offer'] = serializer.data['id_offer']
-
-            serializer = temp
-            offers.append(temp['id_offer'])
-        else:
             serializer = ActiveOfferSerializer(active_offers, many=True)
             remove_user_infos(serializer)
 
             for elem in serializer.data:
                 offers.append(elem['id_offer'])
 
-        # serializer = ActiveOfferSerializer(active_offers, many=True)
-        
-        # offers = []
-        # remove_user_infos(serializer)
-
-        # for elem in serializer.data:
-        #     offers.append(elem['id_offer'])
-
-        if not request.user.is_anonymous:            
             offers = sort_offers_by_distance(
                 request.user.id, [dict(obj) for obj in offers])
-            # offers = sort_offers_by_distance(request.user.id, [dict(obj) for obj in serializer.data])
-        # else:
-        #     # offers = serializer.data
+        else:
+            active_offers = ActiveOffer.objects.all()[offset:offset+5]
+
+            serializer = ActiveOfferSerializer(active_offers, many=True)
+
+            for elem in serializer.data:
+                offers.append(elem['id_offer'])
 
         return Response(offers)
 
@@ -297,9 +262,9 @@ class ActiveOffersTotal(APIView):
 
         if not request.user.is_anonymous:
             if page == 'home':
-                active_offers = ActiveOffer.objects.count()
-                # active_offers = ActiveOffer.objects.exclude(
-                #     id_user=request.user.id).count()
+                # active_offers = ActiveOffer.objects.count()
+                active_offers = ActiveOffer.objects.exclude(
+                    id_user=request.user.id).count()
             elif page == 'account':
                 nbOffer = ActiveOffer.objects.filter(
                     id_user=request.user.id).count()
@@ -452,6 +417,7 @@ class ReservedOffersByUser(APIView):
         reserved_offers = ReservedOffer.objects.filter(id_user=no_user)[offset:offset+5]
         serializer = ReservedOfferSerializer(reserved_offers, many=True)
         remove_user_infos(serializer)
+
         return Response(serializer.data)
 
 
@@ -702,6 +668,15 @@ def search(request):
         mots_cles = request.GET.getlist('mots-cles')[0].split(',')
         queryset = queryset.filter(
             reduce(and_, (Q(description__icontains=mot) for mot in mots_cles)))
+
+    # ! Note: TEST OFFSET et LIMIT !
+    offset = request.GET.get('offset')
+    if offset is None:
+        offset = 0
+    else:
+        offset = int(offset)
+
+    queryset = queryset[offset:offset+5]
 
     serializer = OfferSerializer(queryset, many=True)
     if not request.user.is_anonymous:

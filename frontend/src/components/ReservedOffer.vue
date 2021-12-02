@@ -36,6 +36,10 @@
 				{{ reservedOffer.id_recruiter.last_name }}
 			</p>
 
+			<p v-if="reservedOffer.hourly_rate">
+				Taux horaire : {{ reservedOffer.hourly_rate }} $
+			</p>
+
 			<div class="is-flex is-flex-wrap-wrap is-justify-content-end mt-4">
 				<button
 					class="button is-success w-100 mr-2"
@@ -213,13 +217,15 @@ export default {
 			this.reservedOffer["id_active_offer"] = this.reservedOffer.id_active_offer.id;
 			this.reservedOffer["id_user"] = this.reservedOffer.id_user.id;
 			this.reservedOffer["id_recruiter"] = this.reservedOffer.id_recruiter.id;
+			this.reservedOffer["hourly_rate"] = this.reservedOffer.hourly_rate;
 
 			await axios
 				.post("/api/v1/terminated-offers/", this.reservedOffer)
 				.then((res) => {
-					this.$parent.getTotalOffers();
-
 					if (this.isRecruiterCard) {
+						this.$parent.totalReservedOfferRecruiter = this.$parent.totalReservedOfferRecruiter - 1;
+						this.$parent.totalTerminatedOfferRecruiter = this.$parent.totalTerminatedOfferRecruiter + 1;
+
 						this.$parent.getTerminatedOffersForRecruiterWithOffset(
 							this.reservedOffer["id_recruiter"]
 						);
@@ -229,6 +235,9 @@ export default {
 
 						this.refreshEmployeeInfos(this.reservedOffer["id_user"], this.reservedOffer["id_recruiter"]);
 					} else {
+						this.$parent.totalReservedOfferUser = this.$parent.totalReservedOfferUser - 1;
+						this.$parent.totalTerminatedOfferUser = this.$parent.totalTerminatedOfferUser + 1;
+
 						this.$parent.getTerminatedOffersForUserWithOffset(
 							this.reservedOffer["id_user"]
 						);

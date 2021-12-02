@@ -152,10 +152,13 @@
 						</header>
 
 						<section class="modal-card-body">
+							<div v-if="toModifiedOffer" class="subtitle has-text-centered">
+								Type du service : {{ offerToModified.type_service }}
+							</div>
 
 							<div class="columns">
 								<div class="column is-one-third">
-									<div class="field">
+									<div class="field" v-if="!toModifiedOffer">
 									<label class="label">Type de service</label>
 									<div class="control">
 										<div class="select">
@@ -712,7 +715,7 @@ export default {
 				this.resetDatepicker();
 				this.resetInputs();
 				this.resetRange();
-				this.minDate = this.tomorrow;				
+				// this.minDate = this.tomorrow;				
 				this.toModifiedOffer = false;
 			}
 		},
@@ -1290,7 +1293,6 @@ export default {
 				}
 			}
 
-			this.offerToModified.type_service = this.serviceType;
 			this.offerToModified.description = this.description;
 			this.offerToModified.hourly_rate = this.hourlyRate;
 			this.offerToModified.max_distance = this.maxDistance;
@@ -1323,7 +1325,7 @@ export default {
 		async scrollAction(e) {
 			let list = e.target;
 
-			if(Math.round(list.scrollTop + list.clientHeight) >= list.scrollHeight) {
+			if(Math.round(list.scrollTop + list.clientHeight) >= list.scrollHeight && !this.isFetchingOffersOnScroll) {
 				switch (list.dataset.list) {
 					case 'detailsOffers':
 						this.getAllOffersWithOffset(this.userInfo.user_id);
@@ -1346,7 +1348,7 @@ export default {
 		},
 		async getAllOffersWithOffset(userId) {
 			this.isFetchingOffersOnScroll = true;
-			
+
 			if (this.activeOffers.length < this.totalOffer || !this.totalOffer) {
 				await axios
 					.get(`/api/v1/active-offers/user/${userId}/`, {
@@ -1449,9 +1451,9 @@ export default {
 				.then((res) => {
 					this.totalOffer = res.data.offerEmployee;
 					this.totalReservedOfferRecruiter = res.data.offerReserveRecruiter;
-					this.totalReservedOfferUser = res.data.nbReserveUser;
-					this.totalTerminatedOfferRecruiter = res.data.nbTerminateRecruiter;
-					this.totalTerminatedOfferUser = res.data.nbTerminateUser;
+					this.totalReservedOfferUser = res.data.offerReserveUser;
+					this.totalTerminatedOfferRecruiter = res.data.offerTerminateRecruiter;
+					this.totalTerminatedOfferUser = res.data.offerTerminateUser;
 				})
 				.catch((error) => {
 					console.log(error);
@@ -1530,8 +1532,6 @@ option[value=""][disabled] {
     align-items: center;
     border-radius: 16px;
 	position: absolute;
-	top: 50;
-	left: 50;
 	background-color: rgba(255, 255, 255, 0.4);
 
         .loader {
