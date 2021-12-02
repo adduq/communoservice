@@ -143,7 +143,9 @@
 					<div class="modal-card">
 						<header class="modal-card-head">
 							<p v-if="!toModifiedOffer" class="modal-card-title">Créer un service</p>
-							<p v-else class="modal-card-title">Modifier un service</p>
+							<p v-if="toModifiedOffer && offerToModified" class="modal-card-title">
+								Modifier le service : {{ offerToModified.type_service }}
+							</p>
 							<button
 								class="delete has-background-danger"
 								v-on:click="closeOfferModal()"
@@ -152,10 +154,6 @@
 						</header>
 
 						<section class="modal-card-body">
-							<div v-if="toModifiedOffer" class="subtitle has-text-centered">
-								Type du service : {{ offerToModified.type_service }}
-							</div>
-
 							<div class="columns">
 								<div class="column is-one-third">
 									<div class="field" v-if="!toModifiedOffer">
@@ -1260,6 +1258,9 @@ export default {
 				start: this.convertDaysForCalendar(offer.start_date),
 				end: this.convertDaysForCalendar(offer.end_date)
 			}
+
+			if (this.range.start < this.minDate)
+				this.minDate = this.range.start;
 
 			await new Promise(r => setTimeout(r, 5));
 			for (const [index, [key, value]] of Object.entries(Object.entries(this.daysSelected))) {
