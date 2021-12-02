@@ -478,7 +478,7 @@ class ReservedOfferDetail(APIView):
 
         reserved_offer = self.get_object(id_reserved_offer)
 
-        if reserved_offer.id_user != request.user:
+        if reserved_offer.id_user != request.user and reserved_offer.id_recruiter != request.user:
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
 
         reserved_offer.delete()
@@ -601,7 +601,7 @@ class TerminatedOfferDetail(APIView):
 
         terminated_offer = self.get_object(id_terminated_offer)
 
-        if terminated_offer.id_user != request.user:
+        if terminated_offer.id_user != request.user and terminated_offer.id_recruiter != request.user:
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
 
         terminated_offer.delete()

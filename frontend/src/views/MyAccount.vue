@@ -152,7 +152,7 @@
 						</header>
 
 						<section class="modal-card-body">
-							<div v-if="toModifiedOffer" class="subtitle has-text-centered">
+							<div v-if="toModifiedOffer && offerToModified" class="subtitle has-text-centered">
 								Type du service : {{ offerToModified.type_service }}
 							</div>
 
@@ -1260,6 +1260,9 @@ export default {
 				start: this.convertDaysForCalendar(offer.start_date),
 				end: this.convertDaysForCalendar(offer.end_date)
 			}
+
+			if (this.range.start < this.minDate)
+				this.minDate = this.range.start;
 
 			await new Promise(r => setTimeout(r, 5));
 			for (const [index, [key, value]] of Object.entries(Object.entries(this.daysSelected))) {

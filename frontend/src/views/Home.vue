@@ -778,6 +778,8 @@ export default {
 					this.getAllOffersWithOffset();
 				else
 					this.getSearchingOffersWithOffset();
+
+				this.getTotalOffers();
 			}
 		},
 		async getAllOffersWithOffset() {
