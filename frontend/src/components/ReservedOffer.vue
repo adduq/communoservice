@@ -4,12 +4,7 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-64x64">
-						<img
-							class="is-rounded"
-							:src="this.$parent.profileSwitch ? this.MEDIA_URL + 'pfp_'+reservedOffer.id_user.id+'.jpg' : this.MEDIA_URL + 'pfp_'+reservedOffer.id_recruiter.id+'.jpg'" 
-							@error="replaceByDefault"
-							alt="Placeholder image"
-						/>
+						<img class="is-rounded" :src="imgPath" />
 					</figure>
 				</div>
 				<div class="media-content">
@@ -36,7 +31,13 @@
 				Employé : {{ reservedOffer.id_user.username }}
 			</p>
 			<p v-else>
-				Recruteur : {{ reservedOffer.id_recruiter.username }}
+				Recruteur : {{ reservedOffer.id_recruiter.first_name }}
+				{{ reservedOffer.id_recruiter.last_name }}
+				({{ reservedOffer.id_recruiter.username }})
+			</p>
+
+			<p v-if="reservedOffer.hourly_rate">
+				Taux horaire : {{ reservedOffer.hourly_rate }} $
 			</p>
 
 			<div class="is-flex is-flex-wrap-wrap is-justify-content-end mt-4">
@@ -46,7 +47,7 @@
 				>
 					Terminer
 				</button>
-				<button class="button is-danger w-100" v-on:click="cancelOffer">
+				<button class="button is-danger w-100 mr-2" v-on:click="cancelOffer">
 					Annuler
 				</button>
 			</div>
@@ -123,7 +124,6 @@ export default {
 	props: {
 		reservedOffer: null,
 		isRecruiterCard: false,
-		// userInfo: Object,
 	},
 	components: {
 		StarRating
@@ -145,7 +145,12 @@ export default {
 			statusAttribue: 0,
 			noteService: 0,
 			terminateOfferIsActive: false,
+			imgPath: this.MEDIA_URL + "pfp_default.jpg",
 		};
+	},
+	mounted() {
+		let user_id = this.$parent.profileSwitch ? this.reservedOffer.id_user.id : this.reservedOffer.id_recruiter.id;
+		this.getImgUrl(user_id);
 	},
 	methods: {
 		setRating(note) {
@@ -164,11 +169,11 @@ export default {
 			this.reservedOffer["rating"] = this.noteService;
 
 			await this.finishOffer();
+
+			this.terminateOfferIsActive = !this.terminateOfferIsActive
 		},
 		async finishOffer() {
-			this.reservedOffer["completed_date"] = new Date()
-				.toISOString()
-				.split("T")[0];
+			this.reservedOffer["completed_date"] = new Date().toLocaleDateString("fr-CA");
 
 			await this.deleteFromReservedOffer();
 		},
@@ -180,13 +185,25 @@ export default {
 				)
 				.then((res) => {
 					if (this.isRecruiterCard) {
-						this.$parent.getReservedOffersForRecruiter(
-							this.reservedOffer.id_recruiter.id
-						);
+						this.$parent.reservedOffersForRecruiter = this.$parent.reservedOffersForRecruiter
+						.filter(el => el.id !== this.reservedOffer.id );
+
+						// this.$parent.getReservedOffersForRecruiterWithOffset(
+						// 	this.reservedOffer.id_recruiter.id
+						// );
+						// this.$parent.getReservedOffersForRecruiter(
+						// 	this.reservedOffer.id_recruiter.id
+						// );
 					} else {
-						this.$parent.getReservedOffersForUser(
-							this.reservedOffer.id_user.id
-						);
+						this.$parent.reservedOffersForUser = this.$parent.reservedOffersForUser
+						.filter(el => el.id !== this.reservedOffer.id );
+
+						// this.$parent.getReservedOffersForUserWithOffset(
+						// 	this.reservedOffer.id_user.id
+						// );
+						// this.$parent.getReservedOffersForUser(
+						// 	this.reservedOffer.id_user.id
+						// );
 					}
 
 					this.addToTerminatedOffer();
@@ -200,55 +217,41 @@ export default {
 			this.reservedOffer["id_active_offer"] = this.reservedOffer.id_active_offer.id;
 			this.reservedOffer["id_user"] = this.reservedOffer.id_user.id;
 			this.reservedOffer["id_recruiter"] = this.reservedOffer.id_recruiter.id;
+			this.reservedOffer["hourly_rate"] = this.reservedOffer.hourly_rate;
 
 			await axios
 				.post("/api/v1/terminated-offers/", this.reservedOffer)
 				.then((res) => {
 					if (this.isRecruiterCard) {
-						this.$parent.getTerminatedOffersForRecruiter(
+						this.$parent.totalReservedOfferRecruiter = this.$parent.totalReservedOfferRecruiter - 1;
+						this.$parent.totalTerminatedOfferRecruiter = this.$parent.totalTerminatedOfferRecruiter + 1;
+
+						this.$parent.getTerminatedOffersForRecruiterWithOffset(
 							this.reservedOffer["id_recruiter"]
 						);
+						// this.$parent.getTerminatedOffersForRecruiter(
+						// 	this.reservedOffer["id_recruiter"]
+						// );
 
 						this.refreshEmployeeInfos(this.reservedOffer["id_user"], this.reservedOffer["id_recruiter"]);
-
-						// let new_avg = this.averageWithIncrements(this.userInfo["avg_rating_as_employer"],
-						// this.userInfo["nb_rating_as_employer"], this.reservedOffer["rating"]);
-
-						// console.log(this.userInfo);
-						// console.log(new_avg);
-
-						// this.userInfo["nb_services_received"] += 1;
-						// this.userInfo["nb_rating_as_employer"] += 1;
-						// this.userInfo["avg_rating_as_employer"] = new_avg;
-
-						// console.log(this.userInfo);
 					} else {
-						this.$parent.getTerminatedOffersForUser(
+						this.$parent.totalReservedOfferUser = this.$parent.totalReservedOfferUser - 1;
+						this.$parent.totalTerminatedOfferUser = this.$parent.totalTerminatedOfferUser + 1;
+
+						this.$parent.getTerminatedOffersForUserWithOffset(
 							this.reservedOffer["id_user"]
 						);
+						// this.$parent.getTerminatedOffersForUser(
+						// 	this.reservedOffer["id_user"]
+						// );
 
 						this.refreshRecruiterInfos(this.reservedOffer["id_recruiter"], this.reservedOffer["id_user"]);
-
-						// let new_avg = this.averageWithIncrements(this.userInfo["avg_rating_as_employee"],
-						// this.userInfo["nb_rating_as_employe"], this.reservedOffer["rating"]);
-
-						// console.log(this.userInfo);
-						// console.log(new_avg);
-
-						// this.userInfo["nb_services_given"] += 1;
-						// this.userInfo["nb_rating_as_employe"] += 1;
-						// this.userInfo["avg_rating_as_employee"] = new_avg;
-						
-						// console.log(this.userInfo);
 					}					
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
-		// averageWithIncrements(old_avg, old_total, new_value) {
-		// 	return ((old_avg * old_total) + new_value) / (old_total + 1);
-		// }
 		async refreshEmployeeInfos(user_id, recruiter_id) {
 			await axios
 				.put(
@@ -275,8 +278,17 @@ export default {
 					console.log(err);
 				});
 		},
-		replaceByDefault(e){
-			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+		async getImgUrl(user_id) {			
+			await axios
+				.get(
+					`/api/v1/userinfo/${user_id}/profile-image/`
+				)
+				.then((res) => {
+					this.imgPath = this.MEDIA_URL + res.data.imgName
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		}
 	},
 };

@@ -4,12 +4,7 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-64x64">
-						<img
-							class="is-rounded"
-							:src="this.$parent.profileSwitch ? this.MEDIA_URL + 'pfp_'+terminatedOffer.id_user.id+'.jpg' : this.MEDIA_URL + 'pfp_'+terminatedOffer.id_recruiter.id+'.jpg'" 
-							@error="replaceByDefault"
-							alt="Placeholder image"
-						/>
+						<img class="is-rounded" :src="imgPath" />
 					</figure>
 				</div>
 				<div class="media-content">
@@ -38,7 +33,13 @@
 						Employé : {{ terminatedOffer.id_user.username }}
 					</p>
 					<p v-else>
-						Recruteur : {{ terminatedOffer.id_recruiter.username }}
+						Recruteur : {{ terminatedOffer.id_recruiter.first_name }}
+						{{ terminatedOffer.id_recruiter.last_name }}
+						({{ terminatedOffer.id_recruiter.username }})
+					</p>
+
+					<p v-if="terminatedOffer.hourly_rate">
+						Taux horaire : {{ terminatedOffer.hourly_rate }} $
 					</p>
 				</div>
 
@@ -74,6 +75,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
 	name: "TerminatedOffer",
 	props: {
@@ -88,11 +91,25 @@ export default {
 				CANCEL: 2,
 				NO_PRESENCE: 3,
 			},
+			imgPath: this.MEDIA_URL + "pfp_default.jpg",
 		};
 	},
-	methods:{
-		replaceByDefault(e){
-			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+	mounted() {
+		let user_id = this.$parent.profileSwitch ? this.terminatedOffer.id_user.id : this.terminatedOffer.id_recruiter.id;
+		this.getImgUrl(user_id);
+	},
+	methods: {
+		async getImgUrl(user_id) {			
+			await axios
+				.get(
+					`/api/v1/userinfo/${user_id}/profile-image/`
+				)
+				.then((res) => {
+					this.imgPath = this.MEDIA_URL + res.data.imgName
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		}
 	}
 };

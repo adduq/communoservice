@@ -75,6 +75,8 @@ class ReservedOffer(models.Model):
     id_recruiter = models.ForeignKey(User, on_delete=models.CASCADE,
                                      related_name="recruiter_reserved_offer")
     reservation_date = models.DateField(null=True)
+    hourly_rate = models.DecimalField(
+        null=False, max_digits=6, decimal_places=2, default="13.50")
 
 
 class TerminatedOffer(models.Model):
@@ -92,3 +94,5 @@ class TerminatedOffer(models.Model):
     status = models.IntegerField(
         default=StatusOffer.GIVEN, choices=StatusOffer.choices)
     rating = models.FloatField(null=True)
+    hourly_rate = models.DecimalField(
+        null=False, max_digits=6, decimal_places=2, default="13.50")

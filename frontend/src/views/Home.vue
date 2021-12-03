@@ -67,11 +67,27 @@
 
 					<div class="panel-block">
 						<button
-							v-on:click="sendQuery"
+							@click="sendQuery"
+							class="button is-link is-outlined is-fullwidth"
+						>
+							Rechercher
+						</button>
+					</div>
+					<!-- <div class="panel-block">
+						<button
+							@click="sendQuery"
 							class="button is-link is-outlined is-fullwidth"
 							:class="isFetchingOffers ? 'is-loading' : ''"
 						>
 							Rechercher
+						</button>
+					</div> -->
+					<div class="panel-block" v-if="saveParams !== null">
+						<button
+							@click="resetSearchParams"
+							class="button is-danger is-outlined is-fullwidth"
+						>
+							Réinitialiser la recherche
 						</button>
 					</div>
 				</nav>
@@ -79,15 +95,21 @@
 			<div class="column is-two-thirds">
 				<div v-if="offers.length > 0" class="box">
 					<!-- <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress> -->
-					<DetailedOffer
-						v-for="offer in offers"
-						v-bind:key="offer.id"
-						v-bind:offer="offer"
-						@click="showOfferModal(offer)"
-					/>
+					<div id="list-services" class="offers-container" @scroll="scrollAction">
+						<DetailedOffer
+							v-for="offer in offers"
+							v-bind:key="offer.id"
+							v-bind:offer="offer"
+							@click="showOfferModal(offer)"
+						/>
+					</div>
 				</div>
 				<div v-else  class="box has-text-centered">
 				Aucune offre disponible à proximité.
+				</div>
+
+				<div class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
+    				<div class="is-loading" :class="isFetchingOffersOnScroll ? 'loader' : ''"></div>
 				</div>
 			</div>
 		</div>
@@ -192,14 +214,14 @@
 						</span>
 						<span
 							class="tag is-rounded ch-5 is-size-5"
-							:class="offerToShow.thursday == true ? 'is-info' : 'is-dark'"
+							:class="offerToShow.wednesday == true ? 'is-info' : 'is-dark'"
 							title="Mercredi"
 						>
 							M
 						</span>
 						<span
 							class="tag is-rounded ch-5 is-size-5"
-							:class="offerToShow.wednesday == true ? 'is-info' : 'is-dark'"
+							:class="offerToShow.thursday == true ? 'is-info' : 'is-dark'"
 							title="Jeudi"
 						>
 							J
@@ -292,14 +314,14 @@
 									</p>
 								</div>
 							</div>
-							<div class="columns is-mobile is-flex-wrap-wrap">
-								<div class="column has-text-centered">
+							<div class="columns is-mobile is-flex-wrap-wrap is-justify-content-center">
+								<div class="column has-text-centered is-4-desktop">
 									<p class="has-text-weight-bold is-size-3">
 										{{ offerUserInfo.nb_services_given }}
 									</p>
 									<p>services rendus</p>
 								</div>
-								<div class="column has-text-centered">
+								<div class="column has-text-centered is-4-desktop">
 									<p class="has-text-weight-bold is-size-3">
 										{{ offerUserInfo.avg_rating_as_employee }}/5
 									</p>
@@ -308,103 +330,47 @@
 							</div>
 						</div>
 					</div>
-					<label class="label has-text-centered mt-6 pt-2 is-size-5"
-						>Veuillez choisir une de mes disponibilités.</label
-					>
-					<div
-						class="is-flex has-text-centered is-flex-wrap-wrap mt-2 mb-6 is-justify-content-space-evenly is-family-monospace"
-					>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.monday ? 'is-info' : '',
-								!offerToShow.monday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.monday"
-							title="Lundi"
-							@click="selectedWeekdays.monday = !selectedWeekdays.monday"
-						>
-							L
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.tuesday ? 'is-info' : '',
-								!offerToShow.tuesday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.tuesday"
-							title="Mardi"
-							@click="selectedWeekdays.tuesday = !selectedWeekdays.tuesday"
-						>
-							M
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.thursday ? 'is-info' : '',
-								!offerToShow.thursday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.thursday"
-							title="Mercredi"
-							@click="selectedWeekdays.thursday = !selectedWeekdays.thursday"
-						>
-							M
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.wednesday ? 'is-info' : '',
-								!offerToShow.wednesday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.wednesday"
-							title="Jeudi"
-							@click="selectedWeekdays.wednesday = !selectedWeekdays.wednesday"
-						>
-							J
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.friday ? 'is-info' : '',
-								!offerToShow.friday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.friday"
-							title="Vendredi"
-							@click="selectedWeekdays.friday = !selectedWeekdays.friday"
-						>
-							V
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.saturday ? 'is-info' : '',
-								!offerToShow.saturday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.saturday"
-							title="Samedi"
-							@click="selectedWeekdays.saturday = !selectedWeekdays.saturday"
-						>
-							S
-						</button>
-						<button
-							class="button is-rounded ch-5 is-size-6"
-							:class="[
-								selectedWeekdays.sunday ? 'is-info' : '',
-								!offerToShow.sunday ? 'is-dark' : '',
-							]"
-							:disabled="!offerToShow.sunday"
-							title="Dimanche"
-							@click="selectedWeekdays.sunday = !selectedWeekdays.sunday"
-						>
-							D
-						</button>
-					</div>
+					<label class="label has-text-centered mt-6 pt-2 is-size-5">
+						Veuillez choisir une de mes disponibilités.
+					</label>
+
+					<DatePicker
+        				:disabled-dates="disableDates" v-model="dates" mode="date"
+        				:min-date="minDate" :max-date="maxDate" is-expanded
+        			/>
+
 				</div>
 				<div v-if="currentStep == 3">
 					<div v-if="$store.state.isAuthenticated">
 						<div v-if="$store.state.userInfo.profile_is_completed">
 							<div class="has-text-centered" v-if="!clickedSend">
 								<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
+								<div class="columns is-mobile is-flex-wrap-wrap">
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Employé</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											{{ offerUserInfo.first_name + " " + offerUserInfo.last_name }}
+										</span>
+									</div>
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Taux horaire</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											${{ offerToShow.hourly_rate }}/h
+										</span>
+									</div>
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Type du service</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											{{ offerToShow.type_service }}
+										</span>
+									</div>
+									<div class="column has-text-centered is-6-desktop">
+										<label class="label is-size-5">Date de réservation</label>
+										<span class="tag has-text-weight-bold is-size-6">
+											{{ dates.toLocaleDateString("fr-CA") }}
+										</span>
+									</div>
+								</div>
 								<label class="checkbox mb-5">
 									<input type="checkbox" v-model="confirmationCheckbox" />
 									Je confirme avoir validé ma demande
@@ -474,16 +440,9 @@
 				<button
 					class="button is-primary is-rounded w-100"
 					v-if="currentStep < 3 && !step3Completed"
-					:disabled="
-						currentStep == 2 &&
-							Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
-					"
-					:title="
-						currentStep == 2 &&
-						Object.keys(selectedWeekdays).every((k) => !selectedWeekdays[k])
-							? 'Vous devez choisir au moins une journée'
-							: ''
-					"
+					:disabled="currentStep == 2 && this.dates == null"
+					:title="currentStep == 2 && this.dates == null
+							? 'Vous devez choisir une journée' : ''"
 					@click="
 						currentStep == 2 ? (step2Completed = true) : '';
 						currentStep++;
@@ -539,15 +498,6 @@ export default {
 			offerToShow: Object,
 			offerUserInfo: Object,
 			offerModalActive: false,
-			selectedWeekdays: {
-				monday: false,
-				tuesday: false,
-				wednesday: false,
-				thursday: false,
-				friday: false,
-				saturday: false,
-				sunday: false,
-			},
 			confirmationCheckbox: false,
 			clickedSend: false,
 
@@ -565,6 +515,12 @@ export default {
 			offers: [],
 			serviceTypes: [],
 			isFetchingOffers: false,
+			isFetchingOffersOnScroll: false,
+			totalOffers: 0,
+
+			offset: 0,
+			saveParams: null,
+
 			select_serviceday: "",
 			dateToday: "",
 			weekdays: {
@@ -576,11 +532,20 @@ export default {
 				5: "saturday",
 				6: "sunday",
 			},
+
+			// masks: [],
+			disableDates: [],
+			dates: null,
+			minDate: null,
+			maxDate: null,
 		};
 	},
 	mounted() {
 		document.title = "Accueil | Communoservice";
-		this.getAllOffers();
+		// this.getAllOffers();
+		this.getAllOffersWithOffset();
+		this.getTotalOffers();
+
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
 		this.getServiceTypes();
@@ -595,7 +560,8 @@ export default {
 	   * à nouveau les offres actives.
 	   */
       (val)=>{
-	   this.getAllOffers();
+	//    this.getAllOffers();
+		this.getAllOffersWithOffset();
       },
       {
 		  //À spécifier si on observe les propriétés "nested" d'un objet.
@@ -603,19 +569,27 @@ export default {
       }
       );
 	},
+	watch: {
+    	dates(val) {
+      	if (val) {
+        	// console.log(val);
+        	this.dates = val;
+      	}
+    	},
+  	},
 	methods: {
-		async getAllOffers() {
-			this.isFetchingOffers = true;
-			await axios
-				.get("/api/v1/active-offers/")
-				.then((response) => {
-					this.offers = response.data;
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-			this.isFetchingOffers = false;
-		},
+		// async getAllOffers() {
+		// 	this.isFetchingOffers = true;
+		// 	await axios
+		// 		.get("/api/v1/active-offers/")
+		// 		.then((response) => {
+		// 			this.offers = response.data;
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log(error);
+		// 		});
+		// 	this.isFetchingOffers = false;
+		// },
 		async getServiceTypes() {
 			await axios
 				.get("/api/v1/service-types/")
@@ -631,11 +605,12 @@ export default {
 
 			this.offerToReserve.id_offer = offer.id;
 			this.offerToReserve.id_user = offer.user;
+			this.offerToReserve.hourly_rate = offer.hourly_rate;
+			this.offerToReserve.reservation_date = this.dates.toLocaleDateString("fr-CA");
+			// this.offerToReserve.reservation_date = this.dates.toISOString().split('T')[0];
 
 			await this.getActiveOfferId(offer);
 			await this.getRecruiterId();
-
-			// console.log(this.offerToReserve);
 
 			await axios
 				.post("/api/v1/reserved-offers/", this.offerToReserve)
@@ -680,7 +655,7 @@ export default {
 			const params = new URLSearchParams();
 
 			params.append("type-service", this.query_typeservice);
-			
+
 			this.query_serviceday = new Date(this.select_serviceday);
 			if (
 				this.query_serviceday instanceof Date &&
@@ -708,16 +683,29 @@ export default {
 			}
 
 			if (Array.from(params).length > 0) {
-				this.isFetchingOffers = true;
-				await axios
-					.get("/api/v1/active-offers/search?" + params.toString())
-					.then((response) => {
-						this.offers = response.data;
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-				this.isFetchingOffers = false;
+				// this.isFetchingOffers = true;
+				// this.isFetchingOffersOnScroll = true;
+
+				// params.append("offset", this.offset);
+				this.saveParams = params.toString();
+
+				this.offers = [];
+				this.offset = 0;
+				var scrollSurface = document.getElementById('list-services');
+				scrollSurface.scrollTop = 0;
+
+				this.getSearchingOffersWithOffset();
+
+				// await axios
+				// 	.get("/api/v1/active-offers/search?" + params.toString())
+				// 	.then((response) => {
+				// 		this.offers = response.data;
+				// 	})
+				// 	.catch((error) => {
+				// 		console.log(error);
+				// 	});
+				// this.isFetchingOffers = false;
+				// this.isFetchingOffersOnScroll = false;
 			}
 		},
 		async getOfferUserInfo(user_id) {
@@ -741,6 +729,7 @@ export default {
 			if (this.offerUserInfo.user != offer.user) {
 				this.getOfferUserInfo(offer.user);
 			}
+			this.getReservedDates(offer);
 		},
 		closeOfferModal() {
 			this.resetOfferModal();
@@ -754,12 +743,152 @@ export default {
 			this.offerUserInfo = {};
 			this.confirmationCheckbox = false;
 			this.clickedSend = false;
-			Object.keys(this.selectedWeekdays).forEach(
-				(value) => (this.selectedWeekdays[value] = false)
-			);
+			this.dates = null;
+			// Object.keys(this.selectedWeekdays).forEach(
+			// 	(value) => (this.selectedWeekdays[value] = false)
+			// );
+		},
+		async getReservedDates(offer) {
+			await axios
+				.get(`/api/v1/reserved-offers/${offer.id}/`)
+				.then((res) => {
+					this.disableDates = [];
+					for (let i = 0; i < res.data.length; i++) {
+						let dayToDisable = {
+							start: this.convertDaysForCalendar(res.data[i].reservation_date),
+							end: this.convertDaysForCalendar(res.data[i].reservation_date)
+						};
+
+						this.disableDates.push(dayToDisable);
+					}
+
+					let daysOfWeek = [];
+					this.daysOfWeekToDisable(daysOfWeek, offer);
+					this.disableDates.push({weekdays: daysOfWeek});
+
+					this.minDate = this.convertDaysForCalendar(offer.start_date);
+					this.maxDate = this.convertDaysForCalendar(offer.end_date);
+
+					// ! Note: À revoir
+					if (!this.minDate) {
+						var tomorrow = new Date();
+						var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
+						var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
+						var yyyy = tomorrow.getFullYear();
+
+						tomorrow = yyyy + "-" + mm + "-" + dd;
+						this.minDate = this.convertDaysForCalendar(tomorrow);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		convertDaysForCalendar(day) {
+			if (day) {
+				let dayTmp = day.toString().split('-');
+				return new Date(dayTmp[0], dayTmp[1] - 1, dayTmp[2]);
+			}
+		},
+		daysOfWeekToDisable(weekdays, offer) {
+			if (!offer.sunday)
+				weekdays.push(1);
+			if (!offer.monday)
+				weekdays.push(2);
+			if (!offer.tuesday)
+				weekdays.push(3);
+			if (!offer.wednesday)
+				weekdays.push(4);
+			if (!offer.thursday)
+				weekdays.push(5);
+			if (!offer.friday)
+				weekdays.push(6);
+			if (!offer.saturday)
+				weekdays.push(7);
 		},
 		replaceByDefault(e){
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+		},
+		scrollAction(e) {
+			let elem = e.target;
+
+			if(Math.round(elem.scrollTop + elem.clientHeight) >= elem.scrollHeight && elem.scrollHeight > 0 && !this.isFetchingOffersOnScroll) {
+				if (this.saveParams === null)
+					this.getAllOffersWithOffset();
+				else
+					this.getSearchingOffersWithOffset();
+
+				this.getTotalOffers();
+			}
+		},
+		async getAllOffersWithOffset() {
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.offset < this.totalOffers || !this.totalOffers) {
+				await axios
+					.get('/api/v1/active-offers/', {
+						params: {
+								offset: this.offset
+							}
+						})
+					.then((res) => {
+						this.offers = this.offers.concat(res.data);
+
+						this.offset = this.offset + 5;
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
+		},
+		async getSearchingOffersWithOffset() {
+			this.isFetchingOffersOnScroll = true;
+
+			if (this.offset < this.totalOffers || !this.totalOffers) {
+				let params = new URLSearchParams(this.saveParams);
+				params.append("offset", this.offset);
+
+				await axios
+					.get("/api/v1/active-offers/search?" + params.toString())
+					.then((res) => {
+						this.offers = this.offers.concat(res.data);
+
+						this.offset = this.offset + 5;
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+			this.isFetchingOffersOnScroll = false;
+		},
+		async getTotalOffers() {
+			await axios
+				.get('/api/v1/total-active-offers/', {
+					params: {
+							page: "home"
+						}
+					})
+				.then((res) => {
+					// console.log(res.data);
+					this.totalOffers = res.data;
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		resetSearchParams() {
+			var scrollSurface = document.getElementById('list-services');
+			scrollSurface.scrollTop = 0;
+
+			this.saveParams = null;
+			this.offers = [];
+			this.offset = 0;
+			this.query_mots_cles = "";
+			this.query_typeservice = "Tout";
+			this.select_serviceday = "";
+
+			this.getAllOffersWithOffset();
 		},
 		openParentSettingModal(){
 			this.$emit('controlModalFromChild', true);
@@ -767,8 +896,30 @@ export default {
 	},
 };
 </script>
+
 <style lang="scss" scoped>
 	@import "../../node_modules/bulma-steps";
+
+	.offers-container {
+	max-height: 500px;
+	overflow: hidden;
+	overflow-y: scroll;
+	// Pour Firefox
+	scrollbar-width: thin;
+	scrollbar-color: #aaaaaa rgba(0, 0, 0, 0);
+
+	&::-webkit-scrollbar {
+		width: 14px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border: 4px solid rgba(0, 0, 0, 0);
+		background-clip: padding-box;
+		border-radius: 9999px;
+		background-color: #aaaaaa;
+	}
+}
+
 	.ch-5 {
 		width: 5ch;
 	}
@@ -831,6 +982,35 @@ export default {
 	.step-item {
 		flex-basis: 0 !important;
 	}
+
+.loader-wrapper {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 1s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+	position: absolute;
+    top: 85%;
+    left: 0;
+	background-color: rgba(255, 255, 255, 0.4);
+
+        .loader {
+            height: 80px;
+            width: 80px;
+			border: 4px solid darken($color: #dee2e5, $amount: 30);
+    		border-right-color: transparent;
+    		border-top-color: transparent;
+        }
+
+    &.is-active {
+        opacity: 1;
+        z-index: 1;
+    }
+}
 	/**
 	Style uniquement appliqué sur le bouton des paramètres.
 	*/

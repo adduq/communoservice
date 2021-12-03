@@ -414,7 +414,8 @@
             "id_offer": 7,
             "id_active_offer": 7,
             "id_recruiter": 2,
-            "reservation_date": "2021-11-08"
+            "reservation_date": "2021-11-08",
+            "hourly_rate": "16.75"
         }
     },
     {
@@ -425,7 +426,8 @@
             "id_offer": 9,
             "id_active_offer": 8,
             "id_recruiter": 1,
-            "reservation_date": "2021-12-08"
+            "reservation_date": "2021-12-08",
+            "hourly_rate": "18.50"
         }
     },
     {
@@ -438,7 +440,8 @@
             "id_recruiter": 1,
             "completed_date": "2021-10-26",
             "status": 1,
-            "rating": 0
+            "rating": 0,
+            "hourly_rate": "11"
         }
     },
     {
@@ -451,7 +454,8 @@
             "id_recruiter": 2,
             "completed_date": "2021-10-28",
             "status": 0,
-            "rating": 9.5
+            "rating": 9.5,
+            "hourly_rate": "12.25"
         }
     },
     {
@@ -464,7 +468,8 @@
             "id_recruiter": 2,
             "completed_date": null,
             "status": 2,
-            "rating": null
+            "rating": null,
+            "hourly_rate": "16.75"
         }
     }
 ]

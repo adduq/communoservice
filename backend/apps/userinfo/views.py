@@ -94,6 +94,8 @@ class UpdateUserInfo(APIView):
 
         try:
             user = UserInfo.objects.get(user_id=request.user.id)
+            userObject = User.objects.get(id=request.user.id)
+
             body = json.loads(request.body)
 
             if 'first_name' in body:
@@ -101,6 +103,7 @@ class UpdateUserInfo(APIView):
 
                 if body['first_name'] == '' or re.match(r"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$", body['first_name']):
                     user.first_name = body['first_name']
+                    userObject.first_name = body['first_name']
                 else:
                     return Response('Le prénom est invalide.', status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,12 +112,14 @@ class UpdateUserInfo(APIView):
                 
                 if body['last_name'] == '' or re.match(r"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$", body['last_name']):
                     user.last_name = body['last_name']
+                    userObject.last_name = body['last_name']
                 else:
                     return Response('Le nom est invalide.', status=status.HTTP_400_BAD_REQUEST)
 
             if 'email' in body:
                 if body['email'] == '' or re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", body['email']):
                     user.email = body['email']
+                    userObject.email = body['email']
                 else:
                     return Response('Le courriel est invalide.', status=status.HTTP_400_BAD_REQUEST)
 
@@ -145,6 +150,8 @@ class UpdateUserInfo(APIView):
                 user.profile_is_completed = False
 
             user.save()
+            userObject.save()
+
             serializer = UserInfoSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -233,3 +240,18 @@ class UpdateUserProfileImage(APIView):
                 return Response({"status": "Added successfully"}, status=status.HTTP_200_OK)
             else:
                 return Response({"status": "No files in request"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetUserImage(APIView):
+    def get(self, request, user_id, format=None):
+        # if request.user.is_anonymous:
+        #     return Response({"status": "invalid"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        imgExist = os.path.exists(
+            str(settings.MEDIA_ROOT) + '/' + 'pfp_' + str(user_id) + '.jpg')
+        imgName = 'pfp_default.jpg'
+
+        if (imgExist):
+            imgName = 'pfp_' + str(user_id) + '.jpg'
+
+        return Response({"imgName": imgName}, status=status.HTTP_200_OK)
