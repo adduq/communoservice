@@ -35,12 +35,12 @@
 					<p v-else>L'offre n'a pas été achevée.</p>
 					
 					<p v-if="this.isRecruiterCard">
-						Employé : {{ terminatedOffer.id_user.first_name }}
-						{{ terminatedOffer.id_user.last_name }}
+						Employé : {{ terminatedOffer.id_user.username }}
 					</p>
 					<p v-else>
-						Employeur : {{ terminatedOffer.id_recruiter.first_name }}
+						Recruteur : {{ terminatedOffer.id_recruiter.first_name }}
 						{{ terminatedOffer.id_recruiter.last_name }}
+						({{ terminatedOffer.id_recruiter.username }})
 					</p>
 				</div>
 

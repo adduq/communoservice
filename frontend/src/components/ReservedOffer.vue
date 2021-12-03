@@ -33,12 +33,12 @@
 				Réservé pour le : {{ reservedOffer.reservation_date }}
 			</time>
 			<p v-if="this.isRecruiterCard">
-				Employé : {{ reservedOffer.id_user.first_name }}
-				{{ reservedOffer.id_user.last_name }}
+				Employé : {{ reservedOffer.id_user.username }}
 			</p>
 			<p v-else>
-				Employeur : {{ reservedOffer.id_recruiter.first_name }}
+				Recruteur : {{ reservedOffer.id_recruiter.first_name }}
 				{{ reservedOffer.id_recruiter.last_name }}
+				({{ reservedOffer.id_recruiter.username }})
 			</p>
 
 			<div class="is-flex is-flex-wrap-wrap is-justify-content-end mt-4">

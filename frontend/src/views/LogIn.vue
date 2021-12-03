@@ -8,26 +8,26 @@
 					<div class="field">
 						<label>Nom d'utilisateur</label>
 						<div class="control">
-							<input type="text" class="input" v-model="username" />
+							<input type="text" class="input" :class="this.usernameError ? 'is-danger': ''" v-model="this.username" @focus="this.usernameError = false"/>
 						</div>
 					</div>
 
 					<div class="field">
 						<label>Mot de passe</label>
 						<div class="control">
-							<input type="password" class="input" v-model="password" />
+							<input type="password" class="input" :class="this.passwordError ? 'is-danger': ''" v-model="this.password" @focus="this.passwordError = false"/>
 						</div>
 					</div>
 
-					<div class="notification is-danger" v-if="errors.length">
-						<p v-for="error in errors" v-bind:key="error">{{ error }}</p>
+					<div class="notification is-danger" v-if="this.errors.length">
+						<p v-for="error in this.errors" v-bind:key="error">{{ error }}</p>
 					</div>
 
 					<div class="field">
 						<div class="control">
 							<button
 								class="button is-dark"
-								:class="isLoading ? 'is-loading' : ''"
+								:class="this.isLoading ? 'is-loading' : ''"
 							>
 								Connexion
 							</button>
@@ -50,7 +50,9 @@ export default {
 	data() {
 		return {
 			username: "",
+			usernameError: false,
 			password: "",
+			passwordError: false,
 			errors: [],
 			isLoading: false,
 		};
@@ -67,44 +69,63 @@ export default {
 				username: this.username,
 				password: this.password,
 			};
+			if(this.validateFormData(formData)){
+				await axios
+					.post("/api/v1/token/login/", formData)
+					.then((response) => {
+						const token = response.data.auth_token;
+						this.$store.commit("setToken", token);
 
-			await axios
-				.post("/api/v1/token/login/", formData)
-				.then((response) => {
-					const token = response.data.auth_token;
-					this.$store.commit("setToken", token);
-
-					// axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-					axios.defaults.headers.common["Authorization"] = "Token " + token;
-					// console.log(axios.defaults.headers.common["Authorization"]);
-					const toPath = this.$route.query.to || "/";
-					this.$router.push(toPath);
-				})
-				.catch((error) => {
-					if (error.response) {
-						this.errors.splice(0);
-						for (const property in error.response.data) {
-							var outvar = "";
-							switch (property) {
-								case "username":
-									outvar = "Nom d'utilisateur";
-									break;
-								case "password":
-									outvar = "Mot de passe";
-									break;
-								default:
-									outvar = "Erreur";
+						// axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+						axios.defaults.headers.common["Authorization"] = "Token " + token;
+						// console.log(axios.defaults.headers.common["Authorization"]);
+						const toPath = this.$route.query.to || "/";
+						this.$router.push(toPath);
+						this.loadUserInfo();
+					})
+					.catch((error) => {
+						if (error.response.status === 400) {
+							this.errors.splice(0);
+							for (const property in error.response.data) {
+								switch (property) {
+									case "non_field_errors":
+										this.errors.push(`${error.response.data["non_field_errors"]}`);
+										break;
+								}
 							}
-							this.errors.push(`${outvar}: ${error.response.data[property]}`);
+						} else {
+							this.errors.push("Une erreur est survenue");
 						}
-					} else {
-						this.errors.push("Une erreur est survenue");
-
-						console.log(JSON.stringify(error));
-					}
-				});
+					});
+			}
 			this.isLoading = false;
 		},
+		async loadUserInfo(){
+			await axios
+				.get('/api/v1/userinfo/me/')
+				.then((response) =>{
+					this.$store.dispatch("changeUserInfo", response.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		validateFormData(formData){
+			this.errors.splice(0);
+			let validUsername = true, validPassword = true;
+			
+			if(!formData.username.trim()){
+				this.errors.push("Le nom d'utilisateur est invalide")
+				validUsername = false;
+				this.usernameError = true;
+			}
+			if(!formData.password.trim()){
+				this.errors.push("Le mot de passe est invalide")
+				validPassword = false;
+				this.passwordError = true;
+			}
+			return validUsername && validPassword;
+		}
 	},
 };
 </script>
