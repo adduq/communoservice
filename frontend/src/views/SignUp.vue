@@ -8,21 +8,21 @@
 					<div class="field">
 						<label>Nom d'utilisateur</label>
 						<div class="control">
-							<input type="text" class="input" v-model="username" />
+							<input type="text" class="input" :class="this.usernameError ? 'is-danger': ''" v-model="this.username" @focus="this.usernameError = false" />
 						</div>
 					</div>
 
 					<div class="field">
 						<label>Mot de passe</label>
 						<div class="control">
-							<input type="password" class="input" v-model="password" />
+							<input type="password" class="input" :class="this.passwordError ? 'is-danger': ''" v-model="this.password" @focus="this.passwordError = false"/>
 						</div>
 					</div>
 
 					<div class="field">
 						<label>Répéter le mot de passe</label>
 						<div class="control">
-							<input type="password" class="input" v-model="password2" />
+							<input type="password" class="input" :class="this.password2Error ? 'is-danger': ''" v-model="this.password2" @focus="this.checkPasswordMatch" @input="this.checkPasswordMatch"/>
 						</div>
 					</div>
 
@@ -54,8 +54,11 @@ export default {
 	data() {
 		return {
 			username: "",
+			usernameError: false,
 			password: "",
+			passwordError: false,
 			password2: "",
+			password2Error: false,
 			errors: [],
 		};
 	},
@@ -64,26 +67,12 @@ export default {
 	},
 	methods: {
 		submitForm() {
-			this.errors = [];
+			const formData = {
+				username: this.username,
+				password: this.password,
+			};
 
-			if (this.username === "") {
-				this.errors.push("Le nom d'utilisateur est manquant");
-			}
-
-			if (this.password === "") {
-				this.errors.push("Le mot de passe est trop court");
-			}
-
-			if (this.password !== this.password2) {
-				this.errors.push("Les mots de passes ne correspondent pas");
-			}
-
-			if (!this.errors.length) {
-				const formData = {
-					username: this.username,
-					password: this.password,
-				};
-
+			if(this.validateFormData(formData)){
 				axios
 					.post("/api/v1/users/", formData)
 					.then((response) => {
@@ -99,22 +88,58 @@ export default {
 						this.$router.push("/connexion");
 					})
 					.catch((error) => {
-						if (error.response) {
+						if (error.response.status === 400) {
 							for (const property in error.response.data) {
-								this.errors.push(
-									`${property}: ${error.response.data[property]}`
-								);
+								switch (property) {
+									case "username":
+										error.response.data["username"].forEach(usernameErr => this.errors.push(usernameErr));
+										this.usernameError = true;
+										break;
+									case "password":
+										error.response.data["password"].forEach(passwordErr => this.errors.push(passwordErr));
+										this.passwordError = true;
+										this.password2Error = true;
+									break;
+								}
 							}
-
-							console.log(JSON.stringify(error.response.data));
-						} else if (error.message) {
+						} else {
 							this.errors.push("Une erreur est survenue");
-
-							console.log(JSON.stringify(error));
+							console.log(error);
 						}
-					});
+					});	
 			}
 		},
+		validateFormData(formData){
+			this.errors.splice(0);
+			let validUsername = true, validPasswords = true;
+
+			if(!formData.username.trim()){
+				this.errors.push("Le nom d'utilisateur est invalide");
+				this.usernameError = true;
+				validUsername = false;
+			}
+			if(formData.password.trim().length < 8){
+				this.errors.push("Le mot de passe doit contenir au minimum 8 caractères");
+				validPasswords = false;
+				this.passwordError = true;
+				this.password2Error = true;
+			}
+			else if(formData.password.trim() != this.password2.trim()){
+				this.errors.push("Les mots de passe ne correspondent pas")
+				validPasswords = false;
+				this.passwordError = true;
+				this.password2Error = true;
+			}
+
+			return validUsername && validPasswords;
+		},
+		checkPasswordMatch(e){
+			if(e.target.value != this.password){
+				this.password2Error = true;
+			}else{
+				this.password2Error = false;
+			}
+		}
 	},
 };
 </script>

@@ -52,7 +52,7 @@
         "model": "userinfo.userinfo",
         "pk": 4,
         "fields": {
-            "profile_is_completed": "True",
+            "profile_is_completed": true,
             "first_name": "communo_manager",
             "last_name": "communo_manager",
             "email": "communostaff@live.ca",
@@ -92,7 +92,7 @@
         "fields": {
             "user_id": 1,
             "is_online": false,
-            "profile_is_completed": false,
+            "profile_is_completed": true,
             "first_name": "François",
             "last_name": "Xavier-Garneau",
             "email": "fgx@educegepgarneau.ca",
@@ -114,7 +114,7 @@
         "fields": {
             "user_id": 2,
             "is_online": false,
-            "profile_is_completed": false,
+            "profile_is_completed": true,
             "first_name": "Guylaine",
             "last_name": "Morin",
             "email": "gmorin@educegepgarneau.ca",
@@ -136,7 +136,7 @@
         "fields": {
             "user_id": 3,
             "is_online": false,
-            "profile_is_completed": false,
+            "profile_is_completed": true,
             "first_name": "Clément",
             "last_name": "Tremblay",
             "email": "ctremblay@educegepgarneau.ca",

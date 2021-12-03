@@ -1,5 +1,6 @@
 <template>
-	<div class="page-my-account">
+	<div 
+	class="page-my-account">
 		<div class="box has-background-dark has-text-white">
 			<div class="container profile">
 				<div class="section profile-heading">
@@ -25,14 +26,14 @@
 								<span
 									class="title is-bold has-text-white"
 									v-if="
-										userInfo.first_name &&
-											userInfo.last_name
+										$store.state.userInfo.first_name &&
+											$store.state.userInfo.last_name
 									"
 								>
 									{{
-										userInfo.first_name +
+										$store.state.userInfo.first_name +
 											" " +
-											userInfo.last_name
+											$store.state.userInfo.last_name
 									}}
 								</span>
 								<span
@@ -157,10 +158,17 @@
 							<div class="columns">
 								<div class="column is-one-third">
 									<div class="field" v-if="!toModifiedOffer">
-									<label class="label">Type de service</label>
+									<label class="label">Type de service
+										<span v-if="!this.validations['isValidServiceType']" class="icon is-info tooltip">
+                                        <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                        <span class="tooltiptext has-background-danger">
+                                         Il faut choisir un type de service.
+                                        </span>
+                                      </span>
+									</label>
 									<div class="control">
-										<div class="select">
-										<select v-model="serviceType" class="w-200">
+										<div class="select" :class="!this.validations['isValidServiceType'] ? 'is-danger': ''" >
+										<select v-model="serviceType" class="w-200" @blur="validateServiceType">
 											<option value="" disabled selected>Choisir parmi</option>
 											<option
 											v-for="type in serviceTypes"
@@ -172,41 +180,68 @@
 									</div>
 									</div>
 
-									<label class="label">Distance maximale (Km)</label>
+									<label class="label">Distance maximale (km)
+										<span v-if="!this.validations['isValidMaxDistance']" class="icon is-info tooltip">
+                                        <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                        <span class="tooltiptext has-background-danger">
+                                         La distance minimale est de 1 km.
+                                        </span>
+                                      </span>	
+									</label>
 									<div class="field has-addons">
 									<p class="control">
 										<input
 										v-model="maxDistance"
 										class="input"
+										:class="!this.validations['isValidMaxDistance'] ? 'is-danger': ''"
 										type="number"
 										min="1"
 										placeholder="Distance"
+										@input="validateMaxDistance"
 										/>
 									</p>
 									</div>
 
-									<label class="label">Taux horaire ($)</label>
+									<label class="label">Taux horaire ($)
+										<span v-if="!this.validations['isValidHourlyRate']" class="icon is-info tooltip">
+                                        <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                        <span class="tooltiptext has-background-danger">
+                                         Le taux horaire doit avoir une valeur entre 0,01 et 9999,99.
+                                        </span>
+                                      </span>	
+									</label>
 									<div class="field has-addons">
 										<p class="control">
 										<input
 											v-model="hourlyRate"
 											class="input"
+											:class="!this.validations['isValidHourlyRate'] ? 'is-danger': ''"
 											type="number"
 											min="0"
 											placeholder="Montant"
+											@input="validateHourlyRate"
 										/>
 										</p>
 									</div>
 								</div>
 								<div class="column">
 									<div class="field">
-										<label class="label">Description</label>
+										<label class="label">Description
+										<span v-if="!this.validations['isValidDescription']" class="icon is-info tooltip">
+                                        <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                        <span class="tooltiptext has-background-danger">
+                                        La description ne peut pas être vide.
+                                        </span>
+                                      </span>
+										</label>
 										<div class="control">
 										<textarea
 											v-model="description"
 											class="textarea"
-											placeholder="Votre message ici..."
+											:class="!this.validations['isValidDescription'] ? 'is-danger': ''"
+											placeholder="Votre description"
 											rows="4"
+											@input="validateDescription"
 										></textarea>
 										</div>
 									</div>
@@ -220,6 +255,15 @@
 									<label class="radio">
 										<input type="radio" @click="resetDatepicker()" name="dispo" v-model="isAlwaysDispo"  v-bind:value="false">
 										Préciser mes disponibilités
+										<span v-if="!this.validations['isValidDispo']" class="icon is-info tooltip">
+                                        <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                        <span v-if="!this.isAlwaysDispo && !this.isDatePickerPresent" class="tooltiptext has-background-danger">
+                                         Indiquez une récurrence.
+                                        </span>
+										 <span v-else class="tooltiptext has-background-danger">
+                                         Indiquez une récurrence ou une journée de disponibilité.
+                                        </span>
+                                      </span>
 									</label>
 									</div>
 								</div>
@@ -238,7 +282,7 @@
 								id="2"
 								class="button is-rounded day-button"
 								:class="daysSelected.monday ? 'is-success' : ''"
-								v-on:click="clickOnDayButton(2, daysSelected.monday)"
+								v-on:click="clickOnDayButton(2, daysSelected.monday); validateDispo()"
 								>
 								L
 								</button>
@@ -247,7 +291,7 @@
 								id="3"
 								class="button is-rounded day-button"
 								:class="daysSelected.tuesday ? 'is-success' : ''"
-								v-on:click="clickOnDayButton(3, daysSelected.tuesday)"
+								v-on:click="clickOnDayButton(3, daysSelected.tuesday); validateDispo()"
 								>
 								M
 								</button>
@@ -256,7 +300,7 @@
 								id="4"
 								class="button is-rounded day-button"
 								:class="daysSelected.wednesday ? 'is-success' : ''"
-								v-on:click="clickOnDayButton(4, daysSelected.wednesday)"
+								v-on:click="clickOnDayButton(4, daysSelected.wednesday); validateDispo()"
 								>
 								M
 								</button>
@@ -265,7 +309,7 @@
 								id="5"
 								class="button is-rounded day-button"
 								:class="daysSelected.thursday ? 'is-success' : ''"
-								v-on:click="clickOnDayButton(5, daysSelected.thursday)"
+								v-on:click="clickOnDayButton(5, daysSelected.thursday); validateDispo()"
 								>
 								J
 								</button>
@@ -274,7 +318,7 @@
 								id="6"
 								class="button is-rounded day-button"
 								:class="daysSelected.friday ? 'is-success' : ''"
-								v-on:click="clickOnDayButton(6), daysSelected.friday"
+								v-on:click="clickOnDayButton(6), daysSelected.friday; validateDispo()"
 								>
 								V
 								</button>
@@ -283,7 +327,7 @@
 								id="7"
 								class="button is-rounded day-button"
 								:class="daysSelected.saturday ? 'is-success' : ''"
-								v-on:click="clickOnDayButton(7, daysSelected.saturday)"
+								v-on:click="clickOnDayButton(7, daysSelected.saturday); validateDispo()"
 								>
 								S
 								</button>
@@ -291,7 +335,7 @@
 								id="1"
 								class="button is-rounded day-button"
 								:class="daysSelected.sunday ? 'is-success' : ''"
-								v-on:click="clickOnDayButton(1, daysSelected.sunday)"
+								v-on:click="clickOnDayButton(1, daysSelected.sunday); validateDispo()"
 								>
 								D
 								</button>
@@ -328,10 +372,11 @@
 							:key="componentKey"
 							is-expanded
 							locale="fr"
+							@input="validateDispo"
 							/>
 						</div>
 						<div
-							class="notification is-danger p-2"
+							class="notification is-danger p-2 animate__animated animate__fadeOut animate__delay-3s"
 							v-if="datePickerError.length > 0 && !toModifiedOffer"
 						>
 							<p v-for="error in datePickerError" v-bind:key="error">
@@ -346,7 +391,7 @@
 						>
 							<button
 								class="button is-success w-200"
-								v-on:click="validateForm"
+								v-on:click="addNewOffer"
 								v-if="!toModifiedOffer"
 							>
 								Créer
@@ -384,8 +429,9 @@
 						</div>
 						<div class="is-flex is-justify-content-center">
 							<a
+								v-if="$store.state.userInfo.profile_is_completed"
 								href="#"
-								class="button is-info mt-5"
+								class="button  button-service is-info mt-5"
 								v-on:click="openCreationModal()"
 							>
 								<span class="icon is-small mr-3">
@@ -395,6 +441,15 @@
 									></i>
 								</span>
 								<span> Créer un service </span>
+							</a>
+
+							<a
+								v-else
+								href="#"
+								class="button  button-service is-info mt-5"
+								v-on:click="openParentSettingModal()"
+							>
+								<span> Compléter votre profil pour créer des offres! </span>
 							</a>
 						</div>
 					</div>
@@ -524,6 +579,8 @@ export default {
 		TerminatedOffer,
 		ReservedOffer,
 	},
+	emits: ['controlModalFromChild']
+	,
 	data() {
 		return {
 			activeOffers: [],
@@ -545,7 +602,6 @@ export default {
 			description: "",
 			hourlyRate: "",
 			maxDistance: "",
-			expirationDate: "",
 			daysSelected: {
 				monday: false,
 				tuesday: false,
@@ -559,7 +615,13 @@ export default {
 			userIsActive: true,
 			imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			userInfo: {},
-			errors: [],
+			validations:{
+				isValidServiceType:true,
+				isValidHourlyRate:true,
+				isValidMaxDistance:true,
+				isValidDescription:true,
+				isValidDispo:true
+			},
 			tomorrow: "",
 			creationModalIsActive: false,
 
@@ -717,91 +779,70 @@ export default {
 				this.toModifiedOffer = false;
 			}
 		},
-		/**
-		 * Validation du formulaire
-		 */
-		validateForm() {
-			this.errors = [];
-			if (this.serviceType === "") {
-				this.errors.push("Il faut choisir un type.");
-			}
+		validateServiceType(){
+		if (this.serviceType === "") {
+			this.validations['isValidServiceType']=false;
+		}else this.validations['isValidServiceType']=true;
+		},
+		validateMaxDistance(){
 
-			this.description = this.description.trim();
-			if (!this.description) {
-				this.errors.push("La description ne peut pas être vide.");
-			}
+			if (this.maxDistance == "" || this.maxDistance <= 0) {
+				this.validations['isValidMaxDistance']=false;
+			}else this.validations['isValidMaxDistance']=true;
+		},
+		validateHourlyRate(){
+			let charactersHourlyRate = this.hourlyRate.toString();
+			let regexDotOnly = new RegExp(/^\ *\.\ *$/);
+			let regex = new RegExp(/^\d{0,4}(\.\d{0,2}){0,1}$/);
 
-			if (this.hourlyRate < 0) {
-				this.errors.push(
-					"Le taux horaire doit être un nombre positif."
-				);
+			if (this.hourlyRate =="" ||this.hourlyRate < 0) {
+			this.validations['isValidHourlyRate']=false;
+			} 
+			else if (regexDotOnly.test(charactersHourlyRate)){
+			this.validations['isValidHourlyRate']=false;
+			}
+			else if (!regex.test(charactersHourlyRate)){
+			this.validations['isValidHourlyRate']=false;
 			}
 			else{
-				let charactersHourlyRate = this.hourlyRate.toString();
-				let regexDotOnly = new RegExp('^\ *\.\ *$');
-				if (regexDotOnly.test(charactersHourlyRate)){
-				this.errors.push(
-					"Le taux horaire doit être un nombre positif."
-				);
-				}
-				let regex = new RegExp(/^\d{0,4}(\.\d{0,2}){0,1}$/);
-				if (!regex.test(charactersHourlyRate)){
-				this.errors.push(
-					"Le taux horaire doit avoir une valeur entre 0,01 et 9999,99."
-				);
-				}
+			this.validations['isValidHourlyRate']=true;	
 			}
-			if (this.maxDistance < 0) {
-				this.errors.push("La distance maximal doit être positive.");
-			}
-			let tomorrow = new Date();
-			let selectedDate = new Date(this.expirationDate);
-			if (selectedDate.getTime() < tomorrow.getTime()) {
-				this.errors.push(
-					"Il faut choisir une date postérieure à aujourd'hui."
-				);
-			}
-
-			
+		},
+		validateDescription(){
+		this.description = this.description.trim();
+		if (!this.description) {
+			this.validations['isValidDescription']=false;
+		}else this.validations['isValidDescription']=true;
+		},
+		validateDispo(){
 			if (!this.isAlwaysDispo){
 				if (!this.isDatePickerPresent){
 					//Utilisateur veut préciser récurrence seulement.
 					if (!this.validateAtLeastOneDisponibilityInWeek()){
-						this.errors.push(
-						"Indiquez une récurrence."
-						);
-					}
+						this.validations['isValidDispo']=false;
+					}else this.validations['isValidDispo']=true;
 				}
-				else{
 					//Le datepicker est ouvert.
-					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range==null){
-						this.errors.push(
-						"Indiquez une récurrence ou une journée de disponibilité."
-						);
-					}
+				else if (this.isDatePickerPresent && !this.validateAtLeastOneDisponibilityInWeek() && this.range==null){
+					this.validations['isValidDispo']=false;
 				}
-			}
+				else this.validations['isValidDispo']=true;
+			}else this.validations['isValidDispo']=true;
+		}
+		,
+		/**
+		 * Validation du formulaire
+		 */
+		validateForm() {
+			
+			this.validateServiceType();
+			this.validateMaxDistance();
+			this.validateHourlyRate();
+			this.validateDescription();
+			this.validateDispo();
 
-			if (!this.errors.length) {
-				this.modalCreateisActive = true;
-
-				this.creationModalIsActive = false;
-			} else {
-				for (let index = 0; index < this.errors.length; index++) {
-					toast({
-						message: this.errors[index],
-						type: "is-danger",
-						dismissible: true,
-						pauseOnHover: true,
-						duration: 4000,
-						position: "bottom-right",
-						animate: {
-							in: "fadeInRightBig",
-							out: "fadeOutRightBig",
-						},
-					});
-				}
-			}
+			return this.validations['isValidServiceType'] && this.validations['isValidHourlyRate'] && this.validations['isValidMaxDistance'] && this.validations['isValidDispo'] && this.validations['isValidDescription'];
+			
 		},
 		/**
 		 * Envoi de la nouvelle offre.
@@ -809,6 +850,9 @@ export default {
 		async addNewOffer() {
 			this.isLoading = true;
 
+			if (!this.validateForm()){
+				return;
+			}
 			//Même si l'utilisateur n'a pas cliqué sur un jour de semaine,
 			//on met à true les jours de semaine qui ont une correspondance avec ses disponibilitésé
 			if (this.isAlwaysDispo){
@@ -843,8 +887,6 @@ export default {
 
 			newOffer.start_date = startDate;
 			newOffer.end_date = endDate;
-
-			// alert(JSON.stringify(newOffer)); //pour validation.
 
 			await axios
 			.post("/api/v1/offers/", newOffer)
@@ -916,24 +958,40 @@ export default {
 				.get("/api/v1/userinfo/me/")
 				.then((response) => {
 					this.userInfo = response.data;
+					console.log(JSON.stringify(this.userInfo));
 					this.userIsActive = this.userInfo["is_online"];
 
-					this.getAllOffersWithOffset(this.userInfo.user_id);
-					this.getTerminatedOffersForUserWithOffset(this.userInfo.user_id);
-					this.getTerminatedOffersForRecruiterWithOffset(this.userInfo.user_id);
-					this.getReservedOffersForUserWithOffset(this.userInfo.user_id);
-					this.getReservedOffersForRecruiterWithOffset(this.userInfo.user_id);
+					if (this.userInfo.profile_is_completed){
+						this.getAllOffersWithOffset(this.userInfo.user_id);
+						this.getTerminatedOffersForUserWithOffset(this.userInfo.user_id);
+						this.getTerminatedOffersForRecruiterWithOffset(this.userInfo.user_id);
+						this.getReservedOffersForUserWithOffset(this.userInfo.user_id);
+						this.getReservedOffersForRecruiterWithOffset(this.userInfo.user_id);
+
+						// this.getAllOffers(this.userInfo.user_id);
+						// this.getTerminatedOffersForUser(this.userInfo.user_id);
+						// this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
+						// this.getReservedOffersForUser(this.userInfo.user_id);
+						// this.getReservedOffersForRecruiter(this.userInfo.user_id);
+					}
 					
-					// this.getAllOffers(this.userInfo.user_id);
-					// this.getTerminatedOffersForUser(this.userInfo.user_id);
-					// this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
-					// this.getReservedOffersForUser(this.userInfo.user_id);
-					// this.getReservedOffersForRecruiter(this.userInfo.user_id);
 					this.getImgUrl(this.userInfo.user_id);
+					// this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
+
+					//Mise à jour du userInfo dans le store.
+					//(important si plusieurs utilisateurs sur le même poste)
+					this.$store.dispatch("changeUserInfo", this.userInfo);
 				})
 				.catch((error) => {
 					console.log(error);
 				});
+		},
+		/**
+		 * Pour forcer l'ouverture de la modale des paramètres,
+		 * qui se trouve dans une view parent.
+		 */
+		openParentSettingModal(){
+			this.$emit('controlModalFromChild', true);
 		},
 		/***Méthodes Datepicker Début**/
 		/**
@@ -967,7 +1025,7 @@ export default {
 		//une plage de dates dans le datepicker.
 		if (this.range == null) {
 			this.datePickerError.push(errorMessage);
-			document.getElementById(weekDayIndex.toString()).blur();
+			document.getElementById(weekDayIndex.toString()).input();
 			return;
 		}
 
@@ -990,6 +1048,9 @@ export default {
 		} else {
 			this.datePickerError.push(errorMessage2);
 			document.getElementById(weekDayIndex.toString()).blur();
+			setTimeout(() => {
+				this.datePickerError.pop();
+			}, 4000);
 			return;
 		}
 
@@ -1465,6 +1526,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../node_modules/bulmaswatch/flatly/variables';
+
 .profile-toggle {
 	width: 8em !important;
 }
@@ -1547,5 +1610,11 @@ option[value=""][disabled] {
         opacity: 1;
         z-index: 1;
     }
+}
+/**
+Style uniquement appliqué sur le bouton de Création d'un service/Compléter le profil.
+ */
+.button-service:hover{
+	background-color: darken(#3488ce, 5%);
 }
 </style>

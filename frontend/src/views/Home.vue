@@ -1,17 +1,21 @@
 <template>
 	<div class="home">
-		<section class="hero is-medium is-dark mb-6">
+		<section class="hero is-large" :class="this.heroCollapsed ? 'collapse' : ''">
 			<div class="hero-body has-text-centered">
-				<p class="title mb-6">Bienvenue sur Communoservice</p>
-				<p class="subtitle">
+				<p class="title mb-6 is-size-1 has-text-weight-bold">Bienvenue sur Communoservice</p>
+				<p class="subtitle animate__animated animate__fadeInLeftBig">
 					Le meilleur site pour les services communautaires
 				</p>
+
+				<a href="#search" class="animate__animated animate__fadeInUp button is-primary is-rounded animate__delay-1s mt-4">
+					Rechercher
+				 <i class="fas fa-chevron-down ml-2" aria-hidden="true"></i>
+				</a>
 			</div>
 		</section>
-
 		<div class="columns is-multiline is-12">
 			<div class="column is-12">
-				<h2 class="is-size-2 has-text-centered">
+				<h2 id="search" class="is-size-2 has-text-centered">
 					Liste des services
 				</h2>
 			</div>
@@ -89,7 +93,7 @@
 				</nav>
 			</div>
 			<div class="column is-two-thirds">
-				<div class="box">
+				<div v-if="offers.length > 0" class="box">
 					<!-- <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress> -->
 					<div id="list-services" class="offers-container" @scroll="scrollAction">
 						<DetailedOffer
@@ -99,6 +103,9 @@
 							@click="showOfferModal(offer)"
 						/>
 					</div>
+				</div>
+				<div v-else  class="box has-text-centered">
+				Aucune offre disponible à proximité.
 				</div>
 
 				<div class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
@@ -291,11 +298,18 @@
 											:title="offerUserInfo.is_online ? 'Actif' : 'Inactif'"
 										></span>
 									</figure>
-									<p>
-										<span class="title is-4 is-bold">
-											{{
-												offerUserInfo.first_name + " " + offerUserInfo.last_name
-											}}
+									<p class="mt-2">
+										<span
+											class="title is-bold"
+											v-if="offerUserInfo.first_name && offerUserInfo.last_name"
+										>
+											{{ offerUserInfo.first_name + " " + offerUserInfo.last_name }}
+										</span>
+										<span
+											class="title is-bold has-text-white"
+											v-else
+										>
+											{{ offerUserInfo.username }}
 										</span>
 									</p>
 								</div>
@@ -307,10 +321,6 @@
 									</p>
 									<p>services rendus</p>
 								</div>
-								<!-- <div class="column has-text-centered">
-									<p class="has-text-weight-bold is-size-3">---</p>
-									<p>services actifs</p>
-								</div> -->
 								<div class="column has-text-centered is-4-desktop">
 									<p class="has-text-weight-bold is-size-3">
 										{{ offerUserInfo.avg_rating_as_employee }}/5
@@ -332,8 +342,9 @@
 				</div>
 				<div v-if="currentStep == 3">
 					<div v-if="$store.state.isAuthenticated">
-						<div class="has-text-centered" v-if="!clickedSend">
-							<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
+						<div v-if="$store.state.userInfo.profile_is_completed">
+							<div class="has-text-centered" v-if="!clickedSend">
+								<h2 class="title mb-5">Veuillez confirmer votre demande</h2>
 								<div class="columns is-mobile is-flex-wrap-wrap">
 									<div class="column has-text-centered is-6-desktop">
 										<label class="label is-size-5">Employé</label>
@@ -360,38 +371,48 @@
 										</span>
 									</div>
 								</div>
-							<label class="checkbox mb-5">
-								<input type="checkbox" v-model="confirmationCheckbox" />
-								Je confirme avoir validé ma demande
-							</label>
+								<label class="checkbox mb-5">
+									<input type="checkbox" v-model="confirmationCheckbox" />
+									Je confirme avoir validé ma demande
+								</label>
+							</div>
+							<div
+								v-if="clickedSend"
+								:class="isFetchingOffers ? 'is-loading' : ''"
+							>
+								<h2 class="title has-text-centered mb-5">
+									Demande envoyée avec succès
+								</h2>
+								<div class="animate__animated animate__zoomInDown">
+									<svg
+										class="checkmark"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 52 52"
+									>
+										<circle
+											class="checkmark__circle"
+											cx="26"
+											cy="26"
+											r="25"
+											fill="none"
+										/>
+										<path
+											class="checkmark__check"
+											fill="none"
+											d="M14.1 27.2l7.1 7.2 16.7-16.8"
+										/>
+									</svg>
+								</div>
+							</div>
 						</div>
 						<div
-							v-if="clickedSend"
-							:class="isFetchingOffers ? 'is-loading' : ''"
+							v-else
+							class="icon-text has-text-warning is-justify-content-center subtitle"
 						>
-							<h2 class="title has-text-centered mb-5">
-								Demande envoyée avec succès
-							</h2>
-							<div class="animate__animated animate__zoomInDown">
-								<svg
-									class="checkmark"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 52 52"
-								>
-									<circle
-										class="checkmark__circle"
-										cx="26"
-										cy="26"
-										r="25"
-										fill="none"
-									/>
-									<path
-										class="checkmark__check"
-										fill="none"
-										d="M14.1 27.2l7.1 7.2 16.7-16.8"
-									/>
-								</svg>
-							</div>
+							<span class="icon">
+								<i class="fas fa-exclamation-triangle"></i>
+							</span>
+							<span class="has-text-black">Vous devez <a href="#" v-on:click="this.openParentSettingModal()">compléter votre profil</a> avant de pouvoir réserver!</span>
 						</div>
 					</div>
 					<div
@@ -401,9 +422,7 @@
 						<span class="icon">
 							<i class="fas fa-exclamation-triangle"></i>
 						</span>
-						<span class="has-text-black"
-							>Vous devez être connecté pour pouvoir réserver !</span
-						>
+						<span class="has-text-black">Vous devez être connecté pour pouvoir réserver!</span>
 					</div>
 				</div>
 			</section>
@@ -438,13 +457,12 @@
 					class="button is-primary is-rounded w-100"
 					v-if="currentStep == 3 && !step3Completed"
 					:disabled="
-						currentStep == 3 &&
-							(!confirmationCheckbox || !$store.state.isAuthenticated)
-					"
+						currentStep == 3 && (!confirmationCheckbox || !$store.state.isAuthenticated || !$store.state.userInfo.profile_is_completed)"
 					:title="
 						currentStep == 3 &&
 						!confirmationCheckbox &&
-						$store.state.isAuthenticated
+						$store.state.isAuthenticated &&
+						$store.state.userInfo.profile_is_completed
 							? 'Vous devez confirmer votre demande'
 							: ''
 					"
@@ -466,12 +484,17 @@ import DetailedOffer from "@/components/DetailedOffer";
 import StepsWizard from "bulma-steps/dist/js/bulma-steps.js";
 export default {
 	name: "Home",
+	components: {
+		DetailedOffer,
+	},
+	emits: ['controlModalFromChild'],
 	data() {
 		return {
 			// Offer modal
 			currentStep: 1,
 			step2Completed: false,
 			step3Completed: false,
+			heroCollapsed: false,
 			offerToShow: Object,
 			offerUserInfo: Object,
 			offerModalActive: false,
@@ -517,9 +540,6 @@ export default {
 			maxDate: null,
 		};
 	},
-	components: {
-		DetailedOffer,
-	},
 	mounted() {
 		document.title = "Accueil | Communoservice";
 		// this.getAllOffers();
@@ -529,6 +549,25 @@ export default {
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
 		this.getServiceTypes();
+		/*Un "observer" qui surveille tout
+		changement dans le state concernant le userInfo.*/
+		this.$store.watch(
+      (state)=>{
+        return this.$store.getters.getUserInfo;
+      },
+	  /**
+	   * Lorsque la valeur du userInfo change, on récupère
+	   * à nouveau les offres actives.
+	   */
+      (val)=>{
+	//    this.getAllOffers();
+		this.getAllOffersWithOffset();
+      },
+      {
+		  //À spécifier si on observe les propriétés "nested" d'un objet.
+        deep:true
+      }
+      );
 	},
 	watch: {
     	dates(val) {
@@ -850,7 +889,10 @@ export default {
 			this.select_serviceday = "";
 
 			this.getAllOffersWithOffset();
-		}
+		},
+		openParentSettingModal(){
+			this.$emit('controlModalFromChild', true);
+		},
 	},
 };
 </script>
@@ -969,4 +1011,20 @@ export default {
         z-index: 1;
     }
 }
+	/**
+	Style uniquement appliqué sur le bouton des paramètres.
+	*/
+	.button-service:hover{
+		background-color: darken(#3488ce, 5%);
+	}
+
+	.hero{
+		height: 100vh;
+		overflow: hidden;
+	}
+	
+	.collapse{
+		height: 0px;
+		transition: height 1s ease-in-out;
+	}
 </style>

@@ -37,9 +37,16 @@
 							              @error="replaceByDefault"
                           />
                         </figure>
+                            <span v-if="!this.isValidPictureProfile" class="icon is-info tooltip">
+                            <i class="fas fa-exclamation-circle has-text-danger"></i>
+                            <span class="tooltiptext has-background-danger">
+                            Type de fichier invalide. Formats acceptés: .jpg, .jpeg, .png.
+                            </span>
+                          </span>
                         <div class="file is-centered mt-5">
                           <label class="file-label">
-                            <input class="file-input" type="file" name="profile_picture" @change="onImageSelected" accept=".jpg, .jpeg, .png">
+                            <input class="file-input" type="file" name="profile_picture" @change="onImageSelected" accept=".jpg, .jpeg, .png"
+                            @input="validateImage(this.selectedImageFile)">
                             <span class="file-cta">
                               <span class="file-icon">
                                 <i class="fas fa-upload"></i>
@@ -57,8 +64,15 @@
                             <div class="field">
                                 <label class="label">Prénom</label>
                                 <div class="control">
-                                    <input class="input" type="text" :placeholder="this.userInfo.first_name"
-                                        v-model="this.updatedUserInfo.first_name">
+                                    <input class="input" type="text" :class="!this.validations['isValidFirstName'] ? 'is-danger': ''" :placeholder="this.userInfo.first_name"
+                                        v-model="this.updatedUserInfo.first_name"
+                                        @input="validateFirstName">
+                                        <span v-if="!this.validations['isValidFirstName']" class="icon is-info tooltip">
+                                        <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                        <span class="tooltiptext has-background-danger">
+                                         Le prénom peut être composé de lettres, d'espaces ou du caractère '-'.
+                                        </span>
+                                      </span>
                                 </div>
                             </div>
                           </div>
@@ -66,8 +80,15 @@
                             <div class="field">
                                 <label class="label">Nom</label>
                                 <div class="control">
-                                    <input class="input" type="text" :placeholder="this.userInfo.last_name"
-                                        v-model="this.updatedUserInfo.last_name">
+                                    <input class="input" type="text" :class="!this.validations['isValidLastName'] ? 'is-danger': ''" :placeholder="this.userInfo.last_name"
+                                        v-model="this.updatedUserInfo.last_name"
+                                        @input="validateLastName">
+                                        <span v-if="!this.validations['isValidLastName']"  class="icon is-info tooltip">
+                                        <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                        <span class="tooltiptext has-background-danger">
+                                         Le prénom peut être composé de lettres, d'espaces ou du caractère '-'.
+                                        </span>
+                                      </span>
                                 </div>
                             </div>
                           </div>
@@ -76,8 +97,15 @@
                         <div class="field">
                             <label class="label">Courriel</label>
                             <div class="control">
-                                <input class="input" type="email" :placeholder="this.userInfo.email"
-                                    v-model="this.updatedUserInfo.email">
+                                <input class="input" type="email" :class="!this.validations['isValidEmail'] ? 'is-danger': ''"  :placeholder="this.userInfo.email"
+                                    v-model="this.updatedUserInfo.email"
+                                    @input="validateEmail">
+                                      <span v-if="!this.validations['isValidEmail']"  class="icon is-info tooltip">
+                                      <i class="fas fa-exclamation-circle has-text-danger"></i>
+                                      <span class="tooltiptext has-background-danger">
+                                        Le format de l'adresse n'est pas valide.
+                                      </span>
+                                    </span>
                             </div>
                         </div>
 
@@ -128,7 +156,13 @@
         currentTab: 0,
         selectedImageFile: null,
         fileErrors : [],
-        userImageURL : ''
+        userImageURL : '',
+        validations:{
+          isValidFirstName:true,
+          isValidLastName:true,
+          isValidEmail:true
+        },
+        isValidPictureProfile:true
       };
     },
     beforeCreate() {},
@@ -198,7 +232,59 @@
           console.log(error);
         });
       },
+      validateFirstName(){
+        let regexName = new RegExp(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$/);
+        this.updatedUserInfo.first_name
+         if (!regexName.test(this.updatedUserInfo.first_name)){
+          this.validations['isValidFirstName']=false;
+        }else this.validations['isValidFirstName']=true;
+      },
+      validateLastName(){
+        let regexName = new RegExp(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$/);
+        this.updatedUserInfo.last_name
+        if (!regexName.test(this.updatedUserInfo.last_name)){
+          this.validations['isValidLastName']=false;
+        }else this.validations['isValidLastName']=true; 
+      },
+      validateEmail(){
+        let regexEmail = RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/);
+        if (!regexEmail.test(this.updatedUserInfo.email)){
+           this.validations['isValidEmail']=false;
+        }else this.validations['isValidEmail']=true;
+      },
+      /**
+       * Vérifications supplémentaires sur tous les champs.
+       */
+      validateForm(){
+        
+       let regexName = new RegExp(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\-\s]{2,15}$/);
+       let regexEmail = RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/);
+
+        if (!regexName.test(this.updatedUserInfo.first_name)){
+          this.validations['isValidFirstName']=false;
+        }else this.validations['isValidFirstName']=true;
+
+        if (!regexName.test(this.updatedUserInfo.last_name)){
+          this.validations['isValidLastName']=false;
+        }else this.validations['isValidLastName']=true;
+
+         if (!regexEmail.test(this.updatedUserInfo.email)){
+           this.validations['isValidEmail']=false;
+        }else this.validations['isValidEmail']=true;
+
+        console.log("this.validations['isValidFirstName'] : "+this.validations['isValidFirstName']);
+        console.log(" this.validations['isValidLastName'] : "+this.validations['isValidLastName']);
+        console.log("this.validations['isValidEmail'] :"+this.validations['isValidEmail'] );
+
+        return this.validations['isValidFirstName'] && this.validations['isValidLastName']  && this.validations['isValidEmail'];
+      }
+      ,
       async validateUserInfo(){
+
+      if (!this.validateForm()){
+        return;
+      }
+ 
         let data = {}
         if(this.updatedUserInfo.first_name != this.userInfo.first_name){
           data.first_name = this.updatedUserInfo.first_name;
@@ -226,6 +312,10 @@
           .put('api/v1/userinfo/me/update/', data)
           .then((response)=>{
             this.userInfo = response.data;
+
+            //Mise à jour du userInfo dans le store.
+            this.$store.dispatch("changeUserInfo", this.userInfo);
+
             toast({
               message: "Informations sauvegardées avec succès!",
               type: "is-success",
@@ -317,6 +407,7 @@
           .post("api/v1/userinfo/me/profile-image/",fd , config)
           .then((response)=>{
             // Set new image 
+            this,isValidPictureProfile=true;
           })
           .catch((error) =>{
             console.log(error);
@@ -334,25 +425,16 @@
             });
           });
         }else{
-          toast({
-            message: "Type de fichier invalide. Formats acceptés: .jpg, .jpeg, .png",
-            type: "is-danger",
-            dismissible: false,
-            pauseOnHover: false,
-            duration: 3000,
-            position: "bottom-right",
-            animate: {
-              in: "fadeInRightBig",
-              out: "fadeOutRightBig",
-            },
-          });
-          this.fileErrors.push("Type de fichier invalide. Formats acceptés: .jpg, .jpeg, .png");
+       
+          this.isValidPictureProfile=false;
         }
       },
       validateImage(file){
+        if (!file){
         const fileType = file['type'];
         const validImageTypes = ['image/jpeg', 'image/png'];
         return validImageTypes.includes(fileType) && file.size<1048576;
+        }
       },
       replaceByDefault(e){
 			  e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
@@ -380,4 +462,26 @@
   .modal-card-body{
     min-height: 434px!important;
   }
+  .tooltip {
+	position: relative;
+	float: right;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 200px;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 10;
+	top: 100%;
+	right: 0;
+	margin-left: -200px;
+}
+
+.tooltip:hover .tooltiptext {
+  	visibility: visible;
+}
 </style>
