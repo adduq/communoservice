@@ -1,4 +1,5 @@
 <template>
+	<a href="#search">
 		<div class="card mb-3 h-140">
 			<div class="card-content is-pointer-cursor" 
 				:class="accountPage ? 'pb-0 mb-4' : ''"
@@ -115,6 +116,7 @@
 				</footer>
 			</div>
 		</div>
+	</a>
 </template>
 
 <script>

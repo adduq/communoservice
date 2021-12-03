@@ -16,7 +16,7 @@
 		<div class="columns is-multiline is-12">
 			<div class="column is-12">
 				<h2 id="search" class="is-size-2 has-text-centered">
-					Liste des services
+					{{$store.state.isAuthenticated && $store.state.userInfo.profile_is_completed ? 'Services offerts dans mon entourage': 'Liste des services actifs'}}
 				</h2>
 			</div>
 		</div>
@@ -93,9 +93,12 @@
 				</nav>
 			</div>
 			<div class="column is-two-thirds">
-				<div v-if="offers.length > 0" class="box">
-					<!-- <progress class="progress is-small is-primary" v-if="isFetchingOffers"></progress> -->
-					<div id="list-services" class="offers-container" @scroll="scrollAction">
+				<div class="box is-relative offers-box">
+					<div class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
+						<div class="is-loading" :class="isFetchingOffersOnScroll ? 'loader' : ''">
+						</div>
+					</div>
+					<div id="list-services" class="offers-container" @scroll="scrollAction" v-if="this.offers.length > 0">
 						<DetailedOffer
 							v-for="offer in offers"
 							v-bind:key="offer.id"
@@ -103,13 +106,9 @@
 							@click="showOfferModal(offer)"
 						/>
 					</div>
-				</div>
-				<div v-else  class="box has-text-centered">
-				Aucune offre disponible à proximité.
-				</div>
-
-				<div class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
-    				<div class="is-loading" :class="isFetchingOffersOnScroll ? 'loader' : ''"></div>
+					<p v-if="!this.isFetchingOffersOnScroll && this.offers.length == 0" class="mt-4 is-size-4 has-text-centered">
+						Aucune offre disponible à proximité.
+					</p>
 				</div>
 			</div>
 		</div>
@@ -428,7 +427,7 @@
 			</section>
 			<footer class="modal-card-foot is-flex is-justify-content-space-evenly">
 				<button
-					class="button is-primary is-rounded w-100"
+					class="button is-primary is-rounded w-200"
 					v-if="currentStep > 1 && !step3Completed"
 					@click="currentStep--"
 				>
@@ -438,7 +437,7 @@
 					</span>
 				</button>
 				<button
-					class="button is-primary is-rounded w-100"
+					class="button is-primary is-rounded w-200"
 					v-if="currentStep < 3 && !step3Completed"
 					:disabled="currentStep == 2 && this.dates == null"
 					:title="currentStep == 2 && this.dates == null
@@ -454,7 +453,7 @@
 					</span>
 				</button>
 				<button
-					class="button is-primary is-rounded w-100"
+					class="button is-primary is-rounded w-200"
 					v-if="currentStep == 3 && !step3Completed"
 					:disabled="
 						currentStep == 3 && (!confirmationCheckbox || !$store.state.isAuthenticated || !$store.state.userInfo.profile_is_completed)"
@@ -901,24 +900,24 @@ export default {
 	@import "../../node_modules/bulma-steps";
 
 	.offers-container {
-	max-height: 500px;
-	overflow: hidden;
-	overflow-y: scroll;
-	// Pour Firefox
-	scrollbar-width: thin;
-	scrollbar-color: #aaaaaa rgba(0, 0, 0, 0);
+		max-height: 500px;
+		overflow: hidden;
+		overflow-y: scroll;
+		// Pour Firefox
+		scrollbar-width: thin;
+		scrollbar-color: #aaaaaa rgba(0, 0, 0, 0);
 
-	&::-webkit-scrollbar {
-		width: 14px;
-	}
+		&::-webkit-scrollbar {
+			width: 14px;
+		}
 
-	&::-webkit-scrollbar-thumb {
-		border: 4px solid rgba(0, 0, 0, 0);
-		background-clip: padding-box;
-		border-radius: 9999px;
-		background-color: #aaaaaa;
+		&::-webkit-scrollbar-thumb {
+			border: 4px solid rgba(0, 0, 0, 0);
+			background-clip: padding-box;
+			border-radius: 9999px;
+			background-color: #aaaaaa;
+		}
 	}
-}
 
 	.ch-5 {
 		width: 5ch;
@@ -982,35 +981,33 @@ export default {
 	.step-item {
 		flex-basis: 0 !important;
 	}
-
-.loader-wrapper {
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 1s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 16px;
-	position: absolute;
-    top: 85%;
-    left: 0;
-	background-color: rgba(255, 255, 255, 0.4);
-
-        .loader {
-            height: 80px;
-            width: 80px;
-			border: 4px solid darken($color: #dee2e5, $amount: 30);
-    		border-right-color: transparent;
-    		border-top-color: transparent;
-        }
-
-    &.is-active {
-        opacity: 1;
-        z-index: 1;
-    }
-}
+	.loader-wrapper {
+		height: 94%;
+    	width: 95%;
+		opacity: 0;
+		z-index: -1;
+		transition: opacity 1s;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 16px;
+		position: absolute;
+		background-color: rgba(255, 255, 255, 0.4);
+			.loader {
+				height: 80px;
+				width: 80px;
+				border: 4px solid darken($color: #dee2e5, $amount: 30);
+				border-right-color: transparent;
+				border-top-color: transparent;
+			}
+		&.is-active {
+			opacity: 1;
+			z-index: 1;
+		}
+	}
+	.offers-box{
+		min-height: 540px;
+	}
 	/**
 	Style uniquement appliqué sur le bouton des paramètres.
 	*/

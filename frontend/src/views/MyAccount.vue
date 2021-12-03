@@ -387,24 +387,24 @@
 						</section>
 
 						<footer
-							class="modal-card-foot is-flex is-justify-content-center"
+							class="modal-card-foot is-flex is-justify-content-space-evenly"
 						>
 							<button
-								class="button is-success w-200"
+								class="button is-success is-rounded w-200"
 								v-on:click="addNewOffer"
 								v-if="!toModifiedOffer"
 							>
 								Créer
 							</button>
 							<button
-								class="button is-success w-200"
+								class="button is-success is-rounded w-200"
 								v-on:click="validateForm"
 								v-else
 							>
 								Modifier
 							</button>
 							<button
-								class="button is-danger w-200"
+								class="button is-danger is-rounded w-200"
 								v-on:click="closeOfferModal()"
 							>
 								Fermer
@@ -431,7 +431,7 @@
 							<a
 								v-if="$store.state.userInfo.profile_is_completed"
 								href="#"
-								class="button  button-service is-info mt-5"
+								class="button button-service is-info mt-5 w-200"
 								v-on:click="openCreationModal()"
 							>
 								<span class="icon is-small mr-3">
@@ -483,11 +483,10 @@
 					</div>
 				</div>
 			</template>
-
 			<div class="loader-wrapper" :class="isFetchingOffersOnScroll ? 'is-active' : ''">
-    			<div class="is-loading" :class="isFetchingOffersOnScroll ? 'loader' : ''"></div>
+				<div class="is-loading" :class="isFetchingOffersOnScroll ? 'loader' : ''">
+				</div>
 			</div>
-
 			<template v-if="profileSwitch">
 				<div class="column">
 					<div class="box">
@@ -1597,7 +1596,6 @@ option[value=""][disabled] {
     border-radius: 16px;
 	position: absolute;
 	background-color: rgba(255, 255, 255, 0.4);
-
         .loader {
             height: 80px;
             width: 80px;
@@ -1605,7 +1603,6 @@ option[value=""][disabled] {
     		border-right-color: transparent;
     		border-top-color: transparent;
         }
-
     &.is-active {
         opacity: 1;
         z-index: 1;

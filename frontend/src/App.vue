@@ -154,10 +154,10 @@
 					dismissible: false,
 					pauseOnHover: false,
 					duration: 3000,
-					position: "center",
+					position: "bottom-right",
 					animate: {
 						in: "fadeInRightBig",
-						out: "fadeOutLeftBig",
+						out: "fadeOutRightBig",
 					},
 				});
 			})
@@ -206,94 +206,94 @@
 </script>
 
 <style lang="scss">
-@import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
-@import "../node_modules/@creativebulma/bulma-badge/dist/bulma-badge.css";
-.navbar {
-	border-radius: 0 !important;
-}
+	@import "../node_modules/bulmaswatch/flatly/bulmaswatch.scss";
+	@import "../node_modules/@creativebulma/bulma-badge/dist/bulma-badge.css";
+	.navbar {
+		border-radius: 0 !important;
+	}
 
-.w-80 {
-	width: 80px !important;
-}
+	.w-80 {
+		width: 80px !important;
+	}
 
-.w-200 {
-	width: 200px;
-}
+	.w-200 {
+		width: 200px;
+	}
 
-.bt-1 {
-	border-top: 1px solid #d3d3d3;
-}
+	.bt-1 {
+		border-top: 1px solid #d3d3d3;
+	}
 
-.panel-section {
-	border-bottom: 1px solid #ededed;
-	padding: 10px 0 10px 0;
-}
+	.panel-section {
+		border-bottom: 1px solid #ededed;
+		padding: 10px 0 10px 0;
+	}
 
-.datepicker {
-	background-color: white;
-	border-color: #dee2e5;
-	border-radius: 0.4em;
-	color: #2b3c4e;
-	border-width: 2px;
-	border-style: solid;
-	font-size: 1em;
-	padding-bottom: calc(0.5em - 1px);
-	padding-left: calc(0.75em - 1px);
-	padding-right: calc(0.75em - 1px);
-	padding-top: calc(0.5em - 1px);
-}
-.active-icon {
-	height: 20px!important;
-	min-width: 20px!important;
-	right: 14%!important;
-	bottom: 14%!important;
-	background-color: lime!important;
-	box-shadow: 0px 0px 8px 0px lime!important;
-}
-.not-active-icon {
-	height: 20px!important;
-	min-width: 20px!important;
-	right: 14%!important;
-	bottom: 14%!important;
-	background-color: grey!important;
-}
+	.datepicker {
+		background-color: white;
+		border-color: #dee2e5;
+		border-radius: 0.4em;
+		color: #2b3c4e;
+		border-width: 2px;
+		border-style: solid;
+		font-size: 1em;
+		padding-bottom: calc(0.5em - 1px);
+		padding-left: calc(0.75em - 1px);
+		padding-right: calc(0.75em - 1px);
+		padding-top: calc(0.5em - 1px);
+	}
+	.active-icon {
+		height: 20px!important;
+		min-width: 20px!important;
+		right: 14%!important;
+		bottom: 14%!important;
+		background-color: lime!important;
+		box-shadow: 0px 0px 8px 0px lime!important;
+	}
+	.not-active-icon {
+		height: 20px!important;
+		min-width: 20px!important;
+		right: 14%!important;
+		bottom: 14%!important;
+		background-color: grey!important;
+	}
 
-.tagline {
-	padding: 20px 0;
-	font-size: 16px;
-	line-height: 1.4;
-}
+	.tagline {
+		padding: 20px 0;
+		font-size: 16px;
+		line-height: 1.4;
+	}
 
-.avatar {
-	object-fit: cover;
-	border-radius: 50%;
-	width: 150px;
-	height: 150px;
-	box-shadow: 0px 2px 8px 3px darkgrey;
-}
+	.avatar {
+		object-fit: cover;
+		border-radius: 50%;
+		width: 150px;
+		height: 150px;
+		box-shadow: 0px 2px 8px 3px darkgrey;
+	}
 
-p.title.is-bold {
-	font-weight: bold;
-}
+	p.title.is-bold {
+		font-weight: bold;
+	}
 
-.h-100p {
-	height: 100%;
-}
+	.h-100p {
+		height: 100%;
+	}
 
-.has-image-centered {
-	margin-left: auto;
-	margin-right: auto;
-}
+	.has-image-centered {
+		margin-left: auto;
+		margin-right: auto;
+	}
 
-.round-shadow {
-	border-radius: 50%;
-	box-shadow: 0px 0px 10px #ccc;
-}
+	.round-shadow {
+		border-radius: 50%;
+		box-shadow: 0px 0px 10px #ccc;
+	}
 
-.w-100 {
-	width: 100px;
-}
-html {
-	scroll-behavior: smooth!important;
-}
+	.w-100 {
+		width: 100px;
+	}
+	html {
+		scroll-behavior: smooth!important;
+	}
 </style>

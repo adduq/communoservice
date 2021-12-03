@@ -127,8 +127,8 @@
                   </div>
                 </section>
                 <footer class="modal-card-foot is-flex is-justify-content-space-evenly">
-                    <button class="button is-success is-rounded w-100" @click="validateUserInfo()">Sauvegarder</button>
-                    <button class="button is-danger is-rounded w-100" @click="$emit('exitSettingsModal', true)">Fermer</button>
+                    <button class="button is-success is-rounded w-200" @click="validateUserInfo()">Sauvegarder</button>
+                    <button class="button is-danger is-rounded w-200" @click="$emit('exitSettingsModal', true)">Fermer</button>
                 </footer>
             </div>
         </div>
