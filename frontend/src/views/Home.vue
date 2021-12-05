@@ -832,7 +832,13 @@ export default {
 						})
 					.then((res) => {
 						this.offers = this.offers.concat(res.data);
-
+						//Filtre pour retirer les offres expirées
+						function keepEndDateAfterToday(offer) {
+							let today= new Date();
+ 						 	let offerEndDate = new Date(offer.end_date);
+						  return offerEndDate > today;
+						}
+						this.offers= this.offers.filter(keepEndDateAfterToday);
 						this.offset = this.offset + 5;
 					})
 					.catch((error) => {

@@ -1,6 +1,7 @@
 <template>
 	<a href="#search">
-		<div class="card mb-3 h-140">
+		<div class="card mb-3 h-140"
+		:class="this.mustHaveChangeDateIcon ? 'has-background-danger-light': ''">
 			<div class="card-content is-pointer-cursor" 
 				:class="accountPage ? 'pb-0 mb-4' : ''"
 				@click="$emit('click', this.offer)">
@@ -26,9 +27,14 @@
 				<div class="has-text-danger" v-if="offer.end_date != null">
 					<time datetime="{{offer.end_date}}">
 						Valide jusqu'au {{ offer.end_date }}
+					<span v-if="mustHaveChangeDateIcon" class="icon is-info tooltip is-pulled-rigth">
+					<i class="fas fa-exclamation-circle has-text-danger"></i>
+					<span class="tooltiptext has-background-danger">
+					L'offre n'est plus visible par les autres utilisateurs. Modifiez la date d'expiration pour rendre l'offre disponible.
+					</span>
+					</span>
 					</time>
 				</div>
-
 				<div class="is-family-monospace is-flex is-justify-content-flex-end mt-3"
 					:class="accountPage ? '' : 'is-size-4-desktop'">
 					<span
@@ -133,10 +139,14 @@ export default {
 		return {
 			deleteConfirmationModal: false,
 			imgPath: this.MEDIA_URL + "pfp_default.jpg",
+			mustHaveChangeDateIcon:false
 		}
 	},
 	mounted() {
 		this.getImgUrl();
+		if ( document.URL.includes("mon-compte") ) {
+			this.addChangeEndDate();
+		}
 	},
 	methods: {
 		async deleteOffer() {
@@ -172,6 +182,13 @@ export default {
 				.catch((err) => {
 					console.log(err);
 				});
+		},
+		addChangeEndDate(){
+			let offerEndDate = new Date(this.offer.end_date);
+			let today = new Date();
+			if(offerEndDate<today){
+			this.mustHaveChangeDateIcon=true;
+			}
 		}
 	}
 };
@@ -180,5 +197,28 @@ export default {
 <style scoped>
 .is-pointer-cursor {
 	cursor: pointer;
+}
+
+.tooltip {
+	position: relative;
+
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 200px;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 10;
+	top: 100%;
+	right: 0;
+	margin-left: -200px;
+}
+
+.tooltip:hover .tooltiptext {
+  	visibility: visible;
 }
 </style>
