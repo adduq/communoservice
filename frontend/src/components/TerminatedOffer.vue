@@ -4,7 +4,12 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-64x64">
-						<img class="is-rounded" :src="imgPath" />
+						<!-- <img class="is-rounded" :src="imgPath" /> -->
+						<img
+							class="is-rounded"
+							:src="this.MEDIA_URL + 'pfp_' + imgId + '.jpg'" 
+							@error="replaceByDefault"
+						/>
 					</figure>
 				</div>
 				<div class="media-content">
@@ -30,7 +35,9 @@
 					<p v-else>L'offre n'a pas été achevée.</p>
 					
 					<p v-if="this.isRecruiterCard">
-						Employé : {{ terminatedOffer.id_user.username }}
+						Employé : {{ terminatedOffer.id_user.first_name }}
+						{{ terminatedOffer.id_user.last_name }}
+						({{ terminatedOffer.id_user.username }})
 					</p>
 					<p v-else>
 						Recruteur : {{ terminatedOffer.id_recruiter.first_name }}
@@ -91,26 +98,35 @@ export default {
 				CANCEL: 2,
 				NO_PRESENCE: 3,
 			},
-			imgPath: this.MEDIA_URL + "pfp_default.jpg",
+			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
+			imgId: "default",
 		};
 	},
+	// mounted() {
+	// 	let user_id = this.$parent.profileSwitch ? this.terminatedOffer.id_user.id : this.terminatedOffer.id_recruiter.id;
+	// 	this.getImgUrl(user_id);
+	// },
 	mounted() {
-		let user_id = this.$parent.profileSwitch ? this.terminatedOffer.id_user.id : this.terminatedOffer.id_recruiter.id;
-		this.getImgUrl(user_id);
+		this.imgId = this.$parent.profileSwitch ? this.terminatedOffer.id_user.id : this.terminatedOffer.id_recruiter.id;
 	},
 	methods: {
-		async getImgUrl(user_id) {			
-			await axios
-				.get(
-					`/api/v1/userinfo/${user_id}/profile-image/`
-				)
-				.then((res) => {
-					this.imgPath = this.MEDIA_URL + res.data.imgName
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		}
+		// async getImgUrl(user_id) {			
+		// 	await axios
+		// 		.get(
+		// 			`/api/v1/userinfo/${user_id}/profile-image/`
+		// 		)
+		// 		.then((res) => {
+		// 			this.imgPath = this.MEDIA_URL + res.data.imgName
+		// 		})
+		// 		.catch((err) => {
+		// 			console.log(err);
+		// 		});
+		// }
+		replaceByDefault(e) {
+			console.clear();
+
+			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+		},
 	}
 };
 </script>
