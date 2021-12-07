@@ -9,7 +9,12 @@
 							<figure
 								class="image is-128x128 round-shadow has-image-centered"
 							>
-								<img class="is-rounded" :src="imgPath" />
+								<!-- <img class="is-rounded" :src="imgPath" /> -->
+								<img
+									class="is-rounded"
+									:src="this.MEDIA_URL + 'pfp_' + userInfo.user_id + '.jpg'" 
+									@error="replaceByDefault"
+								/>
 								<span
 									class="badge is-bottom-right"
 									:class="
@@ -391,17 +396,9 @@
 						>
 							<button
 								class="button is-success is-rounded w-200"
-								v-on:click="addNewOffer"
-								v-if="!toModifiedOffer"
-							>
-								Créer
-							</button>
-							<button
-								class="button is-success is-rounded w-200"
 								v-on:click="validateForm"
-								v-else
 							>
-								Modifier
+								{{ toModifiedOffer ? 'Modifier' : 'Créer' }}
 							</button>
 							<button
 								class="button is-danger is-rounded w-200"
@@ -425,6 +422,7 @@
 								:offer="offer"
 								:accountPage="true"
 								@click="forModifiedOffer(offer)"
+								ref="{{activeOffers}}"
 							/>
 						</div>
 						<div class="is-flex is-justify-content-center">
@@ -539,20 +537,15 @@
 						aria-label="close"
 					></button>
 				</header>
-				<section class="modal-card-body" v-if="!toModifiedOffer">
-					Êtes-vous certain de vouloir créer ce service?
-				</section>
-				<section class="modal-card-body" v-else>
-					Êtes-vous certain de vouloir modifier ce service?
+				<section class="modal-card-body">
+					Êtes-vous certain de vouloir {{ toModifiedOffer ? 'modifier' : 'créer' }} ce service?
 				</section>
 				<footer class="modal-card-foot">
 					<button class="button is-danger w-100" @click="closeOfferModal()">
 						Non
 					</button>
-					<button @click="addNewOffer" class="button is-success w-100" v-if="!toModifiedOffer">
-						Oui
-					</button>
-					<button @click="sendModifiedOffer" class="button is-success w-100" v-else>
+					<button @click="toModifiedOffer ? sendModifiedOffer() : addNewOffer()" 
+							class="button is-success w-100">
 						Oui
 					</button>
 				</footer>
@@ -590,6 +583,7 @@ export default {
 			serviceTypes: [],
 
 			modalCreateisActive: false,
+			formIsValid: false,
 			isFetchingOffersOnScroll: false,
 			totalOffer: 0,
 			totalReservedOfferRecruiter: 0,
@@ -612,7 +606,7 @@ export default {
 			},
 			profileSwitch: false,
 			userIsActive: true,
-			imgPath: this.MEDIA_URL + "pfp_default.jpg",
+			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			userInfo: {},
 			validations:{
 				isValidServiceType:true,
@@ -807,11 +801,13 @@ export default {
 			this.validations['isValidHourlyRate']=true;	
 			}
 		},
-		validateDescription(){
-		this.description = this.description.trim();
-		if (!this.description) {
-			this.validations['isValidDescription']=false;
-		}else this.validations['isValidDescription']=true;
+		validateDescription() {		
+			if (!this.description || /^\s*$/.test(this.description)) {
+				this.description = this.description.trim();
+				this.validations['isValidDescription']=false;
+			}
+			else
+				this.validations['isValidDescription']=true;
 		},
 		validateDispo(){
 			if (!this.isAlwaysDispo){
@@ -840,8 +836,10 @@ export default {
 			this.validateDescription();
 			this.validateDispo();
 
-			return this.validations['isValidServiceType'] && this.validations['isValidHourlyRate'] && this.validations['isValidMaxDistance'] && this.validations['isValidDispo'] && this.validations['isValidDescription'];
+			//return this.validations['isValidServiceType'] && this.validations['isValidHourlyRate'] && this.validations['isValidMaxDistance'] && this.validations['isValidDispo'] && this.validations['isValidDescription'];
 			
+			this.modalCreateisActive = this.formIsValid = this.validations['isValidServiceType'] && this.validations['isValidHourlyRate'] && this.validations['isValidMaxDistance'] && this.validations['isValidDispo'] && this.validations['isValidDescription'];
+			this.creationModalIsActive = !this.modalCreateisActive;
 		},
 		/**
 		 * Envoi de la nouvelle offre.
@@ -849,92 +847,97 @@ export default {
 		async addNewOffer() {
 			this.isLoading = true;
 
-			if (!this.validateForm()){
-				return;
-			}
-			//Même si l'utilisateur n'a pas cliqué sur un jour de semaine,
-			//on met à true les jours de semaine qui ont une correspondance avec ses disponibilitésé
-			if (this.isAlwaysDispo){
-				this.toggleAllDayButtonsToTrue();
-			}
-			else{
-				if (this.isDatePickerPresent){
-					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
-						this.toggleAllDaysThatAreInDatepicker();
+			// if (!this.validateForm()){
+			// 	return;
+			// }
+			if (this.formIsValid) {
+				this.description = this.description.trim();
+
+				//Même si l'utilisateur n'a pas cliqué sur un jour de semaine,
+				//on met à true les jours de semaine qui ont une correspondance avec ses disponibilitésé
+				if (this.isAlwaysDispo){
+					this.toggleAllDayButtonsToTrue();
+				}
+				else{
+					if (this.isDatePickerPresent){
+						if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
+							this.toggleAllDaysThatAreInDatepicker();
+						}
 					}
 				}
+	
+				const newOffer = {
+					user: this.userInfo.user_id,
+					type_service: this.serviceType,
+					description: this.description,
+					hourly_rate: this.hourlyRate,
+					max_distance: this.maxDistance,
+					monday: this.daysSelected.monday,
+					tuesday: this.daysSelected.tuesday,
+					wednesday: this.daysSelected.wednesday,
+					thursday: this.daysSelected.thursday,
+					friday: this.daysSelected.friday,
+					saturday: this.daysSelected.saturday,
+					sunday: this.daysSelected.sunday,
+				};
+				let startDate = this.range == null ? null : this.range.start.toLocaleDateString("fr-CA");
+				let endDate = this.range == null ? null : this.range.end.toLocaleDateString("fr-CA");
+				// let startDate = this.range == null ? null : this.range.start.toISOString().substr(0, 10);
+				// let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
+	
+				newOffer.start_date = startDate;
+				newOffer.end_date = endDate;
+	
+				await axios
+				.post("/api/v1/offers/", newOffer)
+				.then((response) => {
+					this.isLoading = false;
+					this.modalCreateisActive = false;
+					this.creationModalIsActive = false;
+					this.resetDatepicker();
+					this.resetInputs();
+					// this.confirmeCreation = false;
+					this.addActiveOffers({
+						id_offer: response.data.id,
+						id_user: response.data.user,
+					});
+				})
+				.catch((error) => {
+					this.modalCreateisActive = false;
+					this.creationModalIsActive = true;
+					// this.confirmeCreation = false;
+					if (error.response.data["error"] == "profile_incomplete") {
+						toast({
+							message: "Profil incomplet. Veuillez completer votre profil dans les paramètres.",
+							type: "is-danger",
+							dismissible: true,
+							pauseOnHover: true,
+							duration: 4000,
+							position: "bottom-right",
+							animate: {
+								in: "fadeInRightBig",
+								out: "fadeOutRightBig",
+							},
+						});
+	
+					} else {
+						// this.errors.push("Une erreur est survenue. Essayez à nouveau.");
+						toast({
+							message: "Une erreur est survenue. Essayez à nouveau.",
+							type: "is-danger",
+							dismissible: true,
+							pauseOnHover: true,
+							duration: 4000,
+							position: "bottom-right",
+							animate: {
+								in: "fadeInRightBig",
+								out: "fadeOutRightBig",
+							},
+						});
+					}
+				});
 			}
 
-			const newOffer = {
-				user: this.userInfo.user_id,
-				type_service: this.serviceType,
-				description: this.description,
-				hourly_rate: this.hourlyRate,
-				max_distance: this.maxDistance,
-				monday: this.daysSelected.monday,
-				tuesday: this.daysSelected.tuesday,
-				wednesday: this.daysSelected.wednesday,
-				thursday: this.daysSelected.thursday,
-				friday: this.daysSelected.friday,
-				saturday: this.daysSelected.saturday,
-				sunday: this.daysSelected.sunday,
-			};
-			let startDate = this.range == null ? null : this.range.start.toLocaleDateString("fr-CA");
-			let endDate = this.range == null ? null : this.range.end.toLocaleDateString("fr-CA");
-			// let startDate = this.range == null ? null : this.range.start.toISOString().substr(0, 10);
-			// let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
-
-			newOffer.start_date = startDate;
-			newOffer.end_date = endDate;
-
-			await axios
-			.post("/api/v1/offers/", newOffer)
-			.then((response) => {
-				this.isLoading = false;
-				this.modalCreateisActive = false;
-				this.creationModalIsActive = false;
-				this.resetDatepicker();
-				this.resetInputs();
-				// this.confirmeCreation = false;
-				this.addActiveOffers({
-					id_offer: response.data.id,
-					id_user: response.data.user,
-				});
-			})
-			.catch((error) => {
-				this.modalCreateisActive = false;
-				this.creationModalIsActive = true;
-				// this.confirmeCreation = false;
-				if (error.response.data["error"] == "profile_incomplete") {
-					toast({
-						message: "Profil incomplet. Veuillez completer votre profil dans les paramètres.",
-						type: "is-danger",
-						dismissible: true,
-						pauseOnHover: true,
-						duration: 4000,
-						position: "bottom-right",
-						animate: {
-							in: "fadeInRightBig",
-							out: "fadeOutRightBig",
-						},
-					});
-
-				} else {
-					// this.errors.push("Une erreur est survenue. Essayez à nouveau.");
-					toast({
-						message: "Une erreur est survenue. Essayez à nouveau.",
-						type: "is-danger",
-						dismissible: true,
-						pauseOnHover: true,
-						duration: 4000,
-						position: "bottom-right",
-						animate: {
-							in: "fadeInRightBig",
-							out: "fadeOutRightBig",
-						},
-					});
-				}
-			});
 		},
 		toSelectDate(payload) {
 			// alert(payload);
@@ -957,7 +960,7 @@ export default {
 				.get("/api/v1/userinfo/me/")
 				.then((response) => {
 					this.userInfo = response.data;
-					console.log(JSON.stringify(this.userInfo));
+					// console.log(JSON.stringify(this.userInfo));
 					this.userIsActive = this.userInfo["is_online"];
 
 					if (this.userInfo.profile_is_completed){
@@ -974,7 +977,7 @@ export default {
 						// this.getReservedOffersForRecruiter(this.userInfo.user_id);
 					}
 					
-					this.getImgUrl(this.userInfo.user_id);
+					// this.getImgUrl(this.userInfo.user_id);
 					// this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
 
 					//Mise à jour du userInfo dans le store.
@@ -1289,20 +1292,26 @@ export default {
 			}
 			});
 		},
-		async getImgUrl(user_id) {
-			await axios
-				.get(
-					`/api/v1/userinfo/${user_id}/profile-image/`
-				)
-				.then((res) => {
-					this.imgPath = this.MEDIA_URL + res.data.imgName
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+		// async getImgUrl(user_id) {
+		// 	await axios
+		// 		.get(
+		// 			`/api/v1/userinfo/${user_id}/profile-image/`
+		// 		)
+		// 		.then((res) => {
+		// 			this.imgPath = this.MEDIA_URL + res.data.imgName
+		// 		})
+		// 		.catch((err) => {
+		// 			console.log(err);
+		// 		});
+		// },
+		replaceByDefault(e) {
+			console.clear();
+
+			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
 		async forModifiedOffer(offer) {
 			this.toModifiedOffer = true;
+			this.validations['isValidServiceType'] = this.validations['isValidHourlyRate'] = this.validations['isValidMaxDistance'] = this.validations['isValidDispo'] = this.validations['isValidDescription'] = true;
 
 			this.openCreationModal();
 
@@ -1349,7 +1358,7 @@ export default {
 			else{
 				if (this.isDatePickerPresent){
 					if (!this.validateAtLeastOneDisponibilityInWeek() && this.range !=null){
-						this.toggleAllDayThatAreInDatepicker();
+						this.toggleAllDaysThatAreInDatepicker();
 					}
 				}
 			}
@@ -1366,6 +1375,13 @@ export default {
 			this.offerToModified.sunday = this.daysSelected.sunday;
 			let startDate = this.range == null ? null : this.range.start.toLocaleDateString("fr-CA");
 			let endDate = this.range == null ? null : this.range.end.toLocaleDateString("fr-CA");
+
+			if (startDate && startDate < this.tomorrow)
+				startDate = this.tomorrow;
+
+			if (endDate && endDate < this.tomorrow)
+				endDate = this.tomorrow;
+
 			this.offerToModified.start_date = startDate;
 			this.offerToModified.end_date = endDate;
 

@@ -4,7 +4,12 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-64x64">
-						<img class="is-rounded" :src="imgPath" />
+						<!-- <img class="is-rounded" :src="imgPath" /> -->
+						<img
+							class="is-rounded"
+							:src="this.MEDIA_URL + 'pfp_' + imgId + '.jpg'" 
+							@error="replaceByDefault"
+						/>
 					</figure>
 				</div>
 				<div class="media-content">
@@ -28,7 +33,9 @@
 				Réservé pour le : {{ reservedOffer.reservation_date }}
 			</time>
 			<p v-if="this.isRecruiterCard">
-				Employé : {{ reservedOffer.id_user.username }}
+				Employé : {{ reservedOffer.id_user.first_name }}
+				{{ reservedOffer.id_user.last_name }}
+				({{ reservedOffer.id_user.username }})
 			</p>
 			<p v-else>
 				Recruteur : {{ reservedOffer.id_recruiter.first_name }}
@@ -145,12 +152,16 @@ export default {
 			statusAttribue: 0,
 			noteService: 0,
 			terminateOfferIsActive: false,
-			imgPath: this.MEDIA_URL + "pfp_default.jpg",
+			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
+			imgId: "default",
 		};
 	},
+	// mounted() {
+	// 	let user_id = this.$parent.profileSwitch ? this.reservedOffer.id_user.id : this.reservedOffer.id_recruiter.id;
+	// 	this.getImgUrl(user_id);
+	// },
 	mounted() {
-		let user_id = this.$parent.profileSwitch ? this.reservedOffer.id_user.id : this.reservedOffer.id_recruiter.id;
-		this.getImgUrl(user_id);
+		this.imgId = this.$parent.profileSwitch ? this.reservedOffer.id_user.id : this.reservedOffer.id_recruiter.id;
 	},
 	methods: {
 		setRating(note) {
@@ -278,18 +289,23 @@ export default {
 					console.log(err);
 				});
 		},
-		async getImgUrl(user_id) {			
-			await axios
-				.get(
-					`/api/v1/userinfo/${user_id}/profile-image/`
-				)
-				.then((res) => {
-					this.imgPath = this.MEDIA_URL + res.data.imgName
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		}
+		replaceByDefault(e) {
+			console.clear();
+
+			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
+		},
+		// async getImgUrl(user_id) {			
+		// 	await axios
+		// 		.get(
+		// 			`/api/v1/userinfo/${user_id}/profile-image/`
+		// 		)
+		// 		.then((res) => {
+		// 			this.imgPath = this.MEDIA_URL + res.data.imgName
+		// 		})
+		// 		.catch((err) => {
+		// 			console.log(err);
+		// 		});
+		// }
 	},
 };
 </script>

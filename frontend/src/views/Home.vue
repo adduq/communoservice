@@ -691,7 +691,8 @@ export default {
 				this.offers = [];
 				this.offset = 0;
 				var scrollSurface = document.getElementById('list-services');
-				scrollSurface.scrollTop = 0;
+				if (scrollSurface)
+					scrollSurface.scrollTop = 0;
 
 				this.getSearchingOffersWithOffset();
 
@@ -805,7 +806,9 @@ export default {
 			if (!offer.saturday)
 				weekdays.push(7);
 		},
-		replaceByDefault(e){
+		replaceByDefault(e) {
+			console.clear();
+
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
 		scrollAction(e) {
@@ -823,7 +826,7 @@ export default {
 		async getAllOffersWithOffset() {
 			this.isFetchingOffersOnScroll = true;
 
-			if (this.offset < this.totalOffers || !this.totalOffers) {
+			if (this.offset <= this.totalOffers || !this.totalOffers) {
 				await axios
 					.get('/api/v1/active-offers/', {
 						params: {
@@ -834,11 +837,11 @@ export default {
 						this.offers = this.offers.concat(res.data);
 						//Filtre pour retirer les offres expirées
 						function keepEndDateAfterToday(offer) {
-							let today= new Date();
- 						 	let offerEndDate = new Date(offer.end_date);
-						  return offerEndDate > today;
+							let today = new Date();
+							let offerEndDate = new Date(offer.end_date);
+							return !offer.end_date || (offerEndDate > today);
 						}
-						this.offers= this.offers.filter(keepEndDateAfterToday);
+						this.offers = this.offers.filter(keepEndDateAfterToday);
 						this.offset = this.offset + 5;
 					})
 					.catch((error) => {
@@ -884,7 +887,8 @@ export default {
 		},
 		resetSearchParams() {
 			var scrollSurface = document.getElementById('list-services');
-			scrollSurface.scrollTop = 0;
+			if (scrollSurface)
+					scrollSurface.scrollTop = 0;
 
 			this.saveParams = null;
 			this.offers = [];

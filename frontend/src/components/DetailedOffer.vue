@@ -1,14 +1,19 @@
 <template>
 	<a href="#search">
 		<div class="card mb-3 h-140"
-		:class="this.mustHaveChangeDateIcon ? 'has-background-danger-light': ''">
+		:class="mustHaveChangeDateIcon ? 'has-background-danger-light': ''">
 			<div class="card-content is-pointer-cursor" 
 				:class="accountPage ? 'pb-0 mb-4' : ''"
 				@click="$emit('click', this.offer)">
 				<div class="media">
 					<div class="media-left">
 						<figure class="image is-64x64">
-							<img class="is-rounded" :src="imgPath" />
+							<!-- <img class="is-rounded" :src="imgPath" /> -->
+							<img
+								class="is-rounded"
+								:src="this.MEDIA_URL + 'pfp_' + offer.user + '.jpg'" 
+								@error="replaceByDefault"
+							/>
 						</figure>
 					</div>
 					<div class="media-content is-clipped">
@@ -28,10 +33,10 @@
 					<time datetime="{{offer.end_date}}">
 						Valide jusqu'au {{ offer.end_date }}
 					<span v-if="mustHaveChangeDateIcon" class="icon is-info tooltip is-pulled-rigth">
-					<i class="fas fa-exclamation-circle has-text-danger"></i>
-					<span class="tooltiptext has-background-danger">
-					L'offre n'est plus visible par les autres utilisateurs. Modifiez la date d'expiration pour rendre l'offre disponible.
-					</span>
+						<i class="fas fa-exclamation-circle has-text-danger"></i>
+						<span class="tooltiptext has-background-danger">
+							L'offre n'est plus visible par les autres utilisateurs. Modifiez la date d'expiration pour rendre l'offre disponible.
+						</span>
 					</span>
 					</time>
 				</div>
@@ -135,18 +140,30 @@ export default {
 		offer: Object,
 		accountPage: false,
 	},
+	watch: {
+		offer: {
+			handler() {
+				this.addChangeEndDate();
+			},
+        deep: true
+		}
+	},
 	data() {
 		return {
 			deleteConfirmationModal: false,
-			imgPath: this.MEDIA_URL + "pfp_default.jpg",
+			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			mustHaveChangeDateIcon:false
 		}
 	},
 	mounted() {
-		this.getImgUrl();
-		if ( document.URL.includes("mon-compte") ) {
+		// this.getImgUrl();
+
+		if (this.accountPage)
 			this.addChangeEndDate();
-		}
+
+		// if ( document.URL.includes("mon-compte") ) {
+		// 	this.addChangeEndDate();
+		// }
 	},
 	methods: {
 		async deleteOffer() {
@@ -171,24 +188,32 @@ export default {
 					console.log(err);
 				});
 		},
-		async getImgUrl() {
-			await axios
-				.get(
-					`/api/v1/userinfo/${this.offer.user}/profile-image/`
-				)
-				.then((res) => {
-					this.imgPath = this.MEDIA_URL + res.data.imgName;
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+		// async getImgUrl() {
+		// 	await axios
+		// 		.get(
+		// 			`/api/v1/userinfo/${this.offer.user}/profile-image/`
+		// 		)
+		// 		.then((res) => {
+		// 			this.imgPath = this.MEDIA_URL + res.data.imgName;
+		// 		})
+		// 		.catch((err) => {
+		// 			console.log(err);
+		// 		});
+		// },
+		replaceByDefault(e) {
+			// console.clear();
+
+			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
-		addChangeEndDate(){
+		addChangeEndDate() {
 			let offerEndDate = new Date(this.offer.end_date);
 			let today = new Date();
-			if(offerEndDate<today){
-			this.mustHaveChangeDateIcon=true;
-			}
+
+			this.mustHaveChangeDateIcon = this.offer.end_date && (offerEndDate < today);
+
+			// if(offerEndDate < today){
+				// 	this.mustHaveChangeDateIcon = true;
+			// }
 		}
 	}
 };

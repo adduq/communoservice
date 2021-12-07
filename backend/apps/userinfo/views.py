@@ -242,16 +242,16 @@ class UpdateUserProfileImage(APIView):
                 return Response({"status": "No files in request"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class GetUserImage(APIView):
-    def get(self, request, user_id, format=None):
-        # if request.user.is_anonymous:
-        #     return Response({"status": "invalid"}, status=status.HTTP_401_UNAUTHORIZED)
+# class GetUserImage(APIView):
+#     def get(self, request, user_id, format=None):
+#         # if request.user.is_anonymous:
+#         #     return Response({"status": "invalid"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        imgExist = os.path.exists(
-            str(settings.MEDIA_ROOT) + '/' + 'pfp_' + str(user_id) + '.jpg')
-        imgName = 'pfp_default.jpg'
+#         imgExist = os.path.exists(
+#             str(settings.MEDIA_ROOT) + '/' + 'pfp_' + str(user_id) + '.jpg')
+#         imgName = 'pfp_default.jpg'
 
-        if (imgExist):
-            imgName = 'pfp_' + str(user_id) + '.jpg'
+#         if (imgExist):
+#             imgName = 'pfp_' + str(user_id) + '.jpg'
 
-        return Response({"imgName": imgName}, status=status.HTTP_200_OK)
+#         return Response({"imgName": imgName}, status=status.HTTP_200_OK)
