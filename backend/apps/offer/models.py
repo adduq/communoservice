@@ -17,7 +17,7 @@ class Offer(models.Model):
                              db_column="id_user", on_delete=models.CASCADE)
     type_service = models.CharField(max_length=30, default="Administration")
     description = models.CharField(
-        null=True, max_length=100, default="Aucune description")
+        null=True, max_length=900, default="Aucune description")
     hourly_rate = models.DecimalField(
         null=True, max_digits=6, decimal_places=2)
     max_distance = models.PositiveIntegerField(null=True)
