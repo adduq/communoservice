@@ -215,11 +215,11 @@ class ActiveOffers(APIView):
                 id_user=request.user.id).count()
 
             if offset + 5 < total_active_offers:
-                active_offers = ActiveOffer.objects.exclude(
-                    id_user=request.user.id)[offset:offset+5]
+                active_offers = ActiveOffer.objects.filter(~Q(
+                    id_user=request.user.id)).order_by('-id_offer__max_distance').distinct()[offset:offset+5]
             else:
-                active_offers = ActiveOffer.objects.exclude(
-                    id_user=request.user.id)[offset:total_active_offers]
+                active_offers = ActiveOffer.objects.filter(~Q(
+                    id_user=request.user.id)).order_by('-id_offer__max_distance').distinct()[offset:total_active_offers]
 
             serializer = ActiveOfferSerializer(active_offers, many=True)
             remove_user_infos(serializer)
@@ -230,7 +230,8 @@ class ActiveOffers(APIView):
             offers = sort_offers_by_distance(
                 request.user.id, [dict(obj) for obj in offers])
         else:
-            active_offers = ActiveOffer.objects.all()[offset:offset+5]
+            active_offers = ActiveOffer.objects.all().order_by(
+                '-id_offer__max_distance').distinct()[offset:offset+5]
 
             serializer = ActiveOfferSerializer(active_offers, many=True)
 
@@ -242,8 +243,6 @@ class ActiveOffers(APIView):
     def post(self, request, format=None):
         if request.user.is_anonymous:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
-
-        # pprint(request.data)
 
         if request.data['id_user'] is not None and request.user.id != request.data['id_user']:
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
@@ -261,7 +260,6 @@ class ActiveOffersTotal(APIView):
 
         if not request.user.is_anonymous:
             if page == 'home':
-                # active_offers = ActiveOffer.objects.count()
                 active_offers = ActiveOffer.objects.exclude(
                     id_user=request.user.id).count()
             elif page == 'account':
@@ -328,8 +326,6 @@ class ActiveOffersByUser(APIView):
 
 
 class ActiveOfferWithId(APIView):
-    # ? Note: Ajouter validation ici ou accessible à tous ?
-
     def get(self, request, no_user, id_offer, format=None):
         offers = ActiveOffer.objects.get(id_offer=id_offer, id_user=no_user)
         serializer = ActiveOfferCreationSerializer(offers)
@@ -632,6 +628,16 @@ Permet de rechercher des offres.
 def search(request):
     active_offers = list(
         ActiveOffer.objects.all().values_list('id_offer', flat=True))
+
+    if request.GET.get('date') is not None:
+        reserved_days = list(
+            ReservedOffer.objects.filter(reservation_date=request.GET.get('date')).values_list('id_offer', flat=True))
+        active_offers_tmp = list(
+            ActiveOffer.objects.all().values_list('id_offer', flat=True))
+
+        active_offers = [
+            x for x in active_offers_tmp if x not in reserved_days]
+
     queryset = Offer.objects.filter(id__in=active_offers)
 
     if not request.user.is_anonymous:
@@ -661,7 +667,11 @@ def search(request):
         if dow == "sunday":
             queryset = queryset.filter(sunday=True)
 
-        queryset.filter(end_date__gte=date, start_date__lte=date)
+        queryset = queryset.filter(Q(end_date__gte=date, start_date__lte=date) |
+                                   Q(end_date=None, start_date__lte=date) |
+                                   Q(end_date__gte=date, start_date=None) |
+                                   Q(end_date=None, start_date=None))
+        # queryset.filter(end_date__gte=date, start_date__lte=date)
 
     if "mots-cles" in request.GET:
         mots_cles = request.GET.getlist('mots-cles')[0].split(',')

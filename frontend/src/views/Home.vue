@@ -826,7 +826,7 @@ export default {
 		async getAllOffersWithOffset() {
 			this.isFetchingOffersOnScroll = true;
 
-			if (this.offset < this.totalOffers || !this.totalOffers) {
+			if (this.offset <= this.totalOffers || !this.totalOffers) {
 				await axios
 					.get('/api/v1/active-offers/', {
 						params: {
@@ -839,7 +839,7 @@ export default {
 						function keepEndDateAfterToday(offer) {
 							let today = new Date();
 							let offerEndDate = new Date(offer.end_date);
-							return offerEndDate > today;
+							return !offer.end_date || (offerEndDate > today);
 						}
 						this.offers = this.offers.filter(keepEndDateAfterToday);
 						this.offset = this.offset + 5;
@@ -887,7 +887,8 @@ export default {
 		},
 		resetSearchParams() {
 			var scrollSurface = document.getElementById('list-services');
-			scrollSurface.scrollTop = 0;
+			if (scrollSurface)
+					scrollSurface.scrollTop = 0;
 
 			this.saveParams = null;
 			this.offers = [];

@@ -201,15 +201,15 @@ export default {
 		// 		});
 		// },
 		replaceByDefault(e) {
-			console.clear();
+			// console.clear();
 
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
-		addChangeEndDate(){
+		addChangeEndDate() {
 			let offerEndDate = new Date(this.offer.end_date);
 			let today = new Date();
 
-			this.mustHaveChangeDateIcon = offerEndDate < today;
+			this.mustHaveChangeDateIcon = this.offer.end_date && (offerEndDate < today);
 
 			// if(offerEndDate < today){
 				// 	this.mustHaveChangeDateIcon = true;
