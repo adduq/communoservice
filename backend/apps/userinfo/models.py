@@ -57,10 +57,10 @@ class UserInfo(models.Model):
 
     nb_rating_as_employer = models.PositiveIntegerField(null=False, default=0)
 
-    user_bio = models.CharField(max_length=150, null=True)
+    user_bio = models.CharField(max_length=650, null=True)
 
     location_lat = models.CharField(max_length=15, null=True)
 
     location_lon = models.CharField(max_length=15, null=True)
 
-    address = models.CharField(max_length=100, null=True)
+    address = models.CharField(max_length=300, null=True)

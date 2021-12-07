@@ -1,475 +1,3707 @@
-[{
-        "model": "auth.user",
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "first_name": "Jimenez",
+      "last_name": "Deleon",
+      "username": "DelJim",
+      "email": "jimenezdeleon@cytrex.com",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": true
+    }
+  },
+  {
+    "model": "userinfo.userinfo",
+    "pk": 1,
+    "fields": {
+      "user_id": 1,
+      "is_online": false,
+      "profile_is_completed": true,
+      "first_name": "Maureen",
+      "last_name": "Wooten",
+      "email": "maureenwooten@cytrex.com",
+      "nb_services_received": 16,
+      "nb_services_given": 15,
+      "avg_rating_as_employee": 3.2816,
+      "nb_rating_as_employe": 10,
+      "avg_rating_as_employer": 1.9416,
+      "nb_rating_as_employer": 18,
+      "user_bio": "Laborum adipisicing voluptate voluptate nostrud proident excepteur aliquip. Aliquip laborum laboris elit ullamco dolore duis et ullamco incididunt magna. Ea consectetur ipsum sint non et tempor laboris aliqua deserunt. Adipisicing cillum tempor duis sunt ex cupidatat ut qui anim eu mollit. Sit cillum do est consequat. Incididunt commodo veniam ipsum voluptate.\r\n",
+      "location_lat": 47.6378,
+      "location_lon": -71.58529,
+      "address": "laborum Lorem ea aliqua ullamco"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "first_name": "Rose",
+      "last_name": "Roberts",
+      "username": "RobRos",
+      "email": "roseroberts@cytrex.com",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": true
+    }
+  },
+  
+     {
+      "model": "userinfo.userinfo",
+      "pk": 2,
+      "fields": {
+        "user_id": 2,
+        "is_online": false,
+        "profile_is_completed": true,
+        "first_name": "Cobb",
+        "last_name": "Drake",
+        "email": "cobbdrake@cytrex.com",
+        "nb_services_received": 14,
+        "nb_services_given": 19,
+        "avg_rating_as_employee": 0.9145,
+        "nb_rating_as_employe": 18,
+        "avg_rating_as_employer": 2.9752,
+        "nb_rating_as_employer": 19,
+        "user_bio": "Id qui ipsum ullamco consequat do commodo consequat magna sit minim ea elit. Exercitation aliquip minim cillum anim dolore velit. Excepteur proident duis mollit ex laborum minim ex veniam id laborum Lorem adipisicing minim. Pariatur culpa amet duis ullamco. Nulla dolor sunt non irure ea commodo aute cupidatat. Deserunt velit do exercitation elit quis ad reprehenderit duis anim. Non quis incididunt quis eu adipisicing labore proident sit pariatur magna incididunt reprehenderit.\r\n",
+        "location_lat": 47.64299,
+        "location_lon": -71.45156,
+        "address": "eiusmod ut duis do occaecat"
+      }
+    },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "first_name": "Terry",
+      "last_name": "Good",
+      "username": "GooTer",
+      "email": "terrygood@cytrex.com",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": true
+    }
+  },
+  {
+    "model": "userinfo.userinfo",
+    "pk": 3,
+    "fields": {
+      "user_id": 3,
+      "is_online": false,
+      "profile_is_completed": true,
+      "first_name": "Yvonne",
+      "last_name": "Travis",
+      "email": "yvonnetravis@cytrex.com",
+      "nb_services_received": 12,
+      "nb_services_given": 18,
+      "avg_rating_as_employee": 4.9989,
+      "nb_rating_as_employe": 20,
+      "avg_rating_as_employer": 4.7669,
+      "nb_rating_as_employer": 13,
+      "user_bio": "Enim occaecat pariatur eiusmod qui tempor minim. Fugiat incididunt ullamco est in culpa exercitation irure ad. Velit ut reprehenderit eu sunt aliquip et et. Reprehenderit id eiusmod tempor proident aliquip cillum. Est aliquip aliquip elit nulla aute ex excepteur labore cillum ea sint ad veniam. Reprehenderit est consequat consequat nostrud nulla amet fugiat.\r\n",
+      "location_lat": 47.09659,
+      "location_lon": -71.48071,
+      "address": "tempor Lorem aliqua deserunt eu"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "first_name": "Abby",
+      "last_name": "Rivas",
+      "username": "RivAbb",
+      "email": "abbyrivas@cytrex.com",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": true
+    }
+  },
+  {
+   "model": "userinfo.userinfo",
+   "pk": 4,
+   "fields": {
+     "user_id": 4,
+     "is_online": false,
+     "profile_is_completed": true,
+     "first_name": "Sharpe",
+     "last_name": "Spence",
+     "email": "sharpespence@cytrex.com",
+     "nb_services_received": 15,
+     "nb_services_given": 20,
+     "avg_rating_as_employee": 3.9994,
+     "nb_rating_as_employe": 13,
+     "avg_rating_as_employer": 1.1815,
+     "nb_rating_as_employer": 12,
+     "user_bio": "Ullamco proident aliqua reprehenderit veniam amet ex quis nulla. Tempor quis aliquip quis dolor tempor proident. Excepteur quis enim magna voluptate sint minim sint pariatur cillum et labore.\r\n",
+     "location_lat": 47.08103,
+     "location_lon": -71.3435,
+     "address": "in dolor consequat quis sint"
+   }
+ },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "first_name": "Deanne",
+      "last_name": "Sharp",
+      "username": "ShaDea",
+      "email": "deannesharp@cytrex.com",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": true
+    }
+  },
+  {
+   "model": "userinfo.userinfo",
+   "pk": 5,
+   "fields": {
+     "user_id": 5,
+     "is_online": false,
+     "profile_is_completed": true,
+     "first_name": "Battle",
+     "last_name": "Stuart",
+     "email": "battlestuart@cytrex.com",
+     "nb_services_received": 14,
+     "nb_services_given": 12,
+     "avg_rating_as_employee": 3.6298,
+     "nb_rating_as_employe": 18,
+     "avg_rating_as_employer": 4.7079,
+     "nb_rating_as_employer": 16,
+     "user_bio": "Veniam tempor nostrud excepteur aliquip excepteur ipsum. Minim in voluptate sunt cillum nulla mollit. Do sit do sit aliquip eu dolore commodo et aute ex eu cillum. Sunt enim ut aute veniam ea aute voluptate consectetur et occaecat sit cillum. Deserunt nulla minim duis veniam qui.\r\n",
+     "location_lat": 47.04649,
+     "location_lon": -71.52071,
+     "address": "esse cupidatat aute labore tempor"
+   }
+ },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "first_name": "Gomez",
+      "last_name": "Buchanan",
+      "username": "BucGom",
+      "email": "gomezbuchanan@cytrex.com",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": true
+    }
+  },
+  {
+   "model": "userinfo.userinfo",
+   "pk": 6,
+   "fields": {
+     "user_id": 6,
+     "is_online": false,
+     "profile_is_completed": true,
+     "first_name": "Welch",
+     "last_name": "Jacobs",
+     "email": "welchjacobs@cytrex.com",
+     "nb_services_received": 18,
+     "nb_services_given": 18,
+     "avg_rating_as_employee": 1.0032,
+     "nb_rating_as_employe": 11,
+     "avg_rating_as_employer": 1.036,
+     "nb_rating_as_employer": 15,
+     "user_bio": "Lorem nulla aute labore officia qui sint id. Nostrud tempor ex incididunt excepteur minim aliqua reprehenderit sint. Nostrud cillum qui tempor labore anim enim quis labore eu culpa cupidatat. Minim proident cillum commodo exercitation culpa dolore enim reprehenderit reprehenderit anim.\r\n",
+     "location_lat": 47.46545,
+     "location_lon": -71.38433,
+     "address": "id minim cupidatat nisi culpa"
+   }
+ },
+  {
+    "model": "auth.user",
+    "pk": 7,
+    "fields": {
+      "first_name": "Snyder",
+      "last_name": "Workman",
+      "username": "WorSny",
+      "email": "snyderworkman@cytrex.com",
+      "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+      "is_active": true
+    }
+  },
+     {
+      "model": "userinfo.userinfo",
+      "pk": 7,
+      "fields": {
+        "user_id": 7,
+        "is_online": false,
+        "profile_is_completed": true,
+        "first_name": "Wells",
+        "last_name": "James",
+        "email": "wellsjames@cytrex.com",
+        "nb_services_received": 17,
+        "nb_services_given": 14,
+        "avg_rating_as_employee": 3.9403,
+        "nb_rating_as_employe": 11,
+        "avg_rating_as_employer": 1.8541,
+        "nb_rating_as_employer": 14,
+        "user_bio": "Sint incididunt adipisicing elit labore Lorem exercitation aute Lorem sint officia exercitation elit. Et voluptate aliquip magna in esse. Do veniam elit culpa nisi. Ullamco exercitation non reprehenderit fugiat nostrud esse aliquip dolor.\r\n",
+        "location_lat": 47.77323,
+        "location_lon": -71.37416,
+        "address": "cupidatat dolore eu irure velit"
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 8,
+      "fields": {
+        "first_name": "Romero",
+        "last_name": "Oconnor",
+        "username": "OcoRom",
+        "email": "romerooconnor@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 8,
+     "fields": {
+       "user_id": 8,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Jocelyn",
+       "last_name": "Bruce",
+       "email": "jocelynbruce@joviold.com",
+       "nb_services_received": 15,
+       "nb_services_given": 17,
+       "avg_rating_as_employee": 0.296,
+       "nb_rating_as_employe": 17,
+       "avg_rating_as_employer": 1.4577,
+       "nb_rating_as_employer": 20,
+       "user_bio": "Ullamco nulla exercitation exercitation cillum fugiat non fugiat incididunt ex cupidatat deserunt dolore. Sit sint aliquip ut laborum. Excepteur pariatur nulla ut ad esse nulla quis nisi magna ullamco. Et laborum tempor est officia fugiat. Veniam excepteur nulla Lorem laborum deserunt elit elit nulla cillum. Consequat aliqua deserunt non eiusmod id. Veniam commodo cupidatat anim sunt amet quis sit nulla magna pariatur aliqua.\r\n",
+       "location_lat": 47.70065,
+       "location_lon": -71.59982,
+       "address": "exercitation id eu ipsum Lorem"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 9,
+      "fields": {
+        "first_name": "Day",
+        "last_name": "Doyle",
+        "username": "DoyDay",
+        "email": "daydoyle@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 9,
+     "fields": {
+       "user_id": 9,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Bauer",
+       "last_name": "Walters",
+       "email": "bauerwalters@joviold.com",
+       "nb_services_received": 12,
+       "nb_services_given": 10,
+       "avg_rating_as_employee": 0.5953,
+       "nb_rating_as_employe": 11,
+       "avg_rating_as_employer": 3.8955,
+       "nb_rating_as_employer": 15,
+       "user_bio": "Est laboris velit nulla ullamco ipsum fugiat ea magna amet ad. Sunt excepteur et proident ullamco dolor deserunt do. Quis enim aute cupidatat fugiat commodo consectetur non aute culpa adipisicing enim. Deserunt ullamco qui sunt laborum dolor adipisicing ipsum ex. Proident ullamco in elit tempor deserunt amet anim ex. Cillum occaecat ex ea est id ad minim et.\r\n",
+       "location_lat": 47.33998,
+       "location_lon": -71.56442,
+       "address": "nostrud aute veniam nulla tempor"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 10,
+      "fields": {
+        "first_name": "Butler",
+        "last_name": "Meadows",
+        "username": "MeaBut",
+        "email": "butlermeadows@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 10,
+     "fields": {
+       "user_id": 10,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Meadows",
+       "last_name": "Hess",
+       "email": "meadowshess@joviold.com",
+       "nb_services_received": 18,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 2.1201,
+       "nb_rating_as_employe": 18,
+       "avg_rating_as_employer": 0.1621,
+       "nb_rating_as_employer": 10,
+       "user_bio": "Excepteur Lorem labore et aute sit. Labore tempor occaecat qui duis ipsum do mollit. Labore eu irure sit amet pariatur excepteur ad anim enim occaecat exercitation ullamco. Nostrud dolor ea tempor culpa in sunt mollit deserunt exercitation exercitation. Incididunt aliquip non irure cillum est veniam aliquip dolor. Commodo dolor aliqua do non Lorem anim ut dolor eu.\r\n",
+       "location_lat": 47.79746,
+       "location_lon": -71.48685,
+       "address": "velit velit reprehenderit sit sit"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 11,
+      "fields": {
+        "first_name": "Kent",
+        "last_name": "Morin",
+        "username": "MorKen",
+        "email": "kentmorin@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 11,
+     "fields": {
+       "user_id": 11,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Kidd",
+       "last_name": "Branch",
+       "email": "kiddbranch@joviold.com",
+       "nb_services_received": 19,
+       "nb_services_given": 14,
+       "avg_rating_as_employee": 0.1349,
+       "nb_rating_as_employe": 13,
+       "avg_rating_as_employer": 2.2591,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Ullamco elit enim ut cupidatat eiusmod ullamco officia Lorem proident. Minim non et sit ullamco ipsum sit deserunt et officia enim dolor do voluptate sunt. Incididunt irure incididunt minim in deserunt. Deserunt labore laboris excepteur mollit anim veniam nostrud pariatur officia incididunt elit est. Aliqua veniam aliqua minim dolore velit dolor culpa nulla occaecat do. Incididunt nisi esse adipisicing quis quis eu reprehenderit anim officia voluptate id.\r\n",
+       "location_lat": 46.90576,
+       "location_lon": -71.41929,
+       "address": "cillum ea esse tempor incididunt"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 12,
+      "fields": {
+        "first_name": "Levy",
+        "last_name": "Hale",
+        "username": "HalLev",
+        "email": "levyhale@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 12,
+     "fields": {
+       "user_id": 12,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Reid",
+       "last_name": "Bean",
+       "email": "reidbean@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 15,
+       "avg_rating_as_employee": 4.956,
+       "nb_rating_as_employe": 13,
+       "avg_rating_as_employer": 0.9753,
+       "nb_rating_as_employer": 14,
+       "user_bio": "Consectetur consectetur sint sunt ex dolore sit pariatur. Ex officia excepteur non voluptate sunt qui occaecat voluptate. Duis veniam anim incididunt sunt adipisicing non reprehenderit veniam occaecat voluptate laboris ut eiusmod exercitation. Adipisicing ullamco incididunt non dolor excepteur sit enim ut esse.\r\n",
+       "location_lat": 46.98697,
+       "location_lon": -71.50059,
+       "address": "do ex deserunt cupidatat Lorem"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 13,
+      "fields": {
+        "first_name": "Barnes",
+        "last_name": "Bell",
+        "username": "BelBar",
+        "email": "barnesbell@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 13,
+     "fields": {
+       "user_id": 13,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Terri",
+       "last_name": "Mcdaniel",
+       "email": "terrimcdaniel@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 20,
+       "avg_rating_as_employee": 0.4246,
+       "nb_rating_as_employe": 15,
+       "avg_rating_as_employer": 1.9986,
+       "nb_rating_as_employer": 10,
+       "user_bio": "Voluptate mollit laboris consequat Lorem ipsum cupidatat eu cillum deserunt dolor. Deserunt incididunt eu pariatur irure velit minim eiusmod. Dolore mollit ex minim duis. Culpa ea sint ad consequat magna dolor mollit. Incididunt enim sunt cupidatat incididunt aute. Ea ex reprehenderit enim ad sint aliqua Lorem elit ut enim anim est veniam elit. Et dolor consectetur sit mollit eu.\r\n",
+       "location_lat": 47.6382,
+       "location_lon": -71.35051,
+       "address": "minim nulla aliquip pariatur exercitation"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 14,
+      "fields": {
+        "first_name": "Mcdowell",
+        "last_name": "Boyle",
+        "username": "BoyMcd",
+        "email": "mcdowellboyle@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 14,
+     "fields": {
+       "user_id": 14,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Obrien",
+       "last_name": "Griffith",
+       "email": "obriengriffith@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 3.6496,
+       "nb_rating_as_employe": 17,
+       "avg_rating_as_employer": 3.6755,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Duis culpa duis sint ex incididunt aute magna reprehenderit occaecat ad anim anim. Et non consequat mollit mollit consequat ut. Dolore fugiat elit amet reprehenderit et elit commodo minim nostrud consequat proident ullamco. Esse laborum veniam excepteur esse commodo aute commodo officia cupidatat exercitation magna. Anim non officia officia excepteur ipsum anim minim aute quis sunt sit tempor mollit laborum. Officia adipisicing velit magna occaecat.\r\n",
+       "location_lat": 47.46405,
+       "location_lon": -71.41431,
+       "address": "dolor aliqua id in nisi"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 15,
+      "fields": {
+        "first_name": "Nguyen",
+        "last_name": "Hampton",
+        "username": "HamNgu",
+        "email": "nguyenhampton@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 15,
+     "fields": {
+       "user_id": 15,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Tammie",
+       "last_name": "Mullins",
+       "email": "tammiemullins@joviold.com",
+       "nb_services_received": 13,
+       "nb_services_given": 10,
+       "avg_rating_as_employee": 0.35,
+       "nb_rating_as_employe": 16,
+       "avg_rating_as_employer": 4.6308,
+       "nb_rating_as_employer": 12,
+       "user_bio": "Ad eiusmod officia sint eu ex. Deserunt commodo laborum labore incididunt Lorem laborum. Ut et veniam ipsum sit cillum reprehenderit. Mollit velit aliqua dolore laboris ad mollit incididunt dolor in consequat dolor nulla nulla. Est Lorem sunt ut aliquip.\r\n",
+       "location_lat": 46.94577,
+       "location_lon": -71.42065,
+       "address": "est adipisicing deserunt sit commodo"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 16,
+      "fields": {
+        "first_name": "Tammi",
+        "last_name": "Miller",
+        "username": "MilTam",
+        "email": "tammimiller@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 16,
+     "fields": {
+       "user_id": 16,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Kimberly",
+       "last_name": "Hurley",
+       "email": "kimberlyhurley@joviold.com",
+       "nb_services_received": 13,
+       "nb_services_given": 13,
+       "avg_rating_as_employee": 3.1269,
+       "nb_rating_as_employe": 14,
+       "avg_rating_as_employer": 0.7968,
+       "nb_rating_as_employer": 12,
+       "user_bio": "Labore deserunt excepteur dolore ut pariatur. Ad dolore esse qui nulla labore occaecat. Ea consequat non reprehenderit in elit.\r\n",
+       "location_lat": 47.60628,
+       "location_lon": -71.64815,
+       "address": "sit aliqua aliqua aliqua quis"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 17,
+      "fields": {
+        "first_name": "Arline",
+        "last_name": "Jimenez",
+        "username": "JimArl",
+        "email": "arlinejimenez@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 17,
+     "fields": {
+       "user_id": 17,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Kate",
+       "last_name": "White",
+       "email": "katewhite@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 12,
+       "avg_rating_as_employee": 0.0697,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 2.0754,
+       "nb_rating_as_employer": 11,
+       "user_bio": "Cupidatat deserunt aute in in excepteur. Aliqua consequat voluptate incididunt laboris elit duis deserunt labore qui velit nulla qui elit nostrud. Reprehenderit incididunt id eu eu duis id officia magna dolore laborum et ea anim. Deserunt sint non do eiusmod aute reprehenderit consequat sit consequat consequat. Laboris magna duis laborum cupidatat proident do aliquip aliquip deserunt.\r\n",
+       "location_lat": 47.26856,
+       "location_lon": -71.48083,
+       "address": "irure ea voluptate veniam aliqua"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 18,
+      "fields": {
+        "first_name": "Buckner",
+        "last_name": "Foreman",
+        "username": "ForBuc",
+        "email": "bucknerforeman@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 18,
+     "fields": {
+       "user_id": 18,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Bobbie",
+       "last_name": "Carpenter",
+       "email": "bobbiecarpenter@joviold.com",
+       "nb_services_received": 11,
+       "nb_services_given": 20,
+       "avg_rating_as_employee": 3.0762,
+       "nb_rating_as_employe": 13,
+       "avg_rating_as_employer": 2.3651,
+       "nb_rating_as_employer": 14,
+       "user_bio": "Sit id nostrud est mollit aliquip anim reprehenderit id qui fugiat aute non culpa consequat. Veniam ex fugiat aliquip quis in deserunt Lorem. Nostrud magna ea veniam Lorem ea adipisicing eiusmod. Laborum dolore consectetur et cillum occaecat proident labore excepteur dolore eu incididunt. Esse occaecat eu nulla ipsum cupidatat dolore do minim consequat reprehenderit cupidatat consectetur sunt consequat.\r\n",
+       "location_lat": 47.7787,
+       "location_lon": -71.70586,
+       "address": "consectetur mollit officia adipisicing et"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 19,
+      "fields": {
+        "first_name": "Stewart",
+        "last_name": "Daniels",
+        "username": "DanSte",
+        "email": "stewartdaniels@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 19,
+     "fields": {
+       "user_id": 19,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Diana",
+       "last_name": "Chen",
+       "email": "dianachen@joviold.com",
+       "nb_services_received": 17,
+       "nb_services_given": 11,
+       "avg_rating_as_employee": 3.1548,
+       "nb_rating_as_employe": 18,
+       "avg_rating_as_employer": 3.7765,
+       "nb_rating_as_employer": 14,
+       "user_bio": "Veniam pariatur ad ipsum deserunt cupidatat exercitation id commodo consectetur laboris incididunt. Tempor id aute veniam proident aliquip voluptate consectetur consequat minim nulla id velit reprehenderit. Eu aliqua ad officia tempor culpa sint qui ea sit anim. Cillum tempor labore amet tempor ullamco aliquip in qui ad in mollit adipisicing commodo. Qui labore in dolore elit dolor excepteur reprehenderit nostrud laborum. Exercitation ad eiusmod sunt magna veniam dolore laboris in proident id in duis. Labore quis ullamco labore aliquip ea Lorem ex nulla exercitation fugiat.\r\n",
+       "location_lat": 47.32219,
+       "location_lon": -71.44089,
+       "address": "aliqua commodo sint in minim"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 20,
+      "fields": {
+        "first_name": "Cherry",
+        "last_name": "Willis",
+        "username": "WilChe",
+        "email": "cherrywillis@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 20,
+     "fields": {
+       "user_id": 20,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Waters",
+       "last_name": "Patton",
+       "email": "waterspatton@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 12,
+       "avg_rating_as_employee": 1.7691,
+       "nb_rating_as_employe": 10,
+       "avg_rating_as_employer": 4.3228,
+       "nb_rating_as_employer": 20,
+       "user_bio": "Sint amet enim aliquip adipisicing esse pariatur duis laborum sunt elit amet consequat. Velit aute officia cupidatat ad quis enim mollit ipsum irure amet. Officia in sint qui velit sint id mollit anim non aliqua. Nostrud ea ut minim mollit. Ea dolore consectetur exercitation consectetur adipisicing ea sint consequat magna pariatur fugiat.\r\n",
+       "location_lat": 47.04892,
+       "location_lon": -71.40459,
+       "address": "deserunt incididunt pariatur sint mollit"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 21,
+      "fields": {
+        "first_name": "Carissa",
+        "last_name": "French",
+        "username": "FreCar",
+        "email": "carissafrench@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 21,
+     "fields": {
+       "user_id": 21,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Beulah",
+       "last_name": "Noble",
+       "email": "beulahnoble@joviold.com",
+       "nb_services_received": 13,
+       "nb_services_given": 19,
+       "avg_rating_as_employee": 1.3774,
+       "nb_rating_as_employe": 14,
+       "avg_rating_as_employer": 1.4108,
+       "nb_rating_as_employer": 17,
+       "user_bio": "Esse deserunt culpa sit qui nisi fugiat occaecat eu consectetur officia eu deserunt. Cupidatat aliquip eiusmod incididunt fugiat eiusmod sunt incididunt nostrud culpa sunt culpa. Voluptate ea non sint sit est. Est non aute labore officia nulla proident amet nostrud laborum in officia aute laboris consequat. Non ad Lorem nostrud cillum laboris. Eiusmod laborum aliqua esse esse adipisicing quis eu nostrud aliquip commodo fugiat dolore qui.\r\n",
+       "location_lat": 46.9501,
+       "location_lon": -71.58716,
+       "address": "quis fugiat proident labore exercitation"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 22,
+      "fields": {
+        "first_name": "Blackburn",
+        "last_name": "Mills",
+        "username": "MilBla",
+        "email": "blackburnmills@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 22,
+     "fields": {
+       "user_id": 22,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Shanna",
+       "last_name": "Odom",
+       "email": "shannaodom@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 19,
+       "avg_rating_as_employee": 1.6098,
+       "nb_rating_as_employe": 20,
+       "avg_rating_as_employer": 2.7715,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Reprehenderit id duis officia fugiat. Tempor mollit incididunt amet id aliqua ullamco pariatur voluptate labore dolor minim cillum minim. Officia sint laborum amet exercitation aute in id mollit do. Nisi voluptate aliquip adipisicing eu Lorem duis magna Lorem deserunt. Aute esse deserunt nulla reprehenderit sit labore duis.\r\n",
+       "location_lat": 46.81184,
+       "location_lon": -71.60685,
+       "address": "consequat ea qui proident nostrud"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 23,
+      "fields": {
+        "first_name": "Greene",
+        "last_name": "Davenport",
+        "username": "DavGre",
+        "email": "greenedavenport@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 23,
+     "fields": {
+       "user_id": 23,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Sophia",
+       "last_name": "Fleming",
+       "email": "sophiafleming@joviold.com",
+       "nb_services_received": 17,
+       "nb_services_given": 20,
+       "avg_rating_as_employee": 0.295,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 0.875,
+       "nb_rating_as_employer": 10,
+       "user_bio": "Laborum qui voluptate cupidatat minim in qui. Tempor non excepteur sint Lorem consequat nostrud pariatur quis laboris veniam elit. Anim irure amet consectetur velit sit occaecat esse excepteur id cupidatat. Consectetur magna eiusmod occaecat minim officia id dolore duis est cupidatat officia dolor officia sit.\r\n",
+       "location_lat": 46.94795,
+       "location_lon": -71.50139,
+       "address": "irure aute irure ex voluptate"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 24,
+      "fields": {
+        "first_name": "Alta",
+        "last_name": "Caldwell",
+        "username": "CalAlt",
+        "email": "altacaldwell@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 24,
+     "fields": {
+       "user_id": 24,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Ivy",
+       "last_name": "Keith",
+       "email": "ivykeith@joviold.com",
+       "nb_services_received": 17,
+       "nb_services_given": 12,
+       "avg_rating_as_employee": 4.6885,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 2.3587,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Ex nostrud adipisicing qui laboris nisi. Labore deserunt irure enim et aute nulla consectetur pariatur et anim officia in irure deserunt. Dolor officia ex proident Lorem dolor consequat ad ipsum aute. Sit non elit irure tempor do eu labore culpa. Fugiat magna in duis aliquip mollit irure non enim culpa cupidatat enim sit.\r\n",
+       "location_lat": 47.34786,
+       "location_lon": -71.39077,
+       "address": "sunt labore cupidatat officia proident"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 25,
+      "fields": {
+        "first_name": "Leticia",
+        "last_name": "Nash",
+        "username": "NasLet",
+        "email": "leticianash@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 25,
+     "fields": {
+       "user_id": 25,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Randi",
+       "last_name": "Porter",
+       "email": "randiporter@joviold.com",
+       "nb_services_received": 13,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 2.5978,
+       "nb_rating_as_employe": 14,
+       "avg_rating_as_employer": 3.6075,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Dolore incididunt dolore magna ad consequat sunt et nulla excepteur anim eu. Non tempor tempor Lorem aliquip sint sit nulla voluptate dolor incididunt occaecat. Proident officia veniam quis minim esse veniam cillum exercitation magna consectetur sit ea excepteur. Non quis et ut ea proident incididunt sit enim qui ad. Commodo irure in ad dolor ipsum. Occaecat aliquip occaecat exercitation proident veniam duis voluptate mollit et. Esse ea laboris deserunt nulla tempor adipisicing aute qui elit fugiat proident ipsum amet in.\r\n",
+       "location_lat": 46.77876,
+       "location_lon": -71.52172,
+       "address": "proident dolore occaecat proident anim"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 26,
+      "fields": {
+        "first_name": "Selma",
+        "last_name": "Richmond",
+        "username": "RicSel",
+        "email": "selmarichmond@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 26,
+     "fields": {
+       "user_id": 26,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Harper",
+       "last_name": "Shields",
+       "email": "harpershields@joviold.com",
+       "nb_services_received": 19,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 2.1458,
+       "nb_rating_as_employe": 14,
+       "avg_rating_as_employer": 3.0748,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Ipsum ipsum non consectetur pariatur labore enim cupidatat nulla sit anim consequat amet. Proident id in aliqua cillum elit enim nostrud id laborum. Voluptate officia dolore ex Lorem sit officia excepteur laborum voluptate esse mollit sit consequat. Eiusmod laborum enim tempor ipsum veniam quis occaecat irure esse. Laboris deserunt reprehenderit cupidatat excepteur ipsum proident minim pariatur adipisicing minim excepteur sunt tempor Lorem. Irure pariatur duis sit dolor est sit ut nulla.\r\n",
+       "location_lat": 47.27154,
+       "location_lon": -71.47336,
+       "address": "non eiusmod fugiat irure irure"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 27,
+      "fields": {
+        "first_name": "Norman",
+        "last_name": "Cervantes",
+        "username": "CerNor",
+        "email": "normancervantes@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 27,
+     "fields": {
+       "user_id": 27,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Clayton",
+       "last_name": "Martin",
+       "email": "claytonmartin@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 2.5502,
+       "nb_rating_as_employe": 11,
+       "avg_rating_as_employer": 1.8639,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Lorem nulla aute nisi eu deserunt commodo sunt ullamco cupidatat commodo. Commodo excepteur voluptate nulla irure nostrud amet duis ullamco excepteur dolor irure. Labore pariatur quis laboris veniam excepteur irure culpa non. Irure aute ad consectetur cillum aliqua. Ad proident nostrud laborum ex elit.\r\n",
+       "location_lat": 47.61846,
+       "location_lon": -71.69344,
+       "address": "aute quis pariatur est aute"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 28,
+      "fields": {
+        "first_name": "Josie",
+        "last_name": "Meyer",
+        "username": "MeyJos",
+        "email": "josiemeyer@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 28,
+     "fields": {
+       "user_id": 28,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Tamera",
+       "last_name": "Park",
+       "email": "tamerapark@joviold.com",
+       "nb_services_received": 19,
+       "nb_services_given": 14,
+       "avg_rating_as_employee": 2.2961,
+       "nb_rating_as_employe": 10,
+       "avg_rating_as_employer": 3.8671,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Excepteur minim eiusmod deserunt qui magna minim eiusmod cillum cupidatat. Quis exercitation est proident irure anim nulla qui amet fugiat est cupidatat est in. Officia proident pariatur mollit cupidatat consequat culpa nisi ex excepteur consectetur cupidatat amet dolor veniam. Sunt adipisicing commodo exercitation sunt. Veniam laborum eiusmod minim sint do veniam laboris et incididunt duis. Eu labore et ad exercitation aliquip do consequat esse.\r\n",
+       "location_lat": 47.39843,
+       "location_lon": -71.64396,
+       "address": "magna Lorem cillum aliqua sunt"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 29,
+      "fields": {
+        "first_name": "Mable",
+        "last_name": "Solomon",
+        "username": "SolMab",
+        "email": "mablesolomon@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 29,
+     "fields": {
+       "user_id": 29,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Vickie",
+       "last_name": "Peters",
+       "email": "vickiepeters@joviold.com",
+       "nb_services_received": 15,
+       "nb_services_given": 11,
+       "avg_rating_as_employee": 0.5903,
+       "nb_rating_as_employe": 18,
+       "avg_rating_as_employer": 4.9581,
+       "nb_rating_as_employer": 15,
+       "user_bio": "Proident do ullamco irure ullamco dolor ea dolor aliqua fugiat irure. Nulla et cillum eu laboris laboris exercitation exercitation veniam et minim incididunt quis. Enim enim dolore cupidatat ullamco nostrud officia sint consequat anim adipisicing Lorem. Cupidatat minim quis nostrud aliquip voluptate sunt magna deserunt mollit deserunt excepteur voluptate. Sit sit laborum voluptate amet consequat eiusmod. Eiusmod laboris sint eu culpa sit ullamco eu exercitation occaecat eu laborum ullamco. Culpa adipisicing amet velit ad.\r\n",
+       "location_lat": 46.78374,
+       "location_lon": -71.35946,
+       "address": "ad labore culpa quis minim"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 30,
+      "fields": {
+        "first_name": "Dotson",
+        "last_name": "Schneider",
+        "username": "SchDot",
+        "email": "dotsonschneider@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 30,
+     "fields": {
+       "user_id": 30,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Stafford",
+       "last_name": "Solis",
+       "email": "staffordsolis@joviold.com",
+       "nb_services_received": 12,
+       "nb_services_given": 14,
+       "avg_rating_as_employee": 4.3875,
+       "nb_rating_as_employe": 15,
+       "avg_rating_as_employer": 4.4604,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Eu et sit sunt eu elit non exercitation et nulla anim. Et veniam Lorem dolor aliqua irure adipisicing Lorem ipsum. Tempor dolore commodo exercitation eiusmod ullamco anim velit.\r\n",
+       "location_lat": 47.10252,
+       "location_lon": -71.71992,
+       "address": "nulla ut fugiat commodo commodo"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 31,
+      "fields": {
+        "first_name": "Fitzpatrick",
+        "last_name": "Pearson",
+        "username": "PeaFit",
+        "email": "fitzpatrickpearson@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 31,
+     "fields": {
+       "user_id": 31,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Delacruz",
+       "last_name": "Acevedo",
+       "email": "delacruzacevedo@joviold.com",
+       "nb_services_received": 12,
+       "nb_services_given": 19,
+       "avg_rating_as_employee": 2.0444,
+       "nb_rating_as_employe": 12,
+       "avg_rating_as_employer": 1.3801,
+       "nb_rating_as_employer": 14,
+       "user_bio": "Non voluptate eu qui laboris non sunt proident duis non ea dolore. Irure id incididunt culpa est ex voluptate. Nisi ut incididunt ad cupidatat eu culpa ea labore cillum laborum. Ad cupidatat eiusmod aliquip in ut minim adipisicing excepteur dolore elit dolor esse dolor. Eu in consequat pariatur anim Lorem consequat dolor aute do nulla ullamco velit et consequat.\r\n",
+       "location_lat": 47.50634,
+       "location_lon": -71.56719,
+       "address": "magna dolor aliquip laboris et"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 32,
+      "fields": {
+        "first_name": "Gross",
+        "last_name": "Patrick",
+        "username": "PatGro",
+        "email": "grosspatrick@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 32,
+     "fields": {
+       "user_id": 32,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Wilkerson",
+       "last_name": "Bender",
+       "email": "wilkersonbender@joviold.com",
+       "nb_services_received": 18,
+       "nb_services_given": 16,
+       "avg_rating_as_employee": 0.2816,
+       "nb_rating_as_employe": 11,
+       "avg_rating_as_employer": 1.4779,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Enim aliquip ea proident culpa officia magna magna. Voluptate est occaecat quis id cillum eu esse laboris mollit. Nulla in deserunt in consequat nulla anim dolore cupidatat Lorem eiusmod. Nostrud non reprehenderit sunt sit adipisicing dolore ea. Fugiat labore duis dolor eu pariatur in laborum quis. Ad nostrud enim occaecat aliquip ex esse est Lorem adipisicing occaecat dolore consequat aliquip voluptate.\r\n",
+       "location_lat": 47.51072,
+       "location_lon": -71.61585,
+       "address": "consectetur cillum consectetur reprehenderit labore"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 33,
+      "fields": {
+        "first_name": "Sally",
+        "last_name": "Herman",
+        "username": "HerSal",
+        "email": "sallyherman@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 33,
+     "fields": {
+       "user_id": 33,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Noble",
+       "last_name": "Webster",
+       "email": "noblewebster@joviold.com",
+       "nb_services_received": 17,
+       "nb_services_given": 12,
+       "avg_rating_as_employee": 4.8912,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 4.6994,
+       "nb_rating_as_employer": 15,
+       "user_bio": "Velit id occaecat officia voluptate irure commodo. Laborum veniam quis excepteur labore consectetur non consectetur fugiat. Ipsum irure minim ad cupidatat consequat aute quis do minim. Lorem nisi in enim do nisi sunt anim reprehenderit ipsum fugiat anim ullamco aliqua. Exercitation enim mollit nulla incididunt excepteur excepteur dolor proident mollit sit sit anim. Sit dolor consectetur nulla ipsum cillum voluptate amet magna laboris do nisi fugiat. Anim quis excepteur voluptate minim irure ut sunt reprehenderit.\r\n",
+       "location_lat": 47.69466,
+       "location_lon": -71.60124,
+       "address": "dolore ea occaecat laboris dolore"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 34,
+      "fields": {
+        "first_name": "Nash",
+        "last_name": "Decker",
+        "username": "DecNas",
+        "email": "nashdecker@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 34,
+     "fields": {
+       "user_id": 34,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Oconnor",
+       "last_name": "Chan",
+       "email": "oconnorchan@joviold.com",
+       "nb_services_received": 15,
+       "nb_services_given": 20,
+       "avg_rating_as_employee": 2.6371,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 0.6123,
+       "nb_rating_as_employer": 20,
+       "user_bio": "Officia consectetur pariatur cupidatat eiusmod commodo nisi fugiat consequat adipisicing ut commodo nostrud proident. Anim tempor ullamco Lorem id irure exercitation cupidatat magna aliquip proident velit esse. Qui commodo voluptate laborum deserunt non ex nostrud ea enim ad dolore. Aliqua est non magna ea ut qui laborum sit. Consectetur non deserunt cupidatat minim cillum minim reprehenderit est nulla nulla mollit cupidatat cupidatat. Dolor nostrud dolore aute occaecat ex pariatur. Sint consectetur aliquip labore voluptate sunt veniam pariatur laboris excepteur.\r\n",
+       "location_lat": 47.24015,
+       "location_lon": -71.36551,
+       "address": "aliquip Lorem id Lorem aute"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 35,
+      "fields": {
+        "first_name": "Jennings",
+        "last_name": "Pickett",
+        "username": "PicJen",
+        "email": "jenningspickett@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 35,
+     "fields": {
+       "user_id": 35,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Marian",
+       "last_name": "Franks",
+       "email": "marianfranks@joviold.com",
+       "nb_services_received": 19,
+       "nb_services_given": 19,
+       "avg_rating_as_employee": 2.9597,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 1.8114,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Do veniam quis fugiat ea quis minim do veniam. Amet est do aliquip eiusmod ad consectetur est elit dolore magna magna et est. Ullamco ex consectetur irure ad adipisicing in ex ut sint veniam aliqua. Non sunt enim reprehenderit tempor nulla. Proident eiusmod deserunt officia ullamco sint in. Anim excepteur ipsum irure ex in culpa anim mollit. Adipisicing cillum culpa anim sit adipisicing.\r\n",
+       "location_lat": 46.78731,
+       "location_lon": -71.47993,
+       "address": "fugiat occaecat esse officia consequat"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 36,
+      "fields": {
+        "first_name": "Hester",
+        "last_name": "Mercado",
+        "username": "MerHes",
+        "email": "hestermercado@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 36,
+     "fields": {
+       "user_id": 36,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Noel",
+       "last_name": "Sparks",
+       "email": "noelsparks@joviold.com",
+       "nb_services_received": 15,
+       "nb_services_given": 15,
+       "avg_rating_as_employee": 2.9332,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 2.4375,
+       "nb_rating_as_employer": 10,
+       "user_bio": "Voluptate cupidatat mollit laboris dolor non adipisicing sunt magna anim cillum deserunt in ullamco. Veniam nostrud aute cillum veniam elit qui quis eiusmod aliquip. Adipisicing ipsum amet do consectetur est dolor id fugiat ad excepteur veniam non labore voluptate. Sunt eu occaecat aliquip duis esse veniam.\r\n",
+       "location_lat": 46.94702,
+       "location_lon": -71.58861,
+       "address": "reprehenderit eu ex veniam veniam"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 37,
+      "fields": {
+        "first_name": "Tran",
+        "last_name": "Head",
+        "username": "HeaTra",
+        "email": "tranhead@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 37,
+     "fields": {
+       "user_id": 37,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Collier",
+       "last_name": "Hamilton",
+       "email": "collierhamilton@joviold.com",
+       "nb_services_received": 13,
+       "nb_services_given": 12,
+       "avg_rating_as_employee": 1.6125,
+       "nb_rating_as_employe": 17,
+       "avg_rating_as_employer": 3.9276,
+       "nb_rating_as_employer": 10,
+       "user_bio": "Ex tempor est adipisicing cupidatat Lorem proident aliquip. Qui cupidatat nulla esse voluptate. Laboris ut reprehenderit ea dolore deserunt deserunt officia pariatur excepteur magna anim qui aliquip. Irure ut et eu ad sint ex deserunt exercitation deserunt occaecat minim. Dolor adipisicing laborum officia eiusmod eu magna aliquip id do anim. Elit ullamco non elit amet in quis aliqua ut aute aliqua voluptate. Consectetur deserunt eiusmod elit velit est nisi proident veniam deserunt dolor officia sint.\r\n",
+       "location_lat": 47.35217,
+       "location_lon": -71.66718,
+       "address": "consequat velit incididunt nisi pariatur"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 38,
+      "fields": {
+        "first_name": "Nancy",
+        "last_name": "Garcia",
+        "username": "GarNan",
+        "email": "nancygarcia@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 38,
+     "fields": {
+       "user_id": 38,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Lamb",
+       "last_name": "Pittman",
+       "email": "lambpittman@joviold.com",
+       "nb_services_received": 16,
+       "nb_services_given": 10,
+       "avg_rating_as_employee": 4.8698,
+       "nb_rating_as_employe": 13,
+       "avg_rating_as_employer": 4.2055,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Ipsum sint laboris ex ex esse. Deserunt eu incididunt aliqua et incididunt. Sunt veniam adipisicing qui non excepteur esse ea mollit sint est duis sunt adipisicing.\r\n",
+       "location_lat": 47.34848,
+       "location_lon": -71.33782,
+       "address": "ipsum minim ullamco voluptate dolor"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 39,
+      "fields": {
+        "first_name": "Buckley",
+        "last_name": "Salazar",
+        "username": "SalBuc",
+        "email": "buckleysalazar@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 39,
+     "fields": {
+       "user_id": 39,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Carpenter",
+       "last_name": "Coffey",
+       "email": "carpentercoffey@joviold.com",
+       "nb_services_received": 13,
+       "nb_services_given": 20,
+       "avg_rating_as_employee": 1.2465,
+       "nb_rating_as_employe": 16,
+       "avg_rating_as_employer": 0.0269,
+       "nb_rating_as_employer": 14,
+       "user_bio": "Eu eiusmod ad tempor dolore consectetur amet mollit non esse pariatur mollit. Ea cillum deserunt velit fugiat velit sunt eiusmod proident eiusmod est et deserunt excepteur. Exercitation elit commodo amet officia eiusmod cillum deserunt dolor do est ut. Cupidatat enim occaecat nulla sunt sunt veniam ex elit aliqua.\r\n",
+       "location_lat": 47.41278,
+       "location_lon": -71.3683,
+       "address": "Lorem cillum dolore voluptate et"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 40,
+      "fields": {
+        "first_name": "Bianca",
+        "last_name": "Rasmussen",
+        "username": "RasBia",
+        "email": "biancarasmussen@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 40,
+     "fields": {
+       "user_id": 40,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Adams",
+       "last_name": "Delacruz",
+       "email": "adamsdelacruz@joviold.com",
+       "nb_services_received": 19,
+       "nb_services_given": 20,
+       "avg_rating_as_employee": 3.1782,
+       "nb_rating_as_employe": 18,
+       "avg_rating_as_employer": 1.1095,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Ipsum dolore consectetur non Lorem do aute quis irure. Magna velit nisi ut qui dolore labore fugiat. Esse incididunt qui ad ex cupidatat incididunt laborum eiusmod in deserunt elit minim id.\r\n",
+       "location_lat": 47.02542,
+       "location_lon": -71.39662,
+       "address": "minim ad ea in ex"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 41,
+      "fields": {
+        "first_name": "Stephens",
+        "last_name": "Zimmerman",
+        "username": "ZimSte",
+        "email": "stephenszimmerman@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 41,
+     "fields": {
+       "user_id": 41,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Myra",
+       "last_name": "Waller",
+       "email": "myrawaller@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 1.2042,
+       "nb_rating_as_employe": 16,
+       "avg_rating_as_employer": 3.9619,
+       "nb_rating_as_employer": 14,
+       "user_bio": "Sint non et qui eu velit voluptate fugiat sit sunt consequat id id. Aute aute esse culpa duis labore amet incididunt qui aute non. Consectetur aute culpa irure duis eiusmod cillum Lorem officia ut. Deserunt consectetur laborum consequat ex dolore qui cupidatat laboris consequat nostrud. Ex sunt magna ullamco cillum qui consectetur do ex aliquip et. Consectetur labore id consequat consectetur reprehenderit non proident esse cillum et. Tempor amet est reprehenderit aliquip ex.\r\n",
+       "location_lat": 47.75531,
+       "location_lon": -71.63893,
+       "address": "proident anim ullamco do commodo"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 42,
+      "fields": {
+        "first_name": "Elvira",
+        "last_name": "Riddle",
+        "username": "RidElv",
+        "email": "elvirariddle@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 42,
+     "fields": {
+       "user_id": 42,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Pierce",
+       "last_name": "Hutchinson",
+       "email": "piercehutchinson@joviold.com",
+       "nb_services_received": 20,
+       "nb_services_given": 17,
+       "avg_rating_as_employee": 1.2457,
+       "nb_rating_as_employe": 15,
+       "avg_rating_as_employer": 1.1882,
+       "nb_rating_as_employer": 20,
+       "user_bio": "Velit est nostrud reprehenderit reprehenderit consequat excepteur aliqua laboris sit. Do tempor consectetur sit laborum occaecat Lorem laborum reprehenderit officia. Labore ad labore consequat in non esse cupidatat. Sunt amet nostrud aliqua labore ad ea duis. Do laborum cupidatat velit mollit anim do anim nostrud culpa consequat ullamco ipsum velit. Ullamco quis esse sint commodo enim et reprehenderit eiusmod in labore eu. Cupidatat id voluptate Lorem elit deserunt pariatur exercitation aute occaecat velit.\r\n",
+       "location_lat": 47.21871,
+       "location_lon": -71.64267,
+       "address": "laboris excepteur et enim amet"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 43,
+      "fields": {
+        "first_name": "Gabriela",
+        "last_name": "Figueroa",
+        "username": "FigGab",
+        "email": "gabrielafigueroa@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 43,
+     "fields": {
+       "user_id": 43,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Anna",
+       "last_name": "Donovan",
+       "email": "annadonovan@joviold.com",
+       "nb_services_received": 13,
+       "nb_services_given": 14,
+       "avg_rating_as_employee": 2.8658,
+       "nb_rating_as_employe": 17,
+       "avg_rating_as_employer": 4.0815,
+       "nb_rating_as_employer": 12,
+       "user_bio": "Sint non ea eiusmod magna labore. Culpa aliqua elit commodo dolore Lorem enim pariatur in in aliqua ex Lorem. Adipisicing consequat commodo duis commodo ullamco aliqua amet ullamco enim non culpa elit. In reprehenderit duis aliquip sit. Nulla aute adipisicing adipisicing excepteur cillum magna.\r\n",
+       "location_lat": 47.51632,
+       "location_lon": -71.35993,
+       "address": "mollit deserunt culpa do Lorem"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 44,
+      "fields": {
+        "first_name": "Sharlene",
+        "last_name": "Ingram",
+        "username": "IngSha",
+        "email": "sharleneingram@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 44,
+     "fields": {
+       "user_id": 44,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Le",
+       "last_name": "Harvey",
+       "email": "leharvey@joviold.com",
+       "nb_services_received": 19,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 2.2764,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 1.1176,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Ut esse deserunt do voluptate irure ex. Adipisicing voluptate ad nisi labore nulla minim qui. Nisi reprehenderit irure officia quis dolor sunt dolor. Quis laboris nulla consectetur nostrud exercitation. Dolor est nisi ipsum fugiat minim adipisicing velit enim minim pariatur.\r\n",
+       "location_lat": 47.08348,
+       "location_lon": -71.44941,
+       "address": "voluptate laborum Lorem id irure"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 45,
+      "fields": {
+        "first_name": "Tania",
+        "last_name": "Roberts",
+        "username": "RobTan",
+        "email": "taniaroberts@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 45,
+     "fields": {
+       "user_id": 45,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Mosley",
+       "last_name": "Knight",
+       "email": "mosleyknight@joviold.com",
+       "nb_services_received": 14,
+       "nb_services_given": 11,
+       "avg_rating_as_employee": 2.3601,
+       "nb_rating_as_employe": 20,
+       "avg_rating_as_employer": 2.2892,
+       "nb_rating_as_employer": 18,
+       "user_bio": "In culpa nostrud aliquip Lorem anim aute Lorem occaecat enim sint id sit nulla. Tempor cillum sit veniam voluptate labore esse enim eiusmod duis magna ullamco voluptate enim adipisicing. Do ullamco non cillum aute sunt. Voluptate cillum in aute ut deserunt qui. Tempor tempor cillum enim aliquip ex velit cillum do reprehenderit anim nulla quis consectetur et. Ut sint veniam aliqua incididunt aute reprehenderit aliqua cillum. Cupidatat quis proident aliqua tempor veniam.\r\n",
+       "location_lat": 47.48118,
+       "location_lon": -71.62036,
+       "address": "excepteur adipisicing non dolor esse"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 46,
+      "fields": {
+        "first_name": "Darlene",
+        "last_name": "Hood",
+        "username": "HooDar",
+        "email": "darlenehood@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 46,
+     "fields": {
+       "user_id": 46,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Wilda",
+       "last_name": "Avila",
+       "email": "wildaavila@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 19,
+       "avg_rating_as_employee": 2.4238,
+       "nb_rating_as_employe": 20,
+       "avg_rating_as_employer": 4.3109,
+       "nb_rating_as_employer": 17,
+       "user_bio": "Nostrud excepteur exercitation non deserunt quis aliquip magna. Ea adipisicing do amet consectetur. Laborum laborum duis aute eiusmod quis exercitation officia ad occaecat id amet quis culpa.\r\n",
+       "location_lat": 47.44002,
+       "location_lon": -71.38579,
+       "address": "tempor reprehenderit aliqua commodo dolor"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 47,
+      "fields": {
+        "first_name": "Huffman",
+        "last_name": "Giles",
+        "username": "GilHuf",
+        "email": "huffmangiles@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 47,
+     "fields": {
+       "user_id": 47,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Burgess",
+       "last_name": "Finch",
+       "email": "burgessfinch@joviold.com",
+       "nb_services_received": 10,
+       "nb_services_given": 12,
+       "avg_rating_as_employee": 0.0712,
+       "nb_rating_as_employe": 11,
+       "avg_rating_as_employer": 3.9322,
+       "nb_rating_as_employer": 16,
+       "user_bio": "Non velit pariatur tempor ullamco deserunt reprehenderit ea nisi duis ullamco. Ea culpa Lorem sint cupidatat sint. Tempor quis occaecat eu laborum fugiat ullamco nisi pariatur do nulla ea do. Sint culpa veniam adipisicing ea ipsum ut excepteur consectetur aliqua esse laboris aliquip pariatur. Irure proident nulla enim minim tempor ea laborum et anim velit ad amet. Ut ex et non elit eiusmod aliquip.\r\n",
+       "location_lat": 46.85908,
+       "location_lon": -71.59988,
+       "address": "sunt et laborum aute nostrud"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 48,
+      "fields": {
+        "first_name": "Lesley",
+        "last_name": "Silva",
+        "username": "SilLes",
+        "email": "lesleysilva@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 48,
+     "fields": {
+       "user_id": 48,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Suzette",
+       "last_name": "Burns",
+       "email": "suzetteburns@joviold.com",
+       "nb_services_received": 11,
+       "nb_services_given": 18,
+       "avg_rating_as_employee": 0.7828,
+       "nb_rating_as_employe": 13,
+       "avg_rating_as_employer": 4.2453,
+       "nb_rating_as_employer": 18,
+       "user_bio": "Lorem dolor nostrud cillum quis occaecat dolore aliquip. Quis adipisicing velit excepteur magna dolore minim do dolor veniam sit. Laborum esse ipsum tempor deserunt aliquip tempor cillum Lorem voluptate. Exercitation ex qui duis dolore incididunt eu nulla minim in do. Qui deserunt sunt est commodo incididunt laboris magna aute deserunt quis irure qui.\r\n",
+       "location_lat": 47.22553,
+       "location_lon": -71.39042,
+       "address": "commodo fugiat cupidatat fugiat dolor"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 49,
+      "fields": {
+        "first_name": "Jensen",
+        "last_name": "Clarke",
+        "username": "ClaJen",
+        "email": "jensenclarke@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 49,
+     "fields": {
+       "user_id": 49,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Mills",
+       "last_name": "Aguirre",
+       "email": "millsaguirre@joviold.com",
+       "nb_services_received": 14,
+       "nb_services_given": 13,
+       "avg_rating_as_employee": 0.9618,
+       "nb_rating_as_employe": 19,
+       "avg_rating_as_employer": 3.7812,
+       "nb_rating_as_employer": 12,
+       "user_bio": "Aliquip magna sint enim mollit pariatur adipisicing consequat culpa id dolore id consequat est ullamco. Mollit eu do laboris nostrud id duis ullamco pariatur nulla sit ex ipsum aute. Duis qui ea fugiat irure culpa deserunt sit consequat laboris.\r\n",
+       "location_lat": 47.7039,
+       "location_lon": -71.68093,
+       "address": "sit sint culpa fugiat reprehenderit"
+     }
+   },
+    {
+      "model": "auth.user",
+      "pk": 50,
+      "fields": {
+        "first_name": "Bradley",
+        "last_name": "Mcmahon",
+        "username": "McmBra",
+        "email": "bradleymcmahon@joviold.com",
+        "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
+        "is_active": true
+      }
+    },
+    {
+     "model": "userinfo.userinfo",
+     "pk": 50,
+     "fields": {
+       "user_id": 50,
+       "is_online": false,
+       "profile_is_completed": true,
+       "first_name": "Bonita",
+       "last_name": "Dudley",
+       "email": "bonitadudley@joviold.com",
+       "nb_services_received": 16,
+       "nb_services_given": 20,
+       "avg_rating_as_employee": 0.5867,
+       "nb_rating_as_employe": 12,
+       "avg_rating_as_employer": 3.571,
+       "nb_rating_as_employer": 11,
+       "user_bio": "Voluptate nostrud ea et adipisicing nulla veniam. Veniam ad amet consequat sunt Lorem amet do sunt aliquip laboris in. Velit aute eu amet ad sit velit ut quis eiusmod velit. Reprehenderit consectetur nostrud anim sunt fugiat nostrud dolor labore aliqua incididunt exercitation. Aliqua ullamco culpa veniam irure eu dolor nostrud. Eiusmod irure eiusmod sunt nostrud excepteur laboris nisi. Sint velit elit est eiusmod tempor labore commodo cillum exercitation reprehenderit adipisicing ad veniam.\r\n",
+       "location_lat": 47.73629,
+       "location_lon": -71.36866,
+       "address": "elit qui ipsum dolor sunt"
+     }
+   },
+   {
+    "model": "offer.servicetype",
+    "pk": 1,
+    "fields": { "name": "Gardiennage" }
+},
+{
+    "model": "offer.servicetype",
+    "pk": 2,
+    "fields": { "name": "Administration" }
+},
+{
+    "model": "offer.servicetype",
+    "pk": 3,
+    "fields": { "name": "Déneigement" }
+},
+{
+    "model": "offer.servicetype",
+    "pk": 4,
+    "fields": { "name": "Service de traiteur" }
+},
+
+  {
+    "model": "offer.offer",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "type_service": "Déneigement",
+      "description": "Duis et exercitation laboris irure cupidatat velit nulla tempor sint. Exercitation tempor incididunt eiusmod commodo eu.",
+      "hourly_rate": 16.36,
+      "max_distance": 13,
+      "date_added": "2022-12-21",
+      "start_date": "2022-12-21",
+      "end_date": "2023-01-21",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "type_service": "Service de traiteur",
+      "description": "Sint ex ex magna duis nulla ullamco tempor. Veniam culpa nulla veniam sunt incididunt.",
+      "hourly_rate": 28.01,
+      "max_distance": 11,
+      "date_added": "2022-12-27",
+      "start_date": "2022-12-27",
+      "end_date": "2023-01-27",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "type_service": "Déneigement",
+      "description": "Ea est sunt aliqua cillum. Amet incididunt est velit aute amet et fugiat exercitation pariatur occaecat ut dolore.",
+      "hourly_rate": 10.17,
+      "max_distance": 3,
+      "date_added": "2022-11-01",
+      "start_date": "2022-11-01",
+      "end_date": "2022-12-02",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+    
+  },
+  {
+    "model": "offer.offer",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "type_service": "Gardiennage",
+      "description": "Proident cupidatat quis elit velit cillum. Non minim fugiat nostrud pariatur ipsum Lorem.",
+      "hourly_rate": 16.55,
+      "max_distance": 5,
+      "date_added": "2022-04-03",
+      "start_date": "2022-04-03",
+      "end_date": "2022-05-03",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "type_service": "Déneigement",
+      "description": "Voluptate fugiat incididunt irure anim non eiusmod cillum culpa aliqua. Culpa ea magna aute consectetur proident dolore officia.",
+      "hourly_rate": 20.32,
+      "max_distance": 17,
+      "date_added": "2022-08-31",
+      "start_date": "2022-08-31",
+      "end_date": "2022-10-01",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "type_service": "Administration",
+      "description": "Aute mollit adipisicing exercitation elit eu anim voluptate ad commodo. Mollit anim nisi veniam consequat commodo reprehenderit aliquip Lorem excepteur.",
+      "hourly_rate": 29.81,
+      "max_distance": 20,
+      "date_added": "2022-10-27",
+      "start_date": "2022-10-27",
+      "end_date": "2022-11-27"
+      ,
+      "monday": false,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": true,
+      "friday": false,
+      "saturday": false,
+      "sunday": false}
+    
+  },
+  {
+    "model": "offer.offer",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "type_service": "Service de traiteur",
+      "description": "Cillum dolor dolore cupidatat aliqua id quis cupidatat incididunt ea magna laboris. Eiusmod fugiat ad magna aliqua sunt nostrud esse pariatur officia adipisicing duis eiusmod sunt est.",
+      "hourly_rate": 14.46,
+      "max_distance": 4,
+      "date_added": "2022-08-29",
+      "start_date": "2022-08-29",
+      "end_date": "2022-09-29"
+      ,
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "type_service": "Déneigement",
+      "description": "Laborum esse enim cillum tempor aliqua aliqua exercitation excepteur veniam est exercitation Lorem fugiat. Voluptate ad ullamco deserunt culpa non exercitation cupidatat cillum irure id culpa culpa consequat.",
+      "hourly_rate": 24.28,
+      "max_distance": 12,
+      "date_added": "2022-11-29",
+      "start_date": "2022-11-29",
+      "end_date": "2022-12-29",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "type_service": "Déneigement",
+      "description": "Ut labore dolore exercitation proident tempor ea id esse laboris Lorem. Ut nisi aliqua esse consequat aute aliquip officia reprehenderit excepteur.",
+      "hourly_rate": 21.82,
+      "max_distance": 14,
+      "date_added": "2022-11-19",
+      "start_date": "2022-11-19",
+      "end_date": "2022-12-19",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "type_service": "Service de traiteur",
+      "description": "Nostrud laborum eiusmod cupidatat aliquip magna laboris. Cupidatat ut ea proident eiusmod laboris.",
+      "hourly_rate": 12.45,
+      "max_distance": 5,
+      "date_added": "2022-04-12",
+      "start_date": "2022-04-12",
+      "end_date": "2022-05-12",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 11,
+    "fields": {
+      "user": 11,
+      "type_service": "Gardiennage",
+      "description": "Consectetur irure voluptate minim cupidatat consectetur occaecat ut cillum officia non incididunt culpa enim. In sint ipsum elit adipisicing voluptate sint enim esse esse irure.",
+      "hourly_rate": 26.61,
+      "max_distance": 7,
+      "date_added": "2022-08-03",
+      "start_date": "2022-08-03",
+      "end_date": "2022-09-03"
+      ,
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 12,
+    "fields": {
+      "user": 12,
+      "type_service": "Déneigement",
+      "description": "Pariatur officia ullamco adipisicing occaecat sint Lorem dolor. Sit laboris id dolor tempor in aute.",
+      "hourly_rate": 17.62,
+      "max_distance": 3,
+      "date_added": "2022-12-13",
+      "start_date": "2022-12-13",
+      "end_date": "2023-01-13"
+      ,
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 13,
+    "fields": {
+      "user": 13,
+      "type_service": "Administration",
+      "description": "Cupidatat occaecat laborum veniam ex ad veniam occaecat incididunt veniam nostrud velit ut cillum nisi. Laboris in nulla ex nulla ex proident nulla mollit nisi.",
+      "hourly_rate": 21.05,
+      "max_distance": 17,
+      "date_added": "2022-10-07",
+      "start_date": "2022-10-07",
+      "end_date": "2022-11-07"
+      ,
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 14,
+    "fields": {
+      "user": 14,
+      "type_service": "Administration",
+      "description": "Elit mollit sunt tempor id amet quis nostrud labore velit nostrud laborum. Fugiat culpa esse dolore dolor veniam velit exercitation ex aliqua anim officia labore occaecat.",
+      "hourly_rate": 18.59,
+      "max_distance": 1,
+      "date_added": "2022-09-24",
+      "start_date": "2022-09-24",
+      "end_date": "2022-10-24"
+      ,
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 15,
+    "fields": {
+      "user": 15,
+      "type_service": "Service de traiteur",
+      "description": "Laboris labore ad consectetur non velit. Et qui tempor aliquip ex.",
+      "hourly_rate": 16.57,
+      "max_distance": 15,
+      "date_added": "2022-02-21",
+      "start_date": "2022-02-21",
+      "end_date": "2022-03-20",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 16,
+    "fields": {
+      "user": 16,
+      "type_service": "Administration",
+      "description": "Aliquip cupidatat eiusmod sit enim qui aliqua ut sit velit aliqua reprehenderit. Laborum sint anim pariatur aliquip nisi irure ullamco reprehenderit in deserunt sit.",
+      "hourly_rate": 15.79,
+      "max_distance": 1,
+      "date_added": "2022-02-02",
+      "start_date": "2022-02-02",
+      "end_date": "2022-03-02",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 17,
+    "fields": {
+      "user": 17,
+      "type_service": "Service de traiteur",
+      "description": "Tempor cupidatat esse elit incididunt ex velit proident occaecat dolor officia. Anim deserunt consectetur et nisi aliquip do quis consequat.",
+      "hourly_rate": 25.85,
+      "max_distance": 1,
+      "date_added": "2022-05-20",
+      "start_date": "2022-05-20",
+      "end_date": "2022-06-20",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 18,
+    "fields": {
+      "user": 18,
+      "type_service": "Administration",
+      "description": "Lorem laborum mollit ut ex id nulla mollit reprehenderit ex Lorem aliqua do. Veniam minim cillum tempor reprehenderit qui minim labore nisi in dolor duis.",
+      "hourly_rate": 23.39,
+      "max_distance": 12,
+      "date_added": "2022-02-16",
+      "start_date": "2022-02-16",
+      "end_date": "2022-03-15",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 19,
+    "fields": {
+      "user": 19,
+      "type_service": "Service de traiteur",
+      "description": "Lorem non sit ullamco mollit tempor do excepteur tempor pariatur. Lorem dolor mollit anim mollit quis excepteur.",
+      "hourly_rate": 20.56,
+      "max_distance": 17,
+      "date_added": "2022-01-30",
+      "start_date": "2022-01-30",
+      "end_date": "2022-03-02",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 20,
+    "fields": {
+      "user": 20,
+      "type_service": "Déneigement",
+      "description": "Laborum aliqua Lorem Lorem ipsum enim nostrud duis incididunt sunt nisi nisi ullamco proident. Ipsum qui incididunt excepteur ipsum eiusmod quis aliquip labore.",
+      "hourly_rate": 23.33,
+      "max_distance": 9,
+      "date_added": "2022-06-01",
+      "start_date": "2022-06-01",
+      "end_date": "2022-07-02",
+      "monday": false,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 21,
+    "fields": {
+      "user": 21,
+      "type_service": "Administration",
+      "description": "Aliquip eu excepteur anim enim culpa excepteur qui ullamco. Proident dolor velit ullamco labore eu cillum aliqua reprehenderit veniam proident id in quis.",
+      "hourly_rate": 19.79,
+      "max_distance": 20,
+      "date_added": "2022-11-29",
+      "start_date": "2022-11-29",
+      "end_date": "2022-12-29",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": false,
+      "thursday": true,
+      "friday": false,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 22,
+    "fields": {
+      "user": 22,
+      "type_service": "Administration",
+      "description": "Minim aute quis laborum sunt. Commodo nulla laboris mollit reprehenderit.",
+      "hourly_rate": 27.22,
+      "max_distance": 11,
+      "date_added": "2022-08-15",
+      "start_date": "2022-08-15",
+      "end_date": "2022-09-15",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": false,
+      "sunday": false}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 23,
+    "fields": {
+      "user": 23,
+      "type_service": "Administration",
+      "description": "Adipisicing quis anim consequat aute nisi mollit nisi amet irure anim et qui sunt. Nostrud labore fugiat do elit consequat qui voluptate deserunt exercitation duis.",
+      "hourly_rate": 23.06,
+      "max_distance": 17,
+      "date_added": "2022-06-14",
+      "start_date": "2022-06-14",
+      "end_date": "2022-07-14",
+      "monday": true,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": false,
+      "sunday": false}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 24,
+    "fields": {
+      "user": 24,
+      "type_service": "Gardiennage",
+      "description": "Nostrud qui eu ea sit dolor sunt quis consectetur eiusmod. Dolore fugiat dolor laboris aliqua enim sint ex id sunt nulla irure.",
+      "hourly_rate": 28.02,
+      "max_distance": 12,
+      "date_added": "2022-06-13",
+      "start_date": "2022-06-13",
+      "end_date": "2022-07-13",
+      "monday": false,
+      "tuesday": true,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": false,
+      "sunday": false}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 25,
+    "fields": {
+      "user": 25,
+      "type_service": "Administration",
+      "description": "Labore adipisicing sint est exercitation nisi tempor pariatur deserunt proident ut reprehenderit. Dolor occaecat in sint anim mollit.",
+      "hourly_rate": 16.35,
+      "max_distance": 15,
+      "date_added": "2022-10-17",
+      "start_date": "2022-10-17",
+      "end_date": "2022-11-17"
+      ,
+      "monday": false,
+      "tuesday": false,
+      "wednesday": true,
+      "thursday": true,
+      "friday": false,
+      "saturday": false,
+      "sunday": false}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 26,
+    "fields": {
+      "user": 26,
+      "type_service": "Service de traiteur",
+      "description": "Sunt magna aliqua ipsum dolor ut aliqua aute minim. Et cupidatat esse duis occaecat sunt.",
+      "hourly_rate": 23.16,
+      "max_distance": 2,
+      "date_added": "2022-09-21",
+      "start_date": "2022-09-21",
+      "end_date": "2022-10-21"
+      ,
+      "monday": false,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": true,
+      "saturday": false,
+      "sunday": false
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 27,
+    "fields": {
+      "user": 27,
+      "type_service": "Déneigement",
+      "description": "Ex ut exercitation ut laboris reprehenderit proident consequat velit id. Esse velit nostrud est aliqua magna pariatur.",
+      "hourly_rate": 25.48,
+      "max_distance": 3,
+      "date_added": "2022-03-01",
+      "start_date": "2022-03-01",
+      "end_date": "2022-03-28"
+    ,
+    "monday": true,
+    "tuesday": false,
+    "wednesday": true,
+    "thursday": true,
+    "friday": true,
+    "saturday": false,
+    "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 28,
+    "fields": {
+      "user": 28,
+      "type_service": "Administration",
+      "description": "Incididunt sit in voluptate id sint quis do culpa mollit sit occaecat ad duis. Deserunt sunt pariatur exercitation ipsum cupidatat nulla aute duis eu anim.",
+      "hourly_rate": 20.87,
+      "max_distance": 3,
+      "date_added": "2022-09-21",
+      "start_date": "2022-09-21",
+      "end_date": "2022-10-21"
+      ,
+      "monday": false,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 29,
+    "fields": {
+      "user": 29,
+      "type_service": "Déneigement",
+      "description": "Consectetur consequat minim qui enim tempor veniam incididunt cupidatat labore do aute laborum anim. Quis nostrud mollit sint cillum exercitation ex eiusmod elit nisi ut.",
+      "hourly_rate": 22.65,
+      "max_distance": 7,
+      "date_added": "2022-09-19",
+      "start_date": "2022-09-19",
+      "end_date": "2022-10-19",
+      "monday": false,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 30,
+    "fields": {
+      "user": 30,
+      "type_service": "Gardiennage",
+      "description": "Lorem irure labore sunt amet. Esse voluptate commodo adipisicing ex non enim esse ullamco.",
+      "hourly_rate": 16.02,
+      "max_distance": 12,
+      "date_added": "2022-09-30",
+      "start_date": "2022-09-30",
+      "end_date": "2022-10-30",
+      "monday": false,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 31,
+    "fields": {
+      "user": 31,
+      "type_service": "Administration",
+      "description": "Tempor culpa tempor esse eiusmod excepteur ullamco sunt voluptate mollit. Sit aliqua consectetur adipisicing deserunt nisi pariatur.",
+      "hourly_rate": 23.48,
+      "max_distance": 6,
+      "date_added": "2022-07-31",
+      "start_date": "2022-07-31",
+      "end_date": "2022-08-31",
+      "monday": true,
+      "tuesday": false,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": false,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 32,
+    "fields": {
+      "user": 32,
+      "type_service": "Service de traiteur",
+      "description": "Duis occaecat voluptate enim anim culpa tempor enim eiusmod. Veniam adipisicing culpa eu occaecat aliqua amet consequat eiusmod anim non excepteur voluptate.",
+      "hourly_rate": 14.86,
+      "max_distance": 2,
+      "date_added": "2022-09-25",
+      "start_date": "2022-09-25",
+      "end_date": "2022-10-25",
+      "monday": false,
+      "tuesday": false,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": false,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 33,
+    "fields": {
+      "user": 33,
+      "type_service": "Administration",
+      "description": "Anim ullamco fugiat nulla aute qui proident qui irure nostrud esse. Veniam sint aliquip nostrud anim id elit.",
+      "hourly_rate": 29.48,
+      "max_distance": 3,
+      "date_added": "2022-10-15",
+      "start_date": "2022-10-15",
+      "end_date": "2022-11-15",
+      "monday": true,
+      "tuesday": false,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 34,
+    "fields": {
+      "user": 34,
+      "type_service": "Déneigement",
+      "description": "Pariatur laborum laborum laboris nostrud incididunt deserunt dolor mollit dolore. Elit sunt quis consequat eiusmod incididunt voluptate sint.",
+      "hourly_rate": 15,
+      "max_distance": 13,
+      "date_added": "2022-03-22",
+      "start_date": "2022-03-22",
+      "end_date": "2022-04-22",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": false,
+      "sunday": false}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 35,
+    "fields": {
+      "user": 35,
+      "type_service": "Administration",
+      "description": "Voluptate laboris aliqua anim irure eiusmod consectetur nostrud. Deserunt adipisicing enim pariatur proident ad laboris et incididunt.",
+      "hourly_rate": 13.66,
+      "max_distance": 20,
+      "date_added": "2022-07-06",
+      "start_date": "2022-07-06",
+      "end_date": "2022-08-06",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": false,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true
+    }
+  },
+  {
+    "model": "offer.offer",
+    "pk": 36,
+    "fields": {
+      "user": 36,
+      "type_service": "Service de traiteur",
+      "description": "Aliqua aliqua nulla consequat eu occaecat reprehenderit ipsum dolore laborum sint minim amet. Deserunt ut culpa do consectetur dolor.",
+      "hourly_rate": 22.81,
+      "max_distance": 3,
+      "date_added": "2022-02-14",
+      "start_date": "2022-02-14",
+      "end_date": "2022-03-13",
+      "monday": false,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": false,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 37,
+    "fields": {
+      "user": 37,
+      "type_service": "Administration",
+      "description": "Non laboris laborum sint velit in magna ullamco mollit. Excepteur reprehenderit ut amet elit aute deserunt in irure consectetur esse pariatur non non.",
+      "hourly_rate": 20.94,
+      "max_distance": 20,
+      "date_added": "2022-03-16",
+      "start_date": "2022-03-16",
+      "end_date": "2022-04-16",
+      "monday": true,
+      "tuesday": true,
+      "wednesday": true,
+      "thursday": false,
+      "friday": true,
+      "saturday": true,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 38,
+    "fields": {
+      "user": 38,
+      "type_service": "Gardiennage",
+      "description": "Eu proident sit Lorem qui eiusmod proident adipisicing cupidatat tempor. Fugiat commodo eu velit quis quis quis ad deserunt labore nostrud.",
+      "hourly_rate": 27.9,
+      "max_distance": 5,
+      "date_added": "2022-06-20",
+      "start_date": "2022-06-20",
+      "end_date": "2022-07-20",
+      "monday": true,
+      "tuesday": false,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": false,
+      "sunday": true}
+  },
+  {
+    "model": "offer.offer",
+    "pk": 39,
+    "fields": {
+      "user": 39,
+      "type_service": "Gardiennage",
+      "description": "Cupidatat cupidatat veniam ex dolor dolore dolore sint. Sint id sint cupidatat cillum pariatur ut ipsum occaecat sunt exercitation reprehenderit exercitation cupidatat.",
+      "hourly_rate": 11,
+      "max_distance": 10,
+      "date_added": "2022-02-07",
+      "start_date": "2022-02-07",
+      "end_date": "2022-03-07",
+      "monday": true,
+      "tuesday": false,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": true,
+      "sunday": true
+    }},
+  {
+    "model": "offer.offer",
+    "pk": 40,
+    "fields": {
+      "user": 40,
+      "type_service": "Administration",
+      "description": "Anim id anim commodo consequat labore. Minim irure commodo reprehenderit nostrud cupidatat adipisicing cillum adipisicing consectetur do ullamco veniam consequat enim.",
+      "hourly_rate": 21.04,
+      "max_distance": 4,
+      "date_added": "2022-05-25",
+      "start_date": "2022-05-25",
+      "end_date": "2022-06-25",
+      "monday": false,
+      "tuesday": false,
+      "wednesday": true,
+      "thursday": true,
+      "friday": true,
+      "saturday": false,
+      "sunday": true}
+  },
+  
+    {
+      "model": "offer.offer",
+      "pk": 41,
+      "fields": {
+        "user": 41,
+        "type_service": "Déneigement",
+        "description": "Veniam eu magna fugiat aute ipsum dolor tempor sint. Sit culpa deserunt do cillum in aliqua culpa aliquip mollit ullamco.",
+        "hourly_rate": 14.1,
+        "max_distance": 7,
+        "date_added": "2022-08-14",
+        "start_date": "2022-08-14",
+        "end_date": "2022-08-14",
+        "monday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": true}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 42,
+      "fields": {
+        "user": 42,
+        "type_service": "Déneigement",
+        "description": "Veniam culpa sunt veniam cupidatat anim officia cupidatat irure excepteur. Incididunt duis incididunt tempor reprehenderit ipsum ad aute officia esse tempor in.",
+        "hourly_rate": 27,
+        "max_distance": 16,
+        "date_added": "2022-08-27",
+        "start_date": "2022-08-27",
+        "end_date": "2022-08-27",
+        "monday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": true,
+        "sunday": false}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 43,
+      "fields": {
+        "user": 43,
+        "type_service": "Gardiennage",
+        "description": "Velit minim ea consectetur consectetur culpa quis adipisicing mollit cupidatat cillum ea Lorem dolore voluptate. Velit dolor velit tempor excepteur.",
+        "hourly_rate": 10.41,
+        "max_distance": 2,
+        "date_added": "2022-08-15",
+        "start_date": "2022-08-15",
+        "end_date": "2022-08-15",
+        "monday": true,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": false}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 44,
+      "fields": {
+        "user": 44,
+        "type_service": "Administration",
+        "description": "Officia tempor reprehenderit et officia enim anim Lorem nostrud eiusmod excepteur. Duis aliqua commodo Lorem cupidatat nostrud commodo excepteur sint in reprehenderit enim nostrud.",
+        "hourly_rate": 14.46,
+        "max_distance": 13,
+        "date_added": "2022-07-18",
+        "start_date": "2022-07-18",
+        "end_date": "2022-07-18",
+        "monday": true,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": false}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 45,
+      "fields": {
+        "user": 45,
+        "type_service": "Service de traiteur",
+        "description": "Exercitation est nisi laboris nulla occaecat duis commodo nostrud. Reprehenderit excepteur occaecat irure irure fugiat et.",
+        "hourly_rate": 10.69,
+        "max_distance": 17,
+        "date_added": "2022-04-19",
+        "start_date": "2022-04-19",
+        "end_date": "2022-04-19",
+        "monday": false,
+        "tuesday": true,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": false}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 46,
+      "fields": {
+        "user": 46,
+        "type_service": "Administration",
+        "description": "Aute officia dolor ipsum enim aute id adipisicing nisi duis. Culpa eiusmod proident dolor velit ipsum non mollit ipsum nisi occaecat quis dolore nostrud est.",
+        "hourly_rate": 23.19,
+        "max_distance": 10,
+        "date_added": "2022-08-14",
+        "start_date": "2022-08-14",
+        "end_date": "2022-08-14",
+        "monday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": true}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 47,
+      "fields": {
+        "user": 47,
+        "type_service": "Gardiennage",
+        "description": "Pariatur sunt commodo est culpa laborum consectetur incididunt labore cillum commodo. Fugiat deserunt sunt proident tempor eiusmod id dolor do duis aliquip et nulla.",
+        "hourly_rate": 17.61,
+        "max_distance": 2,
+        "date_added": "2022-11-11",
+        "start_date": "2022-11-11",
+        "end_date": "2022-11-11",
+        "monday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": true,
+        "saturday": false,
+        "sunday": false}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 48,
+      "fields": {
+        "user": 48,
+        "type_service": "Administration",
+        "description": "Cillum mollit ex excepteur eiusmod laboris veniam velit quis. Sit mollit ex qui nisi amet voluptate aute ex sunt.",
+        "hourly_rate": 22.41,
+        "max_distance": 12,
+        "date_added": "2022-08-22",
+        "start_date": "2022-08-22",
+        "end_date": "2022-08-22",
+        "monday": true,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": false}
+    },
+    {
+      "model": "offer.offer",
+      "pk": 49,
+      "fields": {
+        "user": 49,
+        "type_service": "Service de traiteur",
+        "description": "Irure sint nostrud adipisicing velit dolore non Lorem cillum nostrud. Proident fugiat nulla enim deserunt nostrud nostrud.",
+        "hourly_rate": 26.77,
+        "max_distance": 2,
+        "date_added": "2022-11-30",
+        "start_date": "2022-11-30",
+        "end_date": "2022-11-30",
+        "monday": false,
+        "tuesday": false,
+        "wednesday": true,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": false}
+    },
+   
+    
+      {
+        "model": "offer.activeoffer",
         "pk": 1,
         "fields": {
-            "username": "garneau1",
-            "first_name": "François",
-            "last_name": "Xavier-Garneau",
-            "email": "fgx@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
+          "id_user": 1,
+          "id_offer": 1
         }
-    },
-    {
-        "model": "auth.user",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 2,
         "fields": {
-            "username": "garneau2",
-            "first_name": "Guylaine",
-            "last_name": "Morin",
-            "email": "gmorin@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
+          "id_user": 2,
+          "id_offer": 2
         }
-    },
-    {
-        "model": "auth.user",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 3,
         "fields": {
-            "username": "garneau3",
-            "first_name": "Clément",
-            "last_name": "Tremblay",
-            "email": "ctremblay@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
+          "id_user": 3,
+          "id_offer": 3
         }
-    },
-    {
-        "model": "auth.user",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 4,
         "fields": {
-            "username": "communo_manager",
-            "first_name": "communo_manager",
-            "last_name": "communo_manager",
-            "email": "communostaff@live.ca",
-            "password": "pbkdf2_sha256$260000$TD8CwXKbK3ZK827Z4PHna0$FC/2L2g2rCmnXuN5k85JywDaq7/8BEBv11GTqjJ2V68=",
-            "is_active": "True",
-            "is_superuser": "True",
-            "is_staff": "True"
+          "id_user": 4,
+          "id_offer": 4
         }
-    },
-    {
-        "model": "userinfo.userinfo",
-        "pk": 4,
-        "fields": {
-            "profile_is_completed": true,
-            "first_name": "communo_manager",
-            "last_name": "communo_manager",
-            "email": "communostaff@live.ca",
-            "nb_services_received": 0,
-            "nb_services_given": 0,
-            "avg_rating_as_employee": 0,
-            "nb_rating_as_employe": 0,
-            "avg_rating_as_employer": 0,
-            "nb_rating_as_employer": 0,
-            "user_id_id": 4,
-            "is_online": "False"
-        }
-    },
-    {
-        "model": "offer.servicetype",
-        "pk": 1,
-        "fields": { "name": "Gardiennage" }
-    },
-    {
-        "model": "offer.servicetype",
-        "pk": 2,
-        "fields": { "name": "Administration" }
-    },
-    {
-        "model": "offer.servicetype",
-        "pk": 3,
-        "fields": { "name": "Déneigement" }
-    },
-    {
-        "model": "offer.servicetype",
-        "pk": 4,
-        "fields": { "name": "Tonte de pelouse" }
-    },
-    {
-        "model": "userinfo.userinfo",
-        "pk": 1,
-        "fields": {
-            "user_id": 1,
-            "is_online": false,
-            "profile_is_completed": true,
-            "first_name": "François",
-            "last_name": "Xavier-Garneau",
-            "email": "fgx@educegepgarneau.ca",
-            "nb_services_received": 45,
-            "nb_services_given": 54,
-            "avg_rating_as_employee": 4.5,
-            "nb_rating_as_employe": 34,
-            "avg_rating_as_employer": 3.98,
-            "nb_rating_as_employer": 23,
-            "user_bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-            "location_lat": "46.856773",
-            "location_lon": "-71.122421",
-            "address": "17 Rue d'Orléans, Sainte-Pétronille, QC"
-        }
-    },
-    {
-        "model": "userinfo.userinfo",
-        "pk": 2,
-        "fields": {
-            "user_id": 2,
-            "is_online": false,
-            "profile_is_completed": true,
-            "first_name": "Guylaine",
-            "last_name": "Morin",
-            "email": "gmorin@educegepgarneau.ca",
-            "nb_services_received": 123,
-            "nb_services_given": 12,
-            "avg_rating_as_employee": 3.86,
-            "nb_rating_as_employe": 34,
-            "avg_rating_as_employer": 3.98,
-            "nb_rating_as_employer": 23,
-            "user_bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "location_lat": "46.871947",
-            "location_lon": "-71.093098",
-            "address": "933 Rte Prévost, Saint-Pierre, QC"
-        }
-    },
-    {
-        "model": "userinfo.userinfo",
-        "pk": 3,
-        "fields": {
-            "user_id": 3,
-            "is_online": false,
-            "profile_is_completed": true,
-            "first_name": "Clément",
-            "last_name": "Tremblay",
-            "email": "ctremblay@educegepgarneau.ca",
-            "nb_services_received": 13,
-            "nb_services_given": 21,
-            "avg_rating_as_employee": 4.56,
-            "nb_rating_as_employe": 35,
-            "avg_rating_as_employer": 4.98,
-            "nb_rating_as_employer": 7,
-            "user_bio": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-            "location_lat": "46.885554",
-            "location_lon": "-71.066911",
-            "address": "576 Rte des Prêtres, Saint-Pierre, QC"
-        }
-    },
-    {
-        "model": "auth.user",
-        "pk": 2,
-        "fields": {
-            "username": "garneau2",
-            "first_name": "Guylaine",
-            "last_name": "Morin",
-            "email": "gmorin@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
-        }
-    },
-    {
-        "model": "auth.user",
-        "pk": 3,
-        "fields": {
-            "username": "garneau3",
-            "first_name": "Clément",
-            "last_name": "Tremblay",
-            "email": "ctremblay@educegepgarneau.ca",
-            "password": "pbkdf2_sha256$260000$PX4al7g5lLhMuOXpOmTJ5Y$7U+8GL50W7ZKyvjjq+JqITd48jlg0PYGD6rtOwTGhjA=",
-            "is_active": "True"
-        }
-    },
-
-
-
-
-    {
-        "model": "offer.offer",
-        "pk": 1,
-        "fields": {
-            "user": 1,
-            "type_service": "Tonte de pelouse",
-            "description": "Service rapide et professionnel.",
-            "hourly_rate": "12.50",
-            "max_distance": 2,
-            "date_added": "2020-09-20",
-            "monday": true,
-            "tuesday": true,
-            "wednesday": true,
-            "thursday": true,
-            "friday": true,
-            "saturday": true,
-            "sunday": true,
-            "start_date": "2021-12-01",
-            "end_date": "2021-12-31"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 2,
-        "fields": {
-            "user": 1,
-            "type_service": "Tonte de pelouse",
-            "description": "Rapide et efficace.",
-            "hourly_rate": "50",
-            "max_distance": 2,
-            "date_added": "2020-05-05",
-            "friday": true,
-            "saturday": true,
-            "start_date": "2021-12-01",
-            "end_date": "2021-12-31"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 3,
-        "fields": {
-            "user": 1,
-            "type_service": "Gardiennage",
-            "description": "Maximum 3 enfants.",
-            "hourly_rate": "12.50",
-            "max_distance": 4,
-            "date_added": "2020-09-20",
-            "start_date": "2021-12-20",
-            "end_date": "2021-12-20"
-        }
-    },
-    {
-        "model": "offer.offer",
-        "pk": 4,
-        "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "Les escaliers extérieurs peuvent être inclus.",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20",
-            "wednesday": true,
-            "sunday": true,
-            "start_date": "2021-12-01",
-            "end_date": "2021-12-20"
-        }
-    },
-    {
-        "model": "offer.offer",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 5,
         "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "La pelle doit être fournie par le client.",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20",
-            "saturday": true,
-            "start_date": "2021-09-24",
-            "end_date": "2021-12-20"
+          "id_user": 5,
+          "id_offer": 5
         }
-    },
-    {
-        "model": "offer.offer",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 6,
         "fields": {
-            "user": 2,
-            "type_service": "Déneigement",
-            "description": "",
-            "hourly_rate": "15.75",
-            "max_distance": 4,
-            "date_added": "2020-12-20",
-            "saturday": true,
-            "start_date": "2021-11-24",
-            "end_date": "2021-12-20"
+          "id_user": 6,
+          "id_offer": 6
         }
-    },
-    {
-        "model": "offer.offer",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 7,
         "fields": {
-            "user": 1,
-            "type_service": "Tonte de pelouse",
-            "description": "À toute épreuve.",
-            "hourly_rate": "16.75",
-            "max_distance": 14,
-            "date_added": "2020-12-20",
-            "monday": true,
-            "thursday": true,
-            "saturday": true,
-            "start_date": "2021-10-24",
-            "end_date": "2021-11-20"
+          "id_user": 7,
+          "id_offer": 7
         }
-    },
-    {
-        "model": "offer.offer",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 8,
         "fields": {
-            "user": 1,
-            "type_service": "Gardiennage",
-            "description": "Abordable.",
-            "hourly_rate": "12.25",
-            "max_distance": 8,
-            "date_added": "2020-12-20",
-            "monday": true,
-            "tuesday": true,
-            "thursday": true,
-            "start_date": "2021-09-08",
-            "end_date": "2021-10-08"
+          "id_user": 8,
+          "id_offer": 8
         }
-    },
-    {
-        "model": "offer.offer",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 9,
         "fields": {
-            "user": 2,
-            "type_service": "Gardiennage",
-            "description": "Service de qualité.",
-            "hourly_rate": "18.50",
-            "max_distance": 24,
-            "date_added": "2020-12-20",
-            "wednesday": true,
-            "thursday": true,
-            "end_date": "2021-12-24"
+          "id_user": 9,
+          "id_offer": 9
         }
-    },
-    {
-        "model": "offer.offer",
+      },
+      {
+        "model": "offer.activeoffer",
         "pk": 10,
         "fields": {
-            "user": 2,
-            "type_service": "Gardiennage",
-            "description": "",
-            "hourly_rate": "11",
-            "max_distance": 7,
-            "date_added": "2020-12-20",
-            "monday": true,
-            "tuesday": true,
-            "wednesday": true,
-            "thursday": true
+          "id_user": 10,
+          "id_offer": 10
         }
-    },
-    {
+      },
+      {
         "model": "offer.activeoffer",
-        "pk": 1,
+        "pk": 11,
         "fields": {
+          "id_user": 11,
+          "id_offer": 11
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 12,
+        "fields": {
+          "id_user": 12,
+          "id_offer": 12
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 13,
+        "fields": {
+          "id_user": 13,
+          "id_offer": 13
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 14,
+        "fields": {
+          "id_user": 14,
+          "id_offer": 14
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 15,
+        "fields": {
+          "id_user": 15,
+          "id_offer": 15
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 16,
+        "fields": {
+          "id_user": 16,
+          "id_offer": 16
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 17,
+        "fields": {
+          "id_user": 17,
+          "id_offer": 17
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 18,
+        "fields": {
+          "id_user": 18,
+          "id_offer": 18
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 19,
+        "fields": {
+          "id_user": 19,
+          "id_offer": 19
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 20,
+        "fields": {
+          "id_user": 20,
+          "id_offer": 20
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 21,
+        "fields": {
+          "id_user": 21,
+          "id_offer": 21
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 22,
+        "fields": {
+          "id_user": 22,
+          "id_offer": 22
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 23,
+        "fields": {
+          "id_user": 23,
+          "id_offer": 23
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 24,
+        "fields": {
+          "id_user": 24,
+          "id_offer": 24
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 25,
+        "fields": {
+          "id_user": 25,
+          "id_offer": 25
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 26,
+        "fields": {
+          "id_user": 26,
+          "id_offer": 26
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 27,
+        "fields": {
+          "id_user": 27,
+          "id_offer": 27
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 28,
+        "fields": {
+          "id_user": 28,
+          "id_offer": 28
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 29,
+        "fields": {
+          "id_user": 29,
+          "id_offer": 29
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 30,
+        "fields": {
+          "id_user": 30,
+          "id_offer": 30
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 31,
+        "fields": {
+          "id_user": 31,
+          "id_offer": 31
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 32,
+        "fields": {
+          "id_user": 32,
+          "id_offer": 32
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 33,
+        "fields": {
+          "id_user": 33,
+          "id_offer": 33
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 34,
+        "fields": {
+          "id_user": 34,
+          "id_offer": 34
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 35,
+        "fields": {
+          "id_user": 35,
+          "id_offer": 35
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 36,
+        "fields": {
+          "id_user": 36,
+          "id_offer": 36
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 37,
+        "fields": {
+          "id_user": 37,
+          "id_offer": 37
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 38,
+        "fields": {
+          "id_user": 38,
+          "id_offer": 38
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 39,
+        "fields": {
+          "id_user": 39,
+          "id_offer": 39
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 40,
+        "fields": {
+          "id_user": 40,
+          "id_offer": 40
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 41,
+        "fields": {
+          "id_user": 41,
+          "id_offer": 41
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 42,
+        "fields": {
+          "id_user": 42,
+          "id_offer": 42
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 43,
+        "fields": {
+          "id_user": 43,
+          "id_offer": 43
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 44,
+        "fields": {
+          "id_user": 44,
+          "id_offer": 44
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 45,
+        "fields": {
+          "id_user": 45,
+          "id_offer": 45
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 46,
+        "fields": {
+          "id_user": 46,
+          "id_offer": 46
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 47,
+        "fields": {
+          "id_user": 47,
+          "id_offer": 47
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 48,
+        "fields": {
+          "id_user": 48,
+          "id_offer": 48
+        }
+      },
+      {
+        "model": "offer.activeoffer",
+        "pk": 49,
+        "fields": {
+          "id_user": 49,
+          "id_offer": 49
+        }
+      },
+
+        {
+          "model": "offer.reservedoffer",
+          "pk": 1,
+          "fields": {
             "id_user": 1,
-            "id_offer": 1
-        }
-    },
-    {
-        "model": "offer.activeoffer",
-        "pk": 2,
-        "fields": {
-            "id_user": 1,
-            "id_offer": 2
-        }
-    },
-    {
-        "model": "offer.activeoffer",
-        "pk": 3,
-        "fields": {
-            "id_user": 1,
-            "id_offer": 3
-        }
-    },
-    {
-        "model": "offer.activeoffer",
-        "pk": 4,
-        "fields": {
+            "id_offer": 1,
+            "id_active_offer": 1,
+            "id_recruiter": 2,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 27.1
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 2,
+          "fields": {
             "id_user": 2,
-            "id_offer": 4
-        }
-    },
-    {
-        "model": "offer.activeoffer",
-        "pk": 5,
-        "fields": {
-            "id_user": 2,
-            "id_offer": 5
-        }
-    },
-    {
-        "model": "offer.activeoffer",
-        "pk": 6,
-        "fields": {
-            "id_user": 2,
-            "id_offer": 6
-        }
-    },
-    {
-        "model": "offer.activeoffer",
-        "pk": 7,
-        "fields": {
-            "id_user": 1,
-            "id_offer": 7
-        }
-    },
-    {
-        "model": "offer.activeoffer",
-        "pk": 8,
-        "fields": {
-            "id_user": 2,
-            "id_offer": 9
-        }
-    },
-    {
-        "model": "offer.reservedoffer",
-        "pk": 1,
-        "fields": {
-            "id_user": 1,
+            "id_offer": 2,
+            "id_active_offer": 2,
+            "id_recruiter": 3,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 23.68
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 3,
+          "fields": {
+            "id_user": 3,
+            "id_offer": 3,
+            "id_active_offer": 3,
+            "id_recruiter": 4,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 25.97
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 4,
+          "fields": {
+            "id_user": 4,
+            "id_offer": 4,
+            "id_active_offer": 4,
+            "id_recruiter": 5,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 11.58
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 5,
+          "fields": {
+            "id_user": 5,
+            "id_offer": 5,
+            "id_active_offer": 5,
+            "id_recruiter": 6,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 21.98
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 6,
+          "fields": {
+            "id_user": 6,
+            "id_offer": 6,
+            "id_active_offer": 6,
+            "id_recruiter": 7,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 25.43
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 7,
+          "fields": {
+            "id_user": 7,
             "id_offer": 7,
             "id_active_offer": 7,
-            "id_recruiter": 2,
-            "reservation_date": "2021-11-08",
-            "hourly_rate": "16.75"
-        }
-    },
-    {
-        "model": "offer.reservedoffer",
-        "pk": 2,
-        "fields": {
-            "id_user": 2,
-            "id_offer": 9,
-            "id_active_offer": 8,
-            "id_recruiter": 1,
-            "reservation_date": "2021-12-08",
-            "hourly_rate": "18.50"
-        }
-    },
-    {
-        "model": "offer.terminatedoffer",
-        "pk": 1,
-        "fields": {
-            "id_user": 2,
-            "id_offer": 10,
-            "id_active_offer": null,
-            "id_recruiter": 1,
-            "completed_date": "2021-10-26",
-            "status": 1,
-            "rating": 0,
-            "hourly_rate": "11"
-        }
-    },
-    {
-        "model": "offer.terminatedoffer",
-        "pk": 2,
-        "fields": {
-            "id_user": 1,
+            "id_recruiter": 8,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 16.64
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 8,
+          "fields": {
+            "id_user": 8,
             "id_offer": 8,
-            "id_active_offer": null,
-            "id_recruiter": 2,
-            "completed_date": "2021-10-28",
-            "status": 0,
-            "rating": 9.5,
-            "hourly_rate": "12.25"
+            "id_active_offer": 8,
+            "id_recruiter": 9,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 18.82
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 9,
+          "fields": {
+            "id_user": 9,
+            "id_offer": 9,
+            "id_active_offer": 9,
+            "id_recruiter": 10,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 13.83
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 10,
+          "fields": {
+            "id_user": 10,
+            "id_offer": 10,
+            "id_active_offer": 10,
+            "id_recruiter": 11,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 28.76
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 11,
+          "fields": {
+            "id_user": 11,
+            "id_offer": 11,
+            "id_active_offer": 11,
+            "id_recruiter": 12,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 17.38
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 12,
+          "fields": {
+            "id_user": 12,
+            "id_offer": 12,
+            "id_active_offer": 12,
+            "id_recruiter": 13,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 20.03
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 13,
+          "fields": {
+            "id_user": 13,
+            "id_offer": 13,
+            "id_active_offer": 13,
+            "id_recruiter": 14,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 18.83
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 14,
+          "fields": {
+            "id_user": 14,
+            "id_offer": 14,
+            "id_active_offer": 14,
+            "id_recruiter": 15,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 27.13
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 15,
+          "fields": {
+            "id_user": 15,
+            "id_offer": 15,
+            "id_active_offer": 15,
+            "id_recruiter": 16,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 24.24
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 16,
+          "fields": {
+            "id_user": 16,
+            "id_offer": 16,
+            "id_active_offer": 16,
+            "id_recruiter": 17,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 10.64
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 17,
+          "fields": {
+            "id_user": 17,
+            "id_offer": 17,
+            "id_active_offer": 17,
+            "id_recruiter": 18,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 26.28
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 18,
+          "fields": {
+            "id_user": 18,
+            "id_offer": 18,
+            "id_active_offer": 18,
+            "id_recruiter": 19,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 18.39
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 19,
+          "fields": {
+            "id_user": 19,
+            "id_offer": 19,
+            "id_active_offer": 19,
+            "id_recruiter": 20,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 25.07
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 20,
+          "fields": {
+            "id_user": 20,
+            "id_offer": 20,
+            "id_active_offer": 20,
+            "id_recruiter": 21,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 14.52
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 21,
+          "fields": {
+            "id_user": 21,
+            "id_offer": 21,
+            "id_active_offer": 21,
+            "id_recruiter": 22,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 21.17
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 22,
+          "fields": {
+            "id_user": 22,
+            "id_offer": 22,
+            "id_active_offer": 22,
+            "id_recruiter": 23,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 17.74
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 23,
+          "fields": {
+            "id_user": 23,
+            "id_offer": 23,
+            "id_active_offer": 23,
+            "id_recruiter": 24,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 14.23
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 24,
+          "fields": {
+            "id_user": 24,
+            "id_offer": 24,
+            "id_active_offer": 24,
+            "id_recruiter": 25,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 16.62
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 25,
+          "fields": {
+            "id_user": 25,
+            "id_offer": 25,
+            "id_active_offer": 25,
+            "id_recruiter": 26,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 11.36
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 26,
+          "fields": {
+            "id_user": 26,
+            "id_offer": 26,
+            "id_active_offer": 26,
+            "id_recruiter": 27,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 12.58
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 27,
+          "fields": {
+            "id_user": 27,
+            "id_offer": 27,
+            "id_active_offer": 27,
+            "id_recruiter": 28,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 16.61
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 28,
+          "fields": {
+            "id_user": 28,
+            "id_offer": 28,
+            "id_active_offer": 28,
+            "id_recruiter": 29,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 22.44
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 29,
+          "fields": {
+            "id_user": 29,
+            "id_offer": 29,
+            "id_active_offer": 29,
+            "id_recruiter": 30,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 14.45
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 30,
+          "fields": {
+            "id_user": 30,
+            "id_offer": 30,
+            "id_active_offer": 30,
+            "id_recruiter": 31,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 11.23
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 31,
+          "fields": {
+            "id_user": 31,
+            "id_offer": 31,
+            "id_active_offer": 31,
+            "id_recruiter": 32,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 27.31
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 32,
+          "fields": {
+            "id_user": 32,
+            "id_offer": 32,
+            "id_active_offer": 32,
+            "id_recruiter": 33,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 24.93
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 33,
+          "fields": {
+            "id_user": 33,
+            "id_offer": 33,
+            "id_active_offer": 33,
+            "id_recruiter": 34,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 14.68
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 34,
+          "fields": {
+            "id_user": 34,
+            "id_offer": 34,
+            "id_active_offer": 34,
+            "id_recruiter": 35,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 29.2
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 35,
+          "fields": {
+            "id_user": 35,
+            "id_offer": 35,
+            "id_active_offer": 35,
+            "id_recruiter": 36,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 18.65
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 36,
+          "fields": {
+            "id_user": 36,
+            "id_offer": 36,
+            "id_active_offer": 36,
+            "id_recruiter": 37,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 22.06
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 37,
+          "fields": {
+            "id_user": 37,
+            "id_offer": 37,
+            "id_active_offer": 37,
+            "id_recruiter": 38,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 21.06
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 38,
+          "fields": {
+            "id_user": 38,
+            "id_offer": 38,
+            "id_active_offer": 38,
+            "id_recruiter": 39,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 11.64
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 39,
+          "fields": {
+            "id_user": 39,
+            "id_offer": 39,
+            "id_active_offer": 39,
+            "id_recruiter": 40,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 19.43
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 40,
+          "fields": {
+            "id_user": 40,
+            "id_offer": 40,
+            "id_active_offer": 40,
+            "id_recruiter": 41,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 12.06
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 41,
+          "fields": {
+            "id_user": 41,
+            "id_offer": 41,
+            "id_active_offer": 41,
+            "id_recruiter": 42,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 14.53
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 42,
+          "fields": {
+            "id_user": 42,
+            "id_offer": 42,
+            "id_active_offer": 42,
+            "id_recruiter": 43,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 15.32
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 43,
+          "fields": {
+            "id_user": 43,
+            "id_offer": 43,
+            "id_active_offer": 43,
+            "id_recruiter": 44,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 16.67
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 44,
+          "fields": {
+            "id_user": 44,
+            "id_offer": 44,
+            "id_active_offer": 44,
+            "id_recruiter": 45,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 22.64
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 45,
+          "fields": {
+            "id_user": 45,
+            "id_offer": 45,
+            "id_active_offer": 45,
+            "id_recruiter": 46,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 28.65
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 46,
+          "fields": {
+            "id_user": 46,
+            "id_offer": 46,
+            "id_active_offer": 46,
+            "id_recruiter": 47,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 26.84
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 47,
+          "fields": {
+            "id_user": 47,
+            "id_offer": 47,
+            "id_active_offer": 47,
+            "id_recruiter": 48,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 15.07
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 48,
+          "fields": {
+            "id_user": 48,
+            "id_offer": 48,
+            "id_active_offer": 48,
+            "id_recruiter": 49,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 29.72
+          }
+        },
+        {
+          "model": "offer.reservedoffer",
+          "pk": 49,
+          "fields": {
+            "id_user": 49,
+            "id_offer": 49,
+            "id_active_offer": 49,
+            "id_recruiter": 50,
+            "reservation_date": "2999-09-09",
+            "hourly_rate": 27.61
+          }
         }
-    },
-    {
-        "model": "offer.terminatedoffer",
-        "pk": 3,
-        "fields": {
-            "id_user": 1,
-            "id_offer": 7,
-            "id_active_offer": 7,
-            "id_recruiter": 2,
-            "completed_date": null,
-            "status": 2,
-            "rating": null,
-            "hourly_rate": "16.75"
-        }
-    }
 ]
