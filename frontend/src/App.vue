@@ -56,7 +56,7 @@
 						<span>Paramètres</span>
 						</a>
 						<hr class="dropdown-divider" />
-						<a href="#" @click="logout(); this.showNav = !this.showNav" class="dropdown-item has-text-danger">
+						<a href="#" @click="logout(); this.showNav = !this.showNav; $emit('initQuotes')" class="dropdown-item has-text-danger">
 						<span class="icon is-small mr-3">
 							<i class="fas fa-sign-out-alt"></i>
 						</span>
@@ -128,7 +128,6 @@
       } else {
         axios.defaults.headers.common["Authorization"] = "";
       }
-    //   console.log(token);
     },
 	created(){
 		if(this.$store.state.token){
@@ -160,6 +159,7 @@
 						out: "fadeOutRightBig",
 					},
 				});
+				
 			})
 			.catch((error) => {
 					toast({
@@ -199,7 +199,7 @@
 			})
 		},
 		controlModalFromChild(modalSettingsisActive){
-		this.modalSettingsisActive = modalSettingsisActive;
+			this.modalSettingsisActive = modalSettingsisActive;
 		}
 	},
 };
