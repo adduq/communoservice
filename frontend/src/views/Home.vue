@@ -335,7 +335,7 @@
 
 					<DatePicker
         				:disabled-dates="disableDates" v-model="dates" mode="date"
-        				:min-date="minDate" :max-date="maxDate" is-expanded
+        				:min-date="minDate" :max-date="maxDate" is-expanded ref="calendar"
         			/>
 
 				</div>
@@ -539,6 +539,22 @@ export default {
 			maxDate: null,
 		};
 	},
+		/**
+	 * Observer sur le changement de currentStep
+	 */
+	watch: {
+    range(val) {
+      if (val) {
+        // 
+		const calendar = this.$refs.calendar
+
+		// Bouger le calendrier vers le mois de la première dispo.
+		if(this.offerToShow.start_date){
+			 calendar.move(new Date(this.offerToShow.start_date));
+		}
+      }
+    },
+  },
 	mounted() {
 		document.title = "Accueil | Communoservice";
 		// this.getAllOffers();

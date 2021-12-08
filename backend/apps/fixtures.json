@@ -1834,8 +1834,72 @@
         "is_online": "False"
     }
 },
-
-
+{
+  "model": "offer.servicetype",
+  "pk": 1,
+  "fields": { "name": "Gardiennage" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 2,
+  "fields": { "name": "Administration" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 3,
+  "fields": { "name": "Déneigement" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 4,
+  "fields": { "name": "Service de traiteur" }
+}
+,
+{
+  "model": "offer.servicetype",
+  "pk": 5,
+  "fields": { "name": "Nettoyage de vitres" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 6,
+  "fields": { "name": "Service de ménage" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 7,
+  "fields": { "name": "Atelier de peinture" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 8,
+  "fields": { "name": "Cours de danse en ligne" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 9,
+  "fields": { "name": "Initiation à l'harmonica" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 10,
+  "fields": { "name": "Tutorat en géographie" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 11,
+  "fields": { "name": "Aide aux devoirs" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 12,
+  "fields": { "name": "Tutorat en français" }
+},
+{
+  "model": "offer.servicetype",
+  "pk": 13,
+  "fields": { "name": "Tutorat en anglais" }
+},
   {
     "model": "offer.offer",
     "pk": 1,
@@ -1988,7 +2052,7 @@
     "pk": 8,
     "fields": {
       "user": 8,
-      "type_service": "Déneigement",
+      "type_service": "Initiation à l'harmonica",
       "description": "Laborum esse enim cillum tempor aliqua aliqua exercitation excepteur veniam est exercitation Lorem fugiat. Voluptate ad ullamco deserunt culpa non exercitation cupidatat cillum irure id culpa culpa consequat.",
       "hourly_rate": 24.28,
       "max_distance": 12,
@@ -2009,7 +2073,7 @@
     "pk": 9,
     "fields": {
       "user": 9,
-      "type_service": "Déneigement",
+      "type_service": "Cours de danse en ligne",
       "description": "Ut labore dolore exercitation proident tempor ea id esse laboris Lorem. Ut nisi aliqua esse consequat aute aliquip officia reprehenderit excepteur.",
       "hourly_rate": 21.82,
       "max_distance": 14,
@@ -2072,7 +2136,7 @@
     "pk": 12,
     "fields": {
       "user": 12,
-      "type_service": "Déneigement",
+      "type_service": "Cours de batterie",
       "description": "Pariatur officia ullamco adipisicing occaecat sint Lorem dolor. Sit laboris id dolor tempor in aute.",
       "hourly_rate": 17.62,
       "max_distance": 3,
@@ -2114,7 +2178,7 @@
     "pk": 14,
     "fields": {
       "user": 14,
-      "type_service": "Administration",
+      "type_service": "Cours de guitare",
       "description": "Elit mollit sunt tempor id amet quis nostrud labore velit nostrud laborum. Fugiat culpa esse dolore dolor veniam velit exercitation ex aliqua anim officia labore occaecat.",
       "hourly_rate": 18.59,
       "max_distance": 1,
@@ -2177,7 +2241,7 @@
     "pk": 17,
     "fields": {
       "user": 17,
-      "type_service": "Service de traiteur",
+      "type_service": "Nettoyage de tapis",
       "description": "Tempor cupidatat esse elit incididunt ex velit proident occaecat dolor officia. Anim deserunt consectetur et nisi aliquip do quis consequat.",
       "hourly_rate": 25.85,
       "max_distance": 1,
@@ -2261,7 +2325,7 @@
     "pk": 21,
     "fields": {
       "user": 21,
-      "type_service": "Administration",
+      "type_service": "Initiation à la peinture",
       "description": "Aliquip eu excepteur anim enim culpa excepteur qui ullamco. Proident dolor velit ullamco labore eu cillum aliqua reprehenderit veniam proident id in quis.",
       "hourly_rate": 19.79,
       "max_distance": 20,
@@ -2303,7 +2367,7 @@
     "pk": 23,
     "fields": {
       "user": 23,
-      "type_service": "Administration",
+      "type_service": "Cours de photographie",
       "description": "Adipisicing quis anim consequat aute nisi mollit nisi amet irure anim et qui sunt. Nostrud labore fugiat do elit consequat qui voluptate deserunt exercitation duis.",
       "hourly_rate": 23.06,
       "max_distance": 17,
@@ -2345,7 +2409,7 @@
     "pk": 25,
     "fields": {
       "user": 25,
-      "type_service": "Administration",
+      "type_service": "Cours de danse classique",
       "description": "Labore adipisicing sint est exercitation nisi tempor pariatur deserunt proident ut reprehenderit. Dolor occaecat in sint anim mollit.",
       "hourly_rate": 16.35,
       "max_distance": 15,
@@ -2429,7 +2493,7 @@
     "pk": 29,
     "fields": {
       "user": 29,
-      "type_service": "Déneigement",
+      "type_service": "Aide aux devoirs",
       "description": "Consectetur consequat minim qui enim tempor veniam incididunt cupidatat labore do aute laborum anim. Quis nostrud mollit sint cillum exercitation ex eiusmod elit nisi ut.",
       "hourly_rate": 22.65,
       "max_distance": 7,
@@ -2471,7 +2535,7 @@
     "pk": 31,
     "fields": {
       "user": 31,
-      "type_service": "Administration",
+      "type_service": "Tutorat en mathématique",
       "description": "Tempor culpa tempor esse eiusmod excepteur ullamco sunt voluptate mollit. Sit aliqua consectetur adipisicing deserunt nisi pariatur.",
       "hourly_rate": 23.48,
       "max_distance": 6,
@@ -2513,7 +2577,7 @@
     "pk": 33,
     "fields": {
       "user": 33,
-      "type_service": "Administration",
+      "type_service": "Tutorat en français",
       "description": "Anim ullamco fugiat nulla aute qui proident qui irure nostrud esse. Veniam sint aliquip nostrud anim id elit.",
       "hourly_rate": 29.48,
       "max_distance": 3,
@@ -2555,7 +2619,7 @@
     "pk": 35,
     "fields": {
       "user": 35,
-      "type_service": "Administration",
+      "type_service": "Tutorat en anglais",
       "description": "Voluptate laboris aliqua anim irure eiusmod consectetur nostrud. Deserunt adipisicing enim pariatur proident ad laboris et incididunt.",
       "hourly_rate": 13.66,
       "max_distance": 20,
@@ -2597,7 +2661,7 @@
     "pk": 37,
     "fields": {
       "user": 37,
-      "type_service": "Administration",
+      "type_service": "Tutorat en géographie",
       "description": "Non laboris laborum sint velit in magna ullamco mollit. Excepteur reprehenderit ut amet elit aute deserunt in irure consectetur esse pariatur non non.",
       "hourly_rate": 20.94,
       "max_distance": 20,
@@ -2639,7 +2703,7 @@
     "pk": 39,
     "fields": {
       "user": 39,
-      "type_service": "Gardiennage",
+      "type_service": "Tutorat en chimie",
       "description": "Cupidatat cupidatat veniam ex dolor dolore dolore sint. Sint id sint cupidatat cillum pariatur ut ipsum occaecat sunt exercitation reprehenderit exercitation cupidatat.",
       "hourly_rate": 11,
       "max_distance": 10,
@@ -2870,10 +2934,10 @@
     "pk": 50,
     "fields": {
         "user": 51,
-        "type_service": "Tonte de pelouse",
+        "type_service": "Nettoyage de vitres",
         "description": "Service rapide et professionnel.",
         "hourly_rate": "12.50",
-        "max_distance": 2,
+        "max_distance": 20,
         "date_added": "2020-09-20",
         "monday": true,
         "tuesday": true,
@@ -2891,10 +2955,10 @@
     "pk": 51,
     "fields": {
         "user": 51,
-        "type_service": "Tonte de pelouse",
+        "type_service": "Nettoyage de vitres",
         "description": "Rapide et efficace.",
         "hourly_rate": "50",
-        "max_distance": 2,
+        "max_distance": 20,
         "date_added": "2020-05-05",
         "friday": true,
         "saturday": true,
@@ -2910,7 +2974,7 @@
         "type_service": "Gardiennage",
         "description": "Maximum 3 enfants.",
         "hourly_rate": "12.50",
-        "max_distance": 4,
+        "max_distance": 20,
         "date_added": "2020-09-20",
         "start_date": "2021-12-20",
         "end_date": "2021-12-20"
@@ -2924,7 +2988,7 @@
         "type_service": "Déneigement",
         "description": "Les escaliers extérieurs peuvent être inclus.",
         "hourly_rate": "15.75",
-        "max_distance": 4,
+        "max_distance": 20,
         "date_added": "2020-12-20",
         "wednesday": true,
         "sunday": true,
@@ -2940,7 +3004,7 @@
         "type_service": "Déneigement",
         "description": "La pelle doit être fournie par le client.",
         "hourly_rate": "15.75",
-        "max_distance": 4,
+        "max_distance": 20,
         "date_added": "2020-12-20",
         "saturday": true,
         "start_date": "2021-09-24",
@@ -2953,9 +3017,9 @@
     "fields": {
         "user": 52,
         "type_service": "Déneigement",
-        "description": "",
+        "description": "Rapide comme l'éclair!",
         "hourly_rate": "15.75",
-        "max_distance": 4,
+        "max_distance": 20,
         "date_added": "2020-12-20",
         "saturday": true,
         "start_date": "2021-11-24",
@@ -2967,10 +3031,10 @@
     "pk": 56,
     "fields": {
         "user": 51,
-        "type_service": "Tonte de pelouse",
+        "type_service": "Nettoyage de vitres",
         "description": "À toute épreuve.",
         "hourly_rate": "16.75",
-        "max_distance": 14,
+        "max_distance": 20,
         "date_added": "2020-12-20",
         "monday": true,
         "thursday": true,
@@ -2987,7 +3051,7 @@
         "type_service": "Gardiennage",
         "description": "Abordable.",
         "hourly_rate": "12.25",
-        "max_distance": 8,
+        "max_distance": 20,
         "date_added": "2020-12-20",
         "monday": true,
         "tuesday": true,
@@ -3004,7 +3068,7 @@
         "type_service": "Gardiennage",
         "description": "Service de qualité.",
         "hourly_rate": "18.50",
-        "max_distance": 24,
+        "max_distance": 20,
         "date_added": "2020-12-20",
         "wednesday": true,
         "thursday": true,
@@ -3017,9 +3081,9 @@
     "fields": {
         "user": 52,
         "type_service": "Gardiennage",
-        "description": "",
+        "description": "Les enfants entre 5 et 10 ans.",
         "hourly_rate": "11",
-        "max_distance": 7,
+        "max_distance": 20,
         "date_added": "2020-12-20",
         "monday": true,
         "tuesday": true,

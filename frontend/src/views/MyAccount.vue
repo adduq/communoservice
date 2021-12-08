@@ -378,6 +378,7 @@
 							is-expanded
 							locale="fr"
 							@input="validateDispo"
+							ref="calendar"
 							/>
 						</div>
 						<div
@@ -695,56 +696,6 @@ export default {
 			tomorrow = yyyy + "-" + mm + "-" + dd;
 			return tomorrow;
 		},
-		// async getAllOffers(userId) {
-		// 	await axios
-		// 		.get(`/api/v1/active-offers/user/${userId}/`)
-		// 		.then((response) => {
-		// 			this.activeOffers = response.data;
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// },
-		// async getTerminatedOffersForUser(userId) {
-		// 	await axios
-		// 		.get(`/api/v1/terminated-offers/user/${userId}/`)
-		// 		.then((res) => {
-		// 			this.terminatedOffersForUser = res.data;
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// },
-		// async getReservedOffersForUser(userId) {
-		// 	await axios
-		// 		.get(`/api/v1/reserved-offers/user/${userId}/`)
-		// 		.then((res) => {
-		// 			this.reservedOffersForUser = res.data;
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// },
-		// async getTerminatedOffersForRecruiter(recruiterId) {
-		// 	await axios
-		// 		.get(`/api/v1/terminated-offers/recruiter/${recruiterId}/`)
-		// 		.then((res) => {
-		// 			this.terminatedOffersForRecruiter = res.data;
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// },
-		// async getReservedOffersForRecruiter(recruiterId) {
-		// 	await axios
-		// 		.get(`/api/v1/reserved-offers/recruiter/${recruiterId}/`)
-		// 		.then((res) => {
-		// 			this.reservedOffersForRecruiter = res.data;
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// },
 		async getServiceTypes() {
 			await axios
 				.get("/api/v1/service-types/")
@@ -758,6 +709,10 @@ export default {
 		openCreationModal() {
 			this.creationModalIsActive = !this.creationModalIsActive;
 			this.minDate = this.convertDaysForCalendar(this.tomorrow);
+
+			 //On bouge le calendirer au mois courant.
+			this.$refs.calendar.move(new Date());
+		
 		},
 		closeOfferModal() {
 			this.creationModalIsActive = false;
