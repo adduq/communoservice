@@ -9,7 +9,6 @@
 							<figure
 								class="image is-128x128 round-shadow has-image-centered"
 							>
-								<!-- <img class="is-rounded" :src="imgPath" /> -->
 								<img
 									class="is-rounded"
 									:src="this.MEDIA_URL + 'pfp_' + userInfo.user_id + '.jpg'" 
@@ -75,7 +74,6 @@
 						</div>
 						<div class="has-text-centered">
 							<p class="has-text-weight-bold is-size-3">
-								<!-- {{ activeOffers.length }} -->
 								{{ totalOffer }}
 							</p>
 							<p>services actifs</p>
@@ -99,7 +97,6 @@
 						</div>
 						<div class="has-text-centered">
 							<p class="has-text-weight-bold is-size-3">
-								<!-- {{ reservedOffersForRecruiter.length }} -->
 								{{ totalReservedOfferRecruiter }}
 							</p>
 							<p>services en attente</p>
@@ -164,12 +161,12 @@
 								<div class="column is-one-third">
 									<div class="field" v-if="!toModifiedOffer">
 									<label class="label">Type de service
-										<span v-if="!this.validations['isValidServiceType']" class="icon is-info tooltip">
+									<span v-if="!this.validations['isValidServiceType']" class="icon is-info tooltip">
                                         <i class="fas fa-exclamation-circle has-text-danger"></i>
                                         <span class="tooltiptext has-background-danger">
-                                         Il faut choisir un type de service.
+											Il faut choisir un type de service.
                                         </span>
-                                      </span>
+                                    </span>
 									</label>
 									<div class="control">
 										<div class="select" :class="!this.validations['isValidServiceType'] ? 'is-danger': ''" >
@@ -186,12 +183,12 @@
 									</div>
 
 									<label class="label">Distance maximale (km)
-										<span v-if="!this.validations['isValidMaxDistance']" class="icon is-info tooltip">
+									<span v-if="!this.validations['isValidMaxDistance']" class="icon is-info tooltip">
                                         <i class="fas fa-exclamation-circle has-text-danger"></i>
                                         <span class="tooltiptext has-background-danger">
-                                         La distance minimale est de 1 km.
+											La distance minimale est de 1 km.
                                         </span>
-                                      </span>	
+                                    </span>	
 									</label>
 									<div class="field has-addons">
 									<p class="control">
@@ -208,12 +205,12 @@
 									</div>
 
 									<label class="label">Taux horaire ($)
-										<span v-if="!this.validations['isValidHourlyRate']" class="icon is-info tooltip">
+									<span v-if="!this.validations['isValidHourlyRate']" class="icon is-info tooltip">
                                         <i class="fas fa-exclamation-circle has-text-danger"></i>
                                         <span class="tooltiptext has-background-danger">
-                                         Le taux horaire doit avoir une valeur entre 0,01 et 9999,99.
+											Le taux horaire doit avoir une valeur entre 0,01 et 9999,99.
                                         </span>
-                                      </span>	
+                                    </span>	
 									</label>
 									<div class="field has-addons">
 										<p class="control">
@@ -237,7 +234,7 @@
                                         <span class="tooltiptext has-background-danger">
                                         La description ne peut pas être vide.
                                         </span>
-                                      </span>
+										</span>
 										</label>
 										<div class="control">
 										<textarea
@@ -263,12 +260,12 @@
 										<span v-if="!this.validations['isValidDispo']" class="icon is-info tooltip">
                                         <i class="fas fa-exclamation-circle has-text-danger"></i>
                                         <span v-if="!this.isAlwaysDispo && !this.isDatePickerPresent" class="tooltiptext has-background-danger">
-                                         Indiquez une récurrence.
+											Indiquez une récurrence.
                                         </span>
-										 <span v-else class="tooltiptext has-background-danger">
-                                         Indiquez une récurrence ou une journée de disponibilité.
+										<span v-else class="tooltiptext has-background-danger">
+											Indiquez une récurrence ou une journée de disponibilité.
                                         </span>
-                                      </span>
+										</span>
 									</label>
 									</div>
 								</div>
@@ -346,7 +343,7 @@
 								</button>
 							</div>
 							</div>
-						<!---->
+
 						<label @click="resetDatepicker()" class="checkbox mb-4">
 							<input type="checkbox" v-model="isDatePickerPresent" />
 							Préciser une date ou une sélection de jours
@@ -556,8 +553,6 @@
 </template>
 
 <script>
-// TODO: Création d'un loader pour les services.
-
 import axios from "axios";
 import DetailedOffer from "@/components/DetailedOffer";
 import TerminatedOffer from "@/components/TerminatedOffer";
@@ -607,7 +602,6 @@ export default {
 			},
 			profileSwitch: false,
 			userIsActive: true,
-			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			userInfo: {},
 			validations:{
 				isValidServiceType:true,
@@ -626,7 +620,6 @@ export default {
 			startDate: "",
 			endDate: "",
 			minDate: "",
-			// minDate: new Date(),
 			componentKey: 0,
 			username: "",
 			password: "",
@@ -683,7 +676,6 @@ export default {
 
 		this.tomorrow = this.getTomorrow();
 		this.getServiceTypes();
-
 		this.getTotalOffers();
 	},
 	methods: {
@@ -722,8 +714,7 @@ export default {
 			if (this.toModifiedOffer) {
 				this.resetDatepicker();
 				this.resetInputs();
-				this.resetRange();
-				// this.minDate = this.tomorrow;				
+				this.resetRange();			
 				this.toModifiedOffer = false;
 			}
 		},
@@ -790,8 +781,6 @@ export default {
 			this.validateHourlyRate();
 			this.validateDescription();
 			this.validateDispo();
-
-			//return this.validations['isValidServiceType'] && this.validations['isValidHourlyRate'] && this.validations['isValidMaxDistance'] && this.validations['isValidDispo'] && this.validations['isValidDescription'];
 			
 			this.modalCreateisActive = this.formIsValid = this.validations['isValidServiceType'] && this.validations['isValidHourlyRate'] && this.validations['isValidMaxDistance'] && this.validations['isValidDispo'] && this.validations['isValidDescription'];
 			this.creationModalIsActive = !this.modalCreateisActive;
@@ -802,9 +791,6 @@ export default {
 		async addNewOffer() {
 			this.isLoading = true;
 
-			// if (!this.validateForm()){
-			// 	return;
-			// }
 			if (this.formIsValid) {
 				this.description = this.description.trim();
 
@@ -837,8 +823,6 @@ export default {
 				};
 				let startDate = this.range == null ? null : this.range.start.toLocaleDateString("fr-CA");
 				let endDate = this.range == null ? null : this.range.end.toLocaleDateString("fr-CA");
-				// let startDate = this.range == null ? null : this.range.start.toISOString().substr(0, 10);
-				// let endDate = this.range == null ? null : this.range.end.toISOString().substr(0, 10);
 	
 				newOffer.start_date = startDate;
 				newOffer.end_date = endDate;
@@ -851,7 +835,6 @@ export default {
 					this.creationModalIsActive = false;
 					this.resetDatepicker();
 					this.resetInputs();
-					// this.confirmeCreation = false;
 					this.addActiveOffers({
 						id_offer: response.data.id,
 						id_user: response.data.user,
@@ -860,7 +843,6 @@ export default {
 				.catch((error) => {
 					this.modalCreateisActive = false;
 					this.creationModalIsActive = true;
-					// this.confirmeCreation = false;
 					if (error.response.data["error"] == "profile_incomplete") {
 						toast({
 							message: "Profil incomplet. Veuillez completer votre profil dans les paramètres.",
@@ -876,7 +858,6 @@ export default {
 						});
 	
 					} else {
-						// this.errors.push("Une erreur est survenue. Essayez à nouveau.");
 						toast({
 							message: "Une erreur est survenue. Essayez à nouveau.",
 							type: "is-danger",
@@ -894,16 +875,11 @@ export default {
 			}
 
 		},
-		toSelectDate(payload) {
-			// alert(payload);
-		},
 		async addActiveOffers(activeOffer) {
 			await axios
 				.post("/api/v1/active-offers/", activeOffer)
 				.then((response, userId) => {
-					// this.getAllOffers(activeOffer.id_user);
 					this.getAllOffersWithOffset(activeOffer.id_user);
-
 					this.getTotalOffers();
 				})
 				.catch((error) => {
@@ -915,7 +891,6 @@ export default {
 				.get("/api/v1/userinfo/me/")
 				.then((response) => {
 					this.userInfo = response.data;
-					// console.log(JSON.stringify(this.userInfo));
 					this.userIsActive = this.userInfo["is_online"];
 
 					if (this.userInfo.profile_is_completed){
@@ -924,16 +899,7 @@ export default {
 						this.getTerminatedOffersForRecruiterWithOffset(this.userInfo.user_id);
 						this.getReservedOffersForUserWithOffset(this.userInfo.user_id);
 						this.getReservedOffersForRecruiterWithOffset(this.userInfo.user_id);
-
-						// this.getAllOffers(this.userInfo.user_id);
-						// this.getTerminatedOffersForUser(this.userInfo.user_id);
-						// this.getTerminatedOffersForRecruiter(this.userInfo.user_id);
-						// this.getReservedOffersForUser(this.userInfo.user_id);
-						// this.getReservedOffersForRecruiter(this.userInfo.user_id);
 					}
-					
-					// this.getImgUrl(this.userInfo.user_id);
-					// this.userImageURL = this.MEDIA_URL + 'pfp_'+this.userInfo.user_id+'.jpg';
 
 					//Mise à jour du userInfo dans le store.
 					//(important si plusieurs utilisateurs sur le même poste)
@@ -1247,23 +1213,13 @@ export default {
 			}
 			});
 		},
-		// async getImgUrl(user_id) {
-		// 	await axios
-		// 		.get(
-		// 			`/api/v1/userinfo/${user_id}/profile-image/`
-		// 		)
-		// 		.then((res) => {
-		// 			this.imgPath = this.MEDIA_URL + res.data.imgName
-		// 		})
-		// 		.catch((err) => {
-		// 			console.log(err);
-		// 		});
-		// },
 		replaceByDefault(e) {
 			console.clear();
-
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
+		/**
+		 * Permet d'ouvrir la modal avec les paramètres de l'offre à modifier.
+		 */
 		async forModifiedOffer(offer) {
 			this.toModifiedOffer = true;
 			this.validations['isValidServiceType'] = this.validations['isValidHourlyRate'] = this.validations['isValidMaxDistance'] = this.validations['isValidDispo'] = this.validations['isValidDescription'] = true;
@@ -1276,8 +1232,7 @@ export default {
 			this.maxDistance = offer.max_distance;
 			this.isAlwaysDispo = false;
 			this.isDatePickerPresent = true;
-			// this.minDate = this.convertDaysForCalendar(offer.start_date);
-			// this.minDate = this.convertDaysForCalendar(this.tomorrow);
+
 			this.range = {
 				start: this.convertDaysForCalendar(offer.start_date),
 				end: this.convertDaysForCalendar(offer.end_date)
@@ -1286,6 +1241,7 @@ export default {
 			if (this.range.start < this.minDate)
 				this.minDate = this.range.start;
 
+			// Permet de sélectionner les journées qui existent déjà lors de la modification.
 			await new Promise(r => setTimeout(r, 5));
 			for (const [index, [key, value]] of Object.entries(Object.entries(this.daysSelected))) {
 				let dayIndex = parseInt(index) + 2 == 8 ? 1 : parseInt(index) + 2;
@@ -1304,6 +1260,9 @@ export default {
 				return new Date(dayTmp[0], dayTmp[1] - 1, dayTmp[2]);
 			}
 		},
+		/**
+		 * Permet d'enregistrer l'offre modifiée.
+		 */
 		async sendModifiedOffer() {
 			this.isLoading = true;
 
@@ -1346,7 +1305,6 @@ export default {
 					this.offerToModified
 				)
 				.then((res) => {
-					// console.log(res.data);
 					this.closeOfferModal();
 					this.isLoading = false;
 				})

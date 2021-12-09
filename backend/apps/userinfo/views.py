@@ -1,25 +1,15 @@
-import os
 from django.http import Http404, HttpResponse, JsonResponse
 from django.conf import settings
 from PIL import Image, ImageOps
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view  # Pour utilser annotations
 from django.contrib.auth.models import User
 
 from rest_framework import status
 from .models import UserInfo
-from .serializers import UserInfoSerializer, UserSerializer
-
-from rest_framework.decorators import api_view, schema
-from rest_framework.schemas import AutoSchema
-from django.core.validators import validate_email
+from .serializers import UserInfoSerializer
 
 import re, json
-
-
-from pprint import pprint
-# Create your views here.
 
 
 class UserInfoDetail(APIView):
@@ -178,9 +168,6 @@ class UpdateEmployeeRating(APIView):
 
         if (recruiter_id is not None and request.user.id != recruiter_id):
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
-        # if ((recruiter_id is not None and request.user.id != recruiter_id) and
-        #         (user_id is not None and request.user.id != user_id)):
-        #     return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
 
         userinfo = UserInfo.objects.get(user_id=user_id)
 
@@ -205,9 +192,6 @@ class UpdateRecruiterRating(APIView):
 
         if (user_id is not None and request.user.id != user_id):
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
-        # if ((recruiter_id is not None and request.user.id != recruiter_id) and
-        #         (user_id is not None and request.user.id != user_id)):
-        #     return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
 
         userinfo = UserInfo.objects.get(user_id=recruiter_id)
 
@@ -240,18 +224,3 @@ class UpdateUserProfileImage(APIView):
                 return Response({"status": "Added successfully"}, status=status.HTTP_200_OK)
             else:
                 return Response({"status": "No files in request"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class GetUserImage(APIView):
-#     def get(self, request, user_id, format=None):
-#         # if request.user.is_anonymous:
-#         #     return Response({"status": "invalid"}, status=status.HTTP_401_UNAUTHORIZED)
-
-#         imgExist = os.path.exists(
-#             str(settings.MEDIA_ROOT) + '/' + 'pfp_' + str(user_id) + '.jpg')
-#         imgName = 'pfp_default.jpg'
-
-#         if (imgExist):
-#             imgName = 'pfp_' + str(user_id) + '.jpg'
-
-#         return Response({"imgName": imgName}, status=status.HTTP_200_OK)

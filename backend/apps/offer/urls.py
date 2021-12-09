@@ -29,7 +29,6 @@ urlpatterns = [
     path('terminated-offers/recruiter/<int:no_recruiter>/',
          views.TerminatedOffersByRecruiter.as_view()),
 
-    # path('offers/user/<int:no_user>/', views.UserOffers.as_view()),
     path('active-offers/search', views.search),
 
     path('service-types/', views.ServiceTypes.as_view()),

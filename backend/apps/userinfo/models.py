@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
 import logging
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
 

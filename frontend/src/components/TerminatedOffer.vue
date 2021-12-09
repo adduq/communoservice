@@ -4,7 +4,6 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-64x64">
-						<!-- <img class="is-rounded" :src="imgPath" /> -->
 						<img
 							class="is-rounded"
 							:src="this.MEDIA_URL + 'pfp_' + imgId + '.jpg'" 
@@ -82,8 +81,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
 	name: "TerminatedOffer",
 	props: {
@@ -98,33 +95,15 @@ export default {
 				CANCEL: 2,
 				NO_PRESENCE: 3,
 			},
-			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			imgId: "default",
 		};
 	},
-	// mounted() {
-	// 	let user_id = this.$parent.profileSwitch ? this.terminatedOffer.id_user.id : this.terminatedOffer.id_recruiter.id;
-	// 	this.getImgUrl(user_id);
-	// },
 	mounted() {
 		this.imgId = this.$parent.profileSwitch ? this.terminatedOffer.id_user.id : this.terminatedOffer.id_recruiter.id;
 	},
 	methods: {
-		// async getImgUrl(user_id) {			
-		// 	await axios
-		// 		.get(
-		// 			`/api/v1/userinfo/${user_id}/profile-image/`
-		// 		)
-		// 		.then((res) => {
-		// 			this.imgPath = this.MEDIA_URL + res.data.imgName
-		// 		})
-		// 		.catch((err) => {
-		// 			console.log(err);
-		// 		});
-		// }
 		replaceByDefault(e) {
 			console.clear();
-
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
 	}

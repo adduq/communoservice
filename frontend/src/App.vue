@@ -296,4 +296,7 @@
 	html {
 		scroll-behavior: smooth!important;
 	}
+	.footer {
+		padding: 3rem 1.5rem !important;
+	}
 </style>

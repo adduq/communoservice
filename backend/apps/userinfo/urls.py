@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 
 from apps.userinfo import views
 
@@ -7,7 +7,6 @@ urlpatterns = [
     path('userinfo/me/', views.MyUserInfo.as_view(), name="userinfo/me/"),
     path('userinfo/me/update/', views.UpdateUserInfo.as_view(), name="userinfo/me/update/"),
     path('userinfo/me/profile-image/', views.UpdateUserProfileImage.as_view()),
-    #path('userinfo/<int:user_id>/profile-image/', views.GetUserImage.as_view()),
     path('userinfo/me/status/', views.UserStatus.as_view(), name="userinfo/me/status/"),
     path('userinfo/<int:user_id>/update-employee/<int:recruiter_id>/',
          views.UpdateEmployeeRating.as_view(), name="userinfo/<user_id>/update-employee/<recruiter_id>/"),

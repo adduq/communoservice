@@ -1,14 +1,10 @@
-from typing import OrderedDict
-from django.db.models.aggregates import Count
 import requests
 from django.db.models import Q
 from django.http import Http404
-from django.http.response import HttpResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view  # Pour utilser annotations
-from django.contrib.auth.models import User
 
 from rest_framework import status
 from .models import ActiveOffer, Offer, ReservedOffer, ServiceType, TerminatedOffer
@@ -20,10 +16,6 @@ from rest_framework.decorators import api_view
 from functools import reduce
 from operator import and_
 from math import cos, asin, sqrt, pi
-
-
-from pprint import pp, pprint
-
 
 PUBLIC_MAPBOX_KEY = "pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA"
 
@@ -47,26 +39,25 @@ def sort_offers_by_distance(user_id, offers):
             return False
     
     def driving_distance(employe_lon, employe_lat, max_distance):
-        #if driving distance > offer['max_distance'] then exclude from candidates
+        # if driving distance > offer['max_distance'] then exclude from candidates
         formated_url = "https://api.mapbox.com/directions/v5/mapbox/driving/{0},{1};{2},{3}?access_token={4}".format(me.location_lon, me.location_lat, employe_lon, employe_lat, PUBLIC_MAPBOX_KEY)
         response = requests.get(formated_url)
         data = response.json()
-        # print(data)
         if data['code'] == 'NoRoute':
             return False
         else:
-            # print(data['routes'][0]['distance'])
             return float(data['routes'][0]['distance'])/1000 < float(max_distance)
     
     if me.location_lat != '' and me.location_lat != None and me.location_lon != '' and me.location_lon != None:
-        # print('Sorting offers for user ' + str(user_id))
         potential_offers = map(check_distance, offers)
         return [d for (d, keep) in zip(offers, potential_offers) if keep]
     else:
-        # print('User not compliant for sort_offers_by_distance')
         return offers
 
 
+"""
+Permet de supprimer les informations sensibles de la réponse.
+"""
 def remove_user_infos(serializer):
     for elem in serializer.data:
         if 'id_user' in elem:
@@ -95,16 +86,6 @@ def remove_user_infos(serializer):
 
 
 class Offers(APIView):
-
-    """
-    Récupèrer toutes les offres.
-    """
-
-    # def get(self, request, format=None):
-    #     offers = Offer.objects.all()
-    #     serializer = OfferSerializer(offers, many=True)
-    #     return Response(serializer.data)
-
     """
     Création d'une offre.
     """
@@ -116,8 +97,6 @@ class Offers(APIView):
     def post(self, request, format=None):
         if request.user.is_anonymous:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
-
-        # pprint(request.data)
 
         if request.data['user'] is not None and request.user.id != request.data['user']:
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
@@ -166,24 +145,6 @@ class ServiceTypes(APIView):
         serializer = ServiceTypeSerializer(service_types, many=True)
         return Response(serializer.data)
 
-# # Note:
-# # ? Utiliser activeOffer à la place ?
-# class UserOffers(APIView):
-#     """
-#     Récupérer toutes les offres d'un employé.
-#     """
-
-#     def get_object(self, no_user):
-#         try:
-#             return Offer.objects.filter(user=no_user)
-#         except User.DoesNotExist:
-#             raise Http404
-
-#     def get(self, request, no_user, format=None):
-#         offer = self.get_object(no_user)
-#         serializer = OfferSerializer(offer, many=True)
-#         return Response(serializer.data)
-
 # region ActiveOffers
 
 
@@ -192,15 +153,7 @@ class ActiveOffers(APIView):
     Permet d'avoir les offres actives.
     """
 
-    # def get_offers(self):
-    #     active_offers = list(
-    #         ActiveOffer.objects.all().values_list('id_offer', flat=True))
-    #     return Offer.objects.filter(id__in=active_offers)
-
     def get(self, request, format=None):
-        # active_offers = self.get_offers()
-        # serializer = OfferSerializer(active_offers, many=True)
-        # ! Note: TEST OFFSET et LIMIT !
         offset = request.GET.get('offset')
         if offset is None:
             offset = 0
@@ -214,12 +167,14 @@ class ActiveOffers(APIView):
             total_active_offers = ActiveOffer.objects.exclude(
                 id_user=request.user.id).count()
 
+            active_offers = ActiveOffer.objects.filter(~Q(
+                    id_user=request.user.id)).order_by('-id_offer__max_distance').distinct()
+
+            # Permet de faire la bonne requête selon la taille du offset.
             if offset + 5 < total_active_offers:
-                active_offers = ActiveOffer.objects.filter(~Q(
-                    id_user=request.user.id)).order_by('-id_offer__max_distance').distinct()[offset:offset+5]
+                active_offers = active_offers[offset:offset+5]
             else:
-                active_offers = ActiveOffer.objects.filter(~Q(
-                    id_user=request.user.id)).order_by('-id_offer__max_distance').distinct()[offset:total_active_offers]
+                active_offers = active_offers[offset:total_active_offers]
 
             serializer = ActiveOfferSerializer(active_offers, many=True)
             remove_user_infos(serializer)
@@ -255,6 +210,10 @@ class ActiveOffers(APIView):
 
 
 class ActiveOffersTotal(APIView):
+    """
+    Permet d'avoir le total de chaque liste pour les requête de scroll infinie.
+    """
+
     def get(self, request, format=None):
         page = request.GET.get('page')
 
@@ -291,21 +250,8 @@ class ActiveOffersByUser(APIView):
     """
     Permet d'avoir les offres actives par utilisateur.
     """
-    # ? Note: Ajouter validation ici ou accessible à tous ?
-    # ! Note: Point 2 : Conservation des deux options pour futur optimisation !
-    # ! TODO: Ajouter validation sur le no_user
-
-    # def get_offers(self, no_user):
-    #     active_offers = list(
-    #         ActiveOffer.objects.filter(id_user=no_user).values_list('id_offer', flat=True))
-    #     return Offer.objects.filter(id__in=active_offers)
 
     def get(self, request, no_user, format=None):
-        # active_offers = self.get_offers(no_user)
-        # serializer = OfferSerializer(active_offers, many=True)
-
-        # active_offers = ActiveOffer.objects.filter(id_user=no_user)
-        # ! Note: TEST OFFSET et LIMIT !
         offset = request.GET.get('offset')
         if offset is None:
             offset = 0
@@ -326,6 +272,10 @@ class ActiveOffersByUser(APIView):
 
 
 class ActiveOfferWithId(APIView):
+    """
+    Permet d'avoir une offre active selon son id et l'id de l'utilisateur.
+    """
+
     def get(self, request, no_user, id_offer, format=None):
         offers = ActiveOffer.objects.get(id_offer=id_offer, id_user=no_user)
         serializer = ActiveOfferCreationSerializer(offers)
@@ -371,16 +321,9 @@ class ReservedOffers(APIView):
     Permet d'avoir les offres réservées.
     """
 
-    # def get(self, request, format=None):
-    #     reserved_offers = ReservedOffer.objects.all()
-    #     serializer = ReservedOfferSerializer(reserved_offers, many=True)
-    #     return Response(serializer.data)
-
     def post(self, request, format=None):
         if request.user.is_anonymous:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
-
-        # pprint(request.data)
 
         if request.data['id_recruiter'] is not None and request.user.id != request.data['id_recruiter']:
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
@@ -401,8 +344,6 @@ class ReservedOffersByUser(APIView):
         if request.user.is_anonymous or request.user.id != no_user:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        # reserved_offers = ReservedOffer.objects.filter(id_user=no_user)
-        # ! Note: TEST OFFSET et LIMIT !
         offset = request.GET.get('offset')
         if offset is None:
             offset = 0
@@ -425,9 +366,6 @@ class ReservedOffersByRecruiter(APIView):
         if request.user.is_anonymous or request.user.id != no_recruiter:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        # reserved_offers = ReservedOffer.objects.filter(
-        #     id_recruiter=no_recruiter)
-        # ! Note: TEST OFFSET et LIMIT !
         offset = request.GET.get('offset')
         if offset is None:
             offset = 0
@@ -457,8 +395,6 @@ class ReservedOfferDetail(APIView):
         try:            
             reserved_offers = ReservedOffer.objects.filter(
                 id_offer=id_reserved_offer)
-            # serializer = ReservedOfferSerializer(reserved_offers, many=True)
-            # remove_user_infos(serializer)
             serializer = ReservedOfferCreationSerializer(
                 reserved_offers, many=True)
             res = serializer.data
@@ -505,11 +441,6 @@ class TerminatedOffers(APIView):
     Permet d'avoir les offres terminées.
     """
 
-    # def get(self, request, format=None):
-    #     terminated_offers = TerminatedOffer.objects.all()
-    #     serializer = TerminatedOfferSerializer(terminated_offers, many=True)
-    #     return Response(serializer.data)
-
     def post(self, request, format=None):
         if request.user.is_anonymous:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
@@ -534,15 +465,12 @@ class TerminatedOffersByUser(APIView):
         if request.user.is_anonymous or request.user.id != no_user:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        # terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)
-        # ! Note: TEST OFFSET et LIMIT !
         offset = request.GET.get('offset')
         if offset is None:
             offset = 0
         else:
             offset = int(offset)
 
-        # pprint(offset)
         terminated_offers = TerminatedOffer.objects.filter(id_user=no_user)[offset:offset+5]
         serializer = TerminatedOfferSerializer(terminated_offers, many=True)
         remove_user_infos(serializer)
@@ -558,9 +486,6 @@ class TerminatedOffersByRecruiter(APIView):
         if request.user.is_anonymous or request.user.id != no_recruiter:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-        # terminated_offers = TerminatedOffer.objects.filter(
-        #     id_recruiter=no_recruiter)
-        # ! Note: TEST OFFSET et LIMIT !
         offset = request.GET.get('offset')
         if offset is None:
             offset = 0
@@ -584,11 +509,6 @@ class TerminatedOfferDetail(APIView):
             return TerminatedOffer.objects.get(id=id_terminated_offer)
         except:
             raise Http404
-
-    # def get(self, request, id_terminated_offer, format=None):
-    #     terminated_offer = self.get_object(id_terminated_offer)
-    #     serializer = TerminatedOfferSerializer(terminated_offer)
-    #     return Response(serializer.data)
 
     def delete(self, request, id_terminated_offer, format=None):
         if request.user.is_anonymous:
@@ -629,6 +549,7 @@ def search(request):
     active_offers = list(
         ActiveOffer.objects.all().values_list('id_offer', flat=True))
 
+    # Permet de retirer les offres réservées.
     if request.GET.get('date') is not None:
         reserved_days = list(
             ReservedOffer.objects.filter(reservation_date=request.GET.get('date')).values_list('id_offer', flat=True))
@@ -638,8 +559,9 @@ def search(request):
         active_offers = [
             x for x in active_offers_tmp if x not in reserved_days]
 
-    queryset = Offer.objects.filter(id__in=active_offers)
+    queryset = Offer.objects.filter(id__in=active_offers).order_by('-max_distance').distinct()
 
+    # Exclue les offres de l'utilisateur.
     if not request.user.is_anonymous:
         queryset = queryset.exclude(user=request.user.id)
 
@@ -671,14 +593,12 @@ def search(request):
                                    Q(end_date=None, start_date__lte=date) |
                                    Q(end_date__gte=date, start_date=None) |
                                    Q(end_date=None, start_date=None))
-        # queryset.filter(end_date__gte=date, start_date__lte=date)
 
     if "mots-cles" in request.GET:
         mots_cles = request.GET.getlist('mots-cles')[0].split(',')
         queryset = queryset.filter(
             reduce(and_, (Q(description__icontains=mot) for mot in mots_cles)))
 
-    # ! Note: TEST OFFSET et LIMIT !
     offset = request.GET.get('offset')
     if offset is None:
         offset = 0

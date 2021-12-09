@@ -1,15 +1,13 @@
 <template>
-	<div class="card mb-3 is-pointer-cursor" :class="mustHaveChangeDateIcon ? 'has-background-danger-light': ''" @click="$emit('click', this.offer)">
-		<div class="card-content" 
-			:class="accountPage ? 'pb-0 mb-4' : ''">
+	<div class="card mb-3" :class="mustHaveChangeDateIcon ? 'has-background-danger-light': ''">
+		<div class="card-content is-pointer-cursor" :class="accountPage ? 'pb-0 mb-4' : ''" @click="$emit('click', this.offer)">
 			<div class="is-align-items-center is-flex is-flex-wrap-wrap is-justify-content-space-between">
 				<div class="offer-description is-align-items-center is-flex is-flex-wrap-wrap mb-2">
 					<figure class="image is-64x64 mr-4">
-						<!-- <img class="is-rounded" :src="imgPath" /> -->
 						<img
-								class="is-rounded"
-								:src="this.MEDIA_URL + 'pfp_' + offer.user + '.jpg'" 
-								@error="replaceByDefault"
+							class="is-rounded"
+							:src="this.MEDIA_URL + 'pfp_' + offer.user + '.jpg'" 
+							@error="replaceByDefault"
 						/>
 					</figure>
 					<div class="media-content is-clipped">
@@ -77,16 +75,14 @@
 					</span>
 				</div>
 			</div>
-
-
 		</div>
-
 		<div v-if="accountPage" class="is-flex is-justify-content-center mb-4">
 			<button class="button is-danger w-200" @click="deleteConfirmationModal = true">
 				Supprimer
 			</button>
 		</div>
 	</div>
+
 
 	<div v-if="accountPage" class="modal" :class="{ 'is-active': deleteConfirmationModal }">
 		<div
@@ -148,16 +144,13 @@ export default {
 		}
 	},
 	mounted() {
-		// this.getImgUrl();
-
 		if (this.accountPage)
 			this.addChangeEndDate();
-
-		// if ( document.URL.includes("mon-compte") ) {
-		// 	this.addChangeEndDate();
-		// }
 	},
 	methods: {
+		/**
+		 * Permet de supprimer une offre active.
+		 */
 		async deleteOffer() {
 			await axios
 				.delete(
@@ -167,44 +160,27 @@ export default {
 					this.$parent.activeOffers = this.$parent.activeOffers
 						.filter(el => el.id !== this.offer.id );
 
-					// this.$parent.getAllOffersWithOffset(this.offer.user);
 					this.$parent.getTotalOffers();
-
 					this.$parent.getReservedOffersForUserWithOffset(this.offer.user);
 
 					this.deleteConfirmationModal = !this.deleteConfirmationModal;
-					// this.$parent.getAllOffers(this.offer.user);
-					// this.$parent.getReservedOffersForUser(this.offer.user);
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
-		// async getImgUrl() {
-		// 	await axios
-		// 		.get(
-		// 			`/api/v1/userinfo/${this.offer.user}/profile-image/`
-		// 		)
-		// 		.then((res) => {
-		// 			this.imgPath = this.MEDIA_URL + res.data.imgName;
-		// 		})
-		// 		.catch((err) => {
-		// 			console.log(err);
-		// 		});
-		// },
 		replaceByDefault(e) {
 			console.clear();
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
+		/**
+		 * Permet de faire savoir à l'utilisateur si une offre est expirée.
+		 */
 		addChangeEndDate() {
 			let offerEndDate = new Date(this.offer.end_date);
 			let today = new Date();
 
 			this.mustHaveChangeDateIcon = this.offer.end_date && (offerEndDate < today);
-
-			// if(offerEndDate < today){
-				// 	this.mustHaveChangeDateIcon = true;
-			// }
 		}
 	}
 };

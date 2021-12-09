@@ -4,7 +4,6 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-64x64">
-						<!-- <img class="is-rounded" :src="imgPath" /> -->
 						<img
 							class="is-rounded"
 							:src="this.MEDIA_URL + 'pfp_' + imgId + '.jpg'" 
@@ -152,14 +151,9 @@ export default {
 			statusAttribue: 0,
 			noteService: 0,
 			terminateOfferIsActive: false,
-			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			imgId: "default",
 		};
 	},
-	// mounted() {
-	// 	let user_id = this.$parent.profileSwitch ? this.reservedOffer.id_user.id : this.reservedOffer.id_recruiter.id;
-	// 	this.getImgUrl(user_id);
-	// },
 	mounted() {
 		this.imgId = this.$parent.profileSwitch ? this.reservedOffer.id_user.id : this.reservedOffer.id_recruiter.id;
 	},
@@ -170,7 +164,7 @@ export default {
 		async cancelOffer() {
 			this.reservedOffer["status"] = this.statusDispo.CANCEL;
 
-			await this.finishOffer();
+			await this.deleteFromReservedOffer();
 		},
 		async terminateOffer() {			
 			if (parseInt(this.noteService) === 0)
@@ -179,16 +173,16 @@ export default {
 			this.reservedOffer["status"] = this.statusAttribue;
 			this.reservedOffer["rating"] = this.noteService;
 
-			await this.finishOffer();
+			await this.deleteFromReservedOffer();
 
 			this.terminateOfferIsActive = !this.terminateOfferIsActive
 		},
-		async finishOffer() {
+		/**
+		 * Permet de supprimer une offre des offres réservées.
+		 */
+		async deleteFromReservedOffer() {
 			this.reservedOffer["completed_date"] = new Date().toLocaleDateString("fr-CA");
 
-			await this.deleteFromReservedOffer();
-		},
-		async deleteFromReservedOffer() {
 			await axios
 				.delete(
 					`/api/v1/reserved-offers/${this.reservedOffer.id}`,
@@ -198,23 +192,9 @@ export default {
 					if (this.isRecruiterCard) {
 						this.$parent.reservedOffersForRecruiter = this.$parent.reservedOffersForRecruiter
 						.filter(el => el.id !== this.reservedOffer.id );
-
-						// this.$parent.getReservedOffersForRecruiterWithOffset(
-						// 	this.reservedOffer.id_recruiter.id
-						// );
-						// this.$parent.getReservedOffersForRecruiter(
-						// 	this.reservedOffer.id_recruiter.id
-						// );
 					} else {
 						this.$parent.reservedOffersForUser = this.$parent.reservedOffersForUser
 						.filter(el => el.id !== this.reservedOffer.id );
-
-						// this.$parent.getReservedOffersForUserWithOffset(
-						// 	this.reservedOffer.id_user.id
-						// );
-						// this.$parent.getReservedOffersForUser(
-						// 	this.reservedOffer.id_user.id
-						// );
 					}
 
 					this.addToTerminatedOffer();
@@ -223,6 +203,9 @@ export default {
 					console.log(err);
 				});
 		},
+		/**
+		 * Permet d'ajouter une offre aux offres terminées.
+		 */
 		async addToTerminatedOffer() {
 			this.reservedOffer["id_offer"] = this.reservedOffer.id_offer.id;
 			this.reservedOffer["id_active_offer"] = this.reservedOffer.id_active_offer.id;
@@ -240,9 +223,6 @@ export default {
 						this.$parent.getTerminatedOffersForRecruiterWithOffset(
 							this.reservedOffer["id_recruiter"]
 						);
-						// this.$parent.getTerminatedOffersForRecruiter(
-						// 	this.reservedOffer["id_recruiter"]
-						// );
 
 						this.refreshEmployeeInfos(this.reservedOffer["id_user"], this.reservedOffer["id_recruiter"]);
 					} else {
@@ -252,9 +232,6 @@ export default {
 						this.$parent.getTerminatedOffersForUserWithOffset(
 							this.reservedOffer["id_user"]
 						);
-						// this.$parent.getTerminatedOffersForUser(
-						// 	this.reservedOffer["id_user"]
-						// );
 
 						this.refreshRecruiterInfos(this.reservedOffer["id_recruiter"], this.reservedOffer["id_user"]);
 					}					
@@ -263,49 +240,38 @@ export default {
 					console.log(err);
 				});
 		},
+		/**
+		 * Permet d'actualiser les informations de l'employé.
+		 */
 		async refreshEmployeeInfos(user_id, recruiter_id) {
 			await axios
 				.put(
 					`/api/v1/userinfo/${user_id}/update-employee/${recruiter_id}/`,
 					this.reservedOffer
 				)
-				.then((res) => {
-					// console.log(res.data);
-				})
+				.then((res) => {})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
+		/**
+		 * Permet d'actualiser les informations de l'employeur.
+		 */
 		async refreshRecruiterInfos(recruiter_id, user_id) {
 			await axios
 				.put(
 					`/api/v1/userinfo/${recruiter_id}/update-recruiter/${user_id}/`,
 					this.reservedOffer
 				)
-				.then((res) => {
-					// console.log(res.data);
-				})
+				.then((res) => {})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
 		replaceByDefault(e) {
 			console.clear();
-
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
-		// async getImgUrl(user_id) {			
-		// 	await axios
-		// 		.get(
-		// 			`/api/v1/userinfo/${user_id}/profile-image/`
-		// 		)
-		// 		.then((res) => {
-		// 			this.imgPath = this.MEDIA_URL + res.data.imgName
-		// 		})
-		// 		.catch((err) => {
-		// 			console.log(err);
-		// 		});
-		// }
 	},
 };
 </script>
