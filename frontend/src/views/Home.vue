@@ -939,7 +939,7 @@ export default {
 	@import "../../node_modules/bulma-steps";
 
 	.offers-container {
-		max-height: 500px;
+		max-height: 680px;
 		overflow: hidden;
 		overflow-y: scroll;
 		// Pour Firefox
