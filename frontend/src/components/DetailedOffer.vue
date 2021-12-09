@@ -2,8 +2,8 @@
 	<div class="card mb-3" :class="mustHaveChangeDateIcon ? 'has-background-danger-light': ''">
 		<div class="card-content is-pointer-cursor" :class="accountPage ? 'pb-0 mb-4' : ''" @click="$emit('click', this.offer)">
 			<div class="is-align-items-center is-flex is-flex-wrap-wrap is-justify-content-space-between">
-				<div class="offer-description is-align-items-center is-flex is-flex-wrap-wrap mb-2">
-					<figure class="image is-64x64 mr-4">
+				<div class="offer-description is-justify-content-center is-align-items-center is-flex is-flex-wrap-wrap mb-2">
+					<figure class="image is-128x128" v-if="!accountPage">
 						<img
 							class="is-rounded"
 							:src="this.MEDIA_URL + 'pfp_' + offer.user + '.jpg'" 
@@ -77,9 +77,11 @@
 			</div>
 		</div>
 		<div v-if="accountPage" class="is-flex is-justify-content-center mb-4">
-			<button class="button is-danger w-200" @click="deleteConfirmationModal = true">
-				Supprimer
-			</button>
+			<a class="button is-danger delete-button" @click="deleteConfirmationModal = true">
+				<span class="icon is-small">
+					<i class="fa fa-trash-o"></i>
+				</span>
+			</a>
 		</div>
 	</div>
 
@@ -193,6 +195,7 @@ export default {
 
 .offer-description{
 	min-width: 45%;
+	gap:15px;
 }
 
 .tags-container{
@@ -224,5 +227,10 @@ export default {
 
 .tooltip:hover .tooltiptext {
   	visibility: visible;
+}
+.delete-button{
+	position: absolute;
+    right: 10px;
+    top: 10px;
 }
 </style>
