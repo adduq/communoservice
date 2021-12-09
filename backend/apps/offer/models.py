@@ -67,8 +67,6 @@ class ReservedOffer(models.Model):
     Permet de définir une offre qui a été réservée.
     """
     id_offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-    # Note:
-    # ? Si suppression offre active -> courriel pour prévenir l'employeur ?
     id_active_offer = models.ForeignKey(ActiveOffer, on_delete=models.CASCADE)
     id_user = models.ForeignKey(User, on_delete=models.CASCADE,
                                 related_name="employee_reserved_offer")

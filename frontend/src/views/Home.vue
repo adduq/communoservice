@@ -75,15 +75,6 @@
 							Rechercher
 						</button>
 					</div>
-					<!-- <div class="panel-block">
-						<button
-							@click="sendQuery"
-							class="button is-link is-outlined is-fullwidth"
-							:class="isFetchingOffers ? 'is-loading' : ''"
-						>
-							Rechercher
-						</button>
-					</div> -->
 					<div class="panel-block" v-if="saveParams !== null">
 						<button
 							@click="resetSearchParams"
@@ -193,9 +184,9 @@
 							>
 						</div>
 					</div>
-					<label class="label has-text-centered bt-1 pt-2 is-size-5"
-						>Disponibilités</label
-					>
+					<label class="label has-text-centered bt-1 pt-2 is-size-5">
+						Disponibilités
+					</label>
 					<div
 						class="is-flex has-text-centered is-flex-wrap-wrap mt-2 is-justify-content-space-evenly is-family-monospace"
 					>
@@ -548,7 +539,6 @@ export default {
 	watch: {
     range(val) {
       if (val) {
-        // 
 		const calendar = this.$refs.calendar
 
 		// Bouger le calendrier vers le mois de la première dispo.
@@ -564,7 +554,6 @@ export default {
 			this.initQuotes();
 		}
 
-		// this.getAllOffers();
 		this.getAllOffersWithOffset();
 		this.getTotalOffers();
 		this.updateCalendarToday();
@@ -582,7 +571,6 @@ export default {
 			 * à nouveau les offres actives.
 			 */
 	  		(val)=>{
-		  		//    this.getAllOffers();
 				this.getAllOffersWithOffset();
       		},
       		{
@@ -606,24 +594,11 @@ export default {
 	watch: {
 		dates(val) {
 			if (val) {
-				// console.log(val);
         		this.dates = val;
       		}
     	},
   	},
 	methods: {
-		// async getAllOffers() {
-		// 	this.isFetchingOffers = true;
-		// 	await axios
-		// 		.get("/api/v1/active-offers/")
-		// 		.then((response) => {
-		// 			this.offers = response.data;
-		// 		})
-		// 		.catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// 	this.isFetchingOffers = false;
-		// },
 		async getServiceTypes() {
 			await axios
 				.get("/api/v1/service-types/")
@@ -634,6 +609,9 @@ export default {
 					console.log(err);
 				});
 		},
+		/**
+		 * Permet d'effectuer la réservation d'une offre.
+		 */
 		async reserveOffer(offer) {
 			this.isFetchingOffers = true;
 
@@ -641,7 +619,6 @@ export default {
 			this.offerToReserve.id_user = offer.user;
 			this.offerToReserve.hourly_rate = offer.hourly_rate;
 			this.offerToReserve.reservation_date = this.dates.toLocaleDateString("fr-CA");
-			// this.offerToReserve.reservation_date = this.dates.toISOString().split('T')[0];
 
 			await this.getActiveOfferId(offer);
 			await this.getRecruiterId();
@@ -649,9 +626,6 @@ export default {
 			await axios
 				.post("/api/v1/reserved-offers/", this.offerToReserve)
 				.then((res) => {
-					// console.log(res);
-					// console.log(this.offerToReserve);
-
 					this.isFetchingOffers = false;
 					this.clickedSend = true;
 					this.step3Completed = true;
@@ -665,8 +639,6 @@ export default {
 				.get("/api/v1/userinfo/me/")
 				.then((res) => {
 					this.offerToReserve.id_recruiter = res.data.user_id;
-
-					// console.log(this.offerToReserve);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -677,14 +649,14 @@ export default {
 				.get(`/api/v1/active-offers/${offer.id}/${offer.user}/`)
 				.then((res) => {
 					this.offerToReserve.id_active_offer = res.data.id;
-
-					// console.log(this.offerToReserve); 
-					// console.log(res.data); 
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
+		/**
+		 * Permet d'envoyer la requête pour la recherche.
+		 */
 		async sendQuery() {
 			const params = new URLSearchParams();
 
@@ -717,10 +689,6 @@ export default {
 			}
 
 			if (Array.from(params).length > 0) {
-				// this.isFetchingOffers = true;
-				// this.isFetchingOffersOnScroll = true;
-
-				// params.append("offset", this.offset);
 				this.saveParams = params.toString();
 
 				this.offers = [];
@@ -730,17 +698,6 @@ export default {
 					scrollSurface.scrollTop = 0;
 
 				this.getSearchingOffersWithOffset();
-
-				// await axios
-				// 	.get("/api/v1/active-offers/search?" + params.toString())
-				// 	.then((response) => {
-				// 		this.offers = response.data;
-				// 	})
-				// 	.catch((error) => {
-				// 		console.log(error);
-				// 	});
-				// this.isFetchingOffers = false;
-				// this.isFetchingOffersOnScroll = false;
 			}
 		},
 		async getOfferUserInfo(user_id) {
@@ -779,10 +736,10 @@ export default {
 			this.confirmationCheckbox = false;
 			this.clickedSend = false;
 			this.dates = null;
-			// Object.keys(this.selectedWeekdays).forEach(
-			// 	(value) => (this.selectedWeekdays[value] = false)
-			// );
 		},
+		/**
+		 * Permet de bloquer les jours qui sont déjà réservés, pour une offre donnée, à un recruteur.
+		 */
 		async getReservedDates(offer) {
 			await axios
 				.get(`/api/v1/reserved-offers/${offer.id}/`)
@@ -804,16 +761,14 @@ export default {
 					this.minDate = this.convertDaysForCalendar(offer.start_date);
 					this.maxDate = this.convertDaysForCalendar(offer.end_date);
 
-					// ! Note: À revoir
-					if (!this.minDate) {
-						var tomorrow = new Date();
-						var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
-						var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
-						var yyyy = tomorrow.getFullYear();
+					var tomorrow = new Date();
+					var dd = String(tomorrow.getDate() + 1).padStart(2, "0");
+					var mm = String(tomorrow.getMonth() + 1).padStart(2, "0"); //January is 0.
+					var yyyy = tomorrow.getFullYear();
+					tomorrow = new Date(yyyy + "-" + mm + "-" + dd);
 
-						tomorrow = yyyy + "-" + mm + "-" + dd;
-						this.minDate = this.convertDaysForCalendar(tomorrow);
-					}
+					if (!this.minDate || (this.minDate && this.minDate < tomorrow))
+						this.minDate = tomorrow;
 				})
 				.catch((err) => {
 					console.log(err);
@@ -857,6 +812,11 @@ export default {
 				this.getTotalOffers();
 			}
 		},
+		/**
+		 * Permet d'avoir toutes les offres actives 5 par 5.
+		 * Si l'utilisateur est connecté, les offres correspondent à la distance
+		 * maximal qu'un utilisateur veut parcourir jusqu'à lui.
+		 */
 		async getAllOffersWithOffset() {
 			this.isFetchingOffersOnScroll = true;
 
@@ -884,6 +844,10 @@ export default {
 			}
 			this.isFetchingOffersOnScroll = false;
 		},
+		/**
+		 * Même principe que la fonction getAllOffersWithOffset(), mais
+		 * avec les filtres de la recherche appliqués.
+		 */
 		async getSearchingOffersWithOffset() {
 			this.isFetchingOffersOnScroll = true;
 

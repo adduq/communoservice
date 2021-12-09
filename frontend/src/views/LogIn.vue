@@ -76,9 +76,7 @@ export default {
 						const token = response.data.auth_token;
 						this.$store.commit("setToken", token);
 
-						// axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 						axios.defaults.headers.common["Authorization"] = "Token " + token;
-						// console.log(axios.defaults.headers.common["Authorization"]);
 						const toPath = this.$route.query.to || "/";
 						this.$router.push(toPath);
 						this.loadUserInfo();
