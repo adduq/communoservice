@@ -1,133 +1,126 @@
 <template>
-	<a href="#search">
-		<div class="card mb-3 h-140"
-		:class="mustHaveChangeDateIcon ? 'has-background-danger-light': ''">
-			<div class="card-content is-pointer-cursor" 
-				:class="accountPage ? 'pb-0 mb-4' : ''"
-				@click="$emit('click', this.offer)">
-				<div class="media">
-					<div class="media-left">
-						<figure class="image is-64x64">
-							<!-- <img class="is-rounded" :src="imgPath" /> -->
-							<img
+	<div class="card mb-3 is-pointer-cursor" :class="mustHaveChangeDateIcon ? 'has-background-danger-light': ''" @click="$emit('click', this.offer)">
+		<div class="card-content" 
+			:class="accountPage ? 'pb-0 mb-4' : ''">
+			<div class="is-align-items-center is-flex is-flex-wrap-wrap is-justify-content-space-between">
+				<div class="offer-description is-align-items-center is-flex is-flex-wrap-wrap mb-2">
+					<figure class="image is-64x64 mr-4">
+						<!-- <img class="is-rounded" :src="imgPath" /> -->
+						<img
 								class="is-rounded"
 								:src="this.MEDIA_URL + 'pfp_' + offer.user + '.jpg'" 
 								@error="replaceByDefault"
-							/>
-						</figure>
-					</div>
+						/>
+					</figure>
 					<div class="media-content is-clipped">
-						<p class="title is-4">{{ offer.type_service }}</p>
-						<p class="subtitle is-6">
+						<p class="is-size-4">{{ offer.type_service }}</p>
+						<p class="has-text-grey-dark">
 							{{
 								offer.description.length >= 50
 									? offer.description.substring(0, 50) + "..."
 									: offer.description
 							}}
 						</p>
+						<p class="has-text-danger" v-if="offer.end_date != null">
+							Valide jusqu'au {{ offer.end_date }}
+							<span v-if="mustHaveChangeDateIcon" class="icon is-info tooltip is-pulled-rigth">
+								<i class="fas fa-exclamation-circle has-text-danger"></i>
+								<span class="tooltiptext has-background-danger">
+									L'offre n'est plus visible par les autres utilisateurs. Modifiez la date d'expiration pour rendre l'offre disponible.
+								</span>
+							</span>
+						</p>
 					</div>
 				</div>
-
-
-				<div class="has-text-danger" v-if="offer.end_date != null">
-					<time datetime="{{offer.end_date}}">
-						Valide jusqu'au {{ offer.end_date }}
-					<span v-if="mustHaveChangeDateIcon" class="icon is-info tooltip is-pulled-rigth">
-						<i class="fas fa-exclamation-circle has-text-danger"></i>
-						<span class="tooltiptext has-background-danger">
-							L'offre n'est plus visible par les autres utilisateurs. Modifiez la date d'expiration pour rendre l'offre disponible.
-						</span>
-					</span>
-					</time>
-				</div>
-				<div class="is-family-monospace is-flex is-justify-content-flex-end mt-3"
-					:class="accountPage ? '' : 'is-size-4-desktop'">
+				<div class="is-family-monospace is-flex is-justify-content-center tags-container is-flex-wrap-wrap">
 					<span
-						class="tag is-rounded"
+						class="tag"
 						:class="offer.monday ? 'is-info' : 'is-dark'"
 					>
-						L
+						Lundi
 					</span>
 					<span
-						class="tag is-rounded"
+						class="tag"
 						:class="offer.tuesday ? 'is-info' : 'is-dark'"
 					>
-						M
+						Mardi
 					</span>
 					<span
-						class="tag is-rounded"
+						class="tag"
 						:class="offer.wednesday ? 'is-info' : 'is-dark'"
 					>
-						M
+						Mercredi
 					</span>
 					<span
-						class="tag is-rounded"
+						class="tag"
 						:class="offer.thursday ? 'is-info' : 'is-dark'"
 					>
-						J
+						Jeudi
 					</span>
 					<span
-						class="tag is-rounded"
+						class="tag"
 						:class="offer.friday ? 'is-info' : 'is-dark'"
 					>
-						V
+						Vendredi
 					</span>
 					<span
-						class="tag is-rounded"
+						class="tag"
 						:class="offer.saturday ? 'is-info' : 'is-dark'"
 					>
-						S
+						Samedi
 					</span>
 					<span
-						class="tag is-rounded"
+						class="tag"
 						:class="offer.sunday ? 'is-info' : 'is-dark'"
 					>
-						D
+						Dimanche
 					</span>
 				</div>
 			</div>
 
-			<div v-if="accountPage" class="is-flex is-justify-content-center mb-4">
-				<button class="button is-danger w-200" @click="deleteConfirmationModal = true">
-					Supprimer
-				</button>
-			</div>
+
 		</div>
 
-		<div v-if="accountPage" class="modal" :class="{ 'is-active': deleteConfirmationModal }">
-			<div
-				class="modal-background"
-				@click="deleteConfirmationModal = !deleteConfirmationModal"
-			></div>
-			<div class="modal-card">
-				<header class="modal-card-head">
-					<p class="modal-card-title">Confirmation</p>
-					<button
-						class="delete has-background-danger"
-						@click="deleteConfirmationModal = !deleteConfirmationModal"
-						aria-label="close"
-					></button>
-				</header>
-				<section class="modal-card-body">
-					Êtes-vous certain de vouloir supprimer ce service?
-				</section>
-				<footer class="modal-card-foot">
-					<button
-						class="button is-danger w-100"
-						@click="deleteConfirmationModal = !deleteConfirmationModal"
-					>
-						Non
-					</button>
-					<button
-						@click="deleteOffer"
-						class="button is-success w-100"
-					>
-						Oui
-					</button>
-				</footer>
-			</div>
+		<div v-if="accountPage" class="is-flex is-justify-content-center mb-4">
+			<button class="button is-danger w-200" @click="deleteConfirmationModal = true">
+				Supprimer
+			</button>
 		</div>
-	</a>
+	</div>
+
+	<div v-if="accountPage" class="modal" :class="{ 'is-active': deleteConfirmationModal }">
+		<div
+			class="modal-background"
+			@click="deleteConfirmationModal = !deleteConfirmationModal"
+		></div>
+		<div class="modal-card">
+			<header class="modal-card-head">
+				<p class="modal-card-title">Confirmation</p>
+				<button
+					class="delete has-background-danger"
+					@click="deleteConfirmationModal = !deleteConfirmationModal"
+					aria-label="close"
+				></button>
+			</header>
+			<section class="modal-card-body">
+				Êtes-vous certain de vouloir supprimer ce service?
+			</section>
+			<footer class="modal-card-foot">
+				<button
+					class="button is-danger w-100"
+					@click="deleteConfirmationModal = !deleteConfirmationModal"
+				>
+					Non
+				</button>
+				<button
+					@click="deleteOffer"
+					class="button is-success w-100"
+				>
+					Oui
+				</button>
+			</footer>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -151,7 +144,6 @@ export default {
 	data() {
 		return {
 			deleteConfirmationModal: false,
-			// imgPath: this.MEDIA_URL + "pfp_default.jpg",
 			mustHaveChangeDateIcon:false
 		}
 	},
@@ -201,8 +193,7 @@ export default {
 		// 		});
 		// },
 		replaceByDefault(e) {
-			// console.clear();
-
+			console.clear();
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
 		addChangeEndDate() {
@@ -219,9 +210,21 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .is-pointer-cursor {
 	cursor: pointer;
+}
+
+.offer-description{
+	min-width: 45%;
+}
+
+.tags-container{
+	gap: 5px;
+
+	.tag{
+		width: 10ch;
+	}
 }
 
 .tooltip {

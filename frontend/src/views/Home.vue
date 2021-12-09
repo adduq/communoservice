@@ -1,11 +1,13 @@
 <template>
 	<div class="home">
-		<section class="hero is-large" :class="this.heroCollapsed ? 'collapse' : ''">
+		<section class="hero is-medium" :class="this.$store.state.isAuthenticated ? 'collapse' : ''">
 			<div class="hero-body has-text-centered">
-				<p class="title mb-6 is-size-1 has-text-weight-bold">Bienvenue sur Communoservice</p>
-				<p class="subtitle animate__animated animate__fadeInLeftBig">
-					Le meilleur site pour les services communautaires
-				</p>
+				<p class="title is-size-1-desktop has-text-weight-bold">Bienvenue sur Communoservice</p>
+				<div class="carousel-wrapper is-flex is-justify-content-center">
+					<p id="quote-carousel" class="is-size-5-desktop is-italic animate__animated">
+						{{ '“ ' + this.currentQuote + ' ”'}} 
+					</p>
+				</div>
 
 				<a href="#search" class="animate__animated animate__fadeInUp button is-primary is-rounded animate__delay-1s mt-4">
 					Rechercher
@@ -335,7 +337,7 @@
 
 					<DatePicker
         				:disabled-dates="disableDates" v-model="dates" mode="date"
-        				:min-date="minDate" :max-date="maxDate" is-expanded
+        				:min-date="minDate" :max-date="maxDate" is-expanded ref="calendar"
         			/>
 
 				</div>
@@ -491,6 +493,7 @@ export default {
 		return {
 			// Offer modal
 			currentStep: 1,
+			currentQuote: "",
 			step2Completed: false,
 			step3Completed: false,
 			heroCollapsed: false,
@@ -539,41 +542,73 @@ export default {
 			maxDate: null,
 		};
 	},
+		/**
+	 * Observer sur le changement de currentStep
+	 */
+	watch: {
+    range(val) {
+      if (val) {
+        // 
+		const calendar = this.$refs.calendar
+
+		// Bouger le calendrier vers le mois de la première dispo.
+		if(this.offerToShow.start_date){
+			 calendar.move(new Date(this.offerToShow.start_date));
+		}
+      }
+    },
+  },
 	mounted() {
 		document.title = "Accueil | Communoservice";
+		if(!this.$store.state.isAuthenticated){
+			this.initQuotes();
+		}
+
 		// this.getAllOffers();
 		this.getAllOffersWithOffset();
 		this.getTotalOffers();
-
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
 		this.getServiceTypes();
 		/*Un "observer" qui surveille tout
 		changement dans le state concernant le userInfo.*/
 		this.$store.watch(
-      (state)=>{
-        return this.$store.getters.getUserInfo;
-      },
-	  /**
-	   * Lorsque la valeur du userInfo change, on récupère
-	   * à nouveau les offres actives.
-	   */
-      (val)=>{
-	//    this.getAllOffers();
-		this.getAllOffersWithOffset();
-      },
-      {
-		  //À spécifier si on observe les propriétés "nested" d'un objet.
-        deep:true
-      }
-      );
+			(state)=>{
+				return this.$store.getters.getUserInfo;
+				
+      		},
+			/**
+			 * Lorsque la valeur du userInfo change, on récupère
+			 * à nouveau les offres actives.
+			 */
+	  		(val)=>{
+		  		//    this.getAllOffers();
+				this.getAllOffersWithOffset();
+      		},
+      		{
+		  		//À spécifier si on observe les propriétés "nested" d'un objet.
+        		deep:true
+			}
+      	);
+		  this.$store.watch(
+			(state)=>{
+				return this.$store.state.isAuthenticated;
+      		},
+
+			// Lorsque la valeur du isAuthenticated change, on initialise les quotes
+	  		(value)=>{
+				if(!value){
+					this.initQuotes();
+				}
+      		}
+      	);
 	},
 	watch: {
-    	dates(val) {
-      	if (val) {
-        	// console.log(val);
-        	this.dates = val;
-      	}
+		dates(val) {
+			if (val) {
+				// console.log(val);
+        		this.dates = val;
+      		}
     	},
   	},
 	methods: {
@@ -808,7 +843,6 @@ export default {
 		},
 		replaceByDefault(e) {
 			console.clear();
-
 			e.target.src = this.MEDIA_URL + 'pfp_default.jpg';
 		},
 		scrollAction(e) {
@@ -878,7 +912,6 @@ export default {
 						}
 					})
 				.then((res) => {
-					// console.log(res.data);
 					this.totalOffers = res.data;
 				})
 				.catch((error) => {
@@ -902,6 +935,38 @@ export default {
 		openParentSettingModal(){
 			this.$emit('controlModalFromChild', true);
 		},
+		initQuotes(){
+			var listQuotes = [
+				"Communoservice est la prochaine killer app! -Gandalf.",
+				"C'est exactement ce qu'il manquait à notre communautée. -Guylaine",
+				"Je ne peux pas vous dire à quel point je suis heureux avec Commmunoservice! -François",
+				"Communoservice est à la fois attrayant et accommodant. -Aragorn"
+			]
+			var quoteIndex = 0
+			var carousel = document.getElementById('quote-carousel');
+			
+			if(!carousel){return}
+
+			var changeQuote = () => {
+                this.currentQuote = listQuotes[quoteIndex % listQuotes.length];
+				carousel.classList.add('animate__fadeInLeft');
+                this.sleep(14000).then(() =>{
+                    carousel.classList.remove('animate__fadeInLeft');
+					carousel.classList.add('animate__fadeOutRight');
+                    quoteIndex++;
+                })
+				.then(() => this.sleep(1000))
+				.then(() => {
+					carousel.classList.remove('animate__fadeOutRight');
+					changeQuote();
+				});
+            }
+
+			changeQuote();
+		},
+	    sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
 	},
 };
 </script>
@@ -1031,7 +1096,13 @@ export default {
 	}
 	
 	.collapse{
-		height: 0px;
-		transition: height 1s ease-in-out;
+		display: none;
+	}
+
+	.carousel-wrapper{
+		min-height: 100px;
+		#quote-carousel{
+			width: 40rem;
+		}
 	}
 </style>
