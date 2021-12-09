@@ -1045,7 +1045,7 @@ export default {
 		}
 	}
 	.offers-box{
-		min-height: 540px;
+		min-height: 680px;
 	}
 	/**
 	Style uniquement appliqué sur le bouton des paramètres.

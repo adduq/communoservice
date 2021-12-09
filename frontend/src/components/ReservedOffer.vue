@@ -47,15 +47,11 @@
 			</p>
 
 			<div class="is-flex is-flex-wrap-wrap is-justify-content-end mt-4">
-				<button
-					class="button is-success w-100 mr-2"
-					v-on:click="terminateOfferIsActive = true"
-				>
-					Terminer
-				</button>
-				<button class="button is-danger w-100 mr-2" v-on:click="cancelOffer">
-					Annuler
-				</button>
+				<a class="button is-success complete-button" @click="terminateOfferIsActive = true">
+					<span class="icon is-small">
+						<i class="fa fa-check"></i>
+					</span>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -161,11 +157,6 @@ export default {
 		setRating(note) {
 			this.noteService = note;
 		},
-		async cancelOffer() {
-			this.reservedOffer["status"] = this.statusDispo.CANCEL;
-
-			await this.deleteFromReservedOffer();
-		},
 		async terminateOffer() {			
 			if (parseInt(this.noteService) === 0)
 				this.noteService = null;
@@ -184,24 +175,24 @@ export default {
 			this.reservedOffer["completed_date"] = new Date().toLocaleDateString("fr-CA");
 
 			await axios
-				.delete(
-					`/api/v1/reserved-offers/${this.reservedOffer.id}`,
-					this.reservedOffer
-				)
-				.then((res) => {
-					if (this.isRecruiterCard) {
-						this.$parent.reservedOffersForRecruiter = this.$parent.reservedOffersForRecruiter
-						.filter(el => el.id !== this.reservedOffer.id );
-					} else {
-						this.$parent.reservedOffersForUser = this.$parent.reservedOffersForUser
-						.filter(el => el.id !== this.reservedOffer.id );
-					}
+			.delete(
+				`/api/v1/reserved-offers/${this.reservedOffer.id}`,
+				this.reservedOffer
+			)
+			.then((res) => {
+				if (this.isRecruiterCard) {
+					this.$parent.reservedOffersForRecruiter = this.$parent.reservedOffersForRecruiter
+					.filter(el => el.id !== this.reservedOffer.id );
+				} else {
+					this.$parent.reservedOffersForUser = this.$parent.reservedOffersForUser
+					.filter(el => el.id !== this.reservedOffer.id );
+				}
 
-					this.addToTerminatedOffer();
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+				this.addToTerminatedOffer();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 		},
 		/**
 		 * Permet d'ajouter une offre aux offres terminées.
@@ -279,5 +270,10 @@ export default {
 <style>
 .affiche-note {
 	font-size: 3rem;
+}
+.complete-button{
+	position: absolute;
+    right: 10px;
+    top: 10px;
 }
 </style>

@@ -133,7 +133,7 @@
 				</button>
 			</div>
 		</div>
-		<div class="columns">
+		<div class="columns is-relative">
 			<template v-if="!profileSwitch">
 				<div
 					class="modal"
@@ -878,9 +878,10 @@ export default {
 		async addActiveOffers(activeOffer) {
 			await axios
 				.post("/api/v1/active-offers/", activeOffer)
-				.then((response, userId) => {
-					this.getAllOffersWithOffset(activeOffer.id_user);
+				.then((response, userId) => {	
+					this.totalOffer++;				
 					this.getTotalOffers();
+					this.getAllOffersWithOffset(activeOffer.id_user);
 				})
 				.catch((error) => {
 					console.log(error);
