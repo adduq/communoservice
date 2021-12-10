@@ -1,29 +1,45 @@
 <template>
 	<div class="page-sign-up">
-		<div class="columns">
-			<div class="column is-4 is-offset-4">
+		<div class="columns form-wrapper mt-6">
+			<div class="column is-4 is-offset-4 has-text-centered">
 				<h1 class="title">Inscription</h1>
 
 				<form @submit.prevent="submitForm">
-					<div class="field">
-						<label>Nom d'utilisateur</label>
-						<div class="control">
-							<input type="text" class="input" :class="this.usernameError ? 'is-danger': ''" v-model="this.username" @focus="this.usernameError = false" />
-						</div>
+					<div class="field has-text-left">
+						<p class="control has-icons-left">
+							<input class="input" type="text" placeholder="Nom d'utilisateur" 
+								:class="this.usernameError ? 'is-danger': ''" 
+								v-model="this.username"
+								@focus="this.usernameError = false" >
+							<span class="icon is-small is-left">
+							<i class="fas fa-user"></i>
+							</span>
+						</p>
+					</div>
+
+					<div class="field has-text-left">
+						<p class="control has-icons-left">
+							<input class="input" type="password" placeholder="Mot de passe" 
+								:class="this.passwordError ? 'is-danger': ''" 
+								v-model="this.password" 
+								@focus="this.passwordError = false">
+							<span class="icon is-small is-left">
+							<i class="fas fa-lock"></i>
+							</span>
+						</p>
 					</div>
 
 					<div class="field">
-						<label>Mot de passe</label>
-						<div class="control">
-							<input type="password" class="input" :class="this.passwordError ? 'is-danger': ''" v-model="this.password" @focus="this.passwordError = false"/>
-						</div>
-					</div>
-
-					<div class="field">
-						<label>Répéter le mot de passe</label>
-						<div class="control">
-							<input type="password" class="input" :class="this.password2Error ? 'is-danger': ''" v-model="this.password2" @focus="this.checkPasswordMatch" @input="this.checkPasswordMatch"/>
-						</div>
+						<p class="control has-icons-left">
+							<input class="input" type="password" placeholder="Répéter le mot de passe" 
+								:class="this.password2Error ? 'is-danger': ''" 
+								v-model="this.password2" 
+								@focus="this.checkPasswordMatch" 
+								@input="this.checkPasswordMatch">
+							<span class="icon is-small is-left">
+							<i class="fas fa-lock"></i>
+							</span>
+						</p>
 					</div>
 
 					<div class="notification is-danger" v-if="errors.length">
@@ -32,13 +48,11 @@
 
 					<div class="field">
 						<div class="control">
-							<button class="button is-dark">Inscription</button>
+							<button class="button is-primary signup-button">Inscription</button>
 						</div>
 					</div>
-
 					<hr />
-
-					Ou <router-link to="/connexion">me connecter !</router-link>
+					<p>Ou <a href="/connexion">me connecter!</a></p>
 				</form>
 			</div>
 		</div>
@@ -143,3 +157,11 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+	.form-wrapper{
+		min-height: 100vh;
+	}
+	.signup-button{
+		width: 100%;
+	}
+</style>

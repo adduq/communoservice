@@ -41,10 +41,8 @@
 							</button>
 						</div>
 					</div>
-
 					<hr />
-
-					Ou <router-link to="/inscription">m'inscrire!</router-link>
+					<p>Ou <a href="/inscription">m'inscrire!</a></p>
 				</form>
 			</div>
 		</div>
