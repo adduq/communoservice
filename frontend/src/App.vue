@@ -22,7 +22,7 @@
               <i class="fab fa-github"></i>
             </span>
           </a>
-		  <a class="navbar-item" href="http://tiny.cc/communoservice" @click="showNav = !showNav">
+		  <a class="navbar-item" href="https://youtu.be/wql06I-OCNY" @click="showNav = !showNav">
             <span class="mr-2">Démo</span>
             <span class="icon is-small">
               <i class="fas fa-video"></i>
