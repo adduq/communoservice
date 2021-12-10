@@ -20,14 +20,19 @@ from math import cos, asin, sqrt, pi
 PUBLIC_MAPBOX_KEY = "pk.eyJ1IjoidmFuaXR5cHciLCJhIjoiY2t2a2FhcmxmZDNkOTJxcTYybXNkODRoZSJ9.dNeojMWUvXZH-TkiFqTexA"
 
 def sort_offers_by_distance(user_id, offers):
+    """
+    Permet de trier les offres selon la distance de l'utilisateur 
+    """
 
     me = UserInfo.objects.get(user_id=user_id)
 
+    # Formule Haversine
     def haversine(lat1, lon1, lat2, lon2):
         p = pi/180
         a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p) * cos(lat2*p) * (1-cos((lon2-lon1)*p))/2
         return 12742 * asin(sqrt(a))
 
+    # Vérifier si l'utilisateur est dans le range de l'offre (As the crow flies)
     def check_distance(offer):
         employe = UserInfo.objects.get(user_id=offer['user'])
         if employe.location_lat == '' or employe.location_lon == None or employe.location_lat == '' or employe.location_lon == None:
@@ -38,6 +43,7 @@ def sort_offers_by_distance(user_id, offers):
         else:
             return False
     
+    # Permet de calculer le true distance
     def driving_distance(employe_lon, employe_lat, max_distance):
         # if driving distance > offer['max_distance'] then exclude from candidates
         formated_url = "https://api.mapbox.com/directions/v5/mapbox/driving/{0},{1};{2},{3}?access_token={4}".format(me.location_lon, me.location_lat, employe_lon, employe_lat, PUBLIC_MAPBOX_KEY)
