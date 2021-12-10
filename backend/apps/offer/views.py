@@ -163,37 +163,28 @@ class ActiveOffers(APIView):
         active_offers = []
         offers = []
 
+        active_offers = list(
+            ActiveOffer.objects.all().values_list('id_offer', flat=True))
+
+        queryset = Offer.objects.filter(
+            id__in=active_offers).order_by('max_distance')
+
+        # Exclue les offres de l'utilisateur.
         if not request.user.is_anonymous:
-            total_active_offers = ActiveOffer.objects.exclude(
-                id_user=request.user.id).count()
+            queryset = queryset.exclude(user=request.user.id)
 
-            active_offers = ActiveOffer.objects.filter(~Q(
-                    id_user=request.user.id)).order_by('-id_offer__max_distance').distinct()
-
-            # Permet de faire la bonne requête selon la taille du offset.
-            if offset + 5 < total_active_offers:
-                active_offers = active_offers[offset:offset+5]
-            else:
-                active_offers = active_offers[offset:total_active_offers]
-
-            serializer = ActiveOfferSerializer(active_offers, many=True)
-            remove_user_infos(serializer)
-
-            for elem in serializer.data:
-                offers.append(elem['id_offer'])
-
+        serializer = OfferSerializer(queryset, many=True)
+        if not request.user.is_anonymous:
             offers = sort_offers_by_distance(
-                request.user.id, [dict(obj) for obj in offers])
+                request.user.id, [dict(obj) for obj in serializer.data])
         else:
-            active_offers = ActiveOffer.objects.all().order_by(
-                '-id_offer__max_distance').distinct()[offset:offset+5]
+            offers = serializer.data
 
-            serializer = ActiveOfferSerializer(active_offers, many=True)
+        limit = offset + 5
+        if limit > len(offers):
+            limit = len(offers)
 
-            for elem in serializer.data:
-                offers.append(elem['id_offer'])
-
-        return Response(offers)
+        return Response(offers[offset:limit])
 
     def post(self, request, format=None):
         if request.user.is_anonymous:
@@ -219,8 +210,8 @@ class ActiveOffersTotal(APIView):
 
         if not request.user.is_anonymous:
             if page == 'home':
-                active_offers = ActiveOffer.objects.exclude(
-                    id_user=request.user.id).count()
+                active_offers = ActiveOffer.objects.filter(
+                    ~Q(id_user=request.user.id)).count()
             elif page == 'account':
                 nbOffer = ActiveOffer.objects.filter(
                     id_user=request.user.id).count()
@@ -559,7 +550,7 @@ def search(request):
         active_offers = [
             x for x in active_offers_tmp if x not in reserved_days]
 
-    queryset = Offer.objects.filter(id__in=active_offers).order_by('-max_distance').distinct()
+    queryset = Offer.objects.filter(id__in=active_offers).order_by('max_distance')
 
     # Exclue les offres de l'utilisateur.
     if not request.user.is_anonymous:
@@ -605,11 +596,9 @@ def search(request):
     else:
         offset = int(offset)
 
-    queryset = queryset[offset:offset+5]
-
     serializer = OfferSerializer(queryset, many=True)
     if not request.user.is_anonymous:
         offers = sort_offers_by_distance(request.user.id, [dict(obj) for obj in serializer.data])
     else:
         offers = serializer.data
-    return Response(offers)
+    return Response(offers[offset:offset+5])

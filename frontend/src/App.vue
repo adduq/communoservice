@@ -147,6 +147,14 @@
 				axios.defaults.headers.common["Authorization"] = "";
 				this.$store.commit("removeToken");
 				this.$router.push("/");
+				this.$store.commit("changeUserInfo", {
+					first_name: '',
+					last_name: '',
+					user_bio:'',
+					location_lat:'',
+					location_lon:'',
+					profile_is_completed:false,
+				});
 				toast({
 					message: "Déconnecté avec succès!",
 					type: "is-success",

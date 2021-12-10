@@ -5,7 +5,6 @@ export default createStore({
     state: {
         isAuthenticated: false,
         token: "",
-        // TODO: Centraliser le userInfo afin de diminuer la rendondance
         userInfo: {
             first_name: '',
             last_name: '',

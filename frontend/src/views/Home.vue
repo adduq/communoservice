@@ -554,8 +554,8 @@ export default {
 			this.initQuotes();
 		}
 
-		this.getAllOffersWithOffset();
 		this.getTotalOffers();
+		this.getAllOffersWithOffset();
 		this.updateCalendarToday();
 		StepsWizard.attach(this.$refs.stepsSection.el);
 		this.getServiceTypes();
@@ -564,14 +564,17 @@ export default {
 		this.$store.watch(
 			(state)=>{
 				return this.$store.getters.getUserInfo;
-				
-      		},
+			},
 			/**
 			 * Lorsque la valeur du userInfo change, on récupère
 			 * à nouveau les offres actives.
 			 */
 	  		(val)=>{
-				this.getAllOffersWithOffset();
+				if (this.offers.length > 0) {
+					this.offers = [];
+					this.offset = 0;
+					this.getAllOffersWithOffset();
+				}
       		},
       		{
 		  		//À spécifier si on observe les propriétés "nested" d'un objet.
@@ -820,7 +823,7 @@ export default {
 		async getAllOffersWithOffset() {
 			this.isFetchingOffersOnScroll = true;
 
-			if (this.offset <= this.totalOffers || !this.totalOffers) {
+			if (this.offset < this.totalOffers || !this.totalOffers) {
 				await axios
 					.get('/api/v1/active-offers/', {
 						params: {
@@ -836,7 +839,7 @@ export default {
 							return !offer.end_date || (offerEndDate > today);
 						}
 						this.offers = this.offers.filter(keepEndDateAfterToday);
-						this.offset = this.offset + 5;
+						this.offset = res.data.length === 0 ? this.totalOffers : this.offset + 5;
 					})
 					.catch((error) => {
 						console.log(error);
@@ -859,8 +862,7 @@ export default {
 					.get("/api/v1/active-offers/search?" + params.toString())
 					.then((res) => {
 						this.offers = this.offers.concat(res.data);
-
-						this.offset = this.offset + 5;
+						this.offset = res.data.length === 0 ? this.totalOffers : this.offset + 5;
 					})
 					.catch((error) => {
 						console.log(error);
@@ -939,7 +941,7 @@ export default {
 	@import "../../node_modules/bulma-steps";
 
 	.offers-container {
-		max-height: 500px;
+		max-height: 680px;
 		overflow: hidden;
 		overflow-y: scroll;
 		// Pour Firefox
@@ -1045,7 +1047,7 @@ export default {
 		}
 	}
 	.offers-box{
-		min-height: 540px;
+		min-height: 680px;
 	}
 	/**
 	Style uniquement appliqué sur le bouton des paramètres.
