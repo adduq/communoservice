@@ -407,7 +407,7 @@
           .post("api/v1/userinfo/me/profile-image/",fd , config)
           .then((response)=>{
             // Set new image 
-            this,isValidPictureProfile=true;
+            this.isValidPictureProfile=true;
           })
           .catch((error) =>{
             console.log(error);
@@ -430,7 +430,7 @@
         }
       },
       validateImage(file){
-        if (!file){
+        if (file){
         const fileType = file['type'];
         const validImageTypes = ['image/jpeg', 'image/png'];
         return validImageTypes.includes(fileType) && file.size<1048576;
